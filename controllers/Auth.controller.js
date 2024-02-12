@@ -272,11 +272,115 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-async function register(req, res) {
-  try {
-    const { sponcer_id, contactNo, member_name, password, cpassword, email } = req.body;
 
-    // Check if password and confirm password match
+  function generateRandomNumber() {
+    const min = 1000000; // Minimum 7-digit number (inclusive)
+    const max = 9999999; // Maximum 7-digit number (inclusive)
+  
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  function phoneValidation(phone) {
+    phone = testInput(phone);
+    if (/^\d{10}$/.test(phone)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  function emailValidation(email) {
+    let emailVal =
+      /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+    email = testInput(email);
+    if (emailVal.test(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+  function testInput(data) {
+  data = data.trim();
+  data = data.replace(/\\/g, "");
+  data = htmlspecialchars(data);
+  return data;
+}
+
+function htmlspecialchars(str) {
+  str = str.replace(/&/g, "&amp;");
+  str = str.replace(/</g, "&lt;");
+  str = str.replace(/>/g, "&gt;");
+  str = str.replace(/"/g, "&quot;");
+  str = str.replace(/'/g, "&#039;");
+  return str;
+}
+
+// async function register(req, res) {
+//   try {
+//     const { sponcer_id, contactNo, member_name, password, cpassword, email } = req.body;
+
+//     // Check if password and confirm password match
+//     if (password !== cpassword) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Password and confirm password not matched",
+//       });
+//     }
+
+//     // Check if email is already registered
+//     const existingMember = await Member.findOne({ email });
+//     if (existingMember) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Email already registered",
+//       });
+//     }
+
+//     // Create new member
+//     const member = new Member({
+//       sponcer_id,
+//       contactNo,
+//       member_name: member_name, //.toUpperCase()
+//       password,
+//       email,
+//     });
+//     await member.save();
+
+//     res.status(200).send({
+//       status: true,
+//       message: "Registration successfully",
+//       userId: member._id,
+//     });
+//   } catch (error) {
+//     console.error('Error in registration:', error);
+//     res.status(500).send({ status: false, message: 'Internal Server Error' });
+//   }
+// }
+
+async function register (req, res){
+  try {
+    let sponcer_id = req.query.sponcer_id;
+    let sponcer_name;
+    let member_user_id;
+    
+    // You should implement the logic to find sponcer by sponcer_id
+    // For example:
+    // const sponcer = await Member.findOne({ member_user_id: sponcer_id });
+    // if (!sponcer) {
+    //   return res.status(400).send({
+    //     status: false,
+    //     message: "Invalid sponcer id",
+    //   });
+    // }
+    // sponcer_name = sponcer.member_name;
+
+    let contactNo = req.body.contactNo.trim();
+    let member_name = req.body.member_name.trim().toUpperCase();
+    let password = req.body.password.trim();
+    let cpassword = req.body.cpassword.trim();
+    let email = req.body.email.trim().toLowerCase();
+
     if (password !== cpassword) {
       return res.status(400).send({
         status: false,
@@ -284,8 +388,8 @@ async function register(req, res) {
       });
     }
 
-    // Check if email is already registered
-    const existingMember = await Member.findOne({ email });
+    // Check if the email is already registered
+    const existingMember = await Member.findOne({ email: email });
     if (existingMember) {
       return res.status(400).send({
         status: false,
@@ -293,61 +397,111 @@ async function register(req, res) {
       });
     }
 
-    // Create new member
-    const member = new Member({
-      sponcer_id,
-      contactNo,
-      member_name: member_name, //.toUpperCase()
-      password,
-      email,
-    });
-    await member.save();
+    let reg_date = new Date();
 
-    res.status(200).send({
+    if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
+      return res.status(400).send({
+        title: "Error",
+        message: "Invalid data provided",
+        status: "error",
+      });
+    }
+
+    member_user_id = generateRandomNumber();
+
+    let member = await Member.findOne({ member_user_id: member_user_id });
+    while (member) {
+      member_user_id = generateRandomNumber();
+      member = await Member.findOne({ member_user_id: member_user_id });
+    }
+
+    // const salt = await bcrypt.genSalt(10);
+    // password = await bcrypt.hash(password, salt);
+
+    // Create new member instance
+    const newMember = new Member({
+      member_user_id,
+      sponcer_id,
+      sponcer_name,
+      member_name,
+      contactNo: contactNo,
+      email,
+      password,
+      registration_date: reg_date,
+    });
+
+    // Save the member to the database
+    await newMember.save();
+
+    return res.status(200).send({
       status: true,
       message: "Registration successfully",
-      userId: member._id,
+      userId: member_user_id,
     });
-  } catch (error) {
-    console.error('Error in registration:', error);
-    res.status(500).send({ status: false, message: 'Internal Server Error' });
+  } catch (err) {
+    console.log("Error in registration", err);
+    return res.status(400).send({
+      status: false,
+      message: "Registration failed",
+    });
   }
-}
+};
 
-async function login(req, res) {
+async function login (req, res)  {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    const user = await Member.findOne({ email: email });
 
-    // Find member by email
-    const member = await Member.findOne({ email });
-    if (!member) {
-      return res.status(400).send({ status: false, message: 'Invalid email' });
+    console.log(user)
+    if (!user) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid email!",
+      });
+    } else {
+
+      const validPassword = await bcrypt.compare(password, user.password);
+
+      console.log(validPassword)
+
+      if (!validPassword) {
+        return res.status(400).send({
+          status: false,
+          message: "Invalid password!",
+        });
+      }
+
+      const token = jwt.sign(
+        { userId: user.member_user_id },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      const returnObject = {
+        member_user_id: user.member_user_id,
+        member_name: user.member_name,
+        sponcer_id: user.sponcer_id,
+        sponcer_name: user.sponcer_name,
+      };
+
+      return res.status(200).send({
+        status: true,
+        message: "Login successfully",
+        token,
+        user: returnObject,
+      });
     }
-
-    // Validate password
-    const validPassword = await bcrypt.compare(password, member.password);
-    if (!validPassword) {
-      return res.status(400).send({ status: false, message: 'Invalid password' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign({ userId: member._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
-
-    res.status(200).send({
-      status: true,
-      message: "Login successfully",
-      token,
-      user: {
-        member_user_id: member._id,
-        member_name: member.member_name,
-        email: member.email,
-      },
-    });
   } catch (error) {
-    console.error('Error in login:', error);
-    res.status(500).send({ status: false, message: 'Internal Server Error' });
+    console.error("Error during login:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Internal server error",
+    });
   }
-}
+};
 
 
 

@@ -77,6 +77,7 @@ const Member = require("../models/memberModel");
 const getDashboardData = async (req, res) => {
   const member_user_id = req.user;
 
+
   try {
     const user = await Member.findById(member_user_id);
 
@@ -95,7 +96,7 @@ const getDashboardData = async (req, res) => {
       wallet_address: user.wallet_address,
       promoter_id: user.promoter_id,
       promoter_name: user.promoter_name,
-      contact: user.contact,
+      contact: user.contactNo,
       email: user.email,
       status: user.status,
       registration_date: user.registration_date,
@@ -136,7 +137,7 @@ const getDashboardData = async (req, res) => {
       data: returnObject,
     });
   } catch (error) {
-    console.error("Error fetching dashboard data:", error);
+    console.log("Error fetching dashboard data:", error);
     return res.status(500).send({
       status: false,
       message: "Internal Server Error",
