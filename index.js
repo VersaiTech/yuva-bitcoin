@@ -6,6 +6,17 @@ const cors = require("cors");
 const { Connection } = require("./config/db.config");
 require("dotenv").config();
 
+
+
+const userController = require('./controllers/UserController');
+const taskController = require('./controllers/TaskController');
+const assignedTaskController = require('./controllers/AssignedTaskController');
+
+const {User} = require('./models/Task');
+const {Task} = require('./models/Task');
+
+
+
 const port = process.env.PORT || 5001;
 
 app.use(morgan('dev'));
@@ -24,6 +35,24 @@ app.use('/api/Withdraw', require('./routes/Withdraw.route'));
 // app.listen(port, () => {
 //     console.log(`Server is running on port ${port}.`);
 // });
+
+
+app.post('/users', userController.addUser);
+
+app.post('/tasks', taskController.addTask);
+  
+
+// User routes
+app.get('/users/:userId', userController.getUserById);
+
+// Task routes
+app.get('/tasks', taskController.getAllTasks);
+
+// AssignedTask routes
+app.post('/assign-task', assignedTaskController.assignTask);
+app.post('/mark-task-completed/:assignedTaskId', assignedTaskController.markTaskCompleted);
+app.post('/confirm-task-completion/:assignedTaskId', assignedTaskController.confirmTaskCompletion);
+
 
 
 //Database
