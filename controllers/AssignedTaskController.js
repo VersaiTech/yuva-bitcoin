@@ -1,12 +1,16 @@
 
 const { AssignedTask } = require('../models/Task');
 const doublechecktask = require('../helper/checkintask');
+const { User } = require('../models/Task');
 
 // Example controller to create an assigned task
 const assignTask = async (req, res) => {
   try {
     const { userId, taskId } = req.body;
-    const assignedTask = await AssignedTask.create({ user: userId, task: taskId });
+
+    const user = await User.findOne({ _id: userId });
+  
+    const assignedTask = await AssignedTask.create({ user: userId, task: taskId, twitterId: user.twitterId });
     return res.json(assignedTask);
   } catch (error) {
     console.error('Error assigning task:', error);
@@ -18,8 +22,6 @@ const assignTask = async (req, res) => {
 const markTaskCompleted = async (req, res) => {
     try {
       const assignedTaskId = req.params.assignedTaskId;
-
-      console.log(assignedTaskId);
   
       const updatedTask = await AssignedTask.findOneAndUpdate(
         {task : assignedTaskId},
@@ -33,8 +35,6 @@ const markTaskCompleted = async (req, res) => {
       }
 
       doublechecktask();
-
-      console.log('Task marked as completed:', updatedTask);
       res.json(updatedTask);
 
       

@@ -20,7 +20,7 @@ const assignedTaskSchema = new mongoose.Schema({
     task: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
     dateAssigned: { type: Date, default: Date.now },
     completed: { type: Boolean, default: false },
-    twitterId: { type: String, unique: true , required: true },
+    twitterId: { type: String, unique: true , required: true, ref: 'User'},
     adminConfirmed: { type: Boolean, default: false },
 });
 
