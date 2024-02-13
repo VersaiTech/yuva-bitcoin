@@ -55,7 +55,7 @@ const verifyToken = async (req, res, next) => {
         const userId = decoded.userId;
 
         // Fetch user from MongoDB based on userId
-        const user = await Member.findById(userId);
+        const user = await Member.findOne({member_user_id:userId});
 
         if (!user) {
             return res.status(404).send("User not found");

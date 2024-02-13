@@ -476,7 +476,7 @@ async function login (req, res)  {
         { userId: user.member_user_id },
         process.env.JWT_SECRET_KEY,
         {
-          expiresIn: "1h",
+          expiresIn: "10h",
         }
       );
 

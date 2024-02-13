@@ -138,9 +138,10 @@
 
 // controllers/withdrawController.js
 const Withdraw = require('../models/withdrawModel');
+const Member = require('../models/memberModel');
 
 const withdrawRequest = async (req, res) => {
-  const { user: member_user_id } = req;
+  const {member_user_id } = req.user;
   const { amount } = req.body;
 
   console.log(req.user)
@@ -188,9 +189,10 @@ const withdrawRequest = async (req, res) => {
 };
 
 const getWithdrawRequests = async (req, res) => {
-  const { user } = req;
+  const { member_user_id } = req.user;
+
   try {
-    const withdrawRequests = await Withdraw.find({ member_user_id: user });
+    const withdrawRequests = await Withdraw.find({ member_user_id: member_user_id });
     if (withdrawRequests.length === 0) {
       return res.status(400).send({
         status: false,

@@ -63,6 +63,8 @@ const MemberIncomeDetails = require("../models/memberIncomeDetails");
 
 const stakingBonus = async (req, res) => {
     const member_user_id = req.user;
+
+    console.log(member_user_id)
     try {
         const output = await MemberIncomeDetails.find({ member_user_id, income_type: 'STAKING' });
         if (output.length === 0) {
