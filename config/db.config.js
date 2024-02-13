@@ -22,7 +22,7 @@
 const mongoose = require('mongoose');
 const Connection = (username, password) => {
     
-    const URL = `mongodb+srv://jaylunagariya:Jay1501@cluster0.wp4chqh.mongodb.net/yuvabitcoin`
+    const URL = `mongodb+srv://${username}:${password}@cluster0.wp4chqh.mongodb.net/yuvabitcoin`
 
     try{
         mongoose.connect(URL);
