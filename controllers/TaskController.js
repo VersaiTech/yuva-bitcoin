@@ -40,7 +40,7 @@ const completeTask = async (req, res) => {
     // Reward the user (Update user's coins balance, etc.)
     // Your reward logic goes here...
 
-    res.status(200).json({ message: 'Task completed successfully' });
+    res.status(200).json({ message: 'Task in review admin will review and confirm completion' });
   } catch (error) {
     console.error('Error completing task:', error);
     res.status(500).json({ error: 'Internal Server Error' });
