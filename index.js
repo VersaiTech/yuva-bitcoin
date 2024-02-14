@@ -54,6 +54,13 @@ app.post('/mark-task-completed/:assignedTaskId', assignedTaskController.markTask
 app.post('/confirm-task-completion/:assignedTaskId', assignedTaskController.confirmTaskCompletion);
 
 
+app.post('/post-tweet', assignedTaskController.postTweet);
+
+app.get('/user-info', assignedTaskController.getUserInfo);
+
+app.delete('/delete-tweet/:tweetId', assignedTaskController.deleteTweet);
+
+
 
 //Database
 const username = process.env.DB_USERNAME;
