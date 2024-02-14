@@ -2,6 +2,7 @@
 const { AssignedTask } = require('../models/Task');
 const doublechecktask = require('../helper/checkintask');
 const { User } = require('../models/Task');
+const Twit = require('twit');
 
 // Example controller to create an assigned task
 const assignTask = async (req, res) => {
@@ -39,7 +40,7 @@ const markTaskCompleted = async (req, res) => {
 
 
   } catch (error) {
-    console.error('Error marking task as completed:', error); // Log the error
+    console.error('Error marking task as completed:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -61,45 +62,7 @@ const confirmTaskCompletion = async (req, res) => {
   }
 };
 
-// const doublechecktask = async () => {
-//     const tasks = await AssignedTask.find({where: {adminConfirmed: false}});
-
-// }
-
-const Twit = require('twit');
-
-// const testing = async (req, res) => {
-//   try {
-//     // Initialize Twit with your Twitter API keys and tokens
-//     const T = new Twit({
-//       consumer_key: 'X8Eq7GmsZQinj9ulddxQ7r57I',
-//       consumer_secret: 'dZ1patCeux5O7AbmXdJk2M1s3Ljrnd61vvmiBjribU7WyiGt2f',
-//       access_token: '1720674783707422720-Eax5oaWYz0vBegAz3ykM8VpM3NBWwy',
-//       access_token_secret: 'tTB0SlrOTf73kWEyHsU9yUaczlBVreugLtKumfOX2KM8y'
-//     });
-
-//     // Function to post a tweet
-//     async function postTweet(tweetText) {
-//       try {
-//         const response = await T.post(`https://api.twitter.com/2/tweets`, { text: tweetText });
-//         return res.json(response);
-//         // console.log('Tweet posted successfully:', response);
-
-//       } catch (error) {
-//         console.error('Error posting tweet:', error);
-//       }
-//     }
-
-//     // Example: Post a tweet for each task
-//     const tweetText = 'Hello, Twitter API v2!';
-//     await postTweet(tweetText);
-
-//   } catch (error) {
-//     console.error('Error occurred while checking tweets:', error);
-//   }
-// }
-
-
+//twitter apis
 const getUserInfo = async (req, res) => {
   try {
     const T = new Twit({
