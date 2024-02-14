@@ -381,6 +381,7 @@ async function register (req, res){
     let password = req.body.password.trim();
     let cpassword = req.body.cpassword.trim();
     let email = req.body.email.trim().toLowerCase();
+    let twitterId = req.body.twitterId;
 
     if (password !== cpassword) {
       return res.status(400).send({
@@ -429,6 +430,7 @@ async function register (req, res){
       email,
       password,
       registration_date: reg_date,
+      twitterId
     });
 
     // Save the member to the database
