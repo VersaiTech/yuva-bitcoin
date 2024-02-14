@@ -77,7 +77,6 @@ const Member = require("../models/memberModel");
 const getDashboardData = async (req, res) => {
   const member_user_id = req.user;
 
-
   try {
     const user = await Member.findById(member_user_id);
 

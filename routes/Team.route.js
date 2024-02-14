@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken } = require("../middleware/Auth.middleware");
+const { ValidMember } = require("../middleware/Auth.middleware");
 const { MyReferral, MyTeam } = require("../controllers/Team.controller");
 
-router.route("/MyReferral").get(verifyToken, MyReferral);
+router.route("/MyReferral").get(ValidMember, MyReferral);
 
-router.route("/MyTeam").get(verifyToken, MyTeam);
+router.route("/MyTeam").get(ValidMember, MyTeam);
 
 module.exports = router;

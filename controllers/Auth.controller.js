@@ -267,6 +267,7 @@
 
 
 const Member = require('../models/memberModel');
+const Admin = require('../models/AdminModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -473,7 +474,7 @@ async function login (req, res)  {
       }
 
       const token = jwt.sign(
-        { userId: user.member_user_id },
+        { userId: user.member_user_id,userType: user.userType },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: "10h",
@@ -529,8 +530,100 @@ async function getRegister(req, res) {
   }
 }
 
+async function adminRegister(req, res) {
+  try {
+    // Extract data from request body
+    const { admin_name, password, email } = req.body;
+
+    // Check if email is already registered
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).send({
+        status: false,
+        message: "Email already registered",
+      });
+    }
+
+    // Hash the password
+    // const hashedPassword = await bcrypt.hash(password, 10);
+
+    const admin_user_id = generateRandomNumber();
+
+    // Create new admin instance
+    const newAdmin = new Admin({
+      admin_user_id,
+      admin_name,
+      password,
+      email,
+    });
+
+    // Save the admin to the database
+    const response = await newAdmin.save();
+
+    console.log(response);
+    return res.status(200).send({
+      status: true,
+      message: "Admin registration successful",
+    });
+
+  } catch (err) {
+    console.log("Error in admin registration", err);
+    return res.status(500).send({
+      status: false,
+      message: "Admin registration failed",
+    });
+  }
+}
+
+async function adminLogin(req, res) {
+  const { email, password } = req.body;
+
+  try {
+    // Find admin by email
+    const admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid email!",
+      });
+    }
+
+    // Compare passwords
+    const validPassword = await bcrypt.compare(password, admin.password);
+
+    if (!validPassword) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid password!",
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: admin.admin_user_id, userType: admin.userType },
+      JWT_SECRET_KEY,
+      { expiresIn: "10h" }
+    );
+
+    return res.status(200).send({
+      status: true,
+      message: "Admin login successful",
+      token,
+    });
+  } catch (error) {
+    console.error("Error during admin login:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
 module.exports = {
   register,
   login,
-  getRegister
+  getRegister,
+  adminRegister,
+  adminLogin
 };

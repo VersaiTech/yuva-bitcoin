@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getDashboardData } = require('../controllers/Dashboard.controller');
-const {verifyToken} = require('../middleware/Auth.middleware');
+const {ValidMember, isAdmin} = require('../middleware/Auth.middleware');
 
-router.route('/').get(verifyToken , getDashboardData);
+router.route('/').get(ValidMember, getDashboardData);
 
 module.exports = router;

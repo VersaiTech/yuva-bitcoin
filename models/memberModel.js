@@ -47,6 +47,7 @@ const memberSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   registration_date: { type: Date, default: Date.now },
   coins: { type: Number, default: 0 },
+  userType: { type: String, default: 'member' }
 });
 
 memberSchema.pre('save', async function(next) {
