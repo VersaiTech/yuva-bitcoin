@@ -36,7 +36,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Overview | Rock34x 
+          Dashboard: Overview | Rock34x
         </title>
       </Head>
       <Box

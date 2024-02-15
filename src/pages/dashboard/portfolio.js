@@ -20,6 +20,10 @@ import { CryptoWallet } from "../../sections/dashboard/crypto/crypto-wallet";
 import { CryptoTransactions } from "../../sections/dashboard/crypto/crypto-transactions";
 import { CryptoUpgrade } from "../../sections/dashboard/crypto/crypto-upgrade";
 import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-current-balance";
+import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
+import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-open-tickets';
+import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
+
 
 const now = new Date();
 
@@ -57,6 +61,27 @@ const Page = () => {
                 </div>
               </Stack>
             </Grid>
+
+            <Grid
+              xs={12}
+              md={4}
+            >
+              <OverviewDoneTasks amount={31} />
+            </Grid>
+            <Grid
+              xs={12}
+              md={4}
+            >
+              <OverviewPendingIssues amount={12} />
+            </Grid>
+            <Grid
+              xs={12}
+              md={4}
+            >
+              <OverviewOpenTickets amount={5} />
+            </Grid>
+
+
             <Grid xs={12} md={7}>
               <Stack direction="row" spacing={3}>
                 <CryptoWallet
