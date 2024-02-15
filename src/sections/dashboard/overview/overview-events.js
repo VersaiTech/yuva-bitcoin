@@ -26,10 +26,10 @@ export const OverviewEvents = (props) => {
   return (
     <Card>
       <CardHeader
-        title="Upcoming events"
+        title="Completed Task"
         subheader="Based on the linked bank accounts"
       />
-      <CardContent sx={{ pt: 0 }}>
+      {/* <CardContent sx={{ pt: 0 }}>
         <List disablePadding>
           {events.map((event) => {
             const createdAtMonth = format(event.createdAt, 'LLL').toUpperCase();
@@ -90,7 +90,7 @@ export const OverviewEvents = (props) => {
             );
           })}
         </List>
-      </CardContent>
+      </CardContent> */}
       <Divider />
       <CardActions>
         <Button

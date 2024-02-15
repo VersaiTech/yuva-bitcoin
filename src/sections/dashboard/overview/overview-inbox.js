@@ -26,7 +26,7 @@ export const OverviewInbox = (props) => {
   return (
     <Card>
       <CardHeader
-        title="Inbox"
+        title="Pending Task"
         action={(
           <IconButton color="inherit">
             <SvgIcon fontSize="small">
@@ -35,7 +35,7 @@ export const OverviewInbox = (props) => {
           </IconButton>
         )}
       />
-      <List disablePadding>
+      {/* <List disablePadding>
         {messages.map((message) => {
           const ago = formatDistanceStrict(message.createdAt, new Date(), {
             addSuffix: true,
@@ -109,7 +109,7 @@ export const OverviewInbox = (props) => {
             </ListItem>
           );
         })}
-      </List>
+      </List> */}
       <Divider />
       <CardActions>
         <Button
@@ -121,7 +121,7 @@ export const OverviewInbox = (props) => {
           )}
           size="small"
         >
-          Go to chat
+          See all Tasks
         </Button>
       </CardActions>
     </Card>
