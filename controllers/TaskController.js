@@ -4,6 +4,9 @@ const Member = require('../models/memberModel');
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
 
+const azurecontainer = process.env.AZURE_CONTAINER;
+const azureconnectionString = process.env.AZURE_STRING;
+
 
 
 
@@ -120,8 +123,8 @@ const addTask = async (req, res) => {
         });
 
         if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
-          const blobServiceClient = BlobServiceClient.fromConnectionString("DefaultEndpointsProtocol=https;AccountName=azureyuvacoin;AccountKey=TlBPnxlggxIRenUH7KxiXyXZiTyoCy3xZQj2guD/OLSdBF4JhWgrfQ5L2/PYLf8q1/dbOQPcCMzA+AStn0TTsA==;EndpointSuffix=core.windows.net");
-          const containerName = "yuvacoincontainer";
+          const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
+          const containerName = azurecontainer;
           const containerClient = blobServiceClient.getContainerClient(containerName);
 
           // Loop through each image file
