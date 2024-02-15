@@ -30,7 +30,7 @@ export const OverviewPendingIssues = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Pending Issues
+            Pending Tasks
           </Typography>
           <Typography
             color="text.primary"
@@ -51,7 +51,7 @@ export const OverviewPendingIssues = (props) => {
           )}
           size="small"
         >
-          See all issues
+          See all tasks
         </Button>
       </CardActions>
     </Card>

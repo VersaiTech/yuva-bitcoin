@@ -5,11 +5,23 @@ import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
+import { useAuth } from '../../../hooks/use-auth';
+import { useMounted } from '../../../hooks/use-mounted';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const initialValues = {
   email: '',
   password: '',
   submit: null
+};
+
+
+const useParams = () => {
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('returnTo') || undefined;
+  return {
+    returnTo
+  };
 };
 
 const validationSchema = Yup.object({
@@ -25,10 +37,33 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
+  const isMounted = useMounted();
+  const { issuer, signIn } = useAuth();
+  const { returnTo } = useParams();
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+
+    onSubmit: async (values, helpers) => {
+      console.log(values);
+      try {
+        await signIn(values.email, values.password);
+
+        if (isMounted()) {
+          router.push(returnTo || paths.dashboard.index);
+        }
+      } catch (err) {
+        console.error(err);
+
+        if (isMounted()) {
+          helpers.setStatus({ success: false });
+          helpers.setErrors({ submit: err.message });
+          helpers.setSubmitting(false);
+        }
+      }
+    }
   });
 
   return (

@@ -21,6 +21,7 @@ export const de = {
   [tokens.nav.dashboard]: 'Dashboard',
   [tokens.nav.details]: 'Einzelheiten',
   [tokens.nav.ecommerce]: 'E-Commerce',
+  [tokens.nav.tasks]: 'Tasks',
   [tokens.nav.edit]: 'Bearbeiten',
   [tokens.nav.error]: 'Fehler',
   [tokens.nav.feed]: 'Füttern',

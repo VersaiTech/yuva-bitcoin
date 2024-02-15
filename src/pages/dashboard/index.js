@@ -13,7 +13,6 @@ import {
 import { usePageView } from '../../hooks/use-page-view';
 import { useSettings } from '../../hooks/use-settings';
 import { Layout as DashboardLayout } from '../../layouts/dashboard';
-import { OverviewBanner } from '../../sections/dashboard/overview/overview-banner';
 import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
 import { OverviewEvents } from '../../sections/dashboard/overview/overview-events';
 import { OverviewInbox } from '../../sections/dashboard/overview/overview-inbox';
@@ -72,12 +71,6 @@ const Page = () => {
               xs={12}
               md={4}
             >
-              <OverviewDoneTasks amount={31} />
-            </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
               <OverviewPendingIssues amount={12} />
             </Grid>
             <Grid
@@ -88,48 +81,9 @@ const Page = () => {
             </Grid>
             <Grid
               xs={12}
-              md={7}
+              md={4}
             >
-              <OverviewBanner />
-            </Grid>
-            <Grid
-              xs={12}
-              md={5}
-            >
-              <OverviewTips
-                sx={{ height: '100%' }}
-                tips={[
-                  {
-                    title: 'New fresh design.',
-                    content: 'Your favorite template has a new trendy look, more customization options, screens & more.'
-                  },
-                  {
-                    title: 'Tip 2.',
-                    content: 'Tip content'
-                  },
-                  {
-                    title: 'Tip 3.',
-                    content: 'Tip content'
-                  }
-                ]}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={7}
-            >
-              <OverviewSubscriptionUsage
-                chartSeries={[
-                  {
-                    name: 'This year',
-                    data: [40, 37, 41, 42, 45, 42, 36, 45, 40, 44, 38, 41]
-                  },
-                  {
-                    name: 'Last year',
-                    data: [26, 22, 19, 22, 24, 28, 23, 25, 24, 21, 17, 19]
-                  }
-                ]}
-              />
+              <OverviewDoneTasks amount={31} />
             </Grid>
             <Grid
               xs={12}
@@ -257,12 +211,6 @@ const Page = () => {
                   }
                 ]}
               />
-            </Grid>
-            <Grid xs={6}>
-              <OverviewJobs />
-            </Grid>
-            <Grid xs={6}>
-              <OverviewHelp />
             </Grid>
           </Grid>
         </Container>

@@ -40,11 +40,11 @@ export const getSections = (t) => [
         ),
       },
       {
-        title: t(tokens.nav.portfolio),
+        title: t(tokens.nav.tasks),
         path: paths.dashboard.index2,
         icon: (
           <SvgIcon fontSize="small">
-            <HomeSmileIcon />
+            <LayoutAlt02Icon />
           </SvgIcon>
         ),
       },

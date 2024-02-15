@@ -20,6 +20,7 @@ export const es = {
   [tokens.nav.dashboard]: 'Dashboard',
   [tokens.nav.details]: 'Detalles',
   [tokens.nav.demo]: 'Demo',
+  [tokens.nav.tasks]: 'Tasks',
   [tokens.nav.ecommerce]: 'E-Commerce',
   [tokens.nav.edit]: 'Editar',
   [tokens.nav.error]: 'Error',

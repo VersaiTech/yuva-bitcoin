@@ -197,7 +197,6 @@ const Page = () => {
                 }}
               >
                 <CryptoOperation />
-                <CryptoUpgrade />
               </Stack>
             </Grid>
           </Grid>

@@ -34,7 +34,7 @@ const storeSettings = (value) => {
 };
 
 const initialSettings = {
-  colorPreset: 'indigo',
+  colorPreset: 'green',
   contrast: 'normal',
   direction: 'ltr',
   layout: 'vertical',

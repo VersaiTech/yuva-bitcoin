@@ -30,7 +30,7 @@ export const OverviewOpenTickets = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Open tickets
+            Today Pending Task
           </Typography>
           <Typography
             color="text.primary"
@@ -51,7 +51,7 @@ export const OverviewOpenTickets = (props) => {
           )}
           size="small"
         >
-          See all tickets
+          See all Tasks
         </Button>
       </CardActions>
     </Card>

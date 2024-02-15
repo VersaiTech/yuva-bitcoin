@@ -29,6 +29,7 @@ export const en = {
   [tokens.nav.finance]: 'Finance',
   [tokens.nav.fleet]: 'Fleet',
   [tokens.nav.forgotPassword]: 'Forgot Password',
+  [tokens.nav.tasks]: 'Tasks',
   [tokens.nav.invoiceList]: 'Invoices',
   [tokens.nav.jobList]: 'Job Listings',
   [tokens.nav.kanban]: 'Kanban',

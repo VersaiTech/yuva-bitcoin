@@ -9,7 +9,7 @@ const loginPaths = {
   [Issuer.Amplify]: paths.auth.amplify.login,
   [Issuer.Auth0]: paths.auth.auth0.login,
   [Issuer.Firebase]: paths.auth.firebase.login,
-  [Issuer.JWT]: paths.auth.jwt.login
+  [Issuer.JWT]: paths.authDemo.login.modern
 };
 
 export const AuthGuard = (props) => {
