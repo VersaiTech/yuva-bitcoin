@@ -2,6 +2,10 @@ const { Task, CompletedTask } = require('../models/Task');
 const Member = require('../models/memberModel');
 
 
+const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
+
+
+
 
 const completeTask = async (req, res) => {
   try {
@@ -33,6 +37,7 @@ const completeTask = async (req, res) => {
       taskId,
       name: member.member_name,
      description: task.description,
+     link: task.link,
      status: 'pending'
     });
     await completedTask.save();
@@ -101,14 +106,36 @@ const getAllTasks = async (req, res) => {
 const addTask = async (req, res) => {
     try {
         // Extract task data from request body
-        const { description, coins } = req.body;
+        const { description, coins, link } = req.body;
+        const imageFiles = req.files;
     
         // Create a new task document
         const newTask = new Task({
           taskId: generateRandomNumber(),
           description,
           coins,
+          // imageUrl: null,
+          link,
+          imageUrls: [],
         });
+
+        if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+          const blobServiceClient = BlobServiceClient.fromConnectionString("DefaultEndpointsProtocol=https;AccountName=azureyuvacoin;AccountKey=TlBPnxlggxIRenUH7KxiXyXZiTyoCy3xZQj2guD/OLSdBF4JhWgrfQ5L2/PYLf8q1/dbOQPcCMzA+AStn0TTsA==;EndpointSuffix=core.windows.net");
+          const containerName = "yuvacoincontainer";
+          const containerClient = blobServiceClient.getContainerClient(containerName);
+
+          // Loop through each image file
+          for (let i = 0; i < imageFiles.length; i++) {
+              const imageFile = imageFiles[i];
+              const blobName = `${newTask.taskId}-${imageFile.originalname}`;
+              const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+              const imageData = imageFile.buffer;
+              await blockBlobClient.uploadData(imageData, imageData.length);
+
+              newTask.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
+          }
+      }
     
         // Save the task to the database
         await newTask.save();
