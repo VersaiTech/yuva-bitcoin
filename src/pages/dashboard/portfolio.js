@@ -32,7 +32,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Portfolio | Rock34x</title>
+        <title>Dashboard: Overview | Rock34x</title>
       </Head>
       <Box
         component="main"
@@ -53,7 +53,7 @@ const Page = () => {
             <Grid xs={12}>
               <Stack direction="row" justifyContent="space-between" spacing={4}>
                 <div>
-                  <Typography variant="h4">Portfolio</Typography>
+                  <Typography variant="h4">Overview</Typography>
                 </div>
               </Stack>
             </Grid>

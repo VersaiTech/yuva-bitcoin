@@ -32,7 +32,16 @@ export const getSections = (t) => [
     items: [
       {
         title: t(tokens.nav.overview),
-        path: paths.dashboard.index,
+        path: paths.dashboard.portfolio,
+        icon: (
+          <SvgIcon fontSize="small">
+            <HomeSmileIcon />
+          </SvgIcon>
+        ),
+      },
+      {
+        title: t(tokens.nav.portfolio),
+        path: paths.dashboard.index2,
         icon: (
           <SvgIcon fontSize="small">
             <HomeSmileIcon />
@@ -58,15 +67,6 @@ export const getSections = (t) => [
       //   )
       // },
 
-      {
-        title: t(tokens.nav.portfolio),
-        path: paths.dashboard.portfolio,
-        icon: (
-          <SvgIcon fontSize="small">
-            <HomeSmileIcon />
-          </SvgIcon>
-        ),
-      },
     ],
   },
   // {
