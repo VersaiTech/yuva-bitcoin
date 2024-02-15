@@ -10,8 +10,9 @@ const mongoose = require('mongoose');
 // });
 
 const taskSchema = new mongoose.Schema({
+    taskId : { type: String, required: true },
     description: { type: String, required: true },
-    coinReward: { type: Number, required: true },
+    coins: { type: Number, required: true },
 });
 
 
@@ -26,8 +27,8 @@ const taskSchema = new mongoose.Schema({
 
 
 const completedTaskSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Member', required: true },
-    taskId: { type: mongoose.Schema.Types.ObjectId, ref: 'Task', required: true },
+    userId : { type: String, required: true, ref: 'Member' },
+    taskId : { type: String, required: true, ref: 'Task' },
     name: { type: String, required: true, ref: 'Member' },
     description: { type: String, required: true, ref: 'Task' },
     dateCompleted: { type: Date, default: Date.now },

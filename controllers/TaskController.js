@@ -6,7 +6,7 @@ const Member = require('../models/memberModel');
 const completeTask = async (req, res) => {
   try {
     const { taskId } = req.body;
-    const userId = req.user._id; // Assuming you have the authenticated user stored in req.user
+    const userId = req.user.member_user_id; // Assuming you have the authenticated user stored in req.user
 
     // Check if the user has already completed this task
     const existingCompletedTask = await CompletedTask.findOne({ userId, taskId });
@@ -15,14 +15,14 @@ const completeTask = async (req, res) => {
     }
 
     // Fetch user details
-    const member = await Member.findById(userId);
+    const member = await Member.findOne({member_user_id: userId});
 
     if (!member) {
       return res.status(404).json({ message: 'member not found' });
     }
 
     // Fetch task details
-    const task = await Task.findById(taskId);
+    const task = await Task.findOne({taskId});
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
@@ -52,25 +52,39 @@ const confirmTaskCompletion = async (req, res) => {
   try {
     const { taskId, userId } = req.body;
 
-    const completedTask = await CompletedTask.findOne({ userId, taskId, status: 'pending' });
+    const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId, status: 'pending' });
+
+    console.log(completedTask);
     if (!completedTask) {
       return res.status(404).json({ message: 'Pending task completion not found' });
     }
 
-    // Add admin authorization logic here if needed
+    // Fetch task details to get the reward amount
+    const task = await Task.findOne({taskId});
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Reward the user
+    const user = await Member.findOne({member_user_id: userId});
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
     completedTask.status = 'confirmed';
     await completedTask.save();
 
-    // Reward the user (Update user's coins balance, etc.)
-    // Your reward logic goes here...
+    // Update user's coins balance with the reward from the task
+    user.coins += task.coins; // Assuming task.reward contains the reward amount
+    await user.save();
 
-    res.status(200).json({ message: 'Task completion confirmed' });
+    res.status(200).json({ message: 'Task completion confirmed. User rewarded.' });
   } catch (error) {
     console.error('Error confirming task completion:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
@@ -87,12 +101,13 @@ const getAllTasks = async (req, res) => {
 const addTask = async (req, res) => {
     try {
         // Extract task data from request body
-        const { description, coinReward } = req.body;
+        const { description, coins } = req.body;
     
         // Create a new task document
         const newTask = new Task({
+          taskId: generateRandomNumber(),
           description,
-          coinReward,
+          coins,
         });
     
         // Save the task to the database
@@ -103,6 +118,14 @@ const addTask = async (req, res) => {
         console.error('Error adding task:', error);
         res.status(500).json({ error: 'Internal Server Error' });
       }
+    }
+
+
+    function generateRandomNumber() {
+      const min = 1000000; // Minimum 7-digit number (inclusive)
+      const max = 9999999; // Maximum 7-digit number (inclusive)
+    
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 module.exports = { getAllTasks, addTask, completeTask, confirmTaskCompletion };

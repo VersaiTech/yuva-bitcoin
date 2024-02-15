@@ -506,8 +506,6 @@ async function login (req, res)  {
   }
 };
 
-
-
 async function getRegister(req, res) {
   try {
     const sponcer_id = req.query.sponcer_id;
