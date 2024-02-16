@@ -55,6 +55,7 @@ export const paths = {
     },
     account: '/dashboard/account',
     portfolio: '/dashboard/portfolio',
+    tasks: '/dashboard/tasks',
     analytics: '/dashboard/analytics',
     demo: '/dashboard/demo',
     blank: '/dashboard/blank',
@@ -94,10 +95,10 @@ export const paths = {
       index: '/dashboard/orders',
       details: '/dashboard/orders/:orderId'
     },
-    tasks: {
-      index: '/dashboard/tasks',
-      details: '/dashboard/tasks/:taskId'
-    },
+    // tasks: {
+    //   index: '/dashboard/tasks',
+    //   details: '/dashboard/tasks/:taskId'
+    // },
     products: {
       index: '/dashboard/products',
       create: '/dashboard/products/create'
