@@ -94,10 +94,10 @@ export const paths = {
       index: '/dashboard/orders',
       details: '/dashboard/orders/:orderId'
     },
-    // tasks: {
-    //   index: '/dashboard/tasks',
-    //   details: '/dashboard/tasks/:taskId'
-    // },
+    tasks: {
+      index: '/dashboard/tasks',
+      details: '/dashboard/tasks/:taskId'
+    },
     products: {
       index: '/dashboard/products',
       create: '/dashboard/products/create'
@@ -152,6 +152,10 @@ export const paths = {
     orders: {
       index: '/rock34x/orders',
       details: '/rock34x/orders/:orderId'
+    },
+    tasks: {
+      index: '/rock34x/tasks',
+      details: '/rock34x/tasks/:taskId'
     },
     products: {
       index: '/rock34x/products',
