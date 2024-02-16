@@ -3,10 +3,12 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const cron = require('node-cron');
+// const cron = require('node-cron');
+
 const { Connection } = require("./config/db.config");
 require("dotenv").config();
 
+const cron = require('./crons/passiveincome');
 
 const assignedTaskController = require('./controllers/AssignedTaskController');
 
@@ -28,12 +30,8 @@ app.use('/api/Team', require('./routes/Team.route'));
 app.use('/api/Earning', require('./routes/Earning.route'));
 app.use('/api/Withdraw', require('./routes/Withdraw.route'));
 // Create an API endpoint to manually trigger the cron job
-app.post('/api/run-cron', (req, res) => {
-  console.log('Manually triggering the cron job...');
-  // Remove the following line, as cron doesn't have a start method
-  // cron.start();
-  res.status(200).json({ message: 'Cron job triggered manually.' });
-});
+
+
 
 // app.listen(port, () => {
 //     console.log(`Server is running on port ${port}.`);
