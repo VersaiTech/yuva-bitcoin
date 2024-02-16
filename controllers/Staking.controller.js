@@ -157,10 +157,10 @@ const stakingRequest = async (req, res) => {
 };
 
 const stakingSummary = async (req, res) => {
-  const user = req.user;
+  const userId = req.user.member_user_id;
 
   try {
-    const deposits = await Deposit.find({ member_user_id: user });
+    const deposits = await Deposit.find({ member_user_id: userId });
     return res.status(200).send({
       message: "Staking summary",
       data: deposits,
