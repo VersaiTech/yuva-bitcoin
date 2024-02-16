@@ -7,8 +7,10 @@ const depositSchema = new mongoose.Schema({
   sys_date: { type: Date, default: Date.now },
   investment: { type: Number, required: true },
   transaction_id: { type: String, required: true },
-  walletAddress: { type: String, required: true },
+  walletAddress: { type: String },
   deposit_type: { type: String, enum: ['Wallet'], required: true },
+  stakingDuration: { type: Number, required: true }, // Add staking duration field
+  interestRate: { type: Number }, // Add interest rate field
 });
 
 // Create a model from the schema

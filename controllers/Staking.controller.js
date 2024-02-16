@@ -103,6 +103,8 @@
 // };
 
 
+const Member = require('../models/memberModel');
+const { v4: uuidv4 } = require('uuid'); 
 const Deposit = require("../models/deposit");
 
 const getStakingData = async (req, res) => {
@@ -142,7 +144,7 @@ const stakingRequest = async (req, res) => {
     });
 
     await deposit.save();
-    
+
     return res.status(200).send({
       message: "Staking request submitted successfully",
     });
@@ -156,7 +158,7 @@ const stakingRequest = async (req, res) => {
 
 const stakingSummary = async (req, res) => {
   const user = req.user;
-  
+
   try {
     const deposits = await Deposit.find({ member_user_id: user });
     return res.status(200).send({
@@ -171,8 +173,66 @@ const stakingSummary = async (req, res) => {
   }
 };
 
+
+async function transferToStaking(req, res) {
+  try {
+    const { member_user_id, investment, stakingDuration } = req.body;
+
+    // Check if the member exists
+    const member = await Member.findOne({ member_user_id });
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+
+    // Check if the member has sufficient balance in the wallet
+    if (member.coins < investment) {
+      return res.status(400).json({ error: 'Insufficient balance in the wallet' });
+    }
+
+    // Deduct the amount from the member's wallet
+    member.coins -= investment;
+    await member.save();
+
+    // Check if there is an existing deposit for the member
+    const existingDeposit = await Deposit.findOne({ member_user_id, deposit_type: 'Wallet' });
+
+    if (existingDeposit) {
+      // Update the existing deposit
+      existingDeposit.investment += investment;
+      await existingDeposit.save();
+      res.status(200).json(existingDeposit);
+    } else {
+      // Create a new deposit if none exists
+      const newDeposit = new Deposit({
+        member_user_id,
+        member_name: member.member_name,
+        investment,
+        transaction_id: generateTransactionId(),
+        deposit_type: 'Wallet',
+        stakingDuration,
+      });
+
+      // Save the deposit
+      const savedDeposit = await newDeposit.save();
+
+      res.status(201).json(savedDeposit);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+// Helper function to generate a unique transaction ID (you may need to implement your logic here)
+function generateTransactionId() {
+  return `${Date.now()}_${uuidv4()}`;
+}
+
 module.exports = {
   getStakingData,
   stakingRequest,
-  stakingSummary
-}
+  stakingSummary, transferToStaking
+};
+
+
+
