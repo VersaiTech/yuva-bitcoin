@@ -104,7 +104,7 @@
 
 
 const Member = require('../models/memberModel');
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 const Deposit = require("../models/deposit");
 
 const getStakingData = async (req, res) => {
@@ -175,14 +175,16 @@ const stakingSummary = async (req, res) => {
 
 
 async function transferToStaking(req, res) {
+  const user = req.user.member_user_id;
   try {
-    const { member_user_id, investment, stakingDuration } = req.body;
+    const { investment, stakingDuration } = req.body;
 
     // Check if the member exists
-    const member = await Member.findOne({ member_user_id });
+    const member = await Member.findOne({ member_user_id: user });
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
     }
+    console.log(member);
 
     // Check if the member has sufficient balance in the wallet
     if (member.coins < investment) {
@@ -204,7 +206,8 @@ async function transferToStaking(req, res) {
     } else {
       // Create a new deposit if none exists
       const newDeposit = new Deposit({
-        member_user_id,
+        member_user_id:member.member_user_id,
+        // user,
         member_name: member.member_name,
         investment,
         transaction_id: generateTransactionId(),

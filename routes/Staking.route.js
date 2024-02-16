@@ -5,6 +5,6 @@ const {ValidMember} = require('../middleware/Auth.middleware');
 
 router.route("/").get(getStakingData).post(ValidMember, stakingRequest);
 router.route("/Summary").get(ValidMember,stakingSummary);
-router.route("/transferToStaking").post(transferToStaking);
+router.route("/transferToStaking").post(ValidMember,transferToStaking);
 
 module.exports = router;
