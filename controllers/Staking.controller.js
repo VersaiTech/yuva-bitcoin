@@ -175,12 +175,12 @@ const stakingSummary = async (req, res) => {
 
 
 async function transferToStaking(req, res) {
-  const user = req.user.member_user_id;
+  const userId = req.user.member_user_id;
   try {
     const { investment, stakingDuration } = req.body;
 
     // Check if the member exists
-    const member = await Member.findOne({ member_user_id: user });
+    const member = await Member.findOne({ member_user_id: userId });
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
     }
@@ -196,7 +196,7 @@ async function transferToStaking(req, res) {
     await member.save();
 
     // Check if there is an existing deposit for the member
-    const existingDeposit = await Deposit.findOne({ member_user_id, deposit_type: 'Wallet' });
+    const existingDeposit = await Deposit.findOne({ member_user_id: userId, deposit_type: 'Wallet' });
 
     if (existingDeposit) {
       // Update the existing deposit
@@ -207,7 +207,6 @@ async function transferToStaking(req, res) {
       // Create a new deposit if none exists
       const newDeposit = new Deposit({
         member_user_id:member.member_user_id,
-        // user,
         member_name: member.member_name,
         investment,
         transaction_id: generateTransactionId(),
