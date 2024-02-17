@@ -158,4 +158,34 @@ const addTask = async (req, res) => {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-module.exports = { getAllTasks, addTask, completeTask, confirmTaskCompletion };
+    async function getAllMembers(req, res) {
+      try {
+        // Fetch all members from the database
+        const members = await Member.find();
+    
+        // If there are no members found, return an empty array
+        if (!members || members.length === 0) {
+          return res.status(404).json({
+            status: false,
+            message: "No members found",
+            members: [],
+          });
+        }
+    
+        // Return the list of members
+        return res.status(200).json({
+          status: true,
+          message: "Members found",
+          members: members,
+        });
+      } catch (error) {
+        console.error("Error fetching members:", error);
+        return res.status(500).json({
+          status: false,
+          message: "Internal server error",
+        });
+      }
+    }
+    
+
+module.exports = { getAllTasks, addTask, completeTask, confirmTaskCompletion, getAllMembers };
