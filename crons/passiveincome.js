@@ -1,5 +1,3 @@
-
-
 // // Define an API endpoint to get interest rates for a specific staking duration
 
 // require("dotenv").config();
@@ -353,28 +351,93 @@ const Deposit = require('../models/deposit');
 const Member = require('../models/memberModel');
 
 // Define the cron job to run every two minutes
-cron.schedule('*/1 * * * * *', async () => {
-    try {
-        // Get all deposits
-        const deposits = await Deposit.find();
+// running okay without a bit of validation
+// cron.schedule(' */1 * * * *', async () => {
+//   console.log('Running the cron job every 1 minutes for testing...');
+//     try {
+//         // Get all deposits
+//         const deposits = await Deposit.find();
 
-        // Iterate over deposits
-        for (const deposit of deposits) {
-            // Calculate interest (3% of the investment)
-            const interest = 0.03 * deposit.investment;
+//         // Iterate over deposits
+//         for (const deposit of deposits) {
+//             // Calculate interest (3% of the investment)
+//             const interest = 0.03 * deposit.investment;
 
-            // Find the member associated with the deposit
-            const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+//             // Find the member associated with the deposit
+//             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
 
-            // Add interest to the member's coins
-            member.coins += interest;
+//             // Add interest to the member's coins
+//             member.coins += interest;
+//             // deposit.investment += interest;
 
-            // Save the updated member
-            await member.save();
+//             // Save the updated member
+//             await member.save();
+//             // await deposit.save();
+//         }
+
+//         console.log('Interest distributed successfully');
+//     } catch (error) {
+//         console.error('Error distributing interest:', error);
+//     }
+// });
+
+
+// newly added
+// Define the cron job to run every day at midnight
+cron.schedule('*/1 * * * *', async () => {
+  console.log('Running the daily 1 cron job...');
+
+  try {
+    // Find all staking deposits
+    const stakingDeposits = await Deposit.find();
+
+    // Iterate over staking deposits and calculate interest
+    for (const deposit of stakingDeposits) {
+      const currentDate = new Date();
+      const stakingStartDate = deposit.sys_date;
+      const stakingDuration = deposit.stakingDuration;
+
+      const elapsedTime = currentDate - stakingStartDate;
+      const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+
+      // Check if the staking duration has been reached
+      if (elapsedDays >= stakingDuration) {
+        const interestRate = getInterestRate(stakingDuration);
+        if (interestRate !== null) {
+          // Calculate interest based on the original investment amount
+          const interest = deposit.investment * interestRate;
+
+          // Update member's account with interest
+          const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+          member.coins += interest;
+          await member.save();
+
+          console.log(`Staking duration reached for deposit with ID ${deposit._id}. Member received ${interestRate * 100}% interest.`);
+        } else {
+          console.log(`Invalid staking duration for deposit with ID ${deposit._id}.`);
         }
-
-        console.log('Interest distributed successfully');
-    } catch (error) {
-        console.error('Error distributing interest:', error);
+      }
     }
+
+    console.log('Daily cron job completed.');
+  } catch (error) {
+    console.error('Error in the daily cron job:', error);
+  }
+}, {
+  scheduled: true,
+  timezone: 'Asia/Kolkata', // Set your timezone to IST
 });
+
+// Helper function to get interest rate based on staking duration
+function getInterestRate(durationMonths) {
+  switch (durationMonths) {
+    case 3:
+      return 0.03;
+    case 6:
+      return 0.05;
+    case 12:
+      return 0.10;
+    default:
+      return null;
+  }
+}
