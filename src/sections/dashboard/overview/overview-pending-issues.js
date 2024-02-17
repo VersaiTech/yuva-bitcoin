@@ -51,7 +51,7 @@ export const OverviewPendingIssues = (props) => {
           )}
           size="small"
         >
-          See all tasks
+          See all pending tasks
         </Button>
       </CardActions>
     </Card>

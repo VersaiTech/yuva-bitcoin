@@ -40,8 +40,8 @@ export const getSections = (t) => [
         ),
       },
       {
-        title: t(tokens.nav.tasks),
-        path: paths.dashboard.index2,
+        title: t(tokens.nav.customers),
+        path: paths.dashboard.customers.index,
         icon: (
           <SvgIcon fontSize="small">
             <LayoutAlt02Icon />
@@ -50,7 +50,7 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.tasks),
-        path: paths.dashboard.tasks,
+        path: paths.dashboard.tasks.index,
         icon: (
           <SvgIcon fontSize="small">
             <BarChartSquare02Icon />

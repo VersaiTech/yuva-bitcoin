@@ -1,0 +1,38 @@
+<svg width="108px" height="110px" viewBox="0 0 108 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>iconly-task</title>
+    <defs>
+        <!-- Define gradients -->
+        <linearGradient x1="88.0814069%" y1="16.8240929%" x2="17.137702%" y2="77.1430431%" id="linearGradient-1">
+            <stop stop-color="#9BF763" offset="0%"></stop>
+            <stop stop-color="#26AB5B" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="100.91953%" y1="-0.9195332%" x2="-0.611636293%" y2="100.611636%" id="linearGradient-2">
+            <stop stop-color="#72DC60" offset="0%"></stop>
+            <stop stop-color="#72DC60" stop-opacity="0.35" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="15.5014844%" y1="11.1810686%" x2="80.0711452%" y2="91.1524441%" id="linearGradient-3">
+            <stop stop-color="#FFFFFF" stop-opacity="0.25" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="89.7887181%" y1="16.8241305%" x2="16.8956202%" y2="79.1834028%" id="linearGradient-4">
+            <stop stop-color="#9BF763" offset="0%"></stop>
+            <stop stop-color="#26AB5B" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-46.2%" y="-38.7%" width="192.3%" height="177.4%" filterUnits="objectBoundingBox" id="filter-5">
+            <feGaussianBlur stdDeviation="8" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="92.909942%" y1="32.9907485%" x2="-18.3766644%" y2="36.6190864%" id="linearGradient-6">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.2" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="11.1916147%" y1="41.3656374%" x2="95.1951187%" y2="41.8275957%" id="linearGradient-9">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 9.000000)">
+            <!-- Task icon background -->
+            <path d="M60.8536677,0.82044707 L89.9485154,8.58020712 C100.671762,11.4402761 104.987366,19.1833532 102.149942,29.7224338 L92.5413759,65.4168903 C90.6930021,72.2834434 86.9107019,76.5644941 81.6088452,78 C81.8172296,76.5621065 81.9243701,75.0641268 81.9243701,73.512129 L81.9243701,39.8849801 C81.9243701,25.3145452 72.5376812,15.5186847 58.5195635,15.5186847 L39,15.5186847 L39.6627321,13.0566378 C42.499857,2.51762692 50.3002266,-1.99421892 60.8536677,0.82044707 Z" fill="url(#linearGradient-1)" fill-rule="nonzero"></path>
+            <!-- Task icon shape -->
+            <path d="M23.0298905,15 L59.0117372,15 C65.9243556,15 71.6606633,17.4237486 75.6698696,21.6200445 C79.6810821,25.8184469 82,31.8298209 82,39.0674634 L82,72.9743651 C82,80.1909429 79.6812827,86.1918848 75.6700702,90.3851715 C71.6607636,94.5765523 65.9243556,97 59.0117372,97 L23.0298905,97 C16.1170715,97 10.3700309,94.576452 6.35025218,90.3847703 C2.32871803,86.1911827

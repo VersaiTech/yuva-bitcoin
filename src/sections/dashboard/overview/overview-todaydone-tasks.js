@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 
-export const OverviewDoneTasks = (props) => {
+export const TodayCompletedTask = (props) => {
   const { amount } = props;
 
   return (
@@ -30,7 +30,7 @@ export const OverviewDoneTasks = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Completed Tasks
+           Today Completed Tasks
           </Typography>
           <Typography
             color="text.primary"
@@ -58,6 +58,6 @@ export const OverviewDoneTasks = (props) => {
   );
 };
 
-OverviewDoneTasks.propTypes = {
+TodayCompletedTask.propTypes = {
   amount: PropTypes.number.isRequired
 };

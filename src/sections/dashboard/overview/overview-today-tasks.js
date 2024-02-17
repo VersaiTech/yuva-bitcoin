@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 
-export const OverviewDoneTasks = (props) => {
+export const TodayTask = (props) => {
   const { amount } = props;
 
   return (
@@ -21,19 +21,19 @@ export const OverviewDoneTasks = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/iconly-glass-tick.svg"
+            src="/assets/iconly/icon-glass-todayalltask.svg"
             width={48}
           />
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography
-            color="text.secondary"
+            color="primary"
             variant="body2"
           >
-            Completed Tasks
+           Today All Task
           </Typography>
           <Typography
-            color="text.primary"
+            color="text.secondery"
             variant="h4"
           >
             {amount}
@@ -51,13 +51,13 @@ export const OverviewDoneTasks = (props) => {
           )}
           size="small"
         >
-          See all completed task
+          See all task
         </Button>
       </CardActions>
     </Card>
   );
 };
 
-OverviewDoneTasks.propTypes = {
+TodayTask.propTypes = {
   amount: PropTypes.number.isRequired
 };

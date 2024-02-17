@@ -20,10 +20,17 @@ import { CryptoWallet } from "../../sections/dashboard/crypto/crypto-wallet";
 import { CryptoTransactions } from "../../sections/dashboard/crypto/crypto-transactions";
 import { CryptoUpgrade } from "../../sections/dashboard/crypto/crypto-upgrade";
 import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-current-balance";
-import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
-import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-open-tickets';
-import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
-
+import { OverviewDoneTasks } from "../../sections/dashboard/overview/overview-done-tasks";
+import { OverviewOpenTickets } from "../../sections/dashboard/overview/overview-open-tickets";
+import { OverviewPendingIssues } from "../../sections/dashboard/overview/overview-pending-issues";
+import { AllUsers } from "../../sections/dashboard/overview/overview-all-users";
+import { ActiveUsers } from "../../sections/dashboard/overview/overview-active-users";
+import { BlockUsers } from "../../sections/dashboard/overview/overview-block-users";
+import { AllTask } from "../../sections/dashboard/overview/overview-all-tasks";
+import { OverviewAllTasks } from "../../sections/dashboard/overview/overview-all-tasks";
+// import { TodayTask } from "../../sections/dashboard/overview/overview-today-task";
+import { TodayTask } from "../../sections/dashboard/overview/overview-today-tasks";
+import { TodayCompletedTask } from "../../sections/dashboard/overview/overview-todaydone-tasks";
 
 const now = new Date();
 
@@ -62,27 +69,36 @@ const Page = () => {
               </Stack>
             </Grid>
 
-            <Grid
-              xs={12}
-              md={4}
-            >
+            <Grid xs={12} md={4}>
+              <AllUsers amount={5043} />
+            </Grid>
+            <Grid xs={12} md={4}>
+              <ActiveUsers amount={142} />
+            </Grid>
+            <Grid xs={12} md={4}>
+              <BlockUsers amount={12} />
+            </Grid>
+            <Grid xs={12} md={4}>
+              <AllTask amount={1232} />
+            </Grid>
+            
+            <Grid xs={12} md={4}>
               <OverviewDoneTasks amount={31} />
             </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
+
+            <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={12} />
             </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
+            <Grid xs={12} md={4}>
+              <TodayTask amount={12} />
+            </Grid>
+            <Grid xs={12} md={4}>
+              <TodayCompletedTask amount={12} />
+            </Grid>
+            <Grid xs={12} md={4}>
               <OverviewOpenTickets amount={5} />
             </Grid>
 
-
-            
             <Grid xs={12} md={8}>
               <Stack
                 spacing={{
@@ -124,7 +140,7 @@ const Page = () => {
                 />
               </Stack>
             </Grid>
-            <Grid xs={12} md={4}>
+            {/* <Grid xs={12} md={4}>
               <Stack
                 spacing={{
                   xs: 3,
@@ -133,7 +149,7 @@ const Page = () => {
               >
                 <CryptoOperation />
               </Stack>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Box>

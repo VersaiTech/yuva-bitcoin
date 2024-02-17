@@ -27,10 +27,10 @@ export const OverviewDoneTasks = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography
-            color="text.secondary"
+            color="text.primary"
             variant="body2"
           >
-            Completed Tasks
+            Today Completed Tasks
           </Typography>
           <Typography
             color="text.primary"
