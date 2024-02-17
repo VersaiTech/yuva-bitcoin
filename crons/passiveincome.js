@@ -346,22 +346,73 @@
 // }
 
 
+/////////////////"yeh Wala Perfect code hai don't touch it"////////////////////
+
+
+// const cron = require('node-cron');
+// const Deposit = require('../models/deposit');
+// const Member = require('../models/memberModel');
+
+// // Define the cron job to run every two minutes
+// cron.schedule('*/1 * * * * *', async () => {
+//     try {
+//         // Get all deposits
+//         const deposits = await Deposit.find();
+
+//         // Iterate over deposits
+//         for (const deposit of deposits) {
+//             // Calculate interest (3% of the investment)
+//             const interest = 0.03 * deposit.investment;
+
+//             // Find the member associated with the deposit
+//             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+
+//             // Add interest to the member's coins
+//             member.coins += interest;
+
+//             // Save the updated member
+//             await member.save();
+//         }
+
+//         console.log('Interest distributed successfully');
+//     } catch (error) {
+//         console.error('Error distributing interest:', error);
+//     }
+// });
+
+
 
 
 const cron = require('node-cron');
 const Deposit = require('../models/deposit');
 const Member = require('../models/memberModel');
+const moment = require('moment');
 
 // Define the cron job to run every two minutes
-cron.schedule('*/1 * * * * *', async () => {
+cron.schedule('*/2 * * * *', async () => {
     try {
         // Get all deposits
         const deposits = await Deposit.find();
 
         // Iterate over deposits
         for (const deposit of deposits) {
-            // Calculate interest (3% of the investment)
-            const interest = 0.03 * deposit.investment;
+            // Calculate the duration of the deposit
+            const depositDate = moment(deposit.sys_date);
+            const currentDate = moment();
+            const durationInMonths = currentDate.diff(depositDate, 'months');
+
+            // Define the interest rate based on the duration
+            let interestRate = 0;
+            if (durationInMonths >= 12) {
+                interestRate = 0.10; // 10% interest for 12 or more months
+            } else if (durationInMonths >= 6) {
+                interestRate = 0.05; // 5% interest for 6 or more months
+            } else if (durationInMonths >= 3) {
+                interestRate = 0.03; // 3% interest for 3 or more months
+            }
+
+            // Calculate interest
+            const interest = interestRate * deposit.investment;
 
             // Find the member associated with the deposit
             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
