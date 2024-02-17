@@ -8,6 +8,7 @@ import { paths } from '../../../paths';
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useSnackbar } from 'notistack';
 
 const initialValues = {
   email: '',
@@ -37,6 +38,7 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const isMounted = useMounted();
   const { issuer, signIn } = useAuth();
   const { returnTo } = useParams();
@@ -53,9 +55,12 @@ const Page = () => {
 
         if (isMounted()) {
           router.push(returnTo || paths.dashboard.index);
+          enqueueSnackbar('Logged in successfully', { variant: 'success' });
         }
-      } catch (err) {
-        console.error(err);
+      } 
+      catch (err) {
+        enqueueSnackbar(err.response.data.message, { variant: 'error' });
+        console.log(err.response.data.message);
 
         if (isMounted()) {
           helpers.setStatus({ success: false });

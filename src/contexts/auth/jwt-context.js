@@ -4,6 +4,7 @@ import { authApi } from '../../api/auth';
 import { Issuer } from '../../utils/auth';
 
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const STORAGE_KEY = 'accessToken';
@@ -71,6 +72,7 @@ export const AuthContext = createContext({
 });
 
 export const AuthProvider = (props) => {
+  const { enqueueSnackbar } = useSnackbar();
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -116,17 +118,14 @@ export const AuthProvider = (props) => {
     []);
 
     const signIn = useCallback(async (email, password) => {
-      try {
-        console.log(BASEURL);
         const response = await axios.post(`${BASEURL}/api/Auth/admin-login`, {
           email,
           password
         });
-    
-        if (response.status === 200) {
-          const { accessToken, user } = response.data;
-    
-          localStorage.setItem(STORAGE_KEY, accessToken);
+        
+          console.log(response.data);
+          const { token, user } = response.data;
+          localStorage.setItem(STORAGE_KEY, token);
   
           dispatch({
             type: ActionType.SIGN_IN,
@@ -134,19 +133,7 @@ export const AuthProvider = (props) => {
               user
             }
           });
-        } else {
-          console.error('Login failed:', response.data);
-        }
-      } catch (error) {
-        console.error('Error: ', error);
-        dispatch({
-          type: ActionType.SIGN_IN,
-          payload: {
-            user: null
-          }
-        });
-      }
-    }, [dispatch]);
+      }, [dispatch]);
     
   const signUp = useCallback(async (email, name, password) => {
     const { accessToken } = await authApi.signUp({ email, name, password });
@@ -165,6 +152,7 @@ export const AuthProvider = (props) => {
   const signOut = useCallback(async () => {
     localStorage.removeItem(STORAGE_KEY);
     dispatch({ type: ActionType.SIGN_OUT });
+    enqueueSnackbar("Logged out successfully", { variant: "success" });
   }, [dispatch]);
 
   return (

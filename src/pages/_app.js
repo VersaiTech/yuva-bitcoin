@@ -24,6 +24,7 @@ import '../libs/mapbox';
 import '../locales/i18n';
 import { SettingsButton } from '../components/settings-button';
 import { SettingsDrawer } from '../components/settings-drawer';
+import SnackbarProvider from "../components/SnackbarProvider";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -53,6 +54,7 @@ console.log('-------------------')
       </Head>
       <ReduxProvider store={store}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <SnackbarProvider>
           <AuthProvider>
             <AuthConsumer>
               {(auth) => (
@@ -126,6 +128,7 @@ console.log('-------------------')
               )}
             </AuthConsumer>
           </AuthProvider>
+          </SnackbarProvider>
         </LocalizationProvider>
       </ReduxProvider>
     </CacheProvider>

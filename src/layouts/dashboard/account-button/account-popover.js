@@ -20,8 +20,10 @@ import {
 import { useAuth } from '../../../hooks/use-auth';
 import { paths } from '../../../paths';
 import { Issuer } from '../../../utils/auth';
+import { useSnackbar } from 'notistack';
 
 export const AccountPopover = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
