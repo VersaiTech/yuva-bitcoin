@@ -344,11 +344,47 @@
 // }
 
 
+/////////////////"yeh Wala Perfect code hai don't touch it"////////////////////
+
+
+// const cron = require('node-cron');
+// const Deposit = require('../models/deposit');
+// const Member = require('../models/memberModel');
+
+// // Define the cron job to run every two minutes
+// cron.schedule('*/1 * * * * *', async () => {
+//     try {
+//         // Get all deposits
+//         const deposits = await Deposit.find();
+
+//         // Iterate over deposits
+//         for (const deposit of deposits) {
+//             // Calculate interest (3% of the investment)
+//             const interest = 0.03 * deposit.investment;
+
+//             // Find the member associated with the deposit
+//             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+
+//             // Add interest to the member's coins
+//             member.coins += interest;
+
+//             // Save the updated member
+//             await member.save();
+//         }
+
+//         console.log('Interest distributed successfully');
+//     } catch (error) {
+//         console.error('Error distributing interest:', error);
+//     }
+// });
+
+
 
 
 const cron = require('node-cron');
 const Deposit = require('../models/deposit');
 const Member = require('../models/memberModel');
+const moment = require('moment');
 
 // Define the cron job to run every two minutes
 // running okay without a bit of validation
