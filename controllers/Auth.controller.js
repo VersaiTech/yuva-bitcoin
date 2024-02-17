@@ -585,7 +585,7 @@ async function adminLogin(req, res) {
     if (!admin) {
       return res.status(400).send({
         status: false,
-        message: "Invalid email!",
+        message: "Invalid credentials!",
       });
     }
 
@@ -595,7 +595,7 @@ async function adminLogin(req, res) {
     if (!validPassword) {
       return res.status(400).send({
         status: false,
-        message: "Invalid password!",
+        message: "Invalid credentials!",
       });
     }
 
