@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { authApi } from '../../api/auth';
 import { Issuer } from '../../utils/auth';
 
+import axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const STORAGE_KEY = 'accessToken';
 
 var ActionType;
@@ -112,20 +115,39 @@ export const AuthProvider = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  const signIn = useCallback(async (email, password) => {
-    const { accessToken } = await authApi.signIn({ email, password });
-    const user = await authApi.me({ accessToken });
-
-    localStorage.setItem(STORAGE_KEY, accessToken);
-
-    dispatch({
-      type: ActionType.SIGN_IN,
-      payload: {
-        user
+    const signIn = useCallback(async (email, password) => {
+      try {
+        console.log(BASEURL);
+        const response = await axios.post(`${BASEURL}/api/Auth/admin-login`, {
+          email,
+          password
+        });
+    
+        if (response.status === 200) {
+          const { accessToken, user } = response.data;
+    
+          localStorage.setItem(STORAGE_KEY, accessToken);
+  
+          dispatch({
+            type: ActionType.SIGN_IN,
+            payload: {
+              user
+            }
+          });
+        } else {
+          console.error('Login failed:', response.data);
+        }
+      } catch (error) {
+        console.error('Error: ', error);
+        dispatch({
+          type: ActionType.SIGN_IN,
+          payload: {
+            user: null
+          }
+        });
       }
-    });
-  }, [dispatch]);
-
+    }, [dispatch]);
+    
   const signUp = useCallback(async (email, name, password) => {
     const { accessToken } = await authApi.signUp({ email, name, password });
     const user = await authApi.me({ accessToken });

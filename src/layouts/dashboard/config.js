@@ -336,11 +336,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.register.classic,
+                path: paths.auth.register.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.register.modern,
+                path: paths.auth.register.modern,
               },
             ],
           },
@@ -349,11 +349,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.forgotPassword.classic,
+                path: paths.auth.forgotPassword.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.forgotPassword.modern,
+                path: paths.auth.forgotPassword.modern,
               },
             ],
           },
@@ -362,11 +362,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.resetPassword.classic,
+                path: paths.auth.resetPassword.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.resetPassword.modern,
+                path: paths.auth.resetPassword.modern,
               },
             ],
           },
@@ -375,11 +375,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.verifyCode.classic,
+                path: paths.auth.verifyCode.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.verifyCode.modern,
+                path: paths.auth.verifyCode.modern,
               },
             ],
           },
@@ -398,11 +398,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.login.classic,
+                path: paths.auth.login.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.login.modern,
+                path: paths.auth.login.modern,
               },
             ],
           },
@@ -411,11 +411,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.register.classic,
+                path: paths.auth.register.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.register.modern,
+                path: paths.auth.register.modern,
               },
             ],
           },
@@ -424,11 +424,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.forgotPassword.classic,
+                path: paths.auth.forgotPassword.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.forgotPassword.modern,
+                path: paths.auth.forgotPassword.modern,
               },
             ],
           },
@@ -437,11 +437,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.resetPassword.classic,
+                path: paths.auth.resetPassword.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.resetPassword.modern,
+                path: paths.auth.resetPassword.modern,
               },
             ],
           },
@@ -450,11 +450,11 @@ export const getSections = (t) => [
             items: [
               {
                 title: "Classic",
-                path: paths.authDemo.verifyCode.classic,
+                path: paths.auth.verifyCode.classic,
               },
               {
                 title: "Modern",
-                path: paths.authDemo.verifyCode.modern,
+                path: paths.auth.verifyCode.modern,
               },
             ],
           },
