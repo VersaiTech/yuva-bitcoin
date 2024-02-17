@@ -3,7 +3,7 @@ export const paths = {
   checkout: '/checkout',
   contact: '/contact',
   pricing: '/pricing',
-  auth: {
+  authDemo: {
     auth0: {
       callback: '/auth/auth0/callback',
       login: '/auth/auth0/login'
@@ -24,26 +24,26 @@ export const paths = {
       resetPassword: '/auth/amplify/reset-password'
     }
   },
-  authDemo: {
+  auth: {
     forgotPassword: {
-      classic: '/auth-demo/forgot-password/classic',
-      modern: '/auth-demo/forgot-password/modern'
+      classic: '/auth/forgot-password/classic',
+      modern: '/auth/forgot-password/modern'
     },
     login: {
-      classic: '/auth-demo/login/classic',
-      modern: '/auth-demo/login/modern'
+      classic: '/auth/login/classic',
+      modern: '/auth/login/modern'
     },
     register: {
-      classic: '/auth-demo/register/classic',
-      modern: '/auth-demo/register/modern'
+      classic: '/auth/register/classic',
+      modern: '/auth/register/modern'
     },
     resetPassword: {
-      classic: '/auth-demo/reset-password/classic',
-      modern: '/auth-demo/reset-password/modern'
+      classic: '/auth/reset-password/classic',
+      modern: '/auth/reset-password/modern'
     },
     verifyCode: {
-      classic: '/auth-demo/verify-code/classic',
-      modern: '/auth-demo/verify-code/modern'
+      classic: '/auth/verify-code/classic',
+      modern: '/auth/verify-code/modern'
     }
   },
   dashboard: {
@@ -55,7 +55,7 @@ export const paths = {
     },
     account: '/dashboard/account',
     portfolio: '/dashboard/portfolio',
-    tasks: '/dashboard/tasks',
+    // tasks: '/dashboard/tasks',
     analytics: '/dashboard/analytics',
     demo: '/dashboard/demo',
     blank: '/dashboard/blank',
@@ -95,10 +95,10 @@ export const paths = {
       index: '/dashboard/orders',
       details: '/dashboard/orders/:orderId'
     },
-    // tasks: {
-    //   index: '/dashboard/tasks',
-    //   details: '/dashboard/tasks/:taskId'
-    // },
+    tasks: {
+      index: '/dashboard/tasks',
+      details: '/dashboard/tasks/:taskId'
+    },
     products: {
       index: '/dashboard/products',
       create: '/dashboard/products/create'
