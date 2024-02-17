@@ -11,6 +11,8 @@ export const en = {
   [tokens.nav.blog]: 'Blog',
   [tokens.nav.browse]: 'Browse',
   [tokens.nav.calendar]: 'Calendar',
+  [tokens.nav.users]: 'Users',
+  [tokens.nav.allUsers]: 'All Users',
   [tokens.nav.chat]: 'Chat',
   [tokens.nav.checkout]: 'Checkout',
   [tokens.nav.concepts]: 'Concepts',

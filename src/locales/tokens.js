@@ -21,6 +21,9 @@ export const tokens = {
     create: 'nav.create',
     crypto: 'nav.crypto',
     customers: 'nav.customers',
+    //all users
+    allUsers: 'nav.allUsers',
+    users: 'nav.users',
     dashboard: 'nav.dashboard',
     details: 'nav.details',
     ecommerce: 'nav.ecommerce',

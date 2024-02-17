@@ -40,8 +40,8 @@ export const getSections = (t) => [
         ),
       },
       {
-        title: t(tokens.nav.customers),
-        path: paths.dashboard.customers.index,
+        title: t(tokens.nav.users),
+        path: paths.dashboard.users.index,
         icon: (
           <SvgIcon fontSize="small">
             <LayoutAlt02Icon />
@@ -66,7 +66,6 @@ export const getSections = (t) => [
       //     </SvgIcon>
       //   )
       // },
-
     ],
   },
   // {
@@ -315,6 +314,77 @@ export const getSections = (t) => [
   {
     subheader: t(tokens.nav.pages),
     items: [
+      {
+        title: t(tokens.nav.users),
+        icon: (
+          <SvgIcon fontSize="small">
+            <Lock01Icon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.allUsers),
+            path: paths.dashboard.users.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+          {
+            title: t(tokens.nav.register),
+            items: [
+              {
+                title: "Classic",
+                path: paths.authDemo.register.classic,
+              },
+              {
+                title: "Modern",
+                path: paths.authDemo.register.modern,
+              },
+            ],
+          },
+          {
+            title: t(tokens.nav.forgotPassword),
+            items: [
+              {
+                title: "Classic",
+                path: paths.authDemo.forgotPassword.classic,
+              },
+              {
+                title: "Modern",
+                path: paths.authDemo.forgotPassword.modern,
+              },
+            ],
+          },
+          {
+            title: t(tokens.nav.resetPassword),
+            items: [
+              {
+                title: "Classic",
+                path: paths.authDemo.resetPassword.classic,
+              },
+              {
+                title: "Modern",
+                path: paths.authDemo.resetPassword.modern,
+              },
+            ],
+          },
+          {
+            title: t(tokens.nav.verifyCode),
+            items: [
+              {
+                title: "Classic",
+                path: paths.authDemo.verifyCode.classic,
+              },
+              {
+                title: "Modern",
+                path: paths.authDemo.verifyCode.modern,
+              },
+            ],
+          },
+        ],
+      },
       {
         title: t(tokens.nav.auth),
         icon: (
