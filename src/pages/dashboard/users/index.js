@@ -11,6 +11,8 @@ import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { CustomerListSearch } from '../../../sections/dashboard/customer/customer-list-search';
 import { CustomerListTable } from '../../../sections/dashboard/customer/customer-list-table';
 
+import axios from 'axios';
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -40,11 +42,20 @@ const useCustomers = (search) => {
 
   const getCustomers = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomers(search);
+      // const response = await customersApi.getCustomers(search);
+
+      const token = localStorage.getItem('accessToken');
+
+      const headers = {
+        'Authorization': token
+      }
+
+      const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
+
 
       if (isMounted()) {
         setState({
-          customers: response.data,
+          customers: response.data.members,
           customersCount: response.count
         });
       }

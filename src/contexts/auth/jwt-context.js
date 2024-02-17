@@ -78,9 +78,20 @@ export const AuthProvider = (props) => {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = globalThis.localStorage.getItem(STORAGE_KEY);
+      const accessToken = globalThis.localStorage.getItem('accessToken');
+
+      console.log(accessToken);
 
       if (accessToken) {
+
+        // const user = await axios.get(`${BASEURL}/api/Auth/admin-profile`, {
+        //   headers: {
+        //     Authorization: `Bearer ${accessToken}`
+        //   }
+        // })
+
+        // console.log(user.data);
+
         const user = await authApi.me({ accessToken });
 
         dispatch({
@@ -126,6 +137,8 @@ export const AuthProvider = (props) => {
           console.log(response.data);
           const { token, user } = response.data;
           localStorage.setItem(STORAGE_KEY, token);
+
+          console.log(token);
   
           dispatch({
             type: ActionType.SIGN_IN,
