@@ -73,6 +73,7 @@
 
 
 const Member = require("../models/memberModel");
+const Admin = require("../models/AdminModel");
 
 const getDashboardData = async (req, res) => {
   const member_user_id = req.user;
@@ -144,6 +145,44 @@ const getDashboardData = async (req, res) => {
   }
 };
 
+const getAdminDashboardData = async (req, res) => {
+  const {admin_user_id} = req.user; 
+
+  try {
+    const admin = await Admin.findOne({admin_user_id: admin_user_id });
+
+    if (!admin) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid admin user id",
+      });
+    }
+
+    const returnObject = {
+      admin_user_id: admin.admin_user_id,
+      admin_name: admin.admin_name,
+      password: admin.password,
+      email: admin.email,
+      registration_date: admin.registration_date,
+      userType: admin.userType,
+    };
+
+    return res.status(200).send({
+      status: true,
+      message: "Admin dashboard data",
+      data: returnObject,
+    });
+  } catch (error) {
+    console.log("Error fetching admin dashboard data:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
 module.exports = {
   getDashboardData,
+  getAdminDashboardData,
 };
