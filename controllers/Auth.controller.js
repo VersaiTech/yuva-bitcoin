@@ -430,7 +430,9 @@ async function register (req, res){
       email,
       password,
       registration_date: reg_date,
-      twitterId
+      twitterId,
+      isActive: true,
+      // isBlocked: false,
     });
 
     // Save the member to the database

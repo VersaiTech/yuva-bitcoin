@@ -49,6 +49,8 @@ const memberSchema = new mongoose.Schema({
   coins: { type: Number, default: 0 },
   userType: { type: String, default: 'member' },
   twitterId: { type: String, unique: true, required: true },
+  isActive: { type: Boolean, default: true },
+  // isBlocked: { type: Boolean, default: false },
 });
 
 memberSchema.pre('save', async function(next) {

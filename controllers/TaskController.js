@@ -22,14 +22,14 @@ const completeTask = async (req, res) => {
     }
 
     // Fetch user details
-    const member = await Member.findOne({member_user_id: userId});
+    const member = await Member.findOne({ member_user_id: userId });
 
     if (!member) {
       return res.status(404).json({ message: 'member not found' });
     }
 
     // Fetch task details
-    const task = await Task.findOne({taskId});
+    const task = await Task.findOne({ taskId });
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
@@ -39,9 +39,9 @@ const completeTask = async (req, res) => {
       userId,
       taskId,
       name: member.member_name,
-     description: task.description,
-     link: task.link,
-     status: 'pending'
+      description: task.description,
+      link: task.link,
+      status: 'pending'
     });
     await completedTask.save();
 
@@ -68,13 +68,13 @@ const confirmTaskCompletion = async (req, res) => {
     }
 
     // Fetch task details to get the reward amount
-    const task = await Task.findOne({taskId});
+    const task = await Task.findOne({ taskId });
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
 
     // Reward the user
-    const user = await Member.findOne({member_user_id: userId});
+    const user = await Member.findOne({ member_user_id: userId });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -107,85 +107,202 @@ const getAllTasks = async (req, res) => {
 };
 
 const addTask = async (req, res) => {
-    try {
-        // Extract task data from request body
-        const { description, coins, link } = req.body;
-        const imageFiles = req.files;
-    
-        // Create a new task document
-        const newTask = new Task({
-          taskId: generateRandomNumber(),
-          description,
-          coins,
-          // imageUrl: null,
-          link,
-          imageUrls: [],
-        });
+  try {
+    // Extract task data from request body
+    const { description, coins, link } = req.body;
+    const imageFiles = req.files;
 
-        if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
-          const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
-          const containerName = azurecontainer;
-          const containerClient = blobServiceClient.getContainerClient(containerName);
+    // Create a new task document
+    const newTask = new Task({
+      taskId: generateRandomNumber(),
+      description,
+      coins,
+      // imageUrl: null,
+      link,
+      imageUrls: [],
+    });
 
-          // Loop through each image file
-          for (let i = 0; i < imageFiles.length; i++) {
-              const imageFile = imageFiles[i];
-              const blobName = `${newTask.taskId}-${imageFile.originalname}`;
-              const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
+      const containerName = azurecontainer;
+      const containerClient = blobServiceClient.getContainerClient(containerName);
 
-              const imageData = imageFile.buffer;
-              await blockBlobClient.uploadData(imageData, imageData.length);
+      // Loop through each image file
+      for (let i = 0; i < imageFiles.length; i++) {
+        const imageFile = imageFiles[i];
+        const blobName = `${newTask.taskId}-${imageFile.originalname}`;
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-              newTask.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
-          }
-      }
-    
-        // Save the task to the database
-        await newTask.save();
-    
-        res.status(201).json(newTask); // Respond with the newly created task
-      } catch (error) {
-        console.error('Error adding task:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        const imageData = imageFile.buffer;
+        await blockBlobClient.uploadData(imageData, imageData.length);
+
+        newTask.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
       }
     }
 
+    // Save the task to the database
+    await newTask.save();
 
-    function generateRandomNumber() {
-      const min = 1000000; // Minimum 7-digit number (inclusive)
-      const max = 9999999; // Maximum 7-digit number (inclusive)
-    
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+    res.status(201).json(newTask); // Respond with the newly created task
+  } catch (error) {
+    console.error('Error adding task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
+const editTask = async (req, res) => {
+  try {
+    // Extract task data from request body
+    const { taskId } = req.body;
+    const imageFiles = req.files;
+    const imageData = [];
+
+    // Find the task by taskId
+    const updatedData = { ...req.body, images: imageData };
+    const task = await Task.findOneAndUpdate(
+      { taskId },
+      { $set: updatedData },
+      { new: true }
+    );
+
+    if (!task) {
+      console.log('Task not found');
+      return res.status(404).json({ error: 'Task not found' });
     }
 
-    async function getAllMembers(req, res) {
-      try {
-        // Fetch all members from the database
-        const members = await Member.find();
-    
-        // If there are no members found, return an empty array
-        if (!members || members.length === 0) {
-          return res.status(404).json({
-            status: false,
-            message: "No members found",
-            members: [],
-          });
-        }
-    
-        // Return the list of members
-        return res.status(200).json({
-          status: true,
-          message: "Members found",
-          members: members,
-        });
-      } catch (error) {
-        console.error("Error fetching members:", error);
-        return res.status(500).json({
-          status: false,
-          message: "Internal server error",
-        });
+    if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+      const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
+      const containerName = azurecontainer;
+      const containerClient = blobServiceClient.getContainerClient(containerName);
+
+      // Clear existing imageUrls
+      task.imageUrls = [];
+
+      // Loop through each image file
+      for (let i = 0; i < imageFiles.length; i++) {
+        const imageFile = imageFiles[i];
+        const blobName = `${task.taskId}-${imageFile.originalname}`;
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+        const imageData = imageFile.buffer;
+        await blockBlobClient.uploadData(imageData, imageData.length);
+
+        task.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
       }
     }
-    
 
-module.exports = { getAllTasks, addTask, completeTask, confirmTaskCompletion, getAllMembers };
+    return res.status(200).json(task);
+  } catch (error) {
+    console.error('Error editing task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+async function getAllMembers(req, res) {
+  try {
+    // Fetch all members from the database
+    const members = await Member.find();
+
+    // If there are no members found, return an empty array
+    if (!members || members.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: "No members found",
+        members: [],
+      });
+    }
+
+    // Return the list of members
+    return res.status(200).json({
+      status: true,
+      message: "Members found",
+      members: members,
+    });
+  } catch (error) {
+    console.error("Error fetching members:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+async function getActiveMembers(req, res) {
+  try {
+    // Fetch active members from the database
+    const activeMembers = await Member.find({ isActive: true });
+
+    // If there are no active members found, return an empty array
+    if (!activeMembers || activeMembers.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: "No active members found",
+        members: [],
+      });
+    }
+
+    // Return the list of active members
+    return res.status(200).json({
+      status: true,
+      message: "Active members found",
+      members: activeMembers,
+    });
+  } catch (error) {
+    console.error("Error fetching active members:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+async function getBlockedMembers(req, res) {
+  try {
+    // Fetch active members from the database
+    const activeMembers = await Member.find({ isActive: false });
+
+    // If there are no active members found, return an empty array
+    if (!activeMembers || activeMembers.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: "No Blocked members found",
+        members: [],
+      });
+    }
+
+    // Return the list of active members
+    return res.status(200).json({
+      status: true,
+      message: "Blocked members found",
+      members: activeMembers,
+    });
+  } catch (error) {
+    console.error("Error fetching active members:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
+
+
+
+
+
+
+function generateRandomNumber() {
+  const min = 1000000; // Minimum 7-digit number (inclusive)
+  const max = 9999999; // Maximum 7-digit number (inclusive)
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+
+module.exports = { getAllTasks, addTask, editTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers };
