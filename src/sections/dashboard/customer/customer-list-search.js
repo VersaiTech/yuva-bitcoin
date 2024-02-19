@@ -20,7 +20,7 @@ const tabs = [
     value: 'all'
   },
   {
-    label: 'Accepts Marketing',
+    label: 'Active Users',
     value: 'hasAcceptedMarketing'
   },
   {
