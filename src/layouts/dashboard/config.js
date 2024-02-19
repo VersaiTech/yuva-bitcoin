@@ -436,7 +436,7 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.deposit),
-        path: paths.pricing,
+        // path: paths.dashboard.deposit.index,
         icon: (
           <SvgIcon fontSize="small">
             <CreditCard01Icon />
@@ -445,6 +445,7 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.alldeposit),
+            path: paths.dashboard.deposit.index,
           },
           {
             title: t(tokens.nav.pendingDeposit),

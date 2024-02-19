@@ -106,6 +106,10 @@ export const paths = {
       index: '/dashboard/tasks',
       details: '/dashboard/tasks/:taskId'
     },
+    deposit: {
+      index: '/dashboard/deposit',
+      details: '/dashboard/deposit/:depositId'
+    },
     products: {
       index: '/dashboard/products',
       create: '/dashboard/products/create'
