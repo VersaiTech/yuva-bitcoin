@@ -81,7 +81,7 @@ export const info = withAlphas({
 export const warning = withAlphas({
   lightest: '#FFFAEB',
   light: '#FEF0C7',
-  main: '#F79009',
+  main: '#F9B707',
   dark: '#B54708',
   darkest: '#7A2E0E',
   contrastText: '#FFFFFF'
