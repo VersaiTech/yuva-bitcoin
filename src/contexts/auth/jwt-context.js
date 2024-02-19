@@ -84,15 +84,13 @@ export const AuthProvider = (props) => {
 
       if (accessToken) {
 
-        // const user = await axios.get(`${BASEURL}/api/Auth/admin-profile`, {
-        //   headers: {
-        //     Authorization: `Bearer ${accessToken}`
-        //   }
-        // })
+        const user = await axios.get(`${BASEURL}/api/Dashboard/admin`, {
+          headers: {
+            Authorization: accessToken
+          }
+        })
 
-        // console.log(user.data);
-
-        const user = await authApi.me({ accessToken });
+        console.log(user.data);
 
         dispatch({
           type: ActionType.INITIALIZE,
@@ -111,7 +109,7 @@ export const AuthProvider = (props) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
       dispatch({
         type: ActionType.INITIALIZE,
         payload: {

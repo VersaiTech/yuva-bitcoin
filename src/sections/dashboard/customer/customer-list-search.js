@@ -17,14 +17,14 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 const tabs = [
   {
     label: 'All Users',
-    value: 'all'
+    value: 'all',
   },
   {
     label: 'Active Users',
     value: 'hasAcceptedMarketing'
   },
   {
-    label: 'Blocked USers',
+    label: 'Blocked Users',
     value: 'isProspect'
   }
   // ,
