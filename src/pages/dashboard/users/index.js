@@ -53,10 +53,14 @@ const useCustomers = (search) => {
       const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
 
 
+      const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
+
+
       if (isMounted()) {
         setState({
           customers: response.data.members,
-          customersCount: response.count
+          customersCount: response.count,
+          activeUsers: activeUsersResponse.data.members
         });
       }
     } catch (err) {

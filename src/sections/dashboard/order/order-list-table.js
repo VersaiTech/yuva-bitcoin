@@ -44,8 +44,8 @@ export const OrderListTable = (props) => {
             return (
               <TableRow
                 hover
-                key={order.id}
-                onClick={() => onOrderSelect?.(order.id)}
+                key={order.taskId}
+                onClick={() => onOrderSelect?.(order.taskId)}
                 sx={{ cursor: 'pointer' }}
               >
                 <TableCell
@@ -69,26 +69,27 @@ export const OrderListTable = (props) => {
                       align="center"
                       variant="subtitle2"
                     >
-                      {createdAtMonth}
+                      {/* {createdAtMonth} */}
                     </Typography>
                     <Typography
                       align="center"
                       variant="h6"
                     >
-                      {createdAtDay}
+                      {/* {createdAtDay} */}
                     </Typography>
                   </Box>
                   <Box sx={{ ml: 2 }}>
                     <Typography variant="subtitle2">
-                      {order.number}
+                      {/* {order.number} */}
+                      {order.description}
                     </Typography>
                     <Typography
                       color="text.secondary"
                       variant="body2"
                     >
-                      Total of
+                      Reward of
                       {' '}
-                      {totalAmount}
+                      {order.coins} coins
                     </Typography>
                   </Box>
                 </TableCell>
