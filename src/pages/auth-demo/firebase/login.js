@@ -100,7 +100,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Rock34x 
+          Login | Yuva Bitcoin 
         </title>
       </Head>
       <div>

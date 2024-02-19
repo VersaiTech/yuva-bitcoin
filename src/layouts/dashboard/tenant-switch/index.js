@@ -34,7 +34,7 @@ export const TenantSwitch = (props) => {
             color="inherit"
             variant="h6"
           >
-            Rock34x
+            Yuva Bitcoin
           </Typography>
           <Typography
             color="neutral.400"
