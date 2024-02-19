@@ -325,68 +325,51 @@ export const getSections = (t) => [
           {
             title: t(tokens.nav.allUsers),
             path: paths.dashboard.users.index,
-            icon: (
-              <SvgIcon fontSize="small">
-                <HomeSmileIcon />
-              </SvgIcon>
-            ),
+            // icon: (
+            //   <SvgIcon fontSize="small">
+            //     <HomeSmileIcon />
+            //   </SvgIcon>
+            // ),
           },
           {
-            title: t(tokens.nav.register),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.register.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.register.modern,
-              },
-            ],
+            title: t(tokens.nav.activeUsers),
+            path: paths.dashboard.users.index,
           },
           {
-            title: t(tokens.nav.forgotPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.forgotPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.forgotPassword.modern,
-              },
-            ],
+            title: t(tokens.nav.blockedUsers),
+            path: paths.dashboard.users.index,
+            
           },
-          {
-            title: t(tokens.nav.resetPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.resetPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.resetPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.verifyCode),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.verifyCode.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.verifyCode.modern,
-              },
-            ],
-          },
+          // {
+          //   title: t(tokens.nav.resetPassword),
+          //   items: [
+          //     {
+          //       title: "Classic",
+          //       path: paths.auth.resetPassword.classic,
+          //     },
+          //     {
+          //       title: "Modern",
+          //       path: paths.auth.resetPassword.modern,
+          //     },
+          //   ],
+          // },
+          // {
+          //   title: t(tokens.nav.verifyCode),
+          //   items: [
+          //     {
+          //       title: "Classic",
+          //       path: paths.auth.verifyCode.classic,
+          //     },
+          //     {
+          //       title: "Modern",
+          //       path: paths.auth.verifyCode.modern,
+          //     },
+          //   ],
+          // },
         ],
       },
       {
-        title: t(tokens.nav.auth),
+        title: t(tokens.nav.withdrawal),
         icon: (
           <SvgIcon fontSize="small">
             <Lock01Icon />
@@ -408,16 +391,16 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.register),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.register.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.register.modern,
-              },
-            ],
+            // items: [
+            //   {
+            //     title: "Classic",
+            //     path: paths.auth.register.classic,
+            //   },
+            //   {
+            //     title: "Modern",
+            //     path: paths.auth.register.modern,
+            //   },
+            // ],
           },
           {
             title: t(tokens.nav.forgotPassword),

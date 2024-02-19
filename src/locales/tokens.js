@@ -9,7 +9,7 @@ export const tokens = {
     tasks: 'nav.tasks',
     analytics: 'nav.analytics',
     demo: 'nav.demo',
-    auth: 'nav.auth',
+    withdrawal: 'nav.withdrawal',
     blog: 'nav.blog',
     browse: 'nav.browse',
     calendar: 'nav.calendar',
@@ -23,6 +23,8 @@ export const tokens = {
     customers: 'nav.customers',
     //all users
     allUsers: 'nav.allUsers',
+    activeUsers: 'nav.activeUsers',
+    blockedUsers: 'nav.blockedUsers',
     users: 'nav.users',
     dashboard: 'nav.dashboard',
     details: 'nav.details',

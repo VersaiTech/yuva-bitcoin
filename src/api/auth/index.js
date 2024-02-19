@@ -7,7 +7,7 @@ class AuthApi {
   async signIn(request) {
     const { email, password } = request;
 
-    await wait(500);
+    ```await wait(500);```
 
     return new Promise((resolve, reject) => {
       try {

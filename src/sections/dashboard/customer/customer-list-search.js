@@ -16,7 +16,7 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'All',
+    label: 'All Users',
     value: 'all'
   },
   {
@@ -24,13 +24,14 @@ const tabs = [
     value: 'hasAcceptedMarketing'
   },
   {
-    label: 'Prospect',
+    label: 'Blocked USers',
     value: 'isProspect'
-  },
-  {
-    label: 'Returning',
-    value: 'isReturning'
   }
+  // ,
+  // {
+  //   label: 'Returning',
+  //   value: 'isReturning'
+  // }
 ];
 
 const sortOptions = [
