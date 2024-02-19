@@ -27,7 +27,7 @@ export const OptionsColorPreset = (props) => {
       color: purple.main
     },
     {
-      label: 'Warning',
+      label: 'Yellow',
       value: 'warning',
       color: warning.main
     }
