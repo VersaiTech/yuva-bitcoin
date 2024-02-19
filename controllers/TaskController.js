@@ -200,6 +200,29 @@ const editTask = async (req, res) => {
 };
 
 
+const deleteTask = async (req, res) => {
+  try {
+    // Extract taskId from request parameters
+    const { taskId } = req.params;
+
+    // Find the task by taskId and delete it
+    const task = await Task.findOneAndDelete({ taskId });
+
+    if (!task) {
+      console.log('Task not found');
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    // Respond with a success message
+    return res.status(200).json({ message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
 
 
 async function getAllMembers(req, res) {
@@ -305,4 +328,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllTasks, addTask, editTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers };
+module.exports = { getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers };
