@@ -36,8 +36,8 @@ export const OrderListTable = (props) => {
       <Table>
         <TableBody>
           {orders.map((order) => {
-            const createdAtMonth = format(order.createdAt, 'LLL').toUpperCase();
-            const createdAtDay = format(order.createdAt, 'd');
+            // const createdAtMonth = format(order.createdAt, 'LLL').toUpperCase();
+            // const createdAtDay = format(order.createdAt, 'd');
             const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
             const statusColor = statusMap[order.status] || 'warning';
 

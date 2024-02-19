@@ -10,7 +10,9 @@ import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
 import { OrderListSearch } from '../../../sections/dashboard/order/order-list-search';
 import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
+import axios from 'axios';
 
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -39,6 +41,15 @@ const useOrders = (search) => {
   const getOrders = useCallback(async () => {
     try {
       // const response = await ordersApi.getOrders(search);
+      const token = localStorage.getItem('accessToken');
+      const headers = {
+        
+        Authorization: token,
+      }
+      
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksAdmin`,{headers:headers});
+      console.log(response.data);
+
       
 
       if (isMounted()) {
@@ -48,7 +59,7 @@ const useOrders = (search) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
     }
   }, [search, isMounted]);
 
