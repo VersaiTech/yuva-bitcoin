@@ -12,6 +12,7 @@ import HomeSmileIcon from "../../icons/untitled-ui/duocolor/home-smile";
 import LayoutAlt02Icon from "../../icons/untitled-ui/duocolor/layout-alt-02";
 import LineChartUp04Icon from "../../icons/untitled-ui/duocolor/line-chart-up-04";
 import Lock01Icon from "../../icons/untitled-ui/duocolor/lock-01";
+import WithdrawalIcon from "../../icons/untitled-ui/duocolor/withdrawal";
 import LogOut01Icon from "../../icons/untitled-ui/duocolor/log-out-01";
 import Mail03Icon from "../../icons/untitled-ui/duocolor/mail-03";
 import Mail04Icon from "../../icons/untitled-ui/duocolor/mail-04";
@@ -26,6 +27,8 @@ import Users03Icon from "../../icons/untitled-ui/duocolor/users-03";
 import XSquareIcon from "../../icons/untitled-ui/duocolor/x-square";
 import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
+import PendingWithdrawalIcon from "../../icons/untitled-ui/duocolor/pendingwithdrawal";
+import UsersIcon from "../../icons/untitled-ui/duocolor/users-icon";
 
 export const getSections = (t) => [
   {
@@ -318,7 +321,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.users),
         icon: (
           <SvgIcon fontSize="small">
-            <Lock01Icon />
+            <UsersIcon />
           </SvgIcon>
         ),
         items: [
@@ -338,7 +341,6 @@ export const getSections = (t) => [
           {
             title: t(tokens.nav.blockedUsers),
             path: paths.dashboard.users.index,
-            
           },
           // {
           //   title: t(tokens.nav.resetPassword),
@@ -372,85 +374,85 @@ export const getSections = (t) => [
         title: t(tokens.nav.withdrawal),
         icon: (
           <SvgIcon fontSize="small">
-            <Lock01Icon />
+            <WithdrawalIcon />
           </SvgIcon>
         ),
         items: [
           {
-            title: t(tokens.nav.login),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.login.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.login.modern,
-              },
-            ],
+            title: t(tokens.nav.allwithdrawal),
+
+            // path: path.dashboard.withdrawal.index,
           },
           {
-            title: t(tokens.nav.register),
-            // items: [
-            //   {
-            //     title: "Classic",
-            //     path: paths.auth.register.classic,
-            //   },
-            //   {
-            //     title: "Modern",
-            //     path: paths.auth.register.modern,
-            //   },
-            // ],
+            title: t(tokens.nav.pendingWithdrawal),
+
+            // path: path.dashboard.withdrawal.index,
           },
           {
-            title: t(tokens.nav.forgotPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.forgotPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.forgotPassword.modern,
-              },
-            ],
+            title: t(tokens.nav.completedWithdrawal),
           },
-          {
-            title: t(tokens.nav.resetPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.resetPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.resetPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.verifyCode),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.verifyCode.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.verifyCode.modern,
-              },
-            ],
-          },
+
+          // },
+          // {
+          //   title: t(tokens.nav.forgotPassword),
+          //   items: [
+          //     {
+          //       title: "Classic",
+          //       path: paths.auth.forgotPassword.classic,
+          //     },
+          //     {
+          //       title: "Modern",
+          //       path: paths.auth.forgotPassword.modern,
+          //     },
+          //   ],
+          // },
+          // {
+          //   title: t(tokens.nav.resetPassword),
+          //   items: [
+          //     {
+          //       title: "Classic",
+          //       path: paths.auth.resetPassword.classic,
+          //     },
+          //     {
+          //       title: "Modern",
+          //       path: paths.auth.resetPassword.modern,
+          //     },
+          //   ],
+          // },
+          // {
+          //   title: t(tokens.nav.verifyCode),
+          //   items: [
+          //     {
+          //       title: "Classic",
+          //       path: paths.auth.verifyCode.classic,
+          //     },
+          //     {
+          //       title: "Modern",
+          //       path: paths.auth.verifyCode.modern,
+          //     },
+          //   ],
+          // },
         ],
       },
       {
-        title: t(tokens.nav.pricing),
+        title: t(tokens.nav.deposit),
         path: paths.pricing,
         icon: (
           <SvgIcon fontSize="small">
             <CreditCard01Icon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.alldeposit),
+          },
+          {
+            title: t(tokens.nav.pendingDeposit),
+          },
+          {
+            title: t(tokens.nav.completedDeposit),
+          }
+        ],
       },
       {
         title: t(tokens.nav.checkout),
@@ -559,7 +561,7 @@ export const getSections = (t) => [
   //     },
   //     {
   //       title: "External Link",
-  //       path: "https://rock34x.io",
+  //       path: "https://yuvabitcoin.com",
   //       icon: (
   //         <SvgIcon fontSize="small">
   //           <File01Icon />

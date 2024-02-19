@@ -30,7 +30,7 @@ const orders = [
     createdAt: subMinutes(subSeconds(now, 23), 32).getTime(),
     currency: '$',
     customer: {
-      email: 'carson.darrin@rock34x.io',
+      email: 'carson.darrin@yuvabitcoin.com',
       name: 'Carson Darrin'
     },
     number: 'DEV-102',
@@ -43,7 +43,7 @@ const orders = [
     createdAt: subMinutes(subSeconds(now, 51), 36).getTime(),
     currency: '$',
     customer: {
-      email: 'fran.perez@rock34x.io',
+      email: 'fran.perez@yuvabitcoin.com',
       name: 'Fran Perez'
     },
     number: 'DEV-101',
@@ -56,7 +56,7 @@ const orders = [
     createdAt: subMinutes(subSeconds(now, 55), 38).getTime(),
     currency: '$',
     customer: {
-      email: 'jie.yan.song@rock34x.io',
+      email: 'jie.yan.song@yuvabitcoin.com',
       name: 'Jie Yan Song'
     },
     number: 'DEV-100',
@@ -69,7 +69,7 @@ const orders = [
     createdAt: subMinutes(subSeconds(now, 3), 40).getTime(),
     currency: '$',
     customer: {
-      email: 'clarke.gillebert@rock34x.io',
+      email: 'clarke.gillebert@yuvabitcoin.com',
       name: 'Clarke Gillebert'
     },
     number: 'DEV-99',
@@ -82,7 +82,7 @@ const orders = [
     createdAt: subMinutes(subSeconds(now, 32), 45).getTime(),
     currency: '$',
     customer: {
-      email: 'miron.vitold@rock34x.io',
+      email: 'miron.vitold@yuvabitcoin.com',
       name: 'Miron Vitold'
     },
     number: 'DEV-98',

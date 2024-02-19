@@ -142,7 +142,7 @@ export const InvoicePdfDocument = (props) => {
               style={styles.brand}
             />
             <Text style={styles.h6}>
-              www.rock34x.io
+              www.yuvabitcoin.com
             </Text>
           </View>
           <View>
@@ -176,7 +176,7 @@ export const InvoicePdfDocument = (props) => {
           </View>
           <View>
             <Text style={styles.body2}>
-              accounts@rock34x.io
+              accounts@yuvabitcoin.com
             </Text>
             <Text style={styles.body2}>
               (+40) 652 3456 23

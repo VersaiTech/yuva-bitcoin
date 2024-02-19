@@ -18,7 +18,7 @@ import { Layout as AuthLayout } from '../../../layouts/auth/classic-layout';
 import { paths } from '../../../paths';
 
 const initialValues = {
-  email: 'demo@rock34x.io',
+  email: 'demo@yuvabitcoin.com',
   password: 'Password123!',
   submit: null
 };

@@ -9,7 +9,6 @@ export const tokens = {
     tasks: 'nav.tasks',
     analytics: 'nav.analytics',
     demo: 'nav.demo',
-    withdrawal: 'nav.withdrawal',
     blog: 'nav.blog',
     browse: 'nav.browse',
     calendar: 'nav.calendar',
@@ -26,6 +25,10 @@ export const tokens = {
     activeUsers: 'nav.activeUsers',
     blockedUsers: 'nav.blockedUsers',
     users: 'nav.users',
+    withdrawal: 'nav.withdrawal',
+    allwithdrawal: 'nav.allwithdrawal',
+    pendingWithdrawal: 'nav.pendingWithdrawal',
+    completedWithdrawal: 'nav.completedWithdrawal',
     dashboard: 'nav.dashboard',
     details: 'nav.details',
     ecommerce: 'nav.ecommerce',
@@ -42,6 +45,7 @@ export const tokens = {
     kanban: 'nav.kanban',
     list: 'nav.list',
     login: 'nav.login',
+  
     logistics: 'nav.logistics',
     mail: 'nav.mail',
     management: 'nav.management',
@@ -57,6 +61,11 @@ export const tokens = {
     register: 'nav.register',
     resetPassword: 'nav.resetPassword',
     socialMedia: 'nav.socialMedia',
-    verifyCode: 'nav.verifyCode'
+    verifyCode: 'nav.verifyCode',
+    deposit: 'nav.deposit',
+    alldeposit: 'nav.alldeposit',
+    pendingDeposit: 'nav.pendingDeposit',
+    completedDeposit: 'nav.completedDeposit',
+
   }
 };

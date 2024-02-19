@@ -30,7 +30,7 @@ export const Modal6 = () => (
     >
       <Box sx={{ p: 2 }}>
         <Typography variant="subtitle2">
-          demo@rock34x.io
+          demo@yuvabitcoin.com
         </Typography>
         <Typography
           color="text.secondary"

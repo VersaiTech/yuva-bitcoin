@@ -107,13 +107,13 @@ const Page = () => {
               members={[
                 {
                   avatar: '/assets/avatars/avatar-cao-yu.png',
-                  email: 'cao.yu@rock34x.io',
+                  email: 'cao.yu@yuvabitcoin.com',
                   name: 'Cao Yu',
                   role: 'Owner'
                 },
                 {
                   avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
-                  email: 'siegbert.gottfried@rock34x.io',
+                  email: 'siegbert.gottfried@yuvabitcoin.com',
                   name: 'Siegbert Gottfried',
                   role: 'Standard'
                 }

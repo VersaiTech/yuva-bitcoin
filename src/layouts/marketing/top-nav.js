@@ -130,7 +130,7 @@ export const TopNav = (props) => {
                     }
                   }}
                 >
-                  Rock34x Kit <span>PRO</span>
+                  Yuva <span>Bitcoin</span>
                 </Box>
               )}
             </Stack>

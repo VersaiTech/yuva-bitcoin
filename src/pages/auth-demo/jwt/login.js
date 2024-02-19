@@ -35,7 +35,7 @@ const useParams = () => {
 };
 
 const initialValues = {
-  email: 'demo@rock34x.io',
+  email: 'demo@yuvabitcoin.com',
   password: 'Password123!',
   submit: null
 };
@@ -85,7 +85,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Rock34x 
+          Login | Yuva Bitcoin 
         </title>
       </Head>
       <div>
@@ -168,7 +168,7 @@ const Page = () => {
         >
           <Alert severity="error">
             <div>
-              You can use <b>demo@rock34x.io</b> and password <b>Password123!</b>
+              You can use <b>demo@yuvabitcoin.com</b> and password <b>Password123!</b>
             </div>
           </Alert>
           <AuthIssuer issuer={issuer} />

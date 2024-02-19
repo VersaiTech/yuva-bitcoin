@@ -28,7 +28,7 @@ export const Form1 = () => (
             label="Email address"
             name="email"
             required
-            value="miron.vitold@rock34x.io"
+            value="miron.vitold@yuvabitcoin.com"
           />
         </Grid>
         <Grid

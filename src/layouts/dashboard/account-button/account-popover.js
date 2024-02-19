@@ -85,7 +85,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          demo@rock34x.io
+          demo@yuvabitcoin.com
         </Typography>
       </Box>
       <Divider />

@@ -46,7 +46,7 @@ export const InvoicePreview = (props) => {
             <Logo />
           </Box>
           <Typography variant="subtitle2">
-            www.rock34x.io
+            www.yuvabitcoin.com
           </Typography>
         </div>
         <div>
@@ -101,7 +101,7 @@ export const InvoicePreview = (props) => {
               align="right"
               variant="body2"
             >
-              accounts@rock34x.io
+              accounts@yuvabitcoin.com
               <br />
               (+40) 652 3456 23
             </Typography>

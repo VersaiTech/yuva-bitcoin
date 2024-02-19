@@ -281,7 +281,7 @@ export const SideNav = (props) => {
               }
             }}
           >
-            Rock34x Kit <span>PRO</span>
+            Yuva <span>Bitcoin</span>
           </Box>
         </Stack>
       </Box>

@@ -111,7 +111,7 @@ export const emails = [
     folder: 'inbox',
     from: {
       avatar: '/assets/avatars/avatar-marcus-finn.png',
-      email: 'marcus.finn@rock34x.io',
+      email: 'marcus.finn@yuvabitcoin.com',
       name: 'Marcus Finn'
     },
     isImportant: true,
@@ -134,7 +134,7 @@ Marcus Finn
     to: [
       {
         avatar: '/assets/avatars/avatar-anika-visser.png',
-        email: 'anika.visser@rock34x.io',
+        email: 'anika.visser@yuvabitcoin.com',
         name: 'Anika Visser'
       }
     ]
@@ -145,7 +145,7 @@ Marcus Finn
     folder: 'spam',
     from: {
       avatar: '/assets/avatars/avatar-miron-vitold.png',
-      email: 'miron.vitold@rock34x.io',
+      email: 'miron.vitold@yuvabitcoin.com',
       name: 'Miron Vitold'
     },
     isImportant: false,
@@ -159,7 +159,7 @@ Hey, nice projects! I really liked the one in react. What's your quote on kinda 
     to: [
       {
         avatar: '/assets/avatars/avatar-anika-visser.png',
-        email: 'anika.visser@rock34x.io',
+        email: 'anika.visser@yuvabitcoin.com',
         name: 'Anika Visser'
       }
     ]
@@ -170,7 +170,7 @@ Hey, nice projects! I really liked the one in react. What's your quote on kinda 
     folder: 'inbox',
     from: {
       avatar: '/assets/avatars/avatar-penjani-inyene.png',
-      email: 'penjani.inyene@rock34x.io',
+      email: 'penjani.inyene@yuvabitcoin.com',
       name: 'Penjani Inyene'
     },
     isImportant: false,
@@ -184,7 +184,7 @@ Dear Anika, Your flight is coming up soon. Please don’t forget to check in for
     to: [
       {
         avatar: '/assets/avatars/avatar-anika-visser.png',
-        email: 'anika.visser@rock34x.io',
+        email: 'anika.visser@yuvabitcoin.com',
         name: 'Anika Visser'
       }
     ]
@@ -195,7 +195,7 @@ Dear Anika, Your flight is coming up soon. Please don’t forget to check in for
     folder: 'trash',
     from: {
       avatar: '/assets/avatars/avatar-carson-darrin.png',
-      email: 'carson.darrin@rock34x.io',
+      email: 'carson.darrin@yuvabitcoin.com',
       name: 'Carson Darrin'
     },
     isImportant: false,
@@ -209,7 +209,7 @@ My market leading client has another fantastic opportunity for an experienced So
     to: [
       {
         avatar: '/assets/avatars/avatar-anika-visser.png',
-        email: 'anika.visser@rock34x.io',
+        email: 'anika.visser@yuvabitcoin.com',
         name: 'Anika Visser'
       }
     ]

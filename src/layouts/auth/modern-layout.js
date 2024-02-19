@@ -50,7 +50,7 @@ export const Layout = (props) => {
             sx={{ mb: 1 }}
             variant="h4"
           >
-            Welcome to Rock34x 
+            Welcome to Yuva Bitcoin 
           </Typography>
           <Typography
             color="text.secondary"
@@ -141,7 +141,7 @@ export const Layout = (props) => {
                   }
                 }}
               >
-                Rock34x Kit <span>PRO</span>
+                Yuva <span>Bitcoin</span>
               </Box>
             </Stack>
           </Box>

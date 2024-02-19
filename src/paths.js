@@ -75,7 +75,7 @@ export const paths = {
     users: {
       index: '/dashboard/users',
       active: '/dashboard/users/active',
-      blocke: '/dashboard/users/blocked',
+      blocked: '/dashboard/users/blocked',
       details: '/dashboard/customers/:users',
       edit: '/dashboard/customers/:userId/edit'
     },

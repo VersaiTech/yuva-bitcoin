@@ -41,7 +41,7 @@ export const DetailList2 = () => (
                 color="text.secondary"
                 variant="body2"
               >
-                miron.vitold@rock34x.io
+                miron.vitold@yuvabitcoin.com
               </Typography>
               <SeverityPill color="success">
                 Email verified

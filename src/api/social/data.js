@@ -11,7 +11,7 @@ export const profile = {
   currentCity: 'Bucharest',
   currentJobCompany: 'Rock34x IO',
   currentJobTitle: 'Product Designer',
-  email: 'anika.visser@rock34x.io',
+  email: 'anika.visser@yuvabitcoin.com',
   name: 'Anika Visser',
   originCity: 'Rm. Valcea',
   previousJobCompany: 'Focus Aesthetic Dynamics',
