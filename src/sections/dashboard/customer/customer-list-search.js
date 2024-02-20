@@ -13,9 +13,6 @@ import {
   TextField
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
-import axios from 'axios';
-
-const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
   {
