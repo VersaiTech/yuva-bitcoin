@@ -52,11 +52,7 @@ async function isActiveAdmin(userId) {
     try {
         const admin = await Admin.findOne({ admin_user_id: userId });
 
-        if (admin && admin.isActive === true) {
-            return admin; 
-        } else {
-            return false; 
-        }
+        return admin;
     } catch (error) {
         console.log("error in ValidMember", error);
         throw error;

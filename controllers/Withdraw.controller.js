@@ -235,9 +235,36 @@ const updateWithdrawalStatus = async (req, res) => {
 
 
 
-
-
 const getWithdrawRequests = async (req, res) => {
+  // const { member_user_id } = req.user;
+
+  try {
+    // Fetch withdrawal requests for the current member
+    // status 0 for pending
+    const withdrawRequests = await Withdraw.find();
+
+    if (withdrawRequests.length === 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'No withdrawal requests',
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        message: 'Withdrawal requests',
+        data: withdrawRequests,
+      });
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+const getWithdrawPending = async (req, res) => {
   // const { member_user_id } = req.user;
 
   try {
@@ -371,5 +398,6 @@ module.exports = {
   getWithdrawRequests,
   getWithdrawApproved,
   getWithdrawRejected,
+  getWithdrawPending,
   getUserWithdraws
 };
