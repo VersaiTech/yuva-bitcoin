@@ -43,7 +43,6 @@ const useCustomers = (search) => {
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
-
       const token = localStorage.getItem('accessToken');
 
       const headers = {
@@ -56,11 +55,15 @@ const useCustomers = (search) => {
       const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
 
 
+      const blockedUsersResponse = await axios.get(`${BASEURL}/admin/getBlockedMembers`, { headers: headers });
+
+
       if (isMounted()) {
         setState({
           customers: response.data.members,
           customersCount: response.count,
-          activeUsers: activeUsersResponse.data.members
+          activeUsers: activeUsersResponse.data.members,
+          blockedUsers: blockedUsersResponse.data.members
         });
       }
     } catch (err) {
@@ -69,8 +72,8 @@ const useCustomers = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-      getCustomers();
-    },
+    getCustomers();
+  },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
 
@@ -79,7 +82,11 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount } = useCustomers(search);
+  const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
+
+  const [currentTab, setCurrentTab] = useState();
+
+  console.log(currentTab);
 
   usePageView();
 
@@ -116,7 +123,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Customer List | Rock34x 
+          Dashboard: Customer List | Rock34x
         </title>
       </Head>
       <Box
@@ -189,10 +196,16 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
+                activeUsers={activeUsers}
+                blockedUsers={blockedUsers}
+                currentTab={currentTab} 
+                setCurrentTab={setCurrentTab}
               />
               <CustomerListTable
-                customers={customers}
-                customersCount={customersCount}
+                // customers={customers}
+                // customersCount={customersCount}
+                customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
+                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

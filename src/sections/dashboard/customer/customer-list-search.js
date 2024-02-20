@@ -13,6 +13,9 @@ import {
   TextField
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
+import axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
   {
@@ -54,10 +57,12 @@ const sortOptions = [
 ];
 
 export const CustomerListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
   const queryRef = useRef(null);
-  const [currentTab, setCurrentTab] = useState('all');
+  // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
+
+  // const [activeUsers, setActiveUsers] = useState([]);
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -67,7 +72,7 @@ export const CustomerListSearch = (props) => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
 
-  const handleTabsChange = useCallback((event, value) => {
+  const handleTabsChange = useCallback(async(event, value) => {
     setCurrentTab(value);
     setFilters((prevState) => {
       const updatedFilters = {
@@ -83,7 +88,7 @@ export const CustomerListSearch = (props) => {
 
       return updatedFilters;
     });
-  }, []);
+  }, [setCurrentTab]);
 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
@@ -174,5 +179,7 @@ CustomerListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
-  sortDir: PropTypes.oneOf(['asc', 'desc'])
+  sortDir: PropTypes.oneOf(['asc', 'desc']),
+  activeUsers: PropTypes.array,
+  blockedUsers: PropTypes.array,
 };
