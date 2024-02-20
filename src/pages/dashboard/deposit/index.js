@@ -1,27 +1,32 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
+import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import { Box, Button, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-import { ordersApi } from '../../../api/orders';
+import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
+import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from '@mui/material';
+import { customersApi } from '../../../api/customers';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
-import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
-import { OrderListSearch } from '../../../sections/dashboard/order/order-list-search';
-import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
+import { CustomerListSearch } from '../../../sections/dashboard/customer/customer-list-search';
+import { CustomerListTable } from '../../../sections/dashboard/customer/customer-list-table';
+import { WithdrawalListSearch } from '../../../sections/dashboard/withdrawals/withdrawals-list-search';
+import { WithdrawalsListTable } from '../../../sections/dashboard/withdrawals/withdrawals-list-table';
+import { DepositListSearch } from '../../../sections/dashboard/deposit/deposit-list-search';
+import { DepositListTable } from '../../../sections/dashboard/deposit/deposit-list-table';
 import axios from 'axios';
-
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
-      status: undefined
+      hasAcceptedMarketing: undefined,
+      isProspect: undefined,
+      isReturning: undefined
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'createdAt',
+    sortBy: 'updatedAt',
     sortDir: 'desc'
   });
 
@@ -31,41 +36,47 @@ const useSearch = () => {
   };
 };
 
-const useOrders = (search) => {
+const useCustomers = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
-    orders: [],
-    ordersCount: 0
+    customers: [],
+    customersCount: 0
   });
 
-  const getOrders = useCallback(async () => {
+  const getCustomers = useCallback(async () => {
     try {
-      // const response = await ordersApi.getOrders(search);
+      // const response = await customersApi.getCustomers(search);
       const token = localStorage.getItem('accessToken');
-      const headers = {
-        
-        Authorization: token,
-      }
-      
-      const response = await axios.get(`${BASEURL}/admin/getAllDeposits`,{headers:headers});
-      console.log(response.data.data);
 
-      
+      const headers = {
+        'Authorization': token
+      }
+
+      const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
+
+
+      const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
+
+
+      const blockedUsersResponse = await axios.get(`${BASEURL}/admin/getBlockedMembers`, { headers: headers });
+
 
       if (isMounted()) {
         setState({
-          orders: response.data.data,
-          ordersCount: response.count
+          customers: response.data.members,
+          customersCount: response.count,
+          activeUsers: activeUsersResponse.data.members,
+          blockedUsers: blockedUsersResponse.data.members
         });
       }
     } catch (err) {
-      console.error(err.response.data);
+      console.error(err);
     }
   }, [search, isMounted]);
 
   useEffect(() => {
-      getOrders();
-    },
+    getCustomers();
+  },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
 
@@ -73,20 +84,16 @@ const useOrders = (search) => {
 };
 
 const Page = () => {
-  const rootRef = useRef(null);
+  // get url status from query
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  
   const { search, updateSearch } = useSearch();
-  const { orders, ordersCount } = useOrders(search);
-  const [drawer, setDrawer] = useState({
-    isOpen: false,
-    data: undefined
-  });
-  const currentOrder = useMemo(() => {
-    if (!drawer.data) {
-      return undefined;
-    }
+  const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
 
-    return orders.find((order) => order.id === drawer.data);
-  }, [drawer, orders]);
+  const [currentTab, setCurrentTab] = useState(status ? status : 'all');
+
+  console.log(currentTab);
 
   usePageView();
 
@@ -97,10 +104,11 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
-  const handleSortChange = useCallback((sortDir) => {
+  const handleSortChange = useCallback((sort) => {
     updateSearch((prevState) => ({
       ...prevState,
-      sortDir
+      sortBy: sort.sortBy,
+      sortDir: sort.sortDir
     }));
   }, [updateSearch]);
 
@@ -118,111 +126,101 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
-  const handleOrderOpen = useCallback((orderId) => {
-    // Close drawer if is the same order
-
-    if (drawer.isOpen && drawer.data === orderId) {
-      setDrawer({
-        isOpen: false,
-        data: undefined
-      });
-      return;
-    }
-
-    setDrawer({
-      isOpen: true,
-      data: orderId
-    });
-  }, [drawer]);
-
-  const handleOrderClose = useCallback(() => {
-    setDrawer({
-      isOpen: false,
-      data: undefined
-    });
-  }, []);
-
   return (
     <>
       <Head>
         <title>
-          Dashboard: Order List | Rock34x 
+          Dashboard: Withdrawals | Yuva Bitcoin
         </title>
       </Head>
-      <Divider />
       <Box
         component="main"
-        ref={rootRef}
         sx={{
-          display: 'flex',
-          flex: '1 1 auto',
-          overflow: 'hidden',
-          position: 'relative'
+          flexGrow: 1,
+          py: 4
         }}
       >
-        <Box
-          ref={rootRef}
-          sx={{
-            bottom: 0,
-            display: 'flex',
-            left: 0,
-            position: 'absolute',
-            right: 0,
-            top: 0
-          }}
-        >
-          <OrderListContainer open={drawer.isOpen}>
-            <Box sx={{ p: 3 }}>
-              <Stack
-                alignItems="flex-start"
-                direction="row"
-                justifyContent="space-between"
-                spacing={4}
-              >
-                <div>
-                  <Typography variant="h4">
-                    Deposits
-                  </Typography>
-                </div>
-                <div>
-                  <Button
+        <Container maxWidth="xl">
+          <Stack spacing={4}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              spacing={4}
+            >
+              <Stack spacing={1}>
+                <Typography variant="h4">
+                  All Withdrawals
+                </Typography>
+                <Stack
+                  alignItems="center"
+                  direction="row"
+                  spacing={1}
+                >
+                  {/* <Button
+                    color="inherit"
+                    size="small"
                     startIcon={(
                       <SvgIcon>
-                        <PlusIcon />
+                        <Upload01Icon />
                       </SvgIcon>
                     )}
-                    variant="contained"
                   >
-                    Add
+                    Import
                   </Button>
-                </div>
+                  <Button
+                    color="inherit"
+                    size="small"
+                    startIcon={(
+                      <SvgIcon>
+                        <Download01Icon />
+                      </SvgIcon>
+                    )}
+                  >
+                    Export
+                  </Button> */}
+                </Stack>
               </Stack>
-            </Box>
-            <Divider />
-            <OrderListSearch
-              onFiltersChange={handleFiltersChange}
-              onSortChange={handleSortChange}
-              sortBy={search.sortBy}
-              sortDir={search.sortDir}
-            />
-            <Divider />
-            <OrderListTable
-              onOrderSelect={handleOrderOpen}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              orders={orders}
-              ordersCount={ordersCount}
-              page={search.page}
-              rowsPerPage={search.rowsPerPage}
-            />
-          </OrderListContainer>
-          <OrderDrawer
-            container={rootRef.current}
-            onClose={handleOrderClose}
-            open={drawer.isOpen}
-            order={currentOrder}
-          />
-        </Box>
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing={3}
+              >
+                <Button
+                  startIcon={(
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  )}
+                  variant="contained"
+                >
+                  Add
+                </Button>
+              </Stack>
+            </Stack>
+            <Card>
+              <DepositListSearch
+                onFiltersChange={handleFiltersChange}
+                onSortChange={handleSortChange}
+                sortBy={search.sortBy}
+                sortDir={search.sortDir}
+                activeUsers={activeUsers}
+                blockedUsers={blockedUsers}
+                currentTab={currentTab} 
+                setCurrentTab={setCurrentTab}
+              />
+              <DepositListTable
+                // customers={customers}
+                // customersCount={customersCount}
+                customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
+                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                rowsPerPage={search.rowsPerPage}
+                page={search.page}
+              />
+            </Card>
+          </Stack>
+        </Container>
       </Box>
     </>
   );
