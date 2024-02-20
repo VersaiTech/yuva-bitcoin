@@ -50,21 +50,24 @@ const useCustomers = (search) => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
+      const response = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawRequests`, { headers: headers });
 
 
-      const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
+      const PendingWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawPending`, { headers: headers });
 
 
-      const blockedUsersResponse = await axios.get(`${BASEURL}/admin/getBlockedMembers`, { headers: headers });
+      const rejectedWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawRejected`, { headers: headers });
 
+
+      const completedWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawApproved`, { headers: headers });
 
       if (isMounted()) {
         setState({
-          customers: response.data.members,
+          customers: response.data.data,
           customersCount: response.count,
-          activeUsers: activeUsersResponse.data.members,
-          blockedUsers: blockedUsersResponse.data.members
+          pending: PendingWithdrawals.data.data,
+          rejected: rejectedWithdrawals.data.data,
+          completed: completedWithdrawals.data.data
         });
       }
     } catch (err) {
@@ -87,11 +90,9 @@ const Page = () => {
   const status = urlParams.get('status');
   
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
+  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState(status ? status : 'all');
-
-  console.log(currentTab);
+  const [currentTab, setCurrentTab] = useState('all');
 
   usePageView();
 
@@ -201,16 +202,17 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                activeUsers={activeUsers}
-                blockedUsers={blockedUsers}
+                completed={completed}
+                pending={pending}
+                rejected={rejected}
                 currentTab={currentTab} 
                 setCurrentTab={setCurrentTab}
               />
               <WithdrawalsListTable
                 // customers={customers}
                 // customersCount={customersCount}
-                customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
-                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : []}
+                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : 0}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

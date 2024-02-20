@@ -24,10 +24,14 @@ const tabs = [
   },
   {
     label: 'Pending',
+    value: 'pending'
+  },
+  {
+    label: 'Rejected',
     value: 'hasAcceptedMarketing'
   },
   {
-    label: 'Completed',
+    label: 'Approved',
     value: 'isProspect'
   }
   // ,
@@ -77,6 +81,7 @@ export const WithdrawalListSearch = (props) => {
     setFilters((prevState) => {
       const updatedFilters = {
         ...prevState,
+        pending: undefined,
         hasAcceptedMarketing: undefined,
         isProspect: undefined,
         isReturning: undefined
@@ -180,6 +185,7 @@ WithdrawalListSearch.propTypes = {
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
   sortDir: PropTypes.oneOf(['asc', 'desc']),
-  activeUsers: PropTypes.array,
-  blockedUsers: PropTypes.array,
+  pending: PropTypes.array,
+  completed: PropTypes.array,
+  rejected: PropTypes.array,
 };
