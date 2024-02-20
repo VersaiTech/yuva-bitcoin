@@ -110,6 +110,10 @@ export const paths = {
       index: '/dashboard/deposit',
       details: '/dashboard/deposit/:depositId'
     },
+    withdrawal: {
+      index: '/dashboard/withdrawal',
+      details: '/dashboard/deposit/:withdrawalId'
+    },
     products: {
       index: '/dashboard/products',
       create: '/dashboard/products/create'
