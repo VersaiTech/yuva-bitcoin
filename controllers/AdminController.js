@@ -343,6 +343,47 @@ async function getBlockedMembers(req, res) {
 }
 
 
+const updateMemberStatus = async (req, res) => {
+  try {
+    // Check if the user making the request is an admin
+    if (!req.user || req.user.userType !== 'admin') {
+      return res.status(403).json({ error: 'Permission denied. Only admin can update member status.' });
+    }
+
+    const { member_user_id, isActive } = req.body;
+
+    // Validate if member_user_id is provided
+    if (!member_user_id) {
+      return res.status(400).json({ error: 'Member user ID is required.' });
+    }
+
+    // Validate if isActive is provided
+    if (isActive === undefined || isActive === null) {
+      return res.status(400).json({ error: 'isActive field is required.' });
+    }
+
+    // Find the member by member_user_id
+    const member = await Member.findOne({ member_user_id });
+
+    // Check if the member exists
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found.' });
+    }
+
+    // Update isActive field
+    member.isActive = isActive;
+
+    // Save the updated member
+    await member.save();
+
+    return res.status(200).json({ message: 'Member status updated successfully.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 
 
@@ -358,4 +399,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllDeposits, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers };
+module.exports = { getAllDeposits, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus };
