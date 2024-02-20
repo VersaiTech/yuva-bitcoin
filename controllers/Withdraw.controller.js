@@ -75,7 +75,7 @@
 //         }
 //         console.log(`ref_id`, ref_id);
 
-    
+
 
 //       //   const query2 = `INSERT INTO tbl_withdraw(member_user_id, member_name ,amount , with_date) VALUES('${member_user_id}', '${member_name}' , '${amount}' , '${sys_date}'`;
 //       const query2 = `INSERT INTO tbl_withdraw(member_user_id, member_name ,with_amt , with_date , with_referrance) VALUES('${member_user_id}', '${member_name}' , '${amount}' , '${sys_date}' , '${ref_id}')`;
@@ -141,82 +141,223 @@ const Withdraw = require('../models/withdrawModel');
 const Member = require('../models/memberModel');
 
 const withdrawRequest = async (req, res) => {
-  const {member_user_id } = req.user;
+  const { member_user_id } = req.user;
   const { amount } = req.body;
 
-  console.log(req.user)
-
   try {
+    // Check if the member exists
     const member = await Member.findOne({ member_user_id });
     if (!member) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: false,
-        message: "No user",
+        message: 'No user found',
       });
     }
 
-    let member_name = member.member_name;
+    // Generate a unique reference ID
+    const ref_id = generateReferenceID();
 
-    let ref_id = generateReferenceID();
-
-    // Check if reference id already exists
-    let existingWithdraw = await Withdraw.findOne({ with_referrance: ref_id });
-    while (existingWithdraw) {
-      ref_id = generateReferenceID();
-      existingWithdraw = await Withdraw.findOne({ with_referrance: ref_id });
-    }
-
-    const withdraw = new Withdraw({
+    // Create a new withdrawal request
+    const withdrawal = new Withdraw({
       member_user_id,
-      member_name,
+      member_name: member.member_name,
       with_amt: amount,
       with_referrance: ref_id,
+      status: 'Pending', // Set the initial status to 'Pending'
     });
 
-    await withdraw.save();
+    // Save the withdrawal request
+    await withdrawal.save();
 
-    return res.status(200).send({
+    return res.status(200).json({
       status: true,
-      message: "Withdraw request sent",
+      message: 'Withdrawal request sent',
+      data: withdrawal,
     });
   } catch (err) {
-    console.log(`error`, err);
-    return res.status(500).send({
+    console.error('Error:', err);
+    return res.status(500).json({
       status: false,
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };
 
+
+// Controller to update the status of a withdrawal request
+const updateWithdrawalStatus = async (req, res) => {
+  try {
+    const { with_referrance } = req.params;
+    const { status, processed_by, remarks } = req.body;
+
+    // Find the withdrawal request by reference ID
+    const withdrawal = await Withdraw.findOne({ with_referrance });
+
+    if (!withdrawal) {
+      return res.status(404).json({ error: 'Withdrawal request not found' });
+    }
+
+    // Check if the withdrawal request has already been processed
+    if (withdrawal.status !== 'Pending') {
+      return res.status(400).json({ error: `Withdrawal request has already been ${withdrawal.status.toLowerCase()}` });
+    }
+
+    // Update the withdrawal request status and other details
+    withdrawal.status = status;
+    withdrawal.processing_date = new Date().toISOString(); // Set the current date and time as the processing_date;
+    withdrawal.processed_by = processed_by;
+    withdrawal.remarks = remarks;
+
+    // Check if the status is "Approved" before deducting from member coins
+    if (status === 'Approved') {
+      // Find the member associated with the withdrawal request
+      const member = await Member.findOne({ member_user_id: withdrawal.member_user_id });
+
+      if (!member) {
+        return res.status(404).json({ error: 'Member not found' });
+      }
+
+      // Deduct the withdrawal amount from the member's coin balance
+      member.coins -= withdrawal.with_amt;
+      await member.save();
+    }
+
+    // Save the updated withdrawal request
+    const updatedWithdrawal = await withdrawal.save();
+
+    res.status(200).json(updatedWithdrawal);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+
+
+
 const getWithdrawRequests = async (req, res) => {
-  const { member_user_id } = req.user;
+  // const { member_user_id } = req.user;
 
   try {
-    const withdrawRequests = await Withdraw.find({ member_user_id: member_user_id });
+    // Fetch withdrawal requests for the current member
+    // status 0 for pending
+    const withdrawRequests = await Withdraw.find({ status: 'Pending' });
+
     if (withdrawRequests.length === 0) {
-      return res.status(400).send({
+      return res.status(400).json({
         status: false,
-        message: "No withdraw requests",
+        message: 'No withdrawal requests',
       });
     } else {
-      return res.status(200).send({
+      return res.status(200).json({
         status: true,
-        message: "Withdraw requests",
+        message: 'Withdrawal requests',
         data: withdrawRequests,
       });
     }
   } catch (err) {
-    return res.status(500).send({
+    console.error('Error:', err);
+    return res.status(500).json({
       status: false,
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };
 
+const getWithdrawApproved = async (req, res) => {
+  // const { member_user_id } = req.user;
+
+  try {
+    // Fetch withdrawal requests for the current member
+    // status 0 for pending
+    const withdrawRequests = await Withdraw.find({ status: 'Approved' });
+
+    if (withdrawRequests.length === 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'No withdrawal requests',
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        message: 'Withdrawal requests',
+        data: withdrawRequests,
+      });
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+
+const getWithdrawRejected = async (req, res) => {
+  // const { member_user_id } = req.user;
+
+  try {
+    // Fetch withdrawal requests for the current member
+    // status 0 for pending
+    const withdrawRequests = await Withdraw.find({ status: 'Rejected' });
+
+    if (withdrawRequests.length === 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'No withdrawal requests',
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        message: 'Withdrawal requests',
+        data: withdrawRequests,
+      });
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+const getUserWithdraws = async (req, res) => {
+  const { member_user_id } = req.user;
+
+  try {
+    // Fetch withdrawal requests for the current member
+    const withdrawRequests = await Withdraw.find({ member_user_id });
+
+    if (withdrawRequests.length === 0) {
+      return res.status(400).json({
+        status: false,
+        message: 'No withdrawal requests',
+      });
+    } else {
+      return res.status(200).json({
+        status: true,
+        message: 'Withdrawal requests',
+        data: withdrawRequests,
+      });
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    return res.status(500).json({
+      status: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+
 // Helper function to generate a reference ID
 const generateReferenceID = () => {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let ref_id = "";
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let ref_id = '';
   const charactersLength = characters.length;
   for (let i = 0; i < 20; i++) {
     ref_id += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -226,5 +367,9 @@ const generateReferenceID = () => {
 
 module.exports = {
   withdrawRequest,
+  updateWithdrawalStatus,
   getWithdrawRequests,
+  getWithdrawApproved,
+  getWithdrawRejected,
+  getUserWithdraws
 };
