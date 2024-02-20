@@ -56,7 +56,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Withdrawals Details | Yuva Bitcoin 
+          Dashboard: Order Details | Rock34x 
         </title>
       </Head>
       <Box

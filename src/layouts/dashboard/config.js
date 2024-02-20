@@ -386,8 +386,7 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.pendingWithdrawal),
-
-            // path: path.dashboard.withdrawal.index,
+            path: paths.dashboard.withdrawal.pending,
           },
           {
             title: t(tokens.nav.completedWithdrawal),
@@ -454,7 +453,7 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.completedDeposit),
-          }
+          },
         ],
       },
       {
