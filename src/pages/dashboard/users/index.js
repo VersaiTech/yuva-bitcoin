@@ -84,7 +84,7 @@ const Page = () => {
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState();
+  const [currentTab, setCurrentTab] = useState('all');
 
   console.log(currentTab);
 
