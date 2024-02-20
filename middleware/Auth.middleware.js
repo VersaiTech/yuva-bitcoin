@@ -36,7 +36,12 @@ async function isActive(userId) {
         // console.log("userId", userId);
         const member = await Member.findOne({ member_user_id: userId });
         // console.log("member", member);
-        return member;
+
+        if (member && member.isActive === true) {
+            return member; 
+        } else {
+            return false; 
+        }
     } catch (error) {
         console.log("error in ValidMember", error);
         throw error;
@@ -46,7 +51,12 @@ async function isActive(userId) {
 async function isActiveAdmin(userId) {
     try {
         const admin = await Admin.findOne({ admin_user_id: userId });
-        return admin;
+
+        if (admin && admin.isActive === true) {
+            return admin; 
+        } else {
+            return false; 
+        }
     } catch (error) {
         console.log("error in ValidMember", error);
         throw error;
