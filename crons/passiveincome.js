@@ -43,7 +43,7 @@
 //   // const sql2 = `SELECT * FROM tbl_memberreg WHERE registration_date < '${registration_date.toISOString()}' AND status=1 LIMIT 0,10`;
 //   // const result2 = await query(sql2);
 //   const sqlTesting = `SELECT * FROM tbl_memberreg WHERE status=1 LIMIT 0,10`;
-  
+
 //   const result2 = await query(sqlTesting);
 //   console.log(result2.length);
 
@@ -296,10 +296,10 @@
 //     members.forEach(async function (member) {
 //       const invest_package = member.invest_package;
 //       // const hash_code = member.hash_code;
-      
+
 //       // 3% interest rate
 //       const interestRate = 3;
-      
+
 //       const interestAmt = (invest_package * interestRate) / 100;
 
 //       // Update user's minting_wallet with the interest amount
@@ -394,86 +394,95 @@ const moment = require('moment');
 //         // Get all deposits
 //         const deposits = await Deposit.find();
 
-//         // Iterate over deposits
-//         for (const deposit of deposits) {
-//             // Calculate interest (3% of the investment)
-//             const interest = 0.03 * deposit.investment;
+// Iterate over deposits
+// for (const deposit of deposits) {
+  // Calculate interest (3% of the investment)
+  // const interest = 0.03 * deposit.investment;
 
-//             // Find the member associated with the deposit
-//             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+  //             // Find the member associated with the deposit
+  //             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
 
-//             // Add interest to the member's coins
-//             member.coins += interest;
-//             // deposit.investment += interest;
+  //             // Add interest to the member's coins
+  //             member.coins += interest;
+  //             // deposit.investment += interest;
 
-//             // Save the updated member
-//             await member.save();
-//             // await deposit.save();
-//         }
+  //             // Save the updated member
+  //             await member.save();
+  //             // await deposit.save();
+  //         }
 
-//         console.log('Interest distributed successfully');
-//     } catch (error) {
-//         console.error('Error distributing interest:', error);
-//     }
-// });
+  //         console.log('Interest distributed successfully');
+  //     } catch (error) {
+  //         console.error('Error distributing interest:', error);
+  //     }
+  // });
 
 
-// newly added
-// Define the cron job to run every day at midnight
-cron.schedule('*/1 * * * *', async () => {
-  console.log('Running the daily 1 cron job...');
+  // newly added
+  // Define the cron job to run every day at midnight
+  cron.schedule('*/1 * * * *', async () => {
+    console.log('Running the daily 1 cron job...');
 
-  try {
-    // Find all staking deposits
-    const stakingDeposits = await Deposit.find();
+    try {
+      // Find staking deposits with interest not credited
+      const stakingDeposits = await Deposit.find({ interestCredited: false });
 
-    // Iterate over staking deposits and calculate interest
-    for (const deposit of stakingDeposits) {
-      const currentDate = new Date();
-      const stakingStartDate = deposit.sys_date;
-      const stakingDuration = deposit.stakingDuration;
+      // Iterate over staking deposits and calculate interest
+      for (const deposit of stakingDeposits) {
+        const currentDate = new Date();
+        const stakingStartDate = deposit.sys_date;
+        const stakingDuration = deposit.stakingDuration;
 
-      const elapsedTime = currentDate - stakingStartDate;
-      const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
+        const elapsedTime = currentDate - stakingStartDate;
+        const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
 
-      // Check if the staking duration has been reached
-      if (elapsedDays >= stakingDuration) {
-        const interestRate = getInterestRate(stakingDuration);
-        if (interestRate !== null) {
-          // Calculate interest based on the original investment amount
-          const interest = deposit.investment * interestRate;
+        // Check if the staking duration has been reached
+        if (elapsedDays >= stakingDuration) {
+          const interestRate = getInterestRate(stakingDuration);
+          if (interestRate !== null) {
+            // Calculate interest based on the original investment amount
+            const interest = deposit.investment * interestRate;
 
-          // Update member's account with interest
-          const member = await Member.findOne({ member_user_id: deposit.member_user_id });
-          member.coins += interest;
-          await member.save();
+            // Update member's account with interest
+            const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+            member.coins += interest;
+            await member.save();
 
-          console.log(`Staking duration reached for deposit with ID ${deposit._id}. Member received ${interestRate * 100}% interest.`);
-        } else {
-          console.log(`Invalid staking duration for deposit with ID ${deposit._id}.`);
+            // Mark the deposit as credited
+            deposit.interestCredited = true;
+            await deposit.save();
+
+            console.log(`Staking duration reached for deposit with ID ${deposit._id}. Member received ${interestRate * 100}% interest.`);
+          } else {
+            console.log(`Invalid staking duration for deposit with ID ${deposit._id}.`);
+          }
         }
       }
+
+      console.log('Daily cron job completed.');
+    } catch (error) {
+      console.error('Error in the daily cron job:', error);
     }
+  }, {
+    scheduled: true,
+    timezone: 'Asia/Kolkata', // Set your timezone to IST
+  });
 
-    console.log('Daily cron job completed.');
-  } catch (error) {
-    console.error('Error in the daily cron job:', error);
+  // Helper function to get interest rate based on staking duration
+  function getInterestRate(durationMonths) {
+    switch (durationMonths) {
+      case 3:
+        return 0.03;
+      case 6:
+        return 0.05;
+      case 12:
+        return 0.10;
+      default:
+        return null;
+    }
   }
-}, {
-  scheduled: true,
-  timezone: 'Asia/Kolkata', // Set your timezone to IST
-});
 
-// Helper function to get interest rate based on staking duration
-function getInterestRate(durationMonths) {
-  switch (durationMonths) {
-    case 3:
-      return 0.03;
-    case 6:
-      return 0.05;
-    case 12:
-      return 0.10;
-    default:
-      return null;
-  }
+
+module.exports = {
+  cron
 }
