@@ -27,7 +27,7 @@ import { getInitials } from '../../../utils/get-initials';
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.id);
+    return customers.map((customer) => customer.member_user_id);
   }, [customers]);
   const [selected, setSelected] = useState([]);
 
@@ -145,13 +145,13 @@ export const CustomerListTable = (props) => {
                 Name
               </TableCell>
               <TableCell>
-                Location
+                TwitterId
               </TableCell>
               <TableCell>
-                Orders
+                Coins
               </TableCell>
               <TableCell>
-                Spent
+                Contact No.
               </TableCell>
               <TableCell align="right">
                 Actions
@@ -160,14 +160,14 @@ export const CustomerListTable = (props) => {
           </TableHead>
           <TableBody>
             {customers.map((customer) => {
-              const isSelected = selected.includes(customer.id);
-              const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
+              const isSelected = selected.includes(customer.member_user_id);
+              // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
+              // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
               return (
                 <TableRow
                   hover
-                  key={customer.id}
+                  key={customer.member_user_id}
                   selected={isSelected}
                 >
                   <TableCell padding="checkbox">
@@ -177,9 +177,9 @@ export const CustomerListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(customer.id);
+                          selectOne(customer.member_user_id);
                         } else {
-                          deselectOne(customer.id);
+                          deselectOne(customer.member_user_id);
                         }
                       }}
                       value={isSelected}
@@ -198,7 +198,7 @@ export const CustomerListTable = (props) => {
                           width: 42
                         }}
                       >
-                        {getInitials(customer.name)}
+                        {getInitials(customer.member_name)}
                       </Avatar>
                       <div>
                         <Link
@@ -207,7 +207,7 @@ export const CustomerListTable = (props) => {
                           href={paths.dashboard.customers.details}
                           variant="subtitle2"
                         >
-                          {customer.name}
+                          {customer.member_name}
                         </Link>
                         <Typography
                           color="text.secondary"
@@ -219,14 +219,14 @@ export const CustomerListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    {location}
+                    {customer.twitterId}
                   </TableCell>
                   <TableCell>
-                    {customer.totalOrders}
+                    {customer.coins}
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {totalSpent}
+                      {customer.contactNo}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">

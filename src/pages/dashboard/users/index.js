@@ -51,6 +51,7 @@ const useCustomers = (search) => {
 
       const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
 
+      console.log(response.data.members);
 
       const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
 
