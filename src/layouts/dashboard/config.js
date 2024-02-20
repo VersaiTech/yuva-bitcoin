@@ -380,6 +380,7 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.allwithdrawal),
+            path: paths.dashboard.withdrawal.index,
 
             // path: path.dashboard.withdrawal.index,
           },
@@ -449,6 +450,7 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.pendingDeposit),
+            path: paths.dashboard.deposit.index,
           },
           {
             title: t(tokens.nav.completedDeposit),
