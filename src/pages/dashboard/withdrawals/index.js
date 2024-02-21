@@ -88,7 +88,7 @@ const Page = () => {
   // get url status from query
   const urlParams = new URLSearchParams(window.location.search);
   const status = urlParams.get('status');
-  
+
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
 
@@ -205,14 +205,28 @@ const Page = () => {
                 completed={completed}
                 pending={pending}
                 rejected={rejected}
-                currentTab={currentTab} 
+                currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
               <WithdrawalsListTable
                 // customers={customers}
                 // customersCount={customersCount}
-                customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : []}
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : 0}
+                // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
+                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
+                customers={
+                  currentTab === 'all' ? customers :
+                    currentTab === 'pending' ? pending :
+                      currentTab === 'hasAcceptedMarketing' ? rejected :
+                        currentTab === 'isProspect' ? completed :
+                          []
+                }
+                customersCount={
+                  currentTab === 'all' ? customersCount :
+                    currentTab === 'pending' ? pending.length :
+                      currentTab === 'hasAcceptedMarketing' ? rejected.length :
+                        currentTab === 'isProspect' ? completed.length :
+                          0
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
