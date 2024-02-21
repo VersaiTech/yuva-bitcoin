@@ -120,35 +120,35 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 // };
 
 // Authentication process with user activity check
-const authenticateUser = async (username, password) => {
-    try {
-      const user = await Member.findOne({ member_user_id: username });
+// const authenticateUser = async (username, password) => {
+//     try {
+//       const user = await Member.findOne({ member_user_id: username });
   
-      if (!user) {
-        // User not found
-        return { error: "User not found" };
-      }
+//       if (!user) {
+//         // User not found
+//         return { error: "User not found" };
+//       }
   
-      if (!user.isActive) {
-        // Inactive user, return an error
-        return { error: "Inactive User" };
-      }
+//       if (!user.isActive) {
+//         // Inactive user, return an error
+//         return { error: "Inactive User" };
+//       }
   
-      // Perform password validation here (compare hashed password, etc.)
+//       // Perform password validation here (compare hashed password, etc.)
   
-      // Generate token if the user is active and password is valid
-      const token = jwt.sign(
-        { userId: user.member_user_id, userType: user.userType },
-        JWT_SECRET_KEY,
-        { expiresIn: '1h' } // Adjust expiration time as needed
-      );
+//       // Generate token if the user is active and password is valid
+//       const token = jwt.sign(
+//         { userId: user.member_user_id, userType: user.userType },
+//         JWT_SECRET_KEY,
+//         { expiresIn: '1h' } // Adjust expiration time as needed
+//       );
   
-      return { token };
-    } catch (error) {
-      console.error('Error during authentication:', error);
-      return { error: "Internal Server Error" };
-    }
-  };
+//       return { token };
+//     } catch (error) {
+//       console.error('Error during authentication:', error);
+//       return { error: "Internal Server Error" };
+//     }
+//   };
   
   // ValidMember middleware with user activity check
   const ValidMember = async (req, res, next) => {
