@@ -27,6 +27,7 @@ app.use('/admin', require('./routes/Admin.route'));
 app.use('/api/Auth', require('./routes/Auth.route'));
 app.use('/api/Dashboard', require('./routes/Dashboard.route'));
 app.use('/api/Staking', require('./routes/Staking.route'));
+app.use('/api/Deposit', require('./routes/deposit.route'));
 app.use('/api/Team', require('./routes/Team.route'));
 app.use('/api/Earning', require('./routes/Earning.route'));
 app.use('/api/Withdraw', require('./routes/Withdraw.route'));
