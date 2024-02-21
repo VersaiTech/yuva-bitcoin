@@ -18,6 +18,14 @@ const useCustomer = () => {
   const getCustomer = useCallback(async () => {
     try {
       const response = await customersApi.getCustomer();
+      // const token = localStorage.getItem('accessToken');
+      // const headers = {
+      //   'Authorization': token
+      // }
+
+      // const response = await axios.get(`${BASEURL}/admin/getAllMembers`, {
+      //   headers: headers
+      // })
 
       if (isMounted()) {
         setCustomer(response);
@@ -117,7 +125,7 @@ const Page = () => {
                         user_id:
                       </Typography>
                       <Chip
-                        label={customer.id}
+                        label={customer.member_user_id}
                         size="small"
                       />
                     </Stack>

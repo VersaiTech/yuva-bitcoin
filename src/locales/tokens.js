@@ -28,6 +28,7 @@ export const tokens = {
     withdrawal: 'nav.withdrawal',
     allwithdrawal: 'nav.allwithdrawal',
     pendingWithdrawal: 'nav.pendingWithdrawal',
+    rejectedWithdrawal: 'nav.rejectedWithdrawal',
     completedWithdrawal: 'nav.completedWithdrawal',
     dashboard: 'nav.dashboard',
     details: 'nav.details',
@@ -66,6 +67,5 @@ export const tokens = {
     alldeposit: 'nav.alldeposit',
     pendingDeposit: 'nav.pendingDeposit',
     completedDeposit: 'nav.completedDeposit',
-
   }
 };
