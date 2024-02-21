@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import {
@@ -67,6 +67,20 @@ export const WithdrawalListSearch = (props) => {
   const [filters, setFilters] = useState({});
 
   // const [activeUsers, setActiveUsers] = useState([]);
+  const urlParams = new URLSearchParams(window.location.search);
+  const sturl = urlParams.get('status');
+  console.log(sturl);
+
+  useEffect(() => {
+    if(sturl){
+      setCurrentTab(sturl);
+    }
+  }, [sturl]);
+
+  useEffect(() => {
+    console.log(currentTab);
+  })
+
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);

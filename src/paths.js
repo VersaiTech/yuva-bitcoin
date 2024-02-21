@@ -74,8 +74,8 @@ export const paths = {
     },
     users: {
       index: "/dashboard/users",
-      active: "/dashboard/users/active",
-      blocked: "/dashboard/users/blocked",
+      active: "/dashboard/users?status=hasAcceptedMarketing",
+      blocked: "/dashboard/users?status=isProspect",
       details: "/dashboard/customers/:users",
       edit: "/dashboard/customers/:userId/edit",
     },
@@ -117,6 +117,8 @@ export const paths = {
       index: "/dashboard/withdrawals",
       pending:"/dashboard/withdrawals?status=pending",
       details: "/dashboard/withdrawals/:withdrawalId",
+      rejected: "/dashboard/withdrawals?status=hasAcceptedMarketing",
+      completed: "/dashboard/withdrawals?status=isProspect",
     },
     products: {
       index: "/dashboard/products",

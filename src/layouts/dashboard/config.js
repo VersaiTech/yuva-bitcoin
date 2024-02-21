@@ -336,11 +336,11 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.activeUsers),
-            path: paths.dashboard.users.index,
+            path: paths.dashboard.users.active,
           },
           {
             title: t(tokens.nav.blockedUsers),
-            path: paths.dashboard.users.index,
+            path: paths.dashboard.users.blocked,
           },
           // {
           //   title: t(tokens.nav.resetPassword),
@@ -390,6 +390,7 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.completedWithdrawal),
+            path: paths.dashboard.withdrawal.completed,
           },
 
           // },
