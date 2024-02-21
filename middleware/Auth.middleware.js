@@ -118,37 +118,6 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 //         }
 //     }
 // };
-
-// Authentication process with user activity check
-// const authenticateUser = async (username, password) => {
-//     try {
-//       const user = await Member.findOne({ member_user_id: username });
-  
-//       if (!user) {
-//         // User not found
-//         return { error: "User not found" };
-//       }
-  
-//       if (!user.isActive) {
-//         // Inactive user, return an error
-//         return { error: "Inactive User" };
-//       }
-  
-//       // Perform password validation here (compare hashed password, etc.)
-  
-//       // Generate token if the user is active and password is valid
-//       const token = jwt.sign(
-//         { userId: user.member_user_id, userType: user.userType },
-//         JWT_SECRET_KEY,
-//         { expiresIn: '1h' } // Adjust expiration time as needed
-//       );
-  
-//       return { token };
-//     } catch (error) {
-//       console.error('Error during authentication:', error);
-//       return { error: "Internal Server Error" };
-//     }
-//   };
   
   // ValidMember middleware with user activity check
   const ValidMember = async (req, res, next) => {
@@ -164,31 +133,23 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
       const userId = decoded.userId;
       const userType = decoded.userType;
   
-      const user = await Member.findOne({ member_user_id: userId });
-  
-      if (!user) {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid User! Please contact support.",
-        });
+      const verify = await isActive(userId);
+
+      if (!verify) {
+          return res.status(403).json({
+              success: false,
+              message: "Member Not Found !",
+          });
       }
-  
-      if (!user.isActive) {
-        return res.status(403).json({
-          success: false,
-          message: "Inactive User! Please contact support.",
-        });
-      }
-  
-      if (user.userType !== userType) {
-        return res.status(403).json({
-          success: false,
-          message: "Invalid User Type!",
-        });
+      if (verify.userType !== userType) {
+          return res.status(403).json({
+              success: false,
+              message: "Invalid User Type !",
+          });
       }
   
       // Attach the user object to the request for further processing
-      req.user = user;
+      req.user = verify;
       req.userType = userType;
       next();
     } catch (err) {
@@ -200,9 +161,6 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
       }
     }
   };
-  
-
-
 
 
 const isAdmin = async (req, res, next) => {
@@ -255,21 +213,6 @@ const isAdmin = async (req, res, next) => {
     }
 };
 
-// Updated isActive function
-// const isActive = async (userId) => {
-//     try {
-//         const user = await Member.findOne({ member_user_id: userId });
-
-//         if (!user) {
-//             return false; // User not found
-//         }
-
-//         return user.isActive; // Assuming there is an isActive field in the Member model
-//     } catch (error) {
-//         console.error('Error checking user activity:', error);
-//         return false; // Return false in case of an error
-//     }
-// };
 
 
 
