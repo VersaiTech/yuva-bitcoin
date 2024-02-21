@@ -84,6 +84,9 @@ export const DepositListTable = (props) => {
     }
   }, [selectAll, deselectAll]);
 
+
+  
+
   const selectedAll = selected.length === customers.length;
   const selectedSome = selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;

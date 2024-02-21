@@ -107,7 +107,7 @@ export const paths = {
       details: "/dashboard/tasks/:taskId",
     },
     deposit: {
-      index: "/dashboard/deposit?status=all",
+      index: "/dashboard/deposit",
       details: "/dashboard/deposit/:depositId",
       pending:"/dashboard/deposit?status=hasAcceptedMarketing",
       completed:"/dashboard/deposit?status=isProspect",
