@@ -3,7 +3,8 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require("cors");
-// const cron = require('node-cron');
+// const socketIO = require("socket.io")
+
 
 const { Connection } = require("./config/db.config");
 require("dotenv").config();
@@ -18,7 +19,7 @@ const port = process.env.PORT || 5001;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors()); 
+app.use(cors());
 
 // const db = require('./config/db.config.js');
 
@@ -41,7 +42,7 @@ app.use('/api/Withdraw', require('./routes/Withdraw.route'));
 // app.post('/users', userController.addUser);
 
 // app.post('/tasks', taskController.addTask);
-  
+
 
 // User routes
 // app.get('/users/:userId', userController.getUserById);
@@ -74,3 +75,16 @@ Connection(username, password);
 app.listen(5000, (req, res) => {
   console.log("=== Server is Listening on " + 5000 + " Port ===");
 });
+
+
+
+// SOCKET
+// const server = express().listen(5000, () => {
+//   console.log('listening to PORT: ', 5000);
+// })
+
+// const socketHandler = socketIO(server)
+  
+// socketHandler.on("connection", () => {
+//   console.log("client connected")
+// })

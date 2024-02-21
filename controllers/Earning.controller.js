@@ -99,7 +99,7 @@ const referralBonus = async (req, res) => {
         } else {
             return res.status(200).send({
                 status: true,
-                message: "Referral bonus",
+                message: "Referral bonus",          
                 data: output,
             });
         }

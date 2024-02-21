@@ -26,6 +26,7 @@
     "node-cron": "^3.0.3",
     "nodemon": "^2.0.22",
     "oauth-signature": "^1.5.0",
+    "socket.io": "^4.7.4",
     "twit": "^2.2.11",
     "util": "^0.12.5",
     "uuid": "^9.0.1"
