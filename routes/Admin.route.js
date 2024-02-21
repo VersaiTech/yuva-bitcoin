@@ -21,7 +21,7 @@ router.route('/completeTask').post(ValidMember, completeTask);
 router.route('/confirmTaskCompletion').post(isAdmin, confirmTaskCompletion);
 
 
-router.route('/updateMemberStatus').post(isAdmin, updateMemberStatus);
+router.route('/updateMemberStatus/:member_user_id').post(isAdmin, updateMemberStatus);
 
 
 

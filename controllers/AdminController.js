@@ -350,7 +350,8 @@ const updateMemberStatus = async (req, res) => {
       return res.status(403).json({ error: 'Permission denied. Only admin can update member status.' });
     }
 
-    const { member_user_id, isActive } = req.body;
+    const {member_user_id} = req.params;
+    const { isActive } = req.body;
 
     // Validate if member_user_id is provided
     if (!member_user_id) {
