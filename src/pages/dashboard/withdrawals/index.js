@@ -1,18 +1,26 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
-import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from '@mui/material';
-import { customersApi } from '../../../api/customers';
-import { useMounted } from '../../../hooks/use-mounted';
-import { usePageView } from '../../../hooks/use-page-view';
-import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { CustomerListSearch } from '../../../sections/dashboard/customer/customer-list-search';
-import { CustomerListTable } from '../../../sections/dashboard/customer/customer-list-table';
-import { WithdrawalListSearch } from '../../../sections/dashboard/withdrawals/withdrawals-list-search';
-import { WithdrawalsListTable } from '../../../sections/dashboard/withdrawals/withdrawals-list-table';
-import axios from 'axios';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Stack,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
+import { customersApi } from "../../../api/customers";
+import { useMounted } from "../../../hooks/use-mounted";
+import { usePageView } from "../../../hooks/use-page-view";
+import { Layout as DashboardLayout } from "../../../layouts/dashboard";
+import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
+import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
+import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
+import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
+import axios from "axios";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -20,17 +28,17 @@ const useSearch = () => {
       query: undefined,
       hasAcceptedMarketing: undefined,
       isProspect: undefined,
-      isReturning: undefined
+      isReturning: undefined,
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'updatedAt',
-    sortDir: 'desc'
+    sortBy: "updatedAt",
+    sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -38,28 +46,37 @@ const useCustomers = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     customers: [],
-    customersCount: 0
+    customersCount: 0,
   });
 
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
 
       const headers = {
-        'Authorization': token
-      }
+        Authorization: token,
+      };
 
-      const response = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawRequests`, { headers: headers });
+      const response = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawRequests`,
+        { headers: headers }
+      );
 
+      const PendingWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawPending`,
+        { headers: headers }
+      );
 
-      const PendingWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawPending`, { headers: headers });
+      const rejectedWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawRejected`,
+        { headers: headers }
+      );
 
-
-      const rejectedWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawRejected`, { headers: headers });
-
-
-      const completedWithdrawals = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawApproved`, { headers: headers });
+      const completedWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawApproved`,
+        { headers: headers }
+      );
 
       if (isMounted()) {
         setState({
@@ -67,7 +84,7 @@ const useCustomers = (search) => {
           customersCount: response.count,
           pending: PendingWithdrawals.data.data,
           rejected: rejectedWithdrawals.data.data,
-          completed: completedWithdrawals.data.data
+          completed: completedWithdrawals.data.data,
         });
       }
     } catch (err) {
@@ -75,11 +92,13 @@ const useCustomers = (search) => {
     }
   }, [search, isMounted]);
 
-  useEffect(() => {
-    getCustomers();
-  },
+  useEffect(
+    () => {
+      getCustomers();
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search]
+  );
 
   return state;
 };
@@ -87,74 +106,75 @@ const useCustomers = (search) => {
 const Page = () => {
   // get url status from query
   const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get('status');
+  const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
+  const { customers, customersCount, completed, rejected, pending } =
+    useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState('all');
+  const [currentTab, setCurrentTab] = useState("all");
 
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleSortChange = useCallback((sort) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir
-    }));
-  }, [updateSearch]);
+  const handleSortChange = useCallback(
+    (sort) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Withdrawals | Yuva Bitcoin
-        </title>
+        <title>Dashboard: Withdrawals | Yuva Bitcoin</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 4
+          py: 4,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">
-                  All Withdrawals
-                </Typography>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
-                >
+                <Typography variant="h4">All Withdrawals</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
                     size="small"
@@ -179,17 +199,13 @@ const Page = () => {
                   </Button> */}
                 </Stack>
               </Stack>
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={3}
-              >
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
-                  startIcon={(
+                  startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
-                  )}
+                  }
                   variant="contained"
                 >
                   Add
@@ -214,11 +230,15 @@ const Page = () => {
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
                 customers={
-                  currentTab === 'all' ? customers :
-                    currentTab === 'pending' ? pending :
-                      currentTab === 'hasAcceptedMarketing' ? rejected :
-                        currentTab === 'isProspect' ? completed :
-                          []
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "pending"
+                    ? pending
+                    : currentTab === "hasAcceptedMarketing"
+                    ? rejected
+                    : currentTab === "isProspect"
+                    ? completed
+                    : []
                 }
                 // customersCount={
                 //   currentTab === 'all' ? customersCount :
@@ -240,10 +260,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
