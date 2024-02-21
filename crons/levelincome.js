@@ -31,7 +31,7 @@ var task = cron.schedule("*/1 * * * * *", async () => {
   newInvestArr.forEach(async (row) => {
     try {
       await updateTblMember(row);
-      await updateTblDeposit(row);
+      await updateTblStake(row);
       const memberUserId = row.member_user_id;
       const investPackage = row.investment;
       const transactionId = row.transaction_id;
@@ -400,7 +400,7 @@ const InsertIncomeTbl = async (
 
 const findNewInvestment = async () => {
   try {
-    const newInvestQuery = `SELECT * FROM tbl_deposit WHERE checked = 0 AND status = 1 ORDER BY record_no LIMIT 0,10`;
+    const newInvestQuery = `SELECT * FROM tbl_stake WHERE checked = 0 AND status = 1 ORDER BY record_no LIMIT 0,10`;
     const newInvestArr = await query(newInvestQuery);
     return newInvestArr;
   } catch (error) {
@@ -443,10 +443,10 @@ const findMemberName = async (memberUserId) => {
 
 // this function will update the table which
 
-const updateTblDeposit = async (rowR) => {
+const updateTblStake = async (rowR) => {
   try {
     const record_no = rowR.record_no;
-    const upL = `UPDATE tbl_deposit SET checked=1 WHERE record_no=${record_no}`; //Setting level as 1
+    const upL = `UPDATE tbl_stake SET checked=1 WHERE record_no=${record_no}`; //Setting level as 1
     await query(upL);
     console.log("UPL done");
   } catch (error) {

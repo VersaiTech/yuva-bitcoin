@@ -382,7 +382,7 @@
 
 
 const cron = require('node-cron');
-const Deposit = require('../models/deposit');
+const Stake = require('../models/stake');
 const Member = require('../models/memberModel');
 const moment = require('moment');
 
@@ -424,14 +424,14 @@ const moment = require('moment');
     console.log('Running the daily 1 cron job...');
 
     try {
-      // Find staking deposits with interest not credited
-      const stakingDeposits = await Deposit.find({ interestCredited: false });
+      // Find staking Stakes with interest not credited
+      const stakingStakes = await Stake.find({ interestCredited: false });
 
-      // Iterate over staking deposits and calculate interest
-      for (const deposit of stakingDeposits) {
+      // Iterate over staking Stakes and calculate interest
+      for (const stake of stakingStakes) {
         const currentDate = new Date();
-        const stakingStartDate = deposit.sys_date;
-        const stakingDuration = deposit.stakingDuration;
+        const stakingStartDate = stake.sys_date;
+        const stakingDuration = stake.stakingDuration;
 
         const elapsedTime = currentDate - stakingStartDate;
         const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
@@ -441,20 +441,20 @@ const moment = require('moment');
           const interestRate = getInterestRate(stakingDuration);
           if (interestRate !== null) {
             // Calculate interest based on the original investment amount
-            const interest = deposit.investment * interestRate;
+            const interest = stake.investment * interestRate;
 
             // Update member's account with interest
-            const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+            const member = await Member.findOne({ member_user_id: stake.member_user_id });
             member.coins += interest;
             await member.save();
 
-            // Mark the deposit as credited
-            deposit.interestCredited = true;
-            await deposit.save();
+            // Mark the stake as credited
+            stake.interestCredited = true;
+            await stake.save();
 
-            console.log(`Staking duration reached for deposit with ID ${deposit._id}. Member received ${interestRate * 100}% interest.`);
+            console.log(`Staking duration reached for stake with ID ${stake._id}. Member received ${interestRate * 100}% interest.`);
           } else {
-            console.log(`Invalid staking duration for deposit with ID ${deposit._id}.`);
+            console.log(`Invalid staking duration for stake with ID ${stake._id}.`);
           }
         }
       }

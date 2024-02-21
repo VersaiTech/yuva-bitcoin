@@ -7,7 +7,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const {getAllDeposits, addTask, editTask, deleteTask, getAllTasks, completeTask,confirmTaskCompletion,updateMemberStatus, getAllMembers,getActiveMembers, getBlockedMembers } = require('../controllers/AdminController');
+const {getAllStakes, addTask, editTask, deleteTask, getAllTasks, completeTask,confirmTaskCompletion,updateMemberStatus, getAllMembers,getActiveMembers, getBlockedMembers } = require('../controllers/AdminController');
 const {ValidMember, isAdmin} = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin,upload.array('file',10), addTask);
@@ -32,7 +32,7 @@ router.route('/getBlockedMembers').get(isAdmin, getBlockedMembers);
 
 
 
-router.route("/getAllDeposits").get(isAdmin, getAllDeposits);
+router.route("/getAllStakes").get(isAdmin, getAllStakes);
 
 
 module.exports = router;

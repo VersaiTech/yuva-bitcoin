@@ -1,6 +1,6 @@
 const { Task, CompletedTask } = require('../models/Task');
 const Member = require('../models/memberModel');
-const Deposit = require('../models/deposit');
+const Stake = require('../models/stake');
 
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
@@ -224,25 +224,25 @@ const deleteTask = async (req, res) => {
 
 
 
-const getAllDeposits = async (req, res) => {
+const getAllStakes = async (req, res) => {
   try {
-    // Retrieve deposits from the database
-    const deposits = await Deposit.find();
+    // Retrieve Stakes from the database
+    const stakes = await Stake.find();
 
-    // Check if there are no deposits found
-    if (!deposits || deposits.length === 0) {
+    // Check if there are no stakes found
+    if (!stakes || stakes.length === 0) {
       return res.status(404).json({
-        message: "No deposits found",
+        message: "No stakes found",
       });
     }
 
-    // Respond with the deposits
+    // Respond with the Stakes
     return res.status(200).json({
-      message: "Deposits retrieved successfully",
-      data: deposits,
+      message: "Stakes retrieved successfully",
+      data: stakes,
     });
   } catch (error) {
-    console.error("Error retrieving deposits:", error);
+    console.error("Error retrieving stakes:", error);
     return res.status(500).json({
       message: "Internal Server Error",
       error: error.message, 
@@ -400,4 +400,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllDeposits, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus };
+module.exports = { getAllStakes, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus };

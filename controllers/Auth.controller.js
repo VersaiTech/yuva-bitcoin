@@ -477,11 +477,12 @@ async function login (req, res)  {
         });
       }
 
+
       const token = jwt.sign(
         { userId: user.member_user_id,userType: user.userType },
         process.env.JWT_SECRET_KEY,
         {
-          expiresIn: "10h",
+          expiresIn: null,
         }
       );
 
@@ -605,7 +606,7 @@ async function adminLogin(req, res) {
     const token = jwt.sign(
       { userId: admin.admin_user_id, userType: admin.userType },
       JWT_SECRET_KEY,
-      { expiresIn: "10h" }
+      { expiresIn: null }
     );
 
     return res.status(200).send({

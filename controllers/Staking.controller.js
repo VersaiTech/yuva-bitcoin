@@ -63,10 +63,10 @@
 //   console.log(sys_date);
 
 //   const { wallerAddress, amount, transactionHash } = req.body;
-//   const query2 = `INSERT INTO tbl_deposit (member_user_id , member_name , sys_date , investment , transaction_id , walletAddress, deposit_type) VALUES ('${user}' , '${member_name}' , '${sys_date}' , '${amount}' , '${transactionHash}' , '${wallerAddress}'  , 'Wallet')`;
+//   const query2 = `INSERT INTO tbl_stake (member_user_id , member_name , sys_date , investment , transaction_id , walletAddress, stake_type) VALUES ('${user}' , '${member_name}' , '${sys_date}' , '${amount}' , '${transactionHash}' , '${wallerAddress}'  , 'Wallet')`;
 
 //   try {
-//     const insertDeposit = await query(query2);
+//     const insertStake = await query(query2);
 //   } catch (err) {
 //     console.log(`error`, err);
 //     return res.status(400).send({
@@ -81,7 +81,7 @@
 
 // const stakingSummary = async (req, res) => {
 //   const user = req.user;
-//   const query1 = `SELECT * FROM tbl_deposit WHERE member_user_id='${user}'`;
+//   const query1 = `SELECT * FROM tbl_stake WHERE member_user_id='${user}'`;
 //   try {
 //     const output = await query(query1);
 //     return res.status(200).send({
@@ -105,66 +105,66 @@
 
 const Member = require('../models/memberModel');
 const { v4: uuidv4 } = require('uuid');
-const Deposit = require("../models/deposit");
+const Stake = require("../models/stake");
 
-const getStakingData = async (req, res) => {
-  try {
-    const deposits = await Deposit.find({ Status: '0' });
-    if (deposits.length === 0) {
-      return res.status(400).send({
-        message: "No wallet is currently available for staking",
-      });
-    } else {
-      const user = deposits[0];
-      return res.status(200).send({
-        message: "Wallet is available for staking",
-        wallet: user.walletAddress,
-      });
-    }
-  } catch (error) {
-    console.error("Error retrieving staking data:", error);
-    return res.status(500).send({
-      message: "Internal Server Error",
-    });
-  }
-};
+// const getStakingData = async (req, res) => {
+//   try {
+//     const stakes = await Stake.find({ Status: '0' });
+//     if (stakes.length === 0) {
+//       return res.status(400).send({
+//         message: "No wallet is currently available for staking",
+//       });
+//     } else {
+//       const user = stakes[0];
+//       return res.status(200).send({
+//         message: "Wallet is available for staking",
+//         wallet: user.walletAddress,
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error retrieving staking data:", error);
+//     return res.status(500).send({
+//       message: "Internal Server Error",
+//     });
+//   }
+// };
 
-const stakingRequest = async (req, res) => {
-  const user = req.user;
+// const stakingRequest = async (req, res) => {
+//   const user = req.user;
 
-  try {
-    const deposit = new Deposit({
-      member_user_id: user,
-      member_name: req.body.member_name,
-      sys_date: new Date(),
-      investment: req.body.amount,
-      transaction_id: req.body.transactionHash,
-      walletAddress: req.body.wallerAddress,
-      deposit_type: 'Wallet',
-    });
+//   try {
+//     const stake = new Stake({
+//       member_user_id: user,
+//       member_name: req.body.member_name,
+//       sys_date: new Date(),
+//       investment: req.body.amount,
+//       transaction_id: req.body.transactionHash,
+//       walletAddress: req.body.wallerAddress,
+//       stake_type: 'Wallet',
+//     });
 
-    await deposit.save();
+//     await stake.save();
 
-    return res.status(200).send({
-      message: "Staking request submitted successfully",
-    });
-  } catch (error) {
-    console.error("Error submitting staking request:", error);
-    return res.status(500).send({
-      message: "Internal Server Error",
-    });
-  }
-};
+//     return res.status(200).send({
+//       message: "Staking request submitted successfully",
+//     });
+//   } catch (error) {
+//     console.error("Error submitting staking request:", error);
+//     return res.status(500).send({
+//       message: "Internal Server Error",
+//     });
+//   }
+// };
 
 
 const stakingSummary = async (req, res) => {
   const userId = req.user.member_user_id;
 
   try {
-    const deposits = await Deposit.find({ member_user_id: userId });
+    const stakes = await Stake.find({ member_user_id: userId });
     return res.status(200).send({
       message: "Staking summary",
-      data: deposits,
+      data: stakes,
     });
   } catch (error) {
     console.error("Error retrieving staking summary:", error);
@@ -196,29 +196,29 @@ async function transferToStaking(req, res) {
     member.coins -= investment;
     await member.save();
 
-    // Check if there is an existing deposit for the member
-    const existingDeposit = await Deposit.findOne({ member_user_id: userId, deposit_type: 'Wallet' });
+    // Check if there is an existing stake for the member
+    const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
 
-    if (existingDeposit) {
-      // Update the existing deposit
-      existingDeposit.investment += investment;
-      await existingDeposit.save();
-      res.status(200).json(existingDeposit);
+    if (existingStake) {
+      // Update the existing Stake
+      existingStake.investment += investment;
+      await existingStake.save();
+      res.status(200).json(existingStake);
     } else {
-      // Create a new deposit if none exists
-      const newDeposit = new Deposit({
+      // Create a new Stake if none exists
+      const newStake = new Stake({
         member_user_id:member.member_user_id,
         member_name: member.member_name,
         investment,
         transaction_id: generateTransactionId(),
-        deposit_type: 'Wallet',
+        stake_type: 'Wallet',
         stakingDuration,
       });
 
-      // Save the deposit
-      const savedDeposit = await newDeposit.save();
+      // Save the Stake
+      const savedStake = await newStake.save();
 
-      res.status(201).json(savedDeposit);
+      res.status(201).json(savedStake);
     }
   } catch (error) {
     console.error(error);
@@ -231,9 +231,10 @@ function generateTransactionId() {
 }
 
 module.exports = {
-  getStakingData,
-  stakingRequest,
-  stakingSummary, transferToStaking
+  // getStakingData,
+  // stakingRequest,
+  stakingSummary, 
+  transferToStaking
 };
 
 
