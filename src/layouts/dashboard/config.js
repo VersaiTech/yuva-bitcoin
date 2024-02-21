@@ -389,6 +389,10 @@ export const getSections = (t) => [
             path: paths.dashboard.withdrawal.pending,
           },
           {
+            title: t(tokens.nav.rejectedWithdrawal),
+            path: paths.dashboard.withdrawal.rejected,
+          },
+          {
             title: t(tokens.nav.completedWithdrawal),
             path: paths.dashboard.withdrawal.completed,
           },

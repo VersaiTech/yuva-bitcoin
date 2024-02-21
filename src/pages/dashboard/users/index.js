@@ -51,8 +51,6 @@ const useCustomers = (search) => {
 
       const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
 
-      console.log(response.data.members);
-
       const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
 
 
@@ -68,7 +66,7 @@ const useCustomers = (search) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data.message);
     }
   }, [search, isMounted]);
 
