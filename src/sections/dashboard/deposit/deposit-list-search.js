@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import {
@@ -58,9 +58,25 @@ const sortOptions = [
 
 export const DepositListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
+
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const sturl = urlParams.get('status');
+  console.log(sturl);
+
+  useEffect(() => {
+    if(sturl){
+      setCurrentTab(sturl);
+    }
+  }, [sturl]);
+
+  useEffect(() => {
+    console.log(currentTab);
+  })
+  
 
   // const [activeUsers, setActiveUsers] = useState([]);
 
@@ -143,7 +159,7 @@ export const DepositListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search Withdrawals"
+            placeholder="Search Deposit"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>

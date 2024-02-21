@@ -84,14 +84,13 @@ const useCustomers = (search) => {
 };
 
 const Page = () => {
-  // get url status from query
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get('status');
+
+  
   
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState(status ? status : 'all');
+  const [currentTab, setCurrentTab] = useState('all');
 
   console.log(currentTab);
 
@@ -130,7 +129,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Withdrawals | Yuva Bitcoin
+          Dashboard: Deposit | Yuva Bitcoin
         </title>
       </Head>
       <Box
@@ -149,7 +148,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  All Withdrawals
+                  All Deposit
                 </Typography>
                 <Stack
                   alignItems="center"
@@ -212,7 +211,7 @@ const Page = () => {
                 // customers={customers}
                 // customersCount={customersCount}
                 customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
-                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

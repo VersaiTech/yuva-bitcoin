@@ -449,10 +449,11 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.pendingDeposit),
-            // path: paths.dashboard.deposit.index,
+            path: paths.dashboard.deposit.pending,
           },
           {
             title: t(tokens.nav.completedDeposit),
+            path: paths.dashboard.deposit.completed,
           },
         ],
       },
