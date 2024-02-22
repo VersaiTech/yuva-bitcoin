@@ -129,358 +129,73 @@
 
 
 
-// require("dotenv").config();
-// const mongoose = require("mongoose");
-// const cron = require("node-cron");
-// const bcrypt = require("bcrypt");
-// const Member = require("../models/memberModel"); // Assuming your model file is in a 'models' directory
-
-// // mongoose.connect(process.env.MONGODB_URI, {
-// //   useNewUrlParser: true,
-// //   useUnifiedTopology: true,
-// // });
-
-// // const db = mongoose.connection;
-// // db.on("error", console.error.bind(console, "MongoDB connection error:"));
-// // db.once("open", () => {
-// //   console.log("Connected to MongoDB database");
-// //   task.start();
-// // });
-
-// const task = cron.schedule("*/2 * * * *", async () => {
-//   console.log("passive income");
-
-//   try {
-//     const members = await Member.find({ status: 1 }).limit(10);
-
-//     members.forEach(async function (member) {
-//       console.log(member);
-
-//       const invest_package = member.invest_package;
-//       const hash_code = member.hash_code;
-//       let roi_rate = findRoi(invest_package);
-
-//       const income_amt = (invest_package * roi_rate) / 100;
-//       console.log(income_amt);
-
-//       if (income_amt > 0) {
-//         const income_doc = {
-//           member_user_id: member.member_user_id,
-//           member_name: member.member_name,
-//           calculate_date: new Date().toISOString().slice(0, 10),
-//           income_amt: income_amt,
-//           income_level: 1,
-//           income_type: 'STAKING BONUS',
-//           b_type: 'STAKING BONUS',
-//           income_member_id: member.member_user_id,
-//           net_amt: income_amt,
-//           hash_code: hash_code,
-//           investment_amt: invest_package,
-//           income_per: roi_rate
-//         };
-
-//         await MemberIncomeDetails.create(income_doc);
-
-//         const updatedMember = await Member.findOneAndUpdate(
-//           { member_user_id: member.member_user_id },
-//           { $inc: { minting_wallet: income_amt } }
-//         );
-
-//         console.log("Before - " + updatedMember.minting_wallet);
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Error processing members:", error);
-//   }
-// });
-
-// Checking amount range, how much times they get return
-// function checkAmount(amount) {
-//   switch (true) {
-//     case amount >= 100 && amount < 24999:
-//       return 2;
-//     case amount >= 25000:
-//       return 2.5;
-//     default:
-//       return 0;
-//   }
-// }
-
-// // Checking amount range, how much they get return daily
-// function findRoi(amount) {
-//   switch (true) {
-//     case amount >= 100 && amount <= 4999:
-//       return 0.5;
-//     case amount >= 5000 && amount <= 9999:
-//       return 0.75;
-//     case amount >= 10000 && amount <= 24999:
-//       return 1;
-//     case amount >= 25000 && amount <= 49999:
-//       return 1.25;
-//     case amount >= 50000 && amount <= 99999:
-//       return 1.5;
-//     case amount >= 100000:
-//       return 2;
-//     default:
-//       return 0;
-//   }
-// }
-
-
-
-// const task = cron.schedule("*/2 * * * *", async () => {
-//   console.log("passive income");
-
-//   try {
-//     const members = await Member.find({ status: 1 }).limit(10);
-
-//     members.forEach(async function (member) {
-//       console.log(member);
-
-//       const invest_package = member.invest_package;
-//       const hash_code = member.hash_code;
-//       const stakingStartDate = member.sys_date; // Assuming staking start date is stored in sys_date
-//       const currentDate = new Date();
-//       const stakingDurationMonths = calculateStakingDuration(stakingStartDate, currentDate);
-
-//       let interestRate = 0;
-//       if (stakingDurationMonths >= 12) {
-//         interestRate = 10; // 10% interest for 12 or more months
-//       } else if (stakingDurationMonths >= 6) {
-//         interestRate = 5; // 5% interest for 6 or more months
-//       } else if (stakingDurationMonths >= 3) {
-//         interestRate = 3; // 3% interest for 3 or more months
-//       }
-
-//       const interestAmt = (invest_package * interestRate) / 100;
-
-//       // Update user's minting_wallet with the interest amount
-//       if (interestAmt > 0) {
-//         const income_doc = {
-//           member_user_id: member.member_user_id,
-//           member_name: member.member_name,
-//           calculate_date: new Date().toISOString().slice(0, 10),
-//           income_amt: interestAmt,
-//           income_level: 1,
-//           income_type: 'STAKING INTEREST', // Update income type to reflect staking interest
-//           b_type: 'STAKING INTEREST',
-//           income_member_id: member.member_user_id,
-//           net_amt: interestAmt,
-//           hash_code: hash_code,
-//           investment_amt: invest_package,
-//           income_per: interestRate
-//         };
-
-//         await MemberIncomeDetails.create(income_doc);
-
-//         const updatedMember = await Member.findOneAndUpdate(
-//           { member_user_id: member.member_user_id },
-//           { $inc: { minting_wallet: interestAmt } }
-//         );
-
-//         console.log("Before - " + updatedMember.minting_wallet);
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Error processing members:", error);
-//   }
-// });
-
-
-// const task = cron.schedule("*/1 * * * * *", async () => {
-//   console.log("Adding 3% interest to each member's minting wallet");
-
-//   try {
-//     const members = await Member.find({ status: 1 }).limit(10);
-
-//     members.forEach(async function (member) {
-//       const invest_package = member.invest_package;
-//       // const hash_code = member.hash_code;
-
-//       // 3% interest rate
-//       const interestRate = 3;
-
-//       const interestAmt = (invest_package * interestRate) / 100;
-
-//       // Update user's minting_wallet with the interest amount
-//       if (interestAmt > 0) {
-//         const income_doc = {
-//           member_user_id: member.member_user_id,
-//           member_name: member.member_name,
-//           calculate_date: new Date().toISOString().slice(0, 10),
-//           income_amt: interestAmt,
-//           income_level: 1,
-//           income_type: 'INTEREST', // Update income type
-//           b_type: 'INTEREST',
-//           income_member_id: member.member_user_id,
-//           net_amt: interestAmt,
-//           hash_code: hash_code,
-//           investment_amt: invest_package,
-//           income_per: interestRate
-//         };
-
-//         await MemberIncomeDetails.create(income_doc);
-
-//         const updatedMember = await Member.findOneAndUpdate(
-//           { member_user_id: member.member_user_id },
-//           { $inc: { coins: interestAmt } }
-//         );
-
-//         console.log("Added 3% interest to member:", member.member_user_id);
-//         console.log("Before - " + updatedMember.minting_wallet);
-//       }
-//     });
-//   } catch (error) {
-//     console.error("Error processing members:", error);
-//   }
-// });
-
-
-// function calculateStakingDuration(startDate, endDate) {
-//   const start = new Date(startDate);
-//   const end = new Date(endDate);
-//   const diffInMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-//   return diffInMonths;
-// }
-
-
-/////////////////"yeh Wala Perfect code hai don't touch it"////////////////////
-
-
-// const cron = require('node-cron');
-// const Deposit = require('../models/deposit');
-// const Member = require('../models/memberModel');
-
-// // Define the cron job to run every two minutes
-// cron.schedule('*/1 * * * * *', async () => {
-//     try {
-//         // Get all deposits
-//         const deposits = await Deposit.find();
-
-//         // Iterate over deposits
-//         for (const deposit of deposits) {
-//             // Calculate interest (3% of the investment)
-//             const interest = 0.03 * deposit.investment;
-
-//             // Find the member associated with the deposit
-//             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
-
-//             // Add interest to the member's coins
-//             member.coins += interest;
-
-//             // Save the updated member
-//             await member.save();
-//         }
-
-//         console.log('Interest distributed successfully');
-//     } catch (error) {
-//         console.error('Error distributing interest:', error);
-//     }
-// });
-
-
-
 
 const cron = require('node-cron');
 const Stake = require('../models/stake');
 const Member = require('../models/memberModel');
-const moment = require('moment');
 
-// Define the cron job to run every two minutes
-// running okay without a bit of validation
-// cron.schedule(' */1 * * * *', async () => {
-//   console.log('Running the cron job every 1 minutes for testing...');
-//     try {
-//         // Get all deposits
-//         const deposits = await Deposit.find();
+// Define the cron job to run every day at midnight
+cron.schedule('*/1 * * * *', async () => {
+  console.log('Running the daily 1 cron job...');
 
-// Iterate over deposits
-// for (const deposit of deposits) {
-  // Calculate interest (3% of the investment)
-  // const interest = 0.03 * deposit.investment;
+  try {
+    // Find staking Stakes with interest not credited
+    const stakingStakes = await Stake.find({ interestCredited: false });
 
-  //             // Find the member associated with the deposit
-  //             const member = await Member.findOne({ member_user_id: deposit.member_user_id });
+    // Iterate over staking Stakes and calculate interest
+    for (const stake of stakingStakes) {
+      const currentDate = new Date();
+      const stakingStartDate = stake.sys_date;
+      const stakingDuration = stake.stakingDuration;
 
-  //             // Add interest to the member's coins
-  //             member.coins += interest;
-  //             // deposit.investment += interest;
+      const elapsedTime = currentDate - stakingStartDate;
+      const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
 
-  //             // Save the updated member
-  //             await member.save();
-  //             // await deposit.save();
-  //         }
+      // Check if the staking duration has been reached
+      if (elapsedDays >= stakingDuration) {
+        const interestRate = getInterestRate(stakingDuration);
+        if (interestRate !== null) {
+          // Calculate interest based on the original investment amount
+          const interest = stake.investment * interestRate;
 
-  //         console.log('Interest distributed successfully');
-  //     } catch (error) {
-  //         console.error('Error distributing interest:', error);
-  //     }
-  // });
+          // Update member's account with interest
+          const member = await Member.findOne({ member_user_id: stake.member_user_id });
+          member.coins += interest;
+          await member.save();
 
+          // Mark the stake as credited
+          stake.interestCredited = true;
+          await stake.save();
 
-  // newly added
-  // Define the cron job to run every day at midnight
-  cron.schedule('*/1 * * * *', async () => {
-    console.log('Running the daily 1 cron job...');
-
-    try {
-      // Find staking Stakes with interest not credited
-      const stakingStakes = await Stake.find({ interestCredited: false });
-
-      // Iterate over staking Stakes and calculate interest
-      for (const stake of stakingStakes) {
-        const currentDate = new Date();
-        const stakingStartDate = stake.sys_date;
-        const stakingDuration = stake.stakingDuration;
-
-        const elapsedTime = currentDate - stakingStartDate;
-        const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24));
-
-        // Check if the staking duration has been reached
-        if (elapsedDays >= stakingDuration) {
-          const interestRate = getInterestRate(stakingDuration);
-          if (interestRate !== null) {
-            // Calculate interest based on the original investment amount
-            const interest = stake.investment * interestRate;
-
-            // Update member's account with interest
-            const member = await Member.findOne({ member_user_id: stake.member_user_id });
-            member.coins += interest;
-            await member.save();
-
-            // Mark the stake as credited
-            stake.interestCredited = true;
-            await stake.save();
-
-            console.log(`Staking duration reached for stake with ID ${stake._id}. Member received ${interestRate * 100}% interest.`);
-          } else {
-            console.log(`Invalid staking duration for stake with ID ${stake._id}.`);
-          }
+          console.log(`Staking duration reached for stake with ID ${stake._id}. Member received ${interestRate * 100}% interest.`);
+        } else {
+          console.log(`Invalid staking duration for stake with ID ${stake._id}.`);
         }
       }
-
-      console.log('Daily cron job completed.');
-    } catch (error) {
-      console.error('Error in the daily cron job:', error);
     }
-  }, {
-    scheduled: true,
-    timezone: 'Asia/Kolkata', // Set your timezone to IST
-  });
 
-  // Helper function to get interest rate based on staking duration
-  function getInterestRate(durationMonths) {
-    switch (durationMonths) {
-      case 3:
-        return 0.03;
-      case 6:
-        return 0.05;
-      case 12:
-        return 0.10;
-      default:
-        return null;
-    }
+    console.log('Daily cron job completed.');
+  } catch (error) {
+    console.error('Error in the daily cron job:', error);
   }
+}, {
+  scheduled: true,
+  timezone: 'Asia/Kolkata', // Set your timezone to IST
+});
+
+// Helper function to get interest rate based on staking duration
+function getInterestRate(durationMonths) {
+  switch (durationMonths) {
+    case 3:
+      return 0.03;
+    case 6:
+      return 0.05;
+    case 12:
+      return 0.10;
+    default:
+      return null;
+  }
+}
 
 
 module.exports = {

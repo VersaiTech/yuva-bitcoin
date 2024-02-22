@@ -251,6 +251,37 @@ const getAllStakes = async (req, res) => {
 };
 
 
+async function getMemberByUserId(req, res) {
+  try {
+    // Extract member_user_id from request parameters
+    const { member_user_id } = req.params;
+
+    // Fetch the member from the database based on member_user_id
+    const member = await Member.findOne({ member_user_id: member_user_id });
+
+    // If the member is not found, return a 404 response
+    if (!member) {
+      return res.status(404).json({
+        status: false,
+        message: `Member with user_id ${member_user_id} not found`,
+        member: null,
+      });
+    }
+
+    // Return the found member
+    return res.status(200).json({
+      status: true,
+      message: `Member found with member_user_id ${member_user_id}`,
+      member: member,
+    });
+  } catch (error) {
+    console.error("Error fetching member:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
 
 
 
@@ -429,4 +460,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllStakes, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus,deleteUser };
+module.exports = { getAllStakes, getAllTasks, addTask, getMemberByUserId,editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus,deleteUser };

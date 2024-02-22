@@ -107,55 +107,6 @@ const Member = require('../models/memberModel');
 const { v4: uuidv4 } = require('uuid');
 const Stake = require("../models/stake");
 
-// const getStakingData = async (req, res) => {
-//   try {
-//     const stakes = await Stake.find({ Status: '0' });
-//     if (stakes.length === 0) {
-//       return res.status(400).send({
-//         message: "No wallet is currently available for staking",
-//       });
-//     } else {
-//       const user = stakes[0];
-//       return res.status(200).send({
-//         message: "Wallet is available for staking",
-//         wallet: user.walletAddress,
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error retrieving staking data:", error);
-//     return res.status(500).send({
-//       message: "Internal Server Error",
-//     });
-//   }
-// };
-
-// const stakingRequest = async (req, res) => {
-//   const user = req.user;
-
-//   try {
-//     const stake = new Stake({
-//       member_user_id: user,
-//       member_name: req.body.member_name,
-//       sys_date: new Date(),
-//       investment: req.body.amount,
-//       transaction_id: req.body.transactionHash,
-//       walletAddress: req.body.wallerAddress,
-//       stake_type: 'Wallet',
-//     });
-
-//     await stake.save();
-
-//     return res.status(200).send({
-//       message: "Staking request submitted successfully",
-//     });
-//   } catch (error) {
-//     console.error("Error submitting staking request:", error);
-//     return res.status(500).send({
-//       message: "Internal Server Error",
-//     });
-//   }
-// };
-
 
 const stakingSummary = async (req, res) => {
   const userId = req.user.member_user_id;
@@ -231,8 +182,6 @@ function generateTransactionId() {
 }
 
 module.exports = {
-  // getStakingData,
-  // stakingRequest,
   stakingSummary, 
   transferToStaking
 };
