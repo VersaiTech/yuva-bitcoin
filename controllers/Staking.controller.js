@@ -181,9 +181,49 @@ function generateTransactionId() {
   return `${Date.now()}_${uuidv4()}`;
 }
 
+async function transferToWallet(req, res) {
+  const userId = req.user.member_user_id;
+  try {
+    const { amount } = req.body;
+
+    // Check if the member exists
+    const member = await Member.findOne({ member_user_id: userId });
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+
+    // Check if there is an existing staking for the member
+    const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+
+    if (!existingStake) {
+      return res.status(400).json({ error: 'No staking found for the member' });
+    }
+
+    // Check if the staking has enough funds
+    if (existingStake.investment < amount) {
+      return res.status(400).json({ error: 'Insufficient funds in the staking' });
+    }
+
+    // Add the amount to the member's wallet
+    member.coins += amount;
+    await member.save();
+
+    // Deduct the amount from the staking
+    existingStake.investment -= amount;
+    await existingStake.save();
+
+    res.status(200).json(existingStake);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
 module.exports = {
   stakingSummary, 
-  transferToStaking
+  transferToStaking,
+  transferToWallet
 };
 
 
