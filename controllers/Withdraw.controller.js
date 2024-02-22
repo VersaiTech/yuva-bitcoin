@@ -184,6 +184,39 @@ const withdrawRequest = async (req, res) => {
 };
 
 
+async function getWithdrawByUserId(req, res) {
+  try {
+    // Extract member_user_id from request parameters
+    const { with_referrance } = req.params;
+
+    // Fetch the member from the database based on member_user_id
+    const withdraw = await Withdraw.findOne({ with_referrance: with_referrance });
+
+    // If the member is not found, return a 404 response
+    if (!withdraw) {
+      return res.status(404).json({
+        status: false,
+        message: `Member with user_id ${with_referrance} not found`,
+        member: null,
+      });
+    }
+
+    // Return the found member
+    return res.status(200).json({
+      status: true,
+      message: `Member found with member_user_id ${with_referrance}`,
+      withdraw: withdraw,
+    });
+  } catch (error) {
+    console.error("Error fetching member:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
 // Controller to update the status of a withdrawal request
 const updateWithdrawalStatus = async (req, res) => {
   try {
@@ -399,5 +432,6 @@ module.exports = {
   getWithdrawApproved,
   getWithdrawRejected,
   getWithdrawPending,
-  getUserWithdraws
+  getUserWithdraws,
+  getWithdrawByUserId
 };
