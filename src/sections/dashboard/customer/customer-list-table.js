@@ -204,7 +204,7 @@ export const CustomerListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.dashboard.customers.details}
+                          href={paths.dashboard.users.details}
                           variant="subtitle2"
                         >
                           {customer.member_name}
@@ -232,7 +232,7 @@ export const CustomerListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={paths.dashboard.customers.edit}
+                      href={`${paths.dashboard.users.edit}${customer.member_user_id}/edit`}
                     >
                       <SvgIcon>
                         <Edit02Icon />

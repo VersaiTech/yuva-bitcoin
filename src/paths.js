@@ -69,15 +69,15 @@ export const paths = {
     crypto: "/dashboard/crypto",
     customers: {
       index: "/dashboard/customers",
-      details: "/dashboard/customers/:customerId",
+      details: "/dashboard/customers/:member_user_id",
       edit: "/dashboard/customers/:customerId/edit",
     },
     users: {
       index: "/dashboard/users",
       active: "/dashboard/users?status=hasAcceptedMarketing",
       blocked: "/dashboard/users?status=isProspect",
-      details: "/dashboard/customers/:users",
-      edit: "/dashboard/customers/:userId/edit",
+      details: "/dashboard/users/:userId",
+      edit: "/dashboard/users/",
     },
     ecommerce: "/dashboard/ecommerce",
     fileManager: "/dashboard/file-manager",

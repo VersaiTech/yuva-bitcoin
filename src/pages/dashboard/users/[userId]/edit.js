@@ -10,25 +10,41 @@ import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
 import { paths } from '../../../../paths';
 import { CustomerEditForm } from '../../../../sections/dashboard/customer/customer-edit-form';
 import { getInitials } from '../../../../utils/get-initials';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useCustomer = () => {
+
+  //need to get member_user_id from params
+
+  const router = useRouter();
+  const {userId} = router.query;
+
+  console.log(userId)
+
   const isMounted = useMounted();
   const [customer, setCustomer] = useState(null);
 
   const getCustomer = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomer();
-      // const token = localStorage.getItem('accessToken');
-      // const headers = {
-      //   'Authorization': token
-      // }
+      // const response = await customersApi.getCustomer();
+      const token = localStorage.getItem('accessToken');
+      const headers = {
+        'Authorization': token
+      }
 
-      // const response = await axios.get(`${BASEURL}/admin/getAllMembers`, {
-      //   headers: headers
-      // })
+      const response = await axios.get(`${BASEURL}/admin/getMemberByUserId/${userId}`, {
+        headers: headers
+      })
+
+
+      console.log(response.data.member)
 
       if (isMounted()) {
-        setCustomer(response);
+        setCustomer(response.data.member);
       }
     } catch (err) {
       console.error(err);
@@ -36,13 +52,31 @@ const useCustomer = () => {
   }, [isMounted]);
 
   useEffect(() => {
-      getCustomer();
-    },
+    getCustomer();
+  },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
   return customer;
 };
+
+
+// const handleSubmit = async (values) => {
+//   try{
+//     console.log('Form values:', values);
+//     const token = localStorage.getItem('token');
+//     const headers = {
+//       'Authorization': token
+//     }
+
+//     const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/:${customer.member_user_id}`,values, { headers: headers })
+
+//     console.log(response);
+//   }
+//   catch(err){
+//     console.log(err);
+//   }
+// }
 
 const Page = () => {
   const customer = useCustomer();
@@ -57,7 +91,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Customer Edit | Rock34x 
+          Dashboard: Customer Edit | Rock34x
         </title>
       </Head>
       <Box
@@ -110,7 +144,7 @@ const Page = () => {
                       width: 64
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(customer.member_name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
@@ -133,7 +167,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <CustomerEditForm customer={customer} />
+             <CustomerEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>

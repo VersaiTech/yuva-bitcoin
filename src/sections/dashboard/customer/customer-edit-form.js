@@ -13,60 +13,87 @@ import {
   Switch,
   TextField,
   Typography,
+  MenuItem,
+  Select,
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { paths } from '../../../paths';
 import { wait } from '../../../utils/wait';
+import axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const CustomerEditForm = (props) => {
   const { customer, ...other } = props;
   const formik = useFormik({
     initialValues: {
-      address1: customer.address1 || '',
-      address2: customer.address2 || '',
-      country: customer.country || '',
+      // address1: customer.address1 || '',
+      // address2: customer.address2 || '',
+      coins: customer.coins || '',
       email: customer.email || '',
       hasDiscount: customer.hasDiscount || false,
       isVerified: customer.isVerified || false,
-      name: customer.name || '',
-      phone: customer.phone || '',
-      state: customer.state || '',
-      submit: null
+      member_name: customer.member_name || '',
+      contactNo: customer.contactNo || '',
+      twitterId: customer.twitterId || '',
+      submit: null,
+      isActive: customer.isActive,
     },
     validationSchema: Yup.object({
-      address1: Yup.string().max(255),
-      address2: Yup.string().max(255),
-      country: Yup.string().max(255),
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      hasDiscount: Yup.bool(),
-      isVerified: Yup.bool(),
-      name: Yup
-        .string()
-        .max(255)
-        .required('Name is required'),
-      phone: Yup.string().max(15),
-      state: Yup.string().max(255)
+      // address1: Yup.string().max(255),
+      // address2: Yup.string().max(255),
+      // country: Yup.string().max(255),
+      // email: Yup
+      //   .string()
+      //   .email('Must be a valid email')
+      //   .max(255)
+      //   .required('Email is required'),
+      // hasDiscount: Yup.bool(),
+      // isVerified: Yup.bool(),
+      // name: Yup
+      //   .string()
+      //   .max(255)
+      //   .required('Name is required'),
+      // phone: Yup.string().max(15),
+      // twitterId: Yup.string().max(255)
     }),
     onSubmit: async (values, helpers) => {
-      try {
-        // NOTE: Make API request
-        await wait(500);
-        helpers.setStatus({ success: true });
-        helpers.setSubmitting(false);
-        toast.success('Customer updated');
-      } catch (err) {
-        console.error(err);
-        toast.error('Something went wrong!');
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
-        helpers.setSubmitting(false);
+      try{
+        const token = localStorage.getItem('token');
+        console.log(token);
+        const headers = {
+          'Authorization': token
+        }
+        
+        const valuesData = {
+          isActive: values.isActive
+        }
+        
+        console.log('Form values:', valuesData);
+        const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${customer.member_user_id}`,valuesData, { headers: headers })
+
+        console.log(response);
       }
+      catch(err){
+        console.log(err.response.data);
+      }
+
+      // try {
+      //   // NOTE: Make API request
+      //   await wait(500);
+      //   helpers.setStatus({ success: true });
+      //   helpers.setSubmitting(false);
+      //   toast.success('Customer updated');
+      // } catch (err) {
+      //   console.error(err);
+      //   toast.error('Something went wrong!');
+      //   helpers.setStatus({ success: false });
+      //   helpers.setErrors({ submit: err.message });
+      //   helpers.setSubmitting(false);
+      // }
     }
   });
+
 
   return (
     <form
@@ -84,15 +111,16 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.name && formik.errors.name)}
+                disabled
+                error={!!(formik.touched.member_name && formik.errors.member_name)}
                 fullWidth
-                helperText={formik.touched.name && formik.errors.name}
+                helperText={formik.touched.member_name && formik.errors.member_name}
                 label="Full name"
-                name="name"
+                name="member_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.name}
+                value={formik.values.member_name}
               />
             </Grid>
             <Grid
@@ -100,6 +128,7 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
+                disabled
                 error={!!(formik.touched.email && formik.errors.email)}
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
@@ -116,14 +145,15 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.country && formik.errors.country)}
+                disabled
+                error={!!(formik.touched.coins && formik.errors.coins)}
                 fullWidth
-                helperText={formik.touched.country && formik.errors.country}
-                label="Country"
-                name="country"
+                helperText={formik.touched.coins && formik.errors.coins}
+                label="Coins"
+                name="coins"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.country}
+                value={formik.values.coins}
               />
             </Grid>
             <Grid
@@ -131,14 +161,15 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.state && formik.errors.state)}
+                disabled
+                error={!!(formik.touched.twitterId && formik.errors.twitterId)}
                 fullWidth
-                helperText={formik.touched.state && formik.errors.state}
-                label="State/Region"
-                name="state"
+                helperText={formik.touched.twitterId && formik.errors.twitterId}
+                label="TwitterId"
+                name="twitterId"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.state}
+                value={formik.values.twitterId}
               />
             </Grid>
             <Grid
@@ -146,6 +177,41 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
+                disabled
+                error={!!(formik.touched.contactNo && formik.errors.contactNo)}
+                fullWidth
+                helperText={formik.touched.contactNo && formik.errors.contactNo}
+                label="Phone number"
+                name="contactNo"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.contactNo}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <Select
+                fullWidth
+                label="isActive"
+                name="isActive"
+                value={formik.values.isActive}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                helperText={formik.touched.isActive && formik.errors.isActive}
+                error={!!(formik.touched.isActive && formik.errors.isActive)}
+              >
+                <MenuItem value={true}>True</MenuItem>
+                <MenuItem value={false}>False</MenuItem>
+              </Select>
+            </Grid>
+
+            {/*  <Grid
+              xs={12}
+              md={6}
+            >
+             <TextField
                 error={!!(formik.touched.address1 && formik.errors.address1)}
                 fullWidth
                 helperText={formik.touched.address1 && formik.errors.address1}
@@ -170,24 +236,9 @@ export const CustomerEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.address2}
               />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.phone && formik.errors.phone)}
-                fullWidth
-                helperText={formik.touched.phone && formik.errors.phone}
-                label="Phone number"
-                name="phone"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.phone}
-              />
-            </Grid>
+            </Grid> */}
           </Grid>
-          <Stack
+          {/* <Stack
             divider={<Divider />}
             spacing={3}
             sx={{ mt: 3 }}
@@ -252,7 +303,7 @@ export const CustomerEditForm = (props) => {
                 value={formik.values.hasDiscount}
               />
             </Stack>
-          </Stack>
+          </Stack> */}
         </CardContent>
         <Stack
           direction={{
@@ -264,7 +315,7 @@ export const CustomerEditForm = (props) => {
           sx={{ p: 3 }}
         >
           <Button
-            disabled={formik.isSubmitting}
+            // disabled={formik.isSubmitting}
             type="submit"
             variant="contained"
           >
@@ -274,7 +325,7 @@ export const CustomerEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.dashboard.customers.details}
+            href={paths.dashboard.users.index}
           >
             Cancel
           </Button>
