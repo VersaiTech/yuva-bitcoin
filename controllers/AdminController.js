@@ -385,8 +385,37 @@ const updateMemberStatus = async (req, res) => {
 };
 
 
+const deleteUser = async (req, res) => {
+  try {
+    // Check if the user making the request is an admin
+    if (!req.user || req.user.userType !== 'admin') {
+      return res.status(403).json({ error: 'Permission denied. Only admin can delete a user.' });
+    }
 
+    const { member_user_id } = req.params;
 
+    // Validate if member_user_id is provided
+    if (!member_user_id) {
+      return res.status(400).json({ error: 'Member user ID is required.' });
+    }
+
+    // Find the Member by member_user_id
+    const member = await Member.findOne({ member_user_id });
+
+    // Check if the Member exists
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found.' });
+    }
+
+    // Delete the Member
+    await Member.findOneAndDelete({ member_user_id });
+
+    return res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -400,4 +429,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllStakes, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus };
+module.exports = { getAllStakes, getAllTasks, addTask, editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus,deleteUser };
