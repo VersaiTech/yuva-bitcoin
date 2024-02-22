@@ -119,6 +119,7 @@ export const paths = {
       details: "/dashboard/withdrawals/:withdrawalId",
       rejected: "/dashboard/withdrawals?status=hasAcceptedMarketing",
       completed: "/dashboard/withdrawals?status=isProspect",
+      edit: "/dashboard/withdrawals/",
     },
     products: {
       index: "/dashboard/products",

@@ -485,7 +485,7 @@ export const WithdrawalsListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.dashboard.customers.details}
+                          href={paths.dashboard.withdrawal.index}
                           variant="subtitle2"
                         >
                           {customer.member_name}
@@ -513,7 +513,7 @@ export const WithdrawalsListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={paths.dashboard.customers.edit}
+                      href={`${paths.dashboard.withdrawal.edit}${customer.with_referrance}/edit`}
                     >
                       <SvgIcon>
                         <Edit02Icon />
@@ -521,7 +521,7 @@ export const WithdrawalsListTable = (props) => {
                     </IconButton>
                     <IconButton
                       component={NextLink}
-                      href={paths.dashboard.customers.details}
+                      href={paths.dashboard.withdrawal.details}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />

@@ -108,7 +108,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.customers.index}
+                  href={paths.dashboard.users.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'

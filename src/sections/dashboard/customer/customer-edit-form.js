@@ -20,24 +20,28 @@ import {
 import { paths } from '../../../paths';
 import { wait } from '../../../utils/wait';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+
+
 export const CustomerEditForm = (props) => {
+  const { enqueueSnackbar } = useSnackbar();
   const { customer, ...other } = props;
   const formik = useFormik({
     initialValues: {
       // address1: customer.address1 || '',
       // address2: customer.address2 || '',
-      coins: customer.coins || '',
+      with_amt: customer.with_amt || '',
       email: customer.email || '',
       hasDiscount: customer.hasDiscount || false,
       isVerified: customer.isVerified || false,
       member_name: customer.member_name || '',
       contactNo: customer.contactNo || '',
-      twitterId: customer.twitterId || '',
+      with_date: customer.with_date || '',
       submit: null,
-      isActive: customer.isActive,
+      status: customer.status,
     },
     validationSchema: Yup.object({
       // address1: Yup.string().max(255),
@@ -59,23 +63,25 @@ export const CustomerEditForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try{
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('accessToken');
         console.log(token);
         const headers = {
           'Authorization': token
         }
         
         const valuesData = {
-          isActive: values.isActive
+          status: values.status
         }
         
         console.log('Form values:', valuesData);
-        const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${customer.member_user_id}`,valuesData, { headers: headers })
+        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`,valuesData, { headers: headers })
 
-        console.log(response);
+        enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
+        console.log(response.data);
       }
       catch(err){
-        console.log(err.response.data);
+        enqueueSnackbar(err.response.data.error, { variant: 'error' });
+        console.log(err.response.data.error);
       }
 
       // try {
@@ -123,7 +129,7 @@ export const CustomerEditForm = (props) => {
                 value={formik.values.member_name}
               />
             </Grid>
-            <Grid
+            {/* <Grid
               xs={12}
               md={6}
             >
@@ -139,21 +145,21 @@ export const CustomerEditForm = (props) => {
                 required
                 value={formik.values.email}
               />
-            </Grid>
+            </Grid> */}
             <Grid
               xs={12}
               md={6}
             >
               <TextField
                 disabled
-                error={!!(formik.touched.coins && formik.errors.coins)}
+                error={!!(formik.touched.with_amt && formik.errors.with_amt)}
                 fullWidth
-                helperText={formik.touched.coins && formik.errors.coins}
-                label="Coins"
-                name="coins"
+                helperText={formik.touched.with_amt && formik.errors.with_amt}
+                label="Withdraw Amount"
+                name="with_amt"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.coins}
+                value={formik.values.with_amt}
               />
             </Grid>
             <Grid
@@ -162,17 +168,17 @@ export const CustomerEditForm = (props) => {
             >
               <TextField
                 disabled
-                error={!!(formik.touched.twitterId && formik.errors.twitterId)}
+                error={!!(formik.touched.with_date && formik.errors.with_date)}
                 fullWidth
-                helperText={formik.touched.twitterId && formik.errors.twitterId}
-                label="TwitterId"
-                name="twitterId"
+                helperText={formik.touched.with_date && formik.errors.with_date}
+                label="Withdraw Date"
+                name="with_date"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.twitterId}
+                value={formik.values.with_date}
               />
             </Grid>
-            <Grid
+            {/* <Grid
               xs={12}
               md={6}
             >
@@ -187,23 +193,25 @@ export const CustomerEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.contactNo}
               />
-            </Grid>
+            </Grid> */}
             <Grid
               xs={12}
               md={6}
             >
               <Select
                 fullWidth
-                label="isActive"
-                name="isActive"
-                value={formik.values.isActive}
+                label="Status"
+                placeholder='status'
+                name="status"
+                value={formik.values.status}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                helperText={formik.touched.isActive && formik.errors.isActive}
-                error={!!(formik.touched.isActive && formik.errors.isActive)}
+                helperText={formik.touched.status && formik.errors.status}
+                error={!!(formik.touched.status && formik.errors.status)}
               >
-                <MenuItem value={true}>True</MenuItem>
-                <MenuItem value={false}>False</MenuItem>
+                <MenuItem value={"Approved"}>Approved</MenuItem>
+                <MenuItem value={"Rejected"}>Rejected</MenuItem>
+                <MenuItem value={"Pending"}>Pending</MenuItem>
               </Select>
             </Grid>
 
@@ -325,7 +333,7 @@ export const CustomerEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.dashboard.users.index}
+            href={paths.dashboard.withdrawal.index}
           >
             Cancel
           </Button>
