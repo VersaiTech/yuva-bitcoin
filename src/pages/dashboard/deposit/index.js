@@ -60,26 +60,25 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/admin/getAllMembers`, {
-        headers: headers,
-      });
+      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin`,
+      {headers: headers});
+      console.log(response.data);
+      // const activeUsersResponse = await axios.get(
+      //   `${BASEURL}/admin/getActiveMembers`,
+      //   { headers: headers }
+      // );
 
-      const activeUsersResponse = await axios.get(
-        `${BASEURL}/admin/getActiveMembers`,
-        { headers: headers }
-      );
-
-      const blockedUsersResponse = await axios.get(
-        `${BASEURL}/admin/getBlockedMembers`,
-        { headers: headers }
-      );
+      // const blockedUsersResponse = await axios.get(
+      //   `${BASEURL}/admin/getBlockedMembers`,
+      //   { headers: headers }
+      // );
 
       if (isMounted()) {
         setState({
-          customers: response.data.members,
+          customers: response.data,
           customersCount: response.count,
-          activeUsers: activeUsersResponse.data.members,
-          blockedUsers: blockedUsersResponse.data.members,
+          // activeUsers: activeUsersResponse.data.members,
+          // blockedUsers: blockedUsersResponse.data.members,
         });
       }
     } catch (err) {
@@ -108,8 +107,6 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState("all");
 
   console.log(currentTab);
-
-
 
   usePageView();
 
@@ -225,8 +222,24 @@ const Page = () => {
               <DepositListTable
                 // customers={customers}
                 // customersCount={customersCount}
-                customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
-                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                customers={
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "hasAcceptedMarketing"
+                    ? activeUsers
+                    : currentTab === "isProspect"
+                    ? blockedUsers
+                    : customers
+                }
+                customersCount={
+                  currentTab === "all"
+                    ? customersCount
+                    : currentTab === "hasAcceptedMarketing"
+                    ? activeUsers.length
+                    : currentTab === "isProspect"
+                    ? blockedUsers.length
+                    : customersCount
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
