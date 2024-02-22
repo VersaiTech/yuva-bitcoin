@@ -41,7 +41,7 @@ const memberSchema = new mongoose.Schema({
   member_user_id: { type: String, required: true, unique: true },
   sponcer_id: { type: String },   //mongoose.Schema.Types.ObjectId
   sponcer_name: { type: String },
-  contactNo: { type: String, required: true },
+  contactNo: { type: String, required: true,unique: true },
   member_name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },

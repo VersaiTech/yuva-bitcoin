@@ -274,34 +274,34 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 
-  function generateRandomNumber() {
-    const min = 1000000; // Minimum 7-digit number (inclusive)
-    const max = 9999999; // Maximum 7-digit number (inclusive)
-  
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function generateRandomNumber() {
+  const min = 1000000; // Minimum 7-digit number (inclusive)
+  const max = 9999999; // Maximum 7-digit number (inclusive)
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function phoneValidation(phone) {
+  phone = testInput(phone);
+  if (/^\d{10}$/.test(phone)) {
+    return true;
+  } else {
+    return false;
   }
-  
-  function phoneValidation(phone) {
-    phone = testInput(phone);
-    if (/^\d{10}$/.test(phone)) {
-      return true;
-    } else {
-      return false;
-    }
+}
+function emailValidation(email) {
+  let emailVal =
+    /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+  email = testInput(email);
+  if (emailVal.test(email)) {
+    return true;
+  } else {
+    return false;
   }
-  function emailValidation(email) {
-    let emailVal =
-      /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
-    email = testInput(email);
-    if (emailVal.test(email)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+}
 
 
-  function testInput(data) {
+function testInput(data) {
   data = data.trim();
   data = data.replace(/\\/g, "");
   data = htmlspecialchars(data);
@@ -359,23 +359,11 @@ function htmlspecialchars(str) {
 //   }
 // }
 
-async function register (req, res){
+async function register(req, res) {
   try {
     let sponcer_id = req.query.sponcer_id;
     let sponcer_name;
     let member_user_id;
-    
-    // You should implement the logic to find sponcer by sponcer_id
-    // For example:
-    // const sponcer = await Member.findOne({ member_user_id: sponcer_id });
-    // if (!sponcer) {
-    //   return res.status(400).send({
-    //     status: false,
-    //     message: "Invalid sponcer id",
-    //   });
-    // }
-    // sponcer_name = sponcer.member_name;
-
     let contactNo = req.body.contactNo.trim();
     let member_name = req.body.member_name.trim().toUpperCase();
     let password = req.body.password.trim();
@@ -398,7 +386,15 @@ async function register (req, res){
         message: "Email already registered",
       });
     }
-
+    
+    // Check if the contact number is already registered
+    const existingMemberContact = await Member.findOne({ contactNo: contactNo });
+    if (existingMemberContact) {
+      return res.status(400).send({
+        status: false,
+        message: "Contact number already registered",
+      });
+    }
     let reg_date = new Date();
 
     if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
@@ -452,7 +448,7 @@ async function register (req, res){
   }
 };
 
-async function login (req, res)  {
+async function login(req, res) {
   const { email, password } = req.body;
 
   try {
@@ -479,7 +475,7 @@ async function login (req, res)  {
 
 
       const token = jwt.sign(
-        { userId: user.member_user_id,userType: user.userType },
+        { userId: user.member_user_id, userType: user.userType },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: '100d'
