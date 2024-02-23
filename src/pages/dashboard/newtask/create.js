@@ -5,16 +5,18 @@ import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator'
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { paths } from '../../../paths';
-import { ProductCreateForm } from '../../../sections/dashboard/product/product-create-form';
+import { NewTaskForm } from '../../../sections/dashboard/newtask/newtask-create-form';
 
 const ProductCreate = () => {
   usePageView();
+
+  
 
   return (
     <>
       <Head>
         <title>
-          Dashboard:  Create Task | New Yuva Bitcoin 
+          Dashboard: Add Task | Yuva Bitcoin 
         </title>
       </Head>
       <Box
@@ -28,7 +30,7 @@ const ProductCreate = () => {
           <Stack spacing={3}>
             <Stack spacing={1}>
               <Typography variant="h4">
-                Create a new task
+                Create New Task
               </Typography>
               <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                 <Link
@@ -42,10 +44,10 @@ const ProductCreate = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.products.index}
+                  href={paths.dashboard.tasks.index}
                   variant="subtitle2"
                 >
-                  Products
+                  Task
                 </Link>
                 <Typography
                   color="text.secondary"
@@ -55,7 +57,7 @@ const ProductCreate = () => {
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <ProductCreateForm />
+            <NewTaskForm />
           </Stack>
         </Container>
       </Box>

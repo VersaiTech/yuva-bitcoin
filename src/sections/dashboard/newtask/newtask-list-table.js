@@ -139,6 +139,7 @@ export const NewtaskListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
+              <TableCell>Task Name</TableCell>
               <TableCell>Task Id</TableCell>
               <TableCell>Coins</TableCell>
               <TableCell> Description</TableCell>
@@ -172,13 +173,13 @@ export const NewtaskListTable = (props) => {
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
-                        src={customer.taskId}
+                        src={customer.taskName}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
                       >
-                        {getInitials(customer.taskId)}
+                        {getInitials(customer.taskName)}
                         
                       </Avatar>
                       <div>
@@ -188,7 +189,7 @@ export const NewtaskListTable = (props) => {
                           href={paths.dashboard.users.details}
                           variant="subtitle2"
                         >
-                          {customer.taskId}
+                          {customer.taskName}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
                           {customer.email}
@@ -196,7 +197,11 @@ export const NewtaskListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
+                  <TableCell>{customer.taskId}</TableCell>
+                  
+
                   <TableCell>{customer.coins}</TableCell>
+                  
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">

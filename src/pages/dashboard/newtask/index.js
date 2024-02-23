@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
+import NextLink from 'next/link';
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { paths } from "../../../paths";
 import {
   Box,
   Button,
@@ -60,16 +62,10 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(
-        `${BASEURL}/admin/getAllTasksAdmin`,
-        { headers: headers }
-      );
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksAdmin`, {
+        headers: headers,
+      });
       console.log(response.data);
-
-      // const PendingWithdrawals = await axios.get(
-      //   `${BASEURL}/api/Withdraw/getWithdrawPending`,
-      //   { headers: headers }
-      // );
 
       // const rejectedWithdrawals = await axios.get(
       //   `${BASEURL}/api/Withdraw/getWithdrawRejected`,
@@ -201,15 +197,17 @@ const Page = () => {
                     Export
                   </Button> */}
                 </Stack>
-              </Stack>
+              </Stack> 
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
+                  component={NextLink}
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
                   }
                   variant="contained"
+                  href={paths.dashboard.tasks.create}
                 >
                   Add
                 </Button>
