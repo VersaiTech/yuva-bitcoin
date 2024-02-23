@@ -60,7 +60,7 @@ const sortOptions = [
   }
 ];
 
-export const WithdrawalListSearch = (props) => {
+export const StakeListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
@@ -194,12 +194,12 @@ export const WithdrawalListSearch = (props) => {
   );
 };
 
-WithdrawalListSearch.propTypes = {
+StakeListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
   sortDir: PropTypes.oneOf(['asc', 'desc']),
-  pending: PropTypes.array,
-  completed: PropTypes.array,
-  rejected: PropTypes.array,
+  // pending: PropTypes.array,
+  // completed: PropTypes.array,
+  // rejected: PropTypes.array,
 };

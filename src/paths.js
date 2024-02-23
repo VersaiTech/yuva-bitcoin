@@ -111,7 +111,9 @@ export const paths = {
       details: "/dashboard/deposit/:depositId",
       pending:"/dashboard/deposit?status=hasAcceptedMarketing",
       completed:"/dashboard/deposit?status=isProspect",
-
+    },
+    Stake:{
+      index: "/dashboard/stake",
     },
     withdrawal: {
       index: "/dashboard/withdrawals",

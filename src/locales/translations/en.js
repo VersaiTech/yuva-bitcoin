@@ -16,6 +16,7 @@ export const en = {
   [tokens.nav.alldeposit]: 'All Deposit',
   [tokens.nav.pendingDeposit]: 'Pending Deposit',
   [tokens.nav.completedDeposit]: 'Completed Deposit',
+  [tokens.nav.Stake]: 'Stake',
   [tokens.nav.blog]: 'Blog',
   [tokens.nav.browse]: 'Browse',
   [tokens.nav.calendar]: 'Calendar',

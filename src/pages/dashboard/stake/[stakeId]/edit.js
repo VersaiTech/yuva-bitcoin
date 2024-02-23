@@ -195,7 +195,7 @@ import { useMounted } from '../../../../hooks/use-mounted';
 import { usePageView } from '../../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
 import { paths } from '../../../../paths';
-import { WithdrawalEditForm } from '../../../../sections/dashboard/withdrawals/withdrawals-edit-form';
+import { CustomerEditForm } from '../../../../sections/dashboard/customer/customer-edit-form';
 import { getInitials } from '../../../../utils/get-initials';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -354,7 +354,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-             <WithdrawalEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
+             <CustomerEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>
