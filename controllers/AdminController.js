@@ -107,14 +107,55 @@ const getAllTasks = async (req, res) => {
   }
 };
 
+const getPendingTasks = async (req, res) => {
+  try {
+    const pendingTasks = await CompletedTask.find({ status: 'pending' });
+
+    if (pendingTasks.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: 'No pending tasks available.',
+        tasks: [],
+      });
+    }
+
+    res.json(pendingTasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const getCompletedTasks = async (req, res) => {
+  try {
+    const completedTasks = await CompletedTask.find({ status: 'confirmed' });
+
+    if (completedTasks.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: 'No completed tasks available.',
+        tasks: [],
+      });
+    }
+
+    res.json(completedTasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 const addTask = async (req, res) => {
   try {
     // Extract task data from request body
-    const { description, coins, link } = req.body;
+    const { taskName, description, coins, link } = req.body;
     const imageFiles = req.files;
+
+
 
     // Create a new task document
     const newTask = new Task({
+      taskName,
       taskId: generateRandomNumber(),
       description,
       coins,
@@ -245,7 +286,7 @@ const getAllStakes = async (req, res) => {
     console.error("Error retrieving stakes:", error);
     return res.status(500).json({
       message: "Internal Server Error",
-      error: error.message, 
+      error: error.message,
     });
   }
 };
@@ -381,7 +422,7 @@ const updateMemberStatus = async (req, res) => {
       return res.status(403).json({ error: 'Permission denied. Only admin can update member status.' });
     }
 
-    const {member_user_id} = req.params;
+    const { member_user_id } = req.params;
     const { isActive } = req.body;
 
     // Validate if member_user_id is provided
@@ -460,4 +501,4 @@ function generateRandomNumber() {
 
 
 
-module.exports = { getAllStakes, getAllTasks, addTask, getMemberByUserId,editTask,deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers,updateMemberStatus,deleteUser };
+module.exports = { getAllStakes, getAllTasks, addTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };

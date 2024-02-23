@@ -16,9 +16,10 @@ async function getOverview(req, res) {
 
         // Count completed tasks separately
         const completedTasksCount = await CompletedTask.countDocuments({ status: 'confirmed' });
+        const pendingTasksCount = await CompletedTask.countDocuments({ status: 'pending' });
 
         // Count pending tasks separately
-        const pendingTasksCount = allTasks.length - completedTasksCount;
+        // const pendingTasksCount = allTasks.length - completedTasksCount;
   
       const totalStakesInvestment = allStakes.reduce((total, stake) => total + stake.investment, 0);
       const totalMemberCoins = allCoin.reduce((total, member) => total + member.coins, 0);
