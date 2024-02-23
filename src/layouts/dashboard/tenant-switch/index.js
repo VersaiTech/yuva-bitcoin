@@ -43,14 +43,14 @@ export const TenantSwitch = (props) => {
             Production
           </Typography>
         </Box>
-        <IconButton
+        {/* <IconButton
           onClick={handlePopoverOpen}
           ref={anchorRef}
         >
           <SvgIcon sx={{ fontSize: 16 }}>
             <ChevronDownIcon />
           </SvgIcon>
-        </IconButton>
+        </IconButton> */}
       </Stack>
       <TenantPopover
         anchorEl={anchorRef.current}
