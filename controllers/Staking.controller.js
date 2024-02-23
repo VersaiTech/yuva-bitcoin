@@ -126,56 +126,56 @@ const stakingSummary = async (req, res) => {
 };
 
 
-async function transferToStaking(req, res) {
-  const userId = req.user.member_user_id;
-  try {
-    const { investment, stakingDuration } = req.body;
+// async function transferToStaking(req, res) {
+//   const userId = req.user.member_user_id;
+//   try {
+//     const { investment, stakingDuration } = req.body;
 
-    // Check if the member exists
-    const member = await Member.findOne({ member_user_id: userId });
-    if (!member) {
-      return res.status(404).json({ error: 'Member not found' });
-    }
-    console.log(member);
+//     // Check if the member exists
+//     const member = await Member.findOne({ member_user_id: userId });
+//     if (!member) {
+//       return res.status(404).json({ error: 'Member not found' });
+//     }
+//     console.log(member);
 
-    // Check if the member has sufficient balance in the wallet
-    if (member.coins < investment) {
-      return res.status(400).json({ error: 'Insufficient balance in the wallet' });
-    }
+//     // Check if the member has sufficient balance in the wallet
+//     if (member.coins < investment) {
+//       return res.status(400).json({ error: 'Insufficient balance in the wallet' });
+//     }
 
-    // Deduct the amount from the member's wallet
-    member.coins -= investment;
-    await member.save();
+//     // Deduct the amount from the member's wallet
+//     member.coins -= investment;
+//     await member.save();
 
-    // Check if there is an existing stake for the member
-    const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+//     // Check if there is an existing stake for the member
+//     const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
 
-    if (existingStake) {
-      // Update the existing Stake
-      existingStake.investment += investment;
-      await existingStake.save();
-      res.status(200).json(existingStake);
-    } else {
-      // Create a new Stake if none exists
-      const newStake = new Stake({
-        member_user_id:member.member_user_id,
-        member_name: member.member_name,
-        investment,
-        transaction_id: generateTransactionId(),
-        stake_type: 'Wallet',
-        stakingDuration,
-      });
+//     if (existingStake) {
+//       // Update the existing Stake
+//       existingStake.investment += investment;
+//       await existingStake.save();
+//       res.status(200).json(existingStake);
+//     } else {
+//       // Create a new Stake if none exists
+//       const newStake = new Stake({
+//         member_user_id:member.member_user_id,
+//         member_name: member.member_name,
+//         investment,
+//         transaction_id: generateTransactionId(),
+//         stake_type: 'Wallet',
+//         stakingDuration,
+//       });
 
-      // Save the Stake
-      const savedStake = await newStake.save();
+//       // Save the Stake
+//       const savedStake = await newStake.save();
 
-      res.status(201).json(savedStake);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
+//       res.status(201).json(savedStake);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
 
 function generateTransactionId() {
   return `${Date.now()}_${uuidv4()}`;
@@ -213,6 +213,46 @@ async function transferToWallet(req, res) {
     await existingStake.save();
 
     res.status(200).json(existingStake);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+async function transferToStaking(req, res) {
+  const userId = req.user.member_user_id;
+  try {
+    const { investment, stakingDuration } = req.body;
+
+    // Check if the member exists
+    const member = await Member.findOne({ member_user_id: userId });
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+
+    // Check if the member has sufficient balance in the wallet
+    if (member.coins < investment) {
+      return res.status(400).json({ error: 'Insufficient balance in the wallet' });
+    }
+
+    // Deduct the amount from the member's wallet
+    member.coins -= investment;
+    await member.save();
+
+    // Create a new Stake for the member
+    const newStake = new Stake({
+      member_user_id: member.member_user_id,
+      member_name: member.member_name,
+      investment,
+      transaction_id: generateTransactionId(),
+      stake_type: 'Wallet',
+      stakingDuration,
+    });
+
+    // Save the new Stake
+    const savedStake = await newStake.save();
+
+    res.status(201).json(savedStake);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
