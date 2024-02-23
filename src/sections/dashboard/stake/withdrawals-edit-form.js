@@ -13,93 +13,60 @@ import {
   Switch,
   TextField,
   Typography,
-  MenuItem,
-  Select,
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { paths } from '../../../paths';
 import { wait } from '../../../utils/wait';
-import axios from 'axios';
-import { useSnackbar } from 'notistack';
 
-const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-
-
-export const WithdrawalEditForm = (props) => {
-  const { enqueueSnackbar } = useSnackbar();
+export const CustomerEditForm = (props) => {
   const { customer, ...other } = props;
   const formik = useFormik({
     initialValues: {
-      // address1: customer.address1 || '',
-      // address2: customer.address2 || '',
-      with_amt: customer.with_amt || '',
+      address1: customer.address1 || '',
+      address2: customer.address2 || '',
+      country: customer.country || '',
       email: customer.email || '',
       hasDiscount: customer.hasDiscount || false,
       isVerified: customer.isVerified || false,
-      member_name: customer.member_name || '',
-      contactNo: customer.contactNo || '',
-      with_date: customer.with_date || '',
-      submit: null,
-      status: customer.status,
+      name: customer.name || '',
+      phone: customer.phone || '',
+      state: customer.state || '',
+      submit: null
     },
     validationSchema: Yup.object({
-      // address1: Yup.string().max(255),
-      // address2: Yup.string().max(255),
-      // country: Yup.string().max(255),
-      // email: Yup
-      //   .string()
-      //   .email('Must be a valid email')
-      //   .max(255)
-      //   .required('Email is required'),
-      // hasDiscount: Yup.bool(),
-      // isVerified: Yup.bool(),
-      // name: Yup
-      //   .string()
-      //   .max(255)
-      //   .required('Name is required'),
-      // phone: Yup.string().max(15),
-      // twitterId: Yup.string().max(255)
+      address1: Yup.string().max(255),
+      address2: Yup.string().max(255),
+      country: Yup.string().max(255),
+      email: Yup
+        .string()
+        .email('Must be a valid email')
+        .max(255)
+        .required('Email is required'),
+      hasDiscount: Yup.bool(),
+      isVerified: Yup.bool(),
+      name: Yup
+        .string()
+        .max(255)
+        .required('Name is required'),
+      phone: Yup.string().max(15),
+      state: Yup.string().max(255)
     }),
     onSubmit: async (values, helpers) => {
-      try{
-        const token = localStorage.getItem('accessToken');
-        console.log(token);
-        const headers = {
-          'Authorization': token
-        }
-        
-        const valuesData = {
-          status: values.status
-        }
-        
-        console.log('Form values:', valuesData);
-        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`,valuesData, { headers: headers })
-
-        enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
-        console.log(response.data);
+      try {
+        // NOTE: Make API request
+        await wait(500);
+        helpers.setStatus({ success: true });
+        helpers.setSubmitting(false);
+        toast.success('Customer updated');
+      } catch (err) {
+        console.error(err);
+        toast.error('Something went wrong!');
+        helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: err.message });
+        helpers.setSubmitting(false);
       }
-      catch(err){
-        enqueueSnackbar(err.response.data.error, { variant: 'error' });
-        console.log(err.response.data.error);
-      }
-
-      // try {
-      //   // NOTE: Make API request
-      //   await wait(500);
-      //   helpers.setStatus({ success: true });
-      //   helpers.setSubmitting(false);
-      //   toast.success('Customer updated');
-      // } catch (err) {
-      //   console.error(err);
-      //   toast.error('Something went wrong!');
-      //   helpers.setStatus({ success: false });
-      //   helpers.setErrors({ submit: err.message });
-      //   helpers.setSubmitting(false);
-      // }
     }
   });
-
 
   return (
     <form
@@ -117,24 +84,22 @@ export const WithdrawalEditForm = (props) => {
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.member_name && formik.errors.member_name)}
+                error={!!(formik.touched.name && formik.errors.name)}
                 fullWidth
-                helperText={formik.touched.member_name && formik.errors.member_name}
+                helperText={formik.touched.name && formik.errors.name}
                 label="Full name"
-                name="member_name"
+                name="name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.member_name}
+                value={formik.values.name}
               />
             </Grid>
-            {/* <Grid
+            <Grid
               xs={12}
               md={6}
             >
               <TextField
-                disabled
                 error={!!(formik.touched.email && formik.errors.email)}
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
@@ -145,21 +110,20 @@ export const WithdrawalEditForm = (props) => {
                 required
                 value={formik.values.email}
               />
-            </Grid> */}
+            </Grid>
             <Grid
               xs={12}
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.with_amt && formik.errors.with_amt)}
+                error={!!(formik.touched.country && formik.errors.country)}
                 fullWidth
-                helperText={formik.touched.with_amt && formik.errors.with_amt}
-                label="Withdraw Amount"
-                name="with_amt"
+                helperText={formik.touched.country && formik.errors.country}
+                label="Country"
+                name="country"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_amt}
+                value={formik.values.country}
               />
             </Grid>
             <Grid
@@ -167,59 +131,21 @@ export const WithdrawalEditForm = (props) => {
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.with_date && formik.errors.with_date)}
+                error={!!(formik.touched.state && formik.errors.state)}
                 fullWidth
-                helperText={formik.touched.with_date && formik.errors.with_date}
-                label="Withdraw Date"
-                name="with_date"
+                helperText={formik.touched.state && formik.errors.state}
+                label="State/Region"
+                name="state"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_date}
+                value={formik.values.state}
               />
             </Grid>
-            {/* <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                disabled
-                error={!!(formik.touched.contactNo && formik.errors.contactNo)}
-                fullWidth
-                helperText={formik.touched.contactNo && formik.errors.contactNo}
-                label="Phone number"
-                name="contactNo"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.contactNo}
-              />
-            </Grid> */}
             <Grid
               xs={12}
               md={6}
             >
-              <Select
-                fullWidth
-                label="Status"
-                placeholder='status'
-                name="status"
-                value={formik.values.status}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                helperText={formik.touched.status && formik.errors.status}
-                error={!!(formik.touched.status && formik.errors.status)}
-              >
-                <MenuItem value={"Approved"}>Approved</MenuItem>
-                <MenuItem value={"Rejected"}>Rejected</MenuItem>
-                <MenuItem value={"Pending"}>Pending</MenuItem>
-              </Select>
-            </Grid>
-
-            {/*  <Grid
-              xs={12}
-              md={6}
-            >
-             <TextField
+              <TextField
                 error={!!(formik.touched.address1 && formik.errors.address1)}
                 fullWidth
                 helperText={formik.touched.address1 && formik.errors.address1}
@@ -244,9 +170,24 @@ export const WithdrawalEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.address2}
               />
-            </Grid> */}
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                error={!!(formik.touched.phone && formik.errors.phone)}
+                fullWidth
+                helperText={formik.touched.phone && formik.errors.phone}
+                label="Phone number"
+                name="phone"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.phone}
+              />
+            </Grid>
           </Grid>
-          {/* <Stack
+          <Stack
             divider={<Divider />}
             spacing={3}
             sx={{ mt: 3 }}
@@ -311,7 +252,7 @@ export const WithdrawalEditForm = (props) => {
                 value={formik.values.hasDiscount}
               />
             </Stack>
-          </Stack> */}
+          </Stack>
         </CardContent>
         <Stack
           direction={{
@@ -323,7 +264,7 @@ export const WithdrawalEditForm = (props) => {
           sx={{ p: 3 }}
         >
           <Button
-            // disabled={formik.isSubmitting}
+            disabled={formik.isSubmitting}
             type="submit"
             variant="contained"
           >
@@ -333,7 +274,7 @@ export const WithdrawalEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.dashboard.withdrawal.index}
+            href={paths.dashboard.customers.details}
           >
             Cancel
           </Button>
@@ -343,7 +284,7 @@ export const WithdrawalEditForm = (props) => {
   );
 };
 
-WithdrawalEditForm.propTypes = {
+CustomerEditForm.propTypes = {
   // @ts-ignore
   customer: PropTypes.object.isRequired
 };

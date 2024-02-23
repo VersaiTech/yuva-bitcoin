@@ -68,5 +68,6 @@ export const tokens = {
     alldeposit: 'nav.alldeposit',
     pendingDeposit: 'nav.pendingDeposit',
     completedDeposit: 'nav.completedDeposit',
+    Stake: 'nav.Stake',
   }
 };

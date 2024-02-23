@@ -33,15 +33,15 @@ export const CustomerEditForm = (props) => {
     initialValues: {
       // address1: customer.address1 || '',
       // address2: customer.address2 || '',
-      with_amt: customer.with_amt || '',
+      coins: customer.coins || '',
       email: customer.email || '',
       hasDiscount: customer.hasDiscount || false,
       isVerified: customer.isVerified || false,
       member_name: customer.member_name || '',
       contactNo: customer.contactNo || '',
-      with_date: customer.with_date || '',
+      twitterId: customer.twitterId || '',
       submit: null,
-      status: customer.status,
+      isActive: customer.isActive,
     },
     validationSchema: Yup.object({
       // address1: Yup.string().max(255),
@@ -70,11 +70,11 @@ export const CustomerEditForm = (props) => {
         }
         
         const valuesData = {
-          status: values.status
+          isActive: values.isActive
         }
         
         console.log('Form values:', valuesData);
-        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`,valuesData, { headers: headers })
+        const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${customer.member_user_id}`,valuesData, { headers: headers })
 
         enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
         console.log(response.data);
@@ -129,7 +129,7 @@ export const CustomerEditForm = (props) => {
                 value={formik.values.member_name}
               />
             </Grid>
-            {/* <Grid
+            <Grid
               xs={12}
               md={6}
             >
@@ -145,21 +145,21 @@ export const CustomerEditForm = (props) => {
                 required
                 value={formik.values.email}
               />
-            </Grid> */}
+            </Grid>
             <Grid
               xs={12}
               md={6}
             >
               <TextField
                 disabled
-                error={!!(formik.touched.with_amt && formik.errors.with_amt)}
+                error={!!(formik.touched.coins && formik.errors.coins)}
                 fullWidth
-                helperText={formik.touched.with_amt && formik.errors.with_amt}
+                helperText={formik.touched.coins && formik.errors.coins}
                 label="Withdraw Amount"
                 name="with_amt"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_amt}
+                value={formik.values.coins}
               />
             </Grid>
             <Grid
@@ -168,17 +168,17 @@ export const CustomerEditForm = (props) => {
             >
               <TextField
                 disabled
-                error={!!(formik.touched.with_date && formik.errors.with_date)}
+                error={!!(formik.touched.twitterId && formik.errors.twitterId)}
                 fullWidth
-                helperText={formik.touched.with_date && formik.errors.with_date}
+                helperText={formik.touched.twitterId && formik.errors.twitterId}
                 label="Withdraw Date"
                 name="with_date"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_date}
+                value={formik.values.twitterId}
               />
             </Grid>
-            {/* <Grid
+            <Grid
               xs={12}
               md={6}
             >
@@ -193,25 +193,24 @@ export const CustomerEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.contactNo}
               />
-            </Grid> */}
+            </Grid>
             <Grid
               xs={12}
               md={6}
             >
               <Select
                 fullWidth
-                label="Status"
-                placeholder='status'
-                name="status"
-                value={formik.values.status}
+                label="isActive"
+                placeholder='isActive'
+                name="isActive"
+                value={formik.values.isActive}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                helperText={formik.touched.status && formik.errors.status}
-                error={!!(formik.touched.status && formik.errors.status)}
+                helperText={formik.touched.isActive && formik.errors.isActive}
+                error={!!(formik.touched.isActive && formik.errors.isActive)}
               >
-                <MenuItem value={"Approved"}>Approved</MenuItem>
-                <MenuItem value={"Rejected"}>Rejected</MenuItem>
-                <MenuItem value={"Pending"}>Pending</MenuItem>
+                <MenuItem value={true}>True</MenuItem>
+                <MenuItem value={false}>False</MenuItem>
               </Select>
             </Grid>
 
@@ -333,7 +332,7 @@ export const CustomerEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.dashboard.withdrawal.index}
+            href={paths.dashboard.users.index}
           >
             Cancel
           </Button>
