@@ -7,6 +7,7 @@ export const tokens = {
     account: 'nav.account',
     portfolio: 'nav.portfolio',
     tasks: 'nav.tasks',
+    // newtask: 'nav.newtask', 
     analytics: 'nav.analytics',
     demo: 'nav.demo',
     blog: 'nav.blog',

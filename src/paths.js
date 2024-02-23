@@ -103,7 +103,7 @@ export const paths = {
       details: "/dashboard/orders/:orderId",
     },
     tasks: {
-      index: "/dashboard/tasks",
+      index: "/dashboard/newtask",
       details: "/dashboard/tasks/:taskId",
     },
     deposit: {
