@@ -135,7 +135,7 @@ const Stake = require('../models/stake');
 const Member = require('../models/memberModel');
 
 // Define the cron job to run every day at midnight
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   console.log('Running the daily 1 cron job...');
 
   try {
