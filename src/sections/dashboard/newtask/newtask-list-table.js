@@ -154,7 +154,7 @@ export const NewtaskListTable = (props) => {
               // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
               return (
-                <TableRow hover key={customer.taskId} selected={isSelected}>
+                <TableRow hover key={customer.taskId + 1} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
