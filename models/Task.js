@@ -36,6 +36,7 @@ const completedTaskSchema = new mongoose.Schema({
     name: { type: String, required: true, ref: 'Member' },
     description: { type: String, required: true, ref: 'Task' },
     link : { type: String, required: true, ref: 'Task' },
+    coins: { type: Number, required: true,ref: 'Task' },
     dateCompleted: { type: Date, default: Date.now },
     status: {
         type: String,

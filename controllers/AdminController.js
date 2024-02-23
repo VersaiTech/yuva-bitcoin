@@ -39,6 +39,7 @@ const completeTask = async (req, res) => {
     const completedTask = new CompletedTask({
       userId,
       taskId,
+      coins: task.coins,
       taskName: task.taskName,
       name: member.member_name,
       description: task.description,
