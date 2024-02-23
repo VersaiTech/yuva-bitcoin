@@ -20,7 +20,7 @@ const tabs = [
     value: 'all',
   },
   {
-    label: 'Active Task',
+    label: 'Pending Task',
     value: 'hasAcceptedMarketing'
   },
   {
@@ -190,6 +190,6 @@ NewtaskListSearch.propTypes = {
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
   sortDir: PropTypes.oneOf(['asc', 'desc']),
-  activeUsers: PropTypes.array,
-  blockedUsers: PropTypes.array,
+  pending: PropTypes.array,
+  completed: PropTypes.array,
 };

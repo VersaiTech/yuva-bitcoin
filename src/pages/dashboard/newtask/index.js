@@ -64,30 +64,24 @@ const useCustomers = (search) => {
         `${BASEURL}/admin/getAllTasksAdmin`,
         { headers: headers }
       );
-      console.log(response.data);
-
-      // const PendingWithdrawals = await axios.get(
-      //   `${BASEURL}/api/Withdraw/getWithdrawPending`,
-      //   { headers: headers }
-      // );
-
-      // const rejectedWithdrawals = await axios.get(
-      //   `${BASEURL}/api/Withdraw/getWithdrawRejected`,
-      //   { headers: headers }
-      // );
-
-      // const completedWithdrawals = await axios.get(
-      //   `${BASEURL}/api/Withdraw/getWithdrawApproved`,
-      //   { headers: headers }
-      // );
-
+      
+      const PendingTasks = await axios.get(
+        `${BASEURL}/admin/getPendingTasks`,
+        { headers: headers }
+        );
+        
+        const completedTasks = await axios.get(
+          `${BASEURL}/admin/getCompletedTasks`,
+          { headers: headers }
+          );
+          // console.log(completedTasks.data);
+          
       if (isMounted()) {
         setState({
           customers: response.data,
           customersCount: response.count,
-          // pending: PendingWithdrawals.data.data,
-          // rejected: rejectedWithdrawals.data.data,
-          // completed: completedWithdrawals.data.data,
+          pending: PendingTasks.data,
+          completed: completedTasks.data,
         });
       }
     } catch (err) {
@@ -223,7 +217,6 @@ const Page = () => {
                 sortDir={search.sortDir}
                 completed={completed}
                 pending={pending}
-                rejected={rejected}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
@@ -235,10 +228,8 @@ const Page = () => {
                 customers={
                   currentTab === "all"
                     ? customers
-                    : currentTab === "pending"
-                    ? pending
                     : currentTab === "hasAcceptedMarketing"
-                    ? rejected
+                    ? pending
                     : currentTab === "isProspect"
                     ? completed
                     : []
