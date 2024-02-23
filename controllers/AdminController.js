@@ -98,18 +98,30 @@ const confirmTaskCompletion = async (req, res) => {
 
 
 // Example controller to get all tasks
+// const getAllTasks = async (req, res) => {
+//   try {
+//     const tasks = await Task.find();
+//     res.json(tasks);
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
 const getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
+    const tasks = await Task.find().sort({ createdAt: -1 });
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+
+
 const getPendingTasks = async (req, res) => {
   try {
-    const pendingTasks = await CompletedTask.find({ status: 'pending' });
+    const pendingTasks = await CompletedTask.find({ status: 'pending' }).sort({ createdAt: -1 });
 
     if (pendingTasks.length === 0) {
       return res.status(404).json({
@@ -128,7 +140,7 @@ const getPendingTasks = async (req, res) => {
 
 const getCompletedTasks = async (req, res) => {
   try {
-    const completedTasks = await CompletedTask.find({ status: 'confirmed' });
+    const completedTasks = await CompletedTask.find({ status: 'confirmed' }).sort({ createdAt: -1 });
 
     if (completedTasks.length === 0) {
       return res.status(404).json({

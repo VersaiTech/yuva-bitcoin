@@ -16,7 +16,7 @@ const taskSchema = new mongoose.Schema({
     coins: { type: Number, required: true },
     link: { type: String, required: true },
     imageUrls: { type: [String] },
-});
+}, { timestamps: true });
 
 
 // const assignedTaskSchema = new mongoose.Schema({
@@ -41,7 +41,7 @@ const completedTaskSchema = new mongoose.Schema({
         enum: ['pending', 'confirmed'], 
         default: 'pending'
       }    
-});
+}, { timestamps: true });
 
 // const User = mongoose.model('User', userSchema);
 const CompletedTask = mongoose.model('CompletedTask', completedTaskSchema);
