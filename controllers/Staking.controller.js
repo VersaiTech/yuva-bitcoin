@@ -108,6 +108,23 @@ const { v4: uuidv4 } = require('uuid');
 const Stake = require("../models/stake");
 
 
+
+const stakingSummaryForAdmin = async (req, res) => {
+  try {
+    const stakes = await Stake.find();
+    return res.status(200).send({
+      message: "Staking summary",
+      data: stakes,
+    });
+  } catch (error) {
+    console.error("Error retrieving staking summary:", error);
+    return res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
 const stakingSummary = async (req, res) => {
   const userId = req.user.member_user_id;
 
@@ -223,7 +240,8 @@ async function transferToWallet(req, res) {
 module.exports = {
   stakingSummary, 
   transferToStaking,
-  transferToWallet
+  transferToWallet,
+  stakingSummaryForAdmin
 };
 
 
