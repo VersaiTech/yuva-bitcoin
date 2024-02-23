@@ -32,6 +32,7 @@ const taskSchema = new mongoose.Schema({
 const completedTaskSchema = new mongoose.Schema({
     userId : { type: String, required: true, ref: 'Member' },
     taskId : { type: String, required: true, ref: 'Task' },
+    taskName: { type: String, required: true, ref: 'Task' }, 
     name: { type: String, required: true, ref: 'Member' },
     description: { type: String, required: true, ref: 'Task' },
     link : { type: String, required: true, ref: 'Task' },

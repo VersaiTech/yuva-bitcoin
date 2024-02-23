@@ -39,6 +39,7 @@ const completeTask = async (req, res) => {
     const completedTask = new CompletedTask({
       userId,
       taskId,
+      taskName: task.taskName,
       name: member.member_name,
       description: task.description,
       link: task.link,
@@ -136,6 +137,8 @@ const getPendingTasks = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
 
 
 const getCompletedTasks = async (req, res) => {
