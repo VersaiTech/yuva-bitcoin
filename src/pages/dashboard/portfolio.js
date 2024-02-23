@@ -32,13 +32,36 @@ import { OverviewAllTasks } from "../../sections/dashboard/overview/overview-all
 import { TodayTask } from "../../sections/dashboard/overview/overview-today-tasks";
 import { TodayCompletedTask } from "../../sections/dashboard/overview/overview-todaydone-tasks";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const now = new Date();
 
 const Page = () => {
   const settings = useSettings();
   const theme = useTheme();
 
+  const [overview, setOverview] = useState([]);
+
   usePageView();
+
+  const OverviewData = async () => {
+    const token = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization: token,
+    }
+
+    const response = await axios.get(`${BASEURL}/admin/getOverview`, { headers: headers });
+
+    console.log(response.data.overview)
+    setOverview(response.data.overview)
+  }
+
+  useEffect(() => {
+    OverviewData();
+  }, []) 
 
   return (
     <>
@@ -70,26 +93,26 @@ const Page = () => {
             </Grid>
 
             <Grid xs={12} md={4}>
-              <AllUsers amount={5043} />
+              <AllUsers amount={overview.allMembers} />
             </Grid>
             <Grid xs={12} md={4}>
-              <ActiveUsers amount={142} />
+              <ActiveUsers amount={overview.activeMembers} />
             </Grid>
             <Grid xs={12} md={4}>
-              <BlockUsers amount={12} />
+              <BlockUsers amount={overview.inactiveMembers} />
             </Grid>
             <Grid xs={12} md={4}>
-              <AllTask amount={1232} />
+              <AllTask amount={overview.allTasks} />
             </Grid>
             
             <Grid xs={12} md={4}>
-              <OverviewDoneTasks amount={31} />
+              <OverviewDoneTasks amount={overview.completedTasks} />
             </Grid>
 
             <Grid xs={12} md={4}>
-              <OverviewPendingIssues amount={12} />
+              <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
-            <Grid xs={12} md={4}>
+            {/* <Grid xs={12} md={4}>
               <TodayTask amount={12} />
             </Grid>
             <Grid xs={12} md={4}>
@@ -97,7 +120,7 @@ const Page = () => {
             </Grid>
             <Grid xs={12} md={4}>
               <OverviewOpenTickets amount={5} />
-            </Grid>
+            </Grid> */}
 
             <Grid xs={12} md={8}>
               <Stack
@@ -108,7 +131,7 @@ const Page = () => {
               >
                 <CryptoCurrentBalance
                   chartSeries={[16213.2, 9626.8, 10076.81]}
-                  labels={["Bitcoin", "Ethereum", "US Dollars"]}
+                  labels={["Bitcoin", "Ethereum", "Deposit"]}
                 />
                 <CryptoTransactions
                   transactions={[
