@@ -8,9 +8,6 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storag
 const azurecontainer = process.env.AZURE_CONTAINER;
 const azureconnectionString = process.env.AZURE_STRING;
 
-
-
-
 const completeTask = async (req, res) => {
   try {
     const { taskId } = req.body;
@@ -58,7 +55,6 @@ const completeTask = async (req, res) => {
   }
 };
 
-
 const confirmTaskCompletion = async (req, res) => {
   try {
     const { taskId, userId } = req.body;
@@ -96,9 +92,6 @@ const confirmTaskCompletion = async (req, res) => {
   }
 };
 
-
-
-
 // Example controller to get all tasks
 // const getAllTasks = async (req, res) => {
 //   try {
@@ -119,8 +112,6 @@ const getAllTasks = async (req, res) => {
   }
 };
 
-
-
 const getPendingTasks = async (req, res) => {
   try {
     const pendingTasks = await CompletedTask.find({ status: 'pending' }).sort({ createdAt: -1 });
@@ -139,9 +130,6 @@ const getPendingTasks = async (req, res) => {
   }
 };
 
-
-
-
 const getCompletedTasks = async (req, res) => {
   try {
     const completedTasks = await CompletedTask.find({ status: 'confirmed' }).sort({ createdAt: -1 });
@@ -159,7 +147,6 @@ const getCompletedTasks = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 const addTask = async (req, res) => {
   try {
@@ -207,7 +194,6 @@ const addTask = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
 
 const editTask = async (req, res) => {
   try {
@@ -257,7 +243,6 @@ const editTask = async (req, res) => {
   }
 };
 
-
 const deleteTask = async (req, res) => {
   try {
     // Extract taskId from request parameters
@@ -278,8 +263,6 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
 
 const getAllStakes = async (req, res) => {
   try {
@@ -306,7 +289,6 @@ const getAllStakes = async (req, res) => {
     });
   }
 };
-
 
 async function getMemberByUserId(req, res) {
   try {
@@ -339,9 +321,6 @@ async function getMemberByUserId(req, res) {
     });
   }
 }
-
-
-
 
 async function getAllMembers(req, res) {
   try {
@@ -505,16 +484,11 @@ const deleteUser = async (req, res) => {
   }
 };
 
-
-
-
 function generateRandomNumber() {
-  const min = 1000000; // Minimum 7-digit number (inclusive)
+  const min = 1000000; // Minimum 7-digit number (inclusive)  
   const max = 9999999; // Maximum 7-digit number (inclusive)
 
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
 
 module.exports = { getAllStakes, getAllTasks, addTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };

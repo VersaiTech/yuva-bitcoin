@@ -19,7 +19,6 @@ const assignTask = async (req, res) => {
   }
 };
 
-
 const markTaskCompleted = async (req, res) => {
   try {
     const assignedTaskId = req.params.assignedTaskId;
