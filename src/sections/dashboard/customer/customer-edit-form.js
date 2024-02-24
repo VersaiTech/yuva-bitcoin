@@ -209,8 +209,8 @@ export const CustomerEditForm = (props) => {
                 helperText={formik.touched.isActive && formik.errors.isActive}
                 error={!!(formik.touched.isActive && formik.errors.isActive)}
               >
-                <MenuItem value={true}>True</MenuItem>
-                <MenuItem value={false}>False</MenuItem>
+                <MenuItem value={true}>Active</MenuItem>
+                <MenuItem value={false}>Block</MenuItem>
               </Select>
             </Grid>
 

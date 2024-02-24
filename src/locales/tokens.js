@@ -17,6 +17,7 @@ export const tokens = {
     checkout: 'nav.checkout',
     concepts: 'nav.concepts',
     contact: 'nav.contact',
+    support : 'nav.support',
     course: 'nav.course',
     create: 'nav.create',
     crypto: 'nav.crypto',

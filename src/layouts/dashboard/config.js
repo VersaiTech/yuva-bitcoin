@@ -485,17 +485,9 @@ export const getSections = (t) => [
         //   },
         // ],
       },
+    
       {
-        title: t(tokens.nav.checkout),
-        path: paths.checkout,
-        icon: (
-          <SvgIcon fontSize="small">
-            <LogOut01Icon />
-          </SvgIcon>
-        ),
-      },
-      {
-        title: t(tokens.nav.contact),
+        title: t(tokens.nav.support),
         path: paths.contact,
         icon: (
           <SvgIcon fontSize="small">
@@ -503,28 +495,28 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      {
-        title: t(tokens.nav.error),
-        icon: (
-          <SvgIcon fontSize="small">
-            <XSquareIcon />
-          </SvgIcon>
-        ),
-        items: [
-          {
-            title: "401",
-            path: paths["401"],
-          },
-          {
-            title: "404",
-            path: paths["404"],
-          },
-          {
-            title: "500",
-            path: paths["500"],
-          },
-        ],
-      },
+      // {
+      //   title: t(tokens.nav.error),
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <XSquareIcon />
+      //     </SvgIcon>
+      //   ),
+      //   items: [
+      //     {
+      //       title: "401",
+      //       path: paths["401"],
+      //     },
+      //     {
+      //       title: "404",
+      //       path: paths["404"],
+      //     },
+      //     {
+      //       title: "500",
+      //       path: paths["500"],
+      //     },
+      //   ],
+      // },
     ],
   },
   // {
