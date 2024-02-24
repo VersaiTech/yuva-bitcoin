@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import Link from 'next/link'; // Import Next.js Link
 
 export const AllTask = (props) => {
   const { amount } = props;
@@ -22,6 +23,7 @@ export const AllTask = (props) => {
         <div>
           <img
             src="/assets/iconly/icon-glass-alltask.svg"
+            alt='All Task Icon'
             width={48}
           />
         </div>
@@ -42,6 +44,7 @@ export const AllTask = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="/dashboard/newtask"> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={(
@@ -53,6 +56,7 @@ export const AllTask = (props) => {
         >
           See all task
         </Button>
+        </Link>
       </CardActions>
     </Card>
   );

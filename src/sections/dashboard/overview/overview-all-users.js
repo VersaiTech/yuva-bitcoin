@@ -1,6 +1,8 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import Link from 'next/link'; // Import Next.js Link
 
 export const AllUsers = (props) => {
   const { amount } = props;
@@ -22,6 +24,7 @@ export const AllUsers = (props) => {
         <div>
           <img
             src="/assets/iconly/icon-glass-user.svg"
+            alt="User Icon"
             width={48}
           />
         </div>
@@ -42,18 +45,19 @@ export const AllUsers = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Button
-          color="inherit"
-          endIcon={(
-            <SvgIcon>
-              <ArrowRightIcon />
-            </SvgIcon>
-          )}
-          size="small"
-          
-        >
-          See all users
-        </Button>
+        <Link href="/dashboard/users"> {/* Use Next.js Link component */}
+          <Button
+            color="inherit"
+            endIcon={(
+              <SvgIcon>
+                <ArrowRightIcon />
+              </SvgIcon>
+            )}
+            size="small"
+          >
+            See all users
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );
@@ -62,3 +66,5 @@ export const AllUsers = (props) => {
 AllUsers.propTypes = {
   amount: PropTypes.number.isRequired
 };
+
+export default AllUsers;
