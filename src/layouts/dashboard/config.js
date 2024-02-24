@@ -50,196 +50,120 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.tasks),
-        path: paths.dashboard.tasks.index,
         icon: (
           <SvgIcon fontSize="small">
             <BarChartSquare02Icon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.todayTasks),
+            path: paths.dashboard.tasks.today
+          },
+          {
+            title: t(tokens.nav.completedTasks),
+            path: paths.dashboard.tasks.completedTasks
+          },
+          {
+            title: t(tokens.nav.failed),
+            path: paths.dashboard.tasks.failed
+          }
+        ]
       },
-      // {
-      //   title: t(tokens.nav.ecommerce),
-      //   path: paths.dashboard.ecommerce,
-      //   icon: (
-      //     <SvgIcon fontSize="small">
-      //       <LineChartUp04Icon />
-      //     </SvgIcon>
-      //   )
-      // },
-
+      {
+        title: t(tokens.nav.earnings),
+        icon: (
+          <SvgIcon fontSize="small">
+            <LineChartUp04Icon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.earnings),
+            path: paths.dashboard.earnings.index
+          },
+          {
+            title: t(tokens.nav.earningsDetails),
+            path: paths.dashboard.earnings.details
+          }
+        ]
+      },
     ],
   },
-
   {
     subheader: t(tokens.nav.pages),
     items: [
       {
-        title: t(tokens.nav.auth),
+        title: t(tokens.nav.deposit),
         icon: (
           <SvgIcon fontSize="small">
-            <Lock01Icon />
+            <LineChartUp04Icon />
           </SvgIcon>
         ),
         items: [
           {
-            title: t(tokens.nav.login),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.login.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.login.modern,
-              },
-            ],
+            title: t(tokens.nav.deposit),
+            path: paths.dashboard.earnings.index
           },
           {
-            title: t(tokens.nav.register),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.register.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.register.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.forgotPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.forgotPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.forgotPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.resetPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.resetPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.resetPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.verifyCode),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.verifyCode.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.verifyCode.modern,
-              },
-            ],
-          },
-        ],
+            title: t(tokens.nav.depositHistory),
+            path: paths.dashboard.earnings.details
+          }
+        ]
       },
       {
-        title: t(tokens.nav.auth),
+        title: t(tokens.nav.stake),
         icon: (
           <SvgIcon fontSize="small">
-            <Lock01Icon />
+            <LineChartUp04Icon />
           </SvgIcon>
         ),
         items: [
           {
-            title: t(tokens.nav.login),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.login.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.login.modern,
-              },
-            ],
+            title: t(tokens.nav.stake),
+            path: paths.dashboard.stake.index
           },
           {
-            title: t(tokens.nav.register),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.register.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.register.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.forgotPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.forgotPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.forgotPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.resetPassword),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.resetPassword.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.resetPassword.modern,
-              },
-            ],
-          },
-          {
-            title: t(tokens.nav.verifyCode),
-            items: [
-              {
-                title: "Classic",
-                path: paths.auth.verifyCode.classic,
-              },
-              {
-                title: "Modern",
-                path: paths.auth.verifyCode.modern,
-              },
-            ],
-          },
-        ],
+            title: t(tokens.nav.stakeHistory),
+            path: paths.dashboard.stake.stakeHistory
+          }
+        ]
       },
       {
-        title: t(tokens.nav.pricing),
-        path: paths.pricing,
+        title: t(tokens.nav.withdraw),
         icon: (
           <SvgIcon fontSize="small">
-            <CreditCard01Icon />
+            <LineChartUp04Icon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.withdraw),
+            path: paths.dashboard.withdraw.index
+          },
+          {
+            title: t(tokens.nav.withdrawHistory),
+            path: paths.dashboard.withdraw.withdrawHistory
+          }
+        ]
       },
       {
-        title: t(tokens.nav.checkout),
-        path: paths.checkout,
+        title: t(tokens.nav.referral),
         icon: (
           <SvgIcon fontSize="small">
-            <LogOut01Icon />
+            <LineChartUp04Icon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.refer),
+            path: paths.dashboard.refer.index
+          },
+          {
+            title: t(tokens.nav.referralHistory),
+            path: paths.dashboard.refer.referHistory
+          }
+        ]
       },
       {
         title: t(tokens.nav.contact),

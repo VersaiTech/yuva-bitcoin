@@ -172,18 +172,6 @@ const Page = () => {
                     Tasks
                   </Typography>
                 </div>
-                <div>
-                  <Button
-                    startIcon={(
-                      <SvgIcon>
-                        <PlusIcon />
-                      </SvgIcon>
-                    )}
-                    variant="contained"
-                  >
-                    Add
-                  </Button>
-                </div>
               </Stack>
             </Box>
             <Divider />

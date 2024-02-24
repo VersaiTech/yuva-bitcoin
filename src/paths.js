@@ -53,6 +53,22 @@ export const paths = {
       index: '/dashboard/academy',
       courseDetails: '/dashboard/academy/courses/:courseId'
     },
+    earnings:{
+      index: '/dashboard/earnings',
+      details: '/dashboard/earnings'
+    },
+    refer : {
+      index: '/dashboard/refer',
+      referHistory: '/dashboard/referhistory'
+    },
+    stake: {
+      index: '/dashboard/stake',
+      stakeHistory: '/dashboard/stakehistory'
+    },
+    withdraw: {
+      index: '/dashboard/withdraw',
+      withdrawHistory: '/dashboard/withdrawhistory'
+    },
     account: '/dashboard/account',
     portfolio: '/dashboard/portfolio',
     // tasks: '/dashboard/tasks',
@@ -97,7 +113,10 @@ export const paths = {
     },
     tasks: {
       index: '/dashboard/tasks',
-      details: '/dashboard/tasks/:taskId'
+      today: '/dashboard/tasks',
+      details: '/dashboard/tasks/:taskId',
+      completedTasks: '/dashboard/tasks?s=completed',
+      failed: '/dashboard/tasks?s=failed'
     },
     products: {
       index: '/dashboard/products',
