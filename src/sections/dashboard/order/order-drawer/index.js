@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import XIcon from '@untitled-ui/icons-react/build/esm/X';
 import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material';
-import { OrderDetails } from './order-details';
+import { DepositDetails } from '../../depostis/deposits-drawer/deposit-details';
 import { OrderEdit } from './order-edit';
 
 export const OrderDrawer = (props) => {
@@ -55,7 +55,7 @@ export const OrderDrawer = (props) => {
         >
           {!isEditing
             ? (
-              <OrderDetails
+              <DepositDetails
                 onApprove={onClose}
                 onEdit={handleEditOpen}
                 onReject={onClose}

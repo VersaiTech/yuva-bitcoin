@@ -26,7 +26,7 @@ const statusMap = {
   rejected: 'error'
 };
 
-export const OrderDetails = (props) => {
+export const DepositDetails = (props) => {
   const { onApprove, onEdit, onReject, order } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
@@ -48,7 +48,7 @@ export const OrderDetails = (props) => {
           <Typography variant="h6">
             Details
           </Typography>
-          <Button
+          {/* <Button
             color="inherit"
             onClick={onEdit}
             size="small"
@@ -59,7 +59,7 @@ export const OrderDetails = (props) => {
             )}
           >
             Edit
-          </Button>
+          </Button> */}
         </Stack>
         <PropertyList>
           <PropertyListItem
@@ -139,7 +139,7 @@ export const OrderDetails = (props) => {
             </SeverityPill>
           </PropertyListItem>
         </PropertyList>
-        <Stack
+        {/* <Stack
           alignItems="center"
           direction="row"
           flexWrap="wrap"
@@ -161,9 +161,9 @@ export const OrderDetails = (props) => {
           >
             Reject
           </Button>
-        </Stack>
+        </Stack> */}
       </Stack>
-      <Stack spacing={3}>
+      {/* <Stack spacing={3}>
         <Typography variant="h6">
           Line items
         </Typography>
@@ -207,12 +207,12 @@ export const OrderDetails = (props) => {
             </TableBody>
           </Table>
         </Scrollbar>
-      </Stack>
+      </Stack> */}
     </Stack>
   );
 };
 
-OrderDetails.propTypes = {
+DepositDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,
   onReject: PropTypes.func,

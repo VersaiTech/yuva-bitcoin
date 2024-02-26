@@ -7,7 +7,7 @@ import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
-import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
+import { WithdrawalListContainer } from '../../../sections/dashboard/withdrawals/withdrawal-list-container';
 import { WithdrawalsListSearch } from '../../../sections/dashboard/withdrawals/withdrawals-list-search';
 import { WithdrawalsListTable } from '../../../sections/dashboard/withdrawals/withdrawals-list-table';
 
@@ -159,7 +159,7 @@ const Page = () => {
             top: 0
           }}
         >
-          <OrderListContainer open={drawer.isOpen}>
+          <WithdrawalListContainer open={drawer.isOpen}>
             <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
@@ -192,7 +192,7 @@ const Page = () => {
               page={search.page}
               rowsPerPage={search.rowsPerPage}
             />
-          </OrderListContainer>
+          </WithdrawalListContainer>
           <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}

@@ -8,9 +8,9 @@ import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
-import { OrderListSearch } from '../../../sections/dashboard/order/order-list-search';
-import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
-
+import { EarningListSearch } from '../../../sections/dashboard/earnings/earning-list-search';
+import { EarningListTable } from '../../../sections/dashboard/earnings/earning-list-table';
+import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -159,7 +159,7 @@ const Page = () => {
             top: 0
           }}
         >
-          <OrderListContainer open={drawer.isOpen}>
+          <EarningListContainer open={drawer.isOpen}>
             <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
@@ -176,14 +176,14 @@ const Page = () => {
               </Stack>
             </Box>
             <Divider />
-            <OrderListSearch
+            <EarningListSearch
               onFiltersChange={handleFiltersChange}
               onSortChange={handleSortChange}
               sortBy={search.sortBy}
               sortDir={search.sortDir}
             />
             <Divider />
-            <OrderListTable
+            <EarningListTable
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
@@ -192,7 +192,7 @@ const Page = () => {
               page={search.page}
               rowsPerPage={search.rowsPerPage}
             />
-          </OrderListContainer>
+          </EarningListContainer>
           <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}

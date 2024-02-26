@@ -7,8 +7,8 @@ import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
-import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
 import { DepositsListSearch } from '../../../sections/dashboard/depostis/deposits-list-search';
+import { DepositsListContainer } from '../../../sections/dashboard/depostis/deposits-list-container';
 import { DepositsListTable } from '../../../sections/dashboard/depostis/deposits-list-table';
 
 const useSearch = () => {
@@ -159,7 +159,7 @@ const Page = () => {
             top: 0
           }}
         >
-          <OrderListContainer open={drawer.isOpen}>
+          <DepositsListContainer open={drawer.isOpen}>
             <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
@@ -192,7 +192,7 @@ const Page = () => {
               page={search.page}
               rowsPerPage={search.rowsPerPage}
             />
-          </OrderListContainer>
+          </DepositsListContainer>
           <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}

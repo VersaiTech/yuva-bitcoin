@@ -174,28 +174,28 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      {
-        title: t(tokens.nav.error),
-        icon: (
-          <SvgIcon fontSize="small">
-            <XSquareIcon />
-          </SvgIcon>
-        ),
-        items: [
-          {
-            title: "401",
-            path: paths["401"],
-          },
-          {
-            title: "404",
-            path: paths["404"],
-          },
-          {
-            title: "500",
-            path: paths["500"],
-          },
-        ],
-      },
+      // {
+      //   title: t(tokens.nav.error),
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <XSquareIcon />
+      //     </SvgIcon>
+      //   ),
+      //   items: [
+      //     {
+      //       title: "401",
+      //       path: paths["401"],
+      //     },
+      //     {
+      //       title: "404",
+      //       path: paths["404"],
+      //     },
+      //     {
+      //       title: "500",
+      //       path: paths["500"],
+      //     },
+      //   ],
+      // },
     ],
   },
 ];
