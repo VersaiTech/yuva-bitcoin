@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import Head from 'next/head';
 import { subDays, subHours, subMinutes, subMonths } from 'date-fns';
 import { Box, Container, Divider, Stack, Tab, Tabs, Typography } from '@mui/material';
@@ -10,6 +10,10 @@ import { AccountGeneralSettings } from '../../sections/dashboard/account/account
 import { AccountNotificationsSettings } from '../../sections/dashboard/account/account-notifications-settings';
 import { AccountTeamSettings } from '../../sections/dashboard/account/account-team-settings';
 import { AccountSecuritySettings } from '../../sections/dashboard/account/account-security-settings';
+
+import axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const now = new Date();
 
@@ -25,17 +29,42 @@ const Page = () => {
   const user = useMockedUser();
   const [currentTab, setCurrentTab] = useState('general');
 
+  const [admin, setAdmin] = useState({});
+
   usePageView();
 
   const handleTabsChange = useCallback((event, value) => {
     setCurrentTab(value);
   }, []);
 
+  const getAdmin = async () => {
+    try{
+      const token = localStorage.getItem('accessToken');
+      const headers = {
+        'Authorization': token
+      }
+
+      const response = await axios.get(`${BASEURL}/api/Dashboard/admin`, {
+        headers: headers
+      })
+
+      console.log(response.data.data);
+      setAdmin(response.data.data);
+    }
+    catch(err){
+      console.error(err.response.data);
+    }
+  }
+
+  useEffect(() => {
+    getAdmin();
+  }, []);
+
   return (
     <>
       <Head>
         <title>
-          Dashboard: Account | Rock34x 
+          Dashboard: Profile | Rock34x 
         </title>
       </Head>
       <Box
@@ -51,7 +80,7 @@ const Page = () => {
             sx={{ mb: 3 }}
           >
             <Typography variant="h4">
-              Account
+              Profile
             </Typography>
             <div>
               <Tabs
@@ -75,6 +104,7 @@ const Page = () => {
           </Stack>
           {currentTab === 'general' && (
             <AccountGeneralSettings
+              admin={admin}
               avatar={user.avatar || ''}
               email={user.email || ''}
               name={user.name || ''}

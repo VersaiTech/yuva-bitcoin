@@ -306,7 +306,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Customers
+                    Withdrawals
                   </Typography>
                 </Link>
               </div>

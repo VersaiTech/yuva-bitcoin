@@ -24,7 +24,7 @@ import { useSnackbar } from 'notistack';
 
 export const AccountPopover = (props) => {
   const {enqueueSnackbar} = useSnackbar();
-  const { anchorEl, onClose, open, ...other } = props;
+  const { anchorEl, onClose, open,admin, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
 
@@ -79,13 +79,13 @@ export const AccountPopover = (props) => {
       {...other}>
       <Box sx={{ p: 2 }}>
         <Typography variant="body1">
-          Anika Visser
+          {admin.admin_name}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          demo@yuvabitcoin.com
+         {admin.email}
         </Typography>
       </Box>
       <Divider />

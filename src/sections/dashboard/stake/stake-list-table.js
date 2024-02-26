@@ -491,7 +491,7 @@ export const StakeListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.dashboard.withdrawal.index}
+                          href={paths.dashboard.Stake.index}
                           variant="subtitle2"
                         >
                           {customer.member_name}

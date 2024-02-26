@@ -18,7 +18,7 @@ import {
 import { alpha } from '@mui/material/styles';
 
 export const AccountGeneralSettings = (props) => {
-  const { avatar, email, name } = props;
+  const { avatar, email, name, admin } = props;
 
   return (
     <Stack
@@ -129,7 +129,7 @@ export const AccountGeneralSettings = (props) => {
                   spacing={2}
                 >
                   <TextField
-                    defaultValue={name}
+                    defaultValue={admin.admin_name}
                     label="Full Name"
                     sx={{ flexGrow: 1 }}
                   />
@@ -146,7 +146,7 @@ export const AccountGeneralSettings = (props) => {
                   spacing={2}
                 >
                   <TextField
-                    defaultValue={email}
+                    defaultValue={admin.email}
                     disabled
                     label="Email Address"
                     required

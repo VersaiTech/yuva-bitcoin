@@ -106,7 +106,7 @@ export const WithdrawalEditForm = (props) => {
       onSubmit={formik.handleSubmit}
       {...other}>
       <Card>
-        <CardHeader title="Edit Customer" />
+        <CardHeader title="Edit Withdrawal" />
         <CardContent sx={{ pt: 0 }}>
           <Grid
             container
