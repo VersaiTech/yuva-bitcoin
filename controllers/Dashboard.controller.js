@@ -5,7 +5,7 @@ const getDashboardData = async (req, res) => {
   const member_user_id = req.user;
 
   try {
-    const user = await Member.findById(member_user_id);
+    const user = await Member.findOne({member_user_id: member_user_id});
 
     if (!user) {
       return res.status(400).send({
