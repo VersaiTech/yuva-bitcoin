@@ -2,6 +2,9 @@ import { createContext, useCallback, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { authApi } from '../../api/auth';
 import { Issuer } from '../../utils/auth';
+import  axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
 const STORAGE_KEY = 'accessToken';
 
@@ -73,10 +76,19 @@ export const AuthProvider = (props) => {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = globalThis.localStorage.getItem(STORAGE_KEY);
+      const accessToken = globalThis.localStorage.getItem('accessToken');
+      console.log(accessToken);
+      const headers = {
+        Authorization: accessToken
+      }
+      console.log(headers);
 
       if (accessToken) {
-        const user = await authApi.me({ accessToken });
+        const user = await axios.get(`${BASEURL}/api/Dashboard/`,{
+        headers: headers
+        });
+        console.log(user);
+
 
         dispatch({
           type: ActionType.INITIALIZE,
@@ -95,7 +107,7 @@ export const AuthProvider = (props) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
       dispatch({
         type: ActionType.INITIALIZE,
         payload: {
@@ -113,9 +125,17 @@ export const AuthProvider = (props) => {
     []);
 
   const signIn = useCallback(async (email, password) => {
-    const { accessToken } = await authApi.signIn({ email, password });
-    const user = await authApi.me({ accessToken });
-    localStorage.setItem(STORAGE_KEY, accessToken);
+    const response = await axios.post(`${BASEURL}/api/Auth/login`,{
+      email,
+      password
+    });
+    console.log(response.data)
+    const {token,user} = response.data;
+    
+    // const { accessToken } = await authApi.signIn({ email, password });
+    // const user = await authApi.me({ accessToken });
+
+    localStorage.setItem(STORAGE_KEY, token);
     dispatch({
       type: ActionType.SIGN_IN,
       payload: {
