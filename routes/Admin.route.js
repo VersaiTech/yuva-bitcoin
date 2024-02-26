@@ -13,7 +13,7 @@ const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask);
 router.route('/getAllTasks').get(ValidMember, getAllTasks);
 router.route('/getAllTasksAdmin').get(isAdmin, getAllTasks);
-router.route('/editTask').post(isAdmin, upload.array('file', 10), editTask);
+router.route('/editTask/:taskId').post(isAdmin, upload.array('file', 10), editTask);
 router.route('/deleteTask/:taskId').delete(isAdmin, deleteTask);
 
 router.route('/getPendingTasks').get(isAdmin, getPendingTasks);

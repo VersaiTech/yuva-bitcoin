@@ -212,7 +212,7 @@ const addTask = async (req, res) => {
 const editTask = async (req, res) => {
   try {
     // Extract task data from request body
-    const { taskId } = req.body;
+    const { taskId } = req.params;
     const imageFiles = req.files;
     const imageData = [];
 
