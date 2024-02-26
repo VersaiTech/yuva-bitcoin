@@ -102,9 +102,9 @@ export const paths = {
       index: "/dashboard/orders",
       details: "/dashboard/orders/:orderId",
     },
-    tasks: {
+    newtask: {
       index: "/dashboard/newtask",
-      details: "/dashboard/tasks/:taskId",
+      details: "/dashboard/newtask/:taskId",
       create: "/dashboard/newtask/create",
     },
     

@@ -22,14 +22,14 @@ const tabs = [
     label: 'All',
     value: 'all',
   },
-  {
-    label: 'Pending',
-    value: 'hasAcceptedMarketing'
-  },
-  {
-    label: 'Completed',
-    value: 'isProspect'
-  }
+  // {
+  //   label: 'Pending',
+  //   value: 'hasAcceptedMarketing'
+  // },
+  // {
+  //   label: 'Completed',
+  //   value: 'isProspect'
+  // }
   // ,
   // {
   //   label: 'Returning',

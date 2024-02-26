@@ -22,19 +22,19 @@ const tabs = [
     label: 'All',
     value: 'all',
   },
-  // {
-  //   label: 'Pending',
-  //   value: 'pending'
-  // },
-  // {
-  //   label: 'Rejected',
-  //   value: 'hasAcceptedMarketing'
-  // },
-  // {
-  //   label: 'Approved',
-  //   value: 'isProspect'
-  // }
-  // ,
+  {
+    label: 'Pending',
+    value: 'pending'
+  },
+  {
+    label: 'Rejected',
+    value: 'hasAcceptedMarketing'
+  },
+  {
+    label: 'Approved',
+    value: 'isProspect'
+  }
+  ,
   // {
   //   label: 'Returning',
   //   value: 'isReturning'

@@ -49,14 +49,24 @@ const useCustomers = (search) => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
-
-      const activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
+      let response = await axios.get(`${BASEURL}/admin/getAllMembers`, { headers: headers });
 
 
-      const blockedUsersResponse = await axios.get(`${BASEURL}/admin/getBlockedMembers`, { headers: headers });
+      let activeUsersResponse = await axios.get(`${BASEURL}/admin/getActiveMembers`, { headers: headers });
 
 
+      let blockedUsersResponse = await axios.get(`${BASEURL}/admin/getBlockedMembers`, { headers: headers });
+
+
+      if(!response ){
+        response = []
+      }
+      if(!activeUsersResponse ){
+        activeUsersResponse = []
+      }
+      if(!blockedUsersResponse ){
+        blockedUsersResponse = []
+      }
       if (isMounted()) {
         setState({
           customers: response.data.members,
@@ -66,6 +76,14 @@ const useCustomers = (search) => {
         });
       }
     } catch (err) {
+
+      setState({
+        customers: [],
+        customersCount: [],
+        activeUsers: [],
+        blockedUsers: []
+      });
+
       console.error(err.response.data.message);
     }
   }, [search, isMounted]);
@@ -204,7 +222,7 @@ const Page = () => {
                 // customers={customers}
                 // customersCount={customersCount}
                 customers={currentTab === 'all' ? customers : currentTab === 'hasAcceptedMarketing' ? activeUsers : currentTab === 'isProspect' ? blockedUsers : customers}
-                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

@@ -207,7 +207,7 @@ const Page = () => {
                     </SvgIcon>
                   }
                   variant="contained"
-                  href={paths.dashboard.tasks.create}
+                  href={paths.dashboard.newtask.create}
                 >
                   Add
                 </Button>

@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 import Link from 'next/link'; // Import Next.js Link
+import NextLink from 'next/link';
+import { paths } from '../../../paths';
 
 export const BlockUsers = (props) => {
   const { amount } = props;
@@ -44,7 +46,7 @@ export const BlockUsers = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/dashboard/users?status=hasBlocked"> {/* Use Next.js Link component */}
+        <Link component={NextLink} color="inherit" href={paths.dashboard.users.blocked}> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={(

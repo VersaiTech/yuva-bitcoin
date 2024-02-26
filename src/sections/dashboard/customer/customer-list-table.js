@@ -27,7 +27,7 @@ import { getInitials } from '../../../utils/get-initials';
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.member_user_id);
+    return customers?.map((customer) => customer.member_user_id);
   }, [customers]);
   const [selected, setSelected] = useState([]);
 
@@ -84,9 +84,9 @@ export const CustomerListTable = (props) => {
     }
   }, [selectAll, deselectAll]);
 
-  const selectedAll = selected.length === customers.length;
-  const selectedSome = selected.length > 0 && selected.length < customers.length;
-  const enableBulkActions = selected.length > 0;
+  const selectedAll = selected?.length === customers?.length;
+  const selectedSome = selected?.length > 0 && selected?.length < customers?.length;
+  const enableBulkActions = selected?.length > 0;
 
   return (
     <Box
@@ -159,7 +159,7 @@ export const CustomerListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
+            {customers?.map((customer) => {
               const isSelected = selected.includes(customer.member_user_id);
               // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
               // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);

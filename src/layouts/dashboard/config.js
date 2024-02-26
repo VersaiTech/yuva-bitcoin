@@ -52,8 +52,8 @@ export const getSections = (t) => [
         ),
       },
       {
-        title: t(tokens.nav.tasks),
-        path: paths.dashboard.tasks.index,
+        title: t(tokens.nav.newtask),
+        path: paths.dashboard.newtask.index,
         icon: (
           <SvgIcon fontSize="small">
             <BarChartSquare02Icon />

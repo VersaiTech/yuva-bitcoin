@@ -21,6 +21,8 @@ import {
 import { FileDropzone } from "../../../components/file-dropzone";
 import { QuillEditor } from "../../../components/quill-editor";
 import { paths } from "../../../paths";
+import Link from "next/link";
+
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
@@ -323,7 +325,7 @@ export const NewTaskForm = (props) => {
           justifyContent="flex-end"
           spacing={1}
         >
-          <Button color="inherit">Cancel</Button>
+          <Link href={paths.dashboard.tasks.index}><Button color="inherit">Cancel</Button></Link>
           <Button type="submit" variant="contained">
             Create
           </Button>

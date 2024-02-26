@@ -27,7 +27,7 @@ import { getInitials } from "../../../utils/get-initials";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.member_user_id);
+    return customers.map((customer) => customer.taskId);
   }, [customers]);
   const [selected, setSelected] = useState([]);
 
@@ -211,7 +211,7 @@ export const NewtaskListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={`${paths.dashboard.users.edit}${customer.member_user_id}/edit`}
+                      href={`${paths.dashboard.users.edit}${customer.taskId}/edit`}
                     >
                       <SvgIcon>
                         <Edit02Icon />
