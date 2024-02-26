@@ -208,9 +208,9 @@ const useCustomer = () => {
   //need to get member_user_id from params
 
   const router = useRouter();
-  const {withdrawalId} = router.query;
+  const {taskId} = router.query;
 
-  console.log(withdrawalId)
+  console.log(taskId)
 
   const isMounted = useMounted();
   const [customer, setCustomer] = useState(null);
@@ -223,15 +223,15 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/api/Withdraw/getWithdrawByUserId/${withdrawalId}`, {
+      const response = await axios.post(`${BASEURL}/admin/editTask/${taskId}`, {
         headers: headers
       })
 
 
-      console.log(response.data.withdraw)
+      console.log(response.data)
 
       if (isMounted()) {
-        setCustomer(response.data.withdraw);
+        setCustomer(response.data);
       }
     } catch (err) {
       console.error(err);
