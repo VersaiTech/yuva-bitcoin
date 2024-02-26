@@ -140,7 +140,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Customer List | Rock34x
+          Dashboard: Users List | Rock34x
         </title>
       </Head>
       <Box
