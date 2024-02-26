@@ -57,6 +57,11 @@ export const paths = {
       index: '/dashboard/earnings',
       details: '/dashboard/earnings'
     },
+    deposits:{
+      index: '/dashboard/deposits',
+      depositsHistory: '/dashboard/deposits'
+    },
+
     refer : {
       index: '/dashboard/refer',
       referHistory: '/dashboard/referhistory'
@@ -66,8 +71,8 @@ export const paths = {
       stakeHistory: '/dashboard/stakehistory'
     },
     withdraw: {
-      index: '/dashboard/withdraw',
-      withdrawHistory: '/dashboard/withdrawhistory'
+      index: '/dashboard/withdrawals',
+      withdrawHistory: '/dashboard/withdrawals'
     },
     account: '/dashboard/account',
     portfolio: '/dashboard/portfolio',

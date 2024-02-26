@@ -39,15 +39,15 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      {
-        title: t(tokens.nav.crypto),
-        path: paths.dashboard.index2,
-        icon: (
-          <SvgIcon fontSize="small">
-            <LayoutAlt02Icon />
-          </SvgIcon>
-        ),
-      },
+      // {
+      //   title: t(tokens.nav.crypto),
+      //   path: paths.dashboard.index2,
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <LayoutAlt02Icon />
+      //     </SvgIcon>
+      //   ),
+      // },
       {
         title: t(tokens.nav.tasks),
         icon: (
@@ -103,11 +103,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.deposit),
-            path: paths.dashboard.earnings.index
+            path: paths.dashboard.deposits.index
           },
           {
             title: t(tokens.nav.depositHistory),
-            path: paths.dashboard.earnings.details
+            path: paths.dashboard.deposits.index
           }
         ]
       },
