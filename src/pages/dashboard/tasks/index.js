@@ -10,6 +10,10 @@ import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
 import { OrderListSearch } from '../../../sections/dashboard/order/order-list-search';
 import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
+import { TaskListSearch } from '../../../sections/dashboard/task/task-list-search';
+import { TaskListTable } from '../../../sections/dashboard/task/task-list-table';
+import axios from 'axios';
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -38,7 +42,14 @@ const useOrders = (search) => {
 
   const getOrders = useCallback(async () => {
     try {
-      const response = await ordersApi.getOrders(search);
+      const token = localStorage.getItem("accessToken");
+
+      const headers = {
+        Authorization: token,
+      };
+      // const response = await ordersApi.getOrders(search);
+      const response = await axios.get(`${BASEURL}/admin/getAllTasks`, {headers: headers});
+      console.log(response.data);
 
       if (isMounted()) {
         setState({
@@ -175,14 +186,14 @@ const Page = () => {
               </Stack>
             </Box>
             <Divider />
-            <OrderListSearch
+            <TaskListSearch
               onFiltersChange={handleFiltersChange}
               onSortChange={handleSortChange}
               sortBy={search.sortBy}
               sortDir={search.sortDir}
             />
             <Divider />
-            <OrderListTable
+            <TaskListTable
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
