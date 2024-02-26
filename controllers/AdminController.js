@@ -112,6 +112,22 @@ const getAllTasks = async (req, res) => {
   }
 };
 
+const getOneTask = async (req, res) => {
+  try {
+    const taskId = req.params; // Assuming you're passing the task ID in the request parameters
+    const task = await Task.findOne(taskId);
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const getPendingTasks = async (req, res) => {
   try {
     const pendingTasks = await CompletedTask.find({ status: 'pending' }).sort({ createdAt: -1 });
@@ -154,8 +170,6 @@ const addTask = async (req, res) => {
     const { taskName, description, coins, link } = req.body;
     const imageFiles = req.files;
 
-
-
     // Create a new task document
     const newTask = new Task({
       taskName,
@@ -194,6 +208,48 @@ const addTask = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+// only one task can be added in a day code is below
+// const addTask = async (req, res) => {
+//   try {
+//     // Extract task data from request body
+//     const { taskName, description, coins, link } = req.body;
+//     const imageFiles = req.files;
+
+//     // Check if a task has already been added on the current day
+//     const today = new Date();
+//     today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to 0 for date comparison
+
+//     const existingTask = await Task.findOne({ createdAt: { $gte: today } });
+
+//     if (existingTask) {
+//       return res.status(400).json({ error: 'You can only add one task per day.' });
+//     }
+
+//     // Create a new task document
+//     const newTask = new Task({
+//       taskName,
+//       taskId: generateRandomNumber(),
+//       description,
+//       coins,
+//       // imageUrl: null,
+//       link,
+//       imageUrls: [],
+//     });
+
+//     if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+//       // ... (your existing image upload logic)
+//     }
+
+//     // Save the task to the database
+//     await newTask.save();
+
+//     res.status(201).json(newTask); // Respond with the newly created task
+//   } catch (error) {
+//     console.error('Error adding task:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
 const editTask = async (req, res) => {
   try {
@@ -491,4 +547,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getAllStakes, getAllTasks, addTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };
+module.exports = { getAllStakes, getAllTasks, addTask, getOneTask,getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };
