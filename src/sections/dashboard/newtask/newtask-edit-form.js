@@ -21,27 +21,31 @@ import { paths } from '../../../paths';
 import { wait } from '../../../utils/wait';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import { useRouter } from 'next/router';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
 
-export const CustomerEditForm = (props) => {
+export const NewTaskEditForm = (props) => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { customer, ...other } = props;
   const formik = useFormik({
     initialValues: {
       // address1: customer.address1 || '',
       // address2: customer.address2 || '',
-      with_amt: customer.with_amt || '',
-      email: customer.email || '',
-      hasDiscount: customer.hasDiscount || false,
-      isVerified: customer.isVerified || false,
-      member_name: customer.member_name || '',
-      contactNo: customer.contactNo || '',
-      with_date: customer.with_date || '',
+      taskId: customer.taskId || '',
+      // email: customer.email || '',
+      description: customer.description || '',
+      coins: customer.coins || '',
+      // hasDiscount: customer.hasDiscount || false,
+      // isVerified: customer.isVerified || false,
+      taskName: customer.taskName || '',
+      // contactNo: customer.contactNo || '',
+      link: customer.link || '',
       submit: null,
-      status: customer.status,
+      // status: customer.status,
     },
     validationSchema: Yup.object({
       // address1: Yup.string().max(255),
@@ -68,20 +72,23 @@ export const CustomerEditForm = (props) => {
         const headers = {
           'Authorization': token
         }
-        
-        const valuesData = {
-          status: values.status
-        }
-        
-        console.log('Form values:', valuesData);
-        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`,valuesData, { headers: headers })
 
-        enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
-        console.log(response.data);
+        console.log('Form values:', values);
+        const response = await axios.post(`${BASEURL}/admin/editTask/${customer.taskId}`, values, { headers: headers })
+
+        
+        if (response.status === 200) {
+          console.log(response.data);
+          enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
+          router.push(paths.dashboard.newtask.index); 
+        }
+        else{
+          enqueueSnackbar('Something went wrong', { variant: 'error' });
+        }
       }
       catch(err){
-        enqueueSnackbar(err.response.data.error, { variant: 'error' });
-        console.log(err.response.data.error);
+        enqueueSnackbar(err, { variant: 'error' });
+        console.log(err);
       }
 
       // try {
@@ -117,16 +124,15 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.member_name && formik.errors.member_name)}
+                error={!!(formik.touched.taskName && formik.errors.taskName)}
                 fullWidth
-                helperText={formik.touched.member_name && formik.errors.member_name}
-                label="Full name"
-                name="member_name"
+                helperText={formik.touched.taskName && formik.errors.taskName}
+                label="Task Name"
+                name="taskName"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.member_name}
+                value={formik.values.taskName}
               />
             </Grid>
             {/* <Grid
@@ -151,15 +157,14 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.with_amt && formik.errors.with_amt)}
+                error={!!(formik.touched.taskId && formik.errors.taskId)}
                 fullWidth
-                helperText={formik.touched.with_amt && formik.errors.with_amt}
-                label="Withdraw Amount"
-                name="with_amt"
+                helperText={formik.touched.taskId && formik.errors.taskId}
+                label="Task Id"
+                name="taskId"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_amt}
+                value={formik.values.taskId}
               />
             </Grid>
             <Grid
@@ -167,15 +172,44 @@ export const CustomerEditForm = (props) => {
               md={6}
             >
               <TextField
-                disabled
-                error={!!(formik.touched.with_date && formik.errors.with_date)}
+                error={!!(formik.touched.link && formik.errors.link)}
                 fullWidth
-                helperText={formik.touched.with_date && formik.errors.with_date}
-                label="Withdraw Date"
-                name="with_date"
+                helperText={formik.touched.link && formik.errors.link}
+                label="Link"
+                name="link"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.with_date}
+                value={formik.values.link}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                error={!!(formik.touched.description && formik.errors.description)}
+                fullWidth
+                helperText={formik.touched.description && formik.errors.description}
+                label="Description"
+                name="description"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.description}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                error={!!(formik.touched.coins && formik.errors.coins)}
+                fullWidth
+                helperText={formik.touched.coins && formik.errors.coins}
+                label="Coins"
+                name="coins"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.coins}
               />
             </Grid>
             {/* <Grid
@@ -194,7 +228,7 @@ export const CustomerEditForm = (props) => {
                 value={formik.values.contactNo}
               />
             </Grid> */}
-            <Grid
+            {/* <Grid
               xs={12}
               md={6}
             >
@@ -213,7 +247,7 @@ export const CustomerEditForm = (props) => {
                 <MenuItem value={"Rejected"}>Rejected</MenuItem>
                 <MenuItem value={"Pending"}>Pending</MenuItem>
               </Select>
-            </Grid>
+            </Grid> */}
 
             {/*  <Grid
               xs={12}
@@ -333,7 +367,7 @@ export const CustomerEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.dashboard.withdrawal.index}
+            href={paths.dashboard.newtask.index}
           >
             Cancel
           </Button>
@@ -343,7 +377,7 @@ export const CustomerEditForm = (props) => {
   );
 };
 
-CustomerEditForm.propTypes = {
+NewTaskEditForm.propTypes = {
   // @ts-ignore
   customer: PropTypes.object.isRequired
 };

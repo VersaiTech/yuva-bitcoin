@@ -211,7 +211,7 @@ export const NewtaskListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={`${paths.dashboard.users.edit}${customer.taskId}/edit`}
+                      href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
                     >
                       <SvgIcon>
                         <Edit02Icon />

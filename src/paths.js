@@ -106,6 +106,7 @@ export const paths = {
       index: "/dashboard/newtask",
       details: "/dashboard/newtask/:taskId",
       create: "/dashboard/newtask/create",
+      edit: "/dashboard/newtask/",
     },
     
     deposit: {

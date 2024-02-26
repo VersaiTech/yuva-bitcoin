@@ -195,7 +195,7 @@ import { useMounted } from '../../../../hooks/use-mounted';
 import { usePageView } from '../../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
 import { paths } from '../../../../paths';
-import { CustomerEditForm } from '../../../../sections/dashboard/customer/customer-edit-form';
+import { NewTaskEditForm } from '../../../../sections/dashboard/newtask/newtask-edit-form';
 import { getInitials } from '../../../../utils/get-initials';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -223,7 +223,7 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.post(`${BASEURL}/admin/editTask/${taskId}`, {
+      const response = await axios.get(`${BASEURL}/admin/getOneTask/${taskId}`, {
         headers: headers
       })
 
@@ -278,7 +278,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Withdrawal Edit | YuvaBitcoin
+          Dashboard: Task Edit | YuvaBitcoin
         </title>
       </Head>
       <Box
@@ -306,7 +306,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Customers
+                    Tasks
                   </Typography>
                 </Link>
               </div>
@@ -331,7 +331,7 @@ const Page = () => {
                       width: 64
                     }}
                   >
-                    {getInitials(customer.member_name)}
+                    {getInitials(customer.taskId)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
@@ -343,10 +343,10 @@ const Page = () => {
                       spacing={1}
                     >
                       <Typography variant="subtitle2">
-                        user_id:
+                        taskId:
                       </Typography>
                       <Chip
-                        label={customer.member_user_id}
+                        label={customer.taskId}
                         size="small"
                       />
                     </Stack>
@@ -354,7 +354,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-             <CustomerEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
+             <NewTaskEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>
