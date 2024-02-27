@@ -292,7 +292,7 @@ const addTask = async (req, res) => {
 const editTask = async (req, res) => {
   try {
     // Extract task data from request body
-    const { taskId } = req.body;
+    const { taskId } = req.params;
     const imageFiles = req.files;
     const imageData = [];
 
@@ -362,6 +362,33 @@ const getAllStakes = async (req, res) => {
   try {
     // Retrieve Stakes from the database
     const stakes = await Stake.find();
+
+    // Check if there are no stakes found
+    if (!stakes || stakes.length === 0) {
+      return res.status(404).json({
+        message: "No stakes found",
+      });
+    }
+
+    // Respond with the Stakes
+    return res.status(200).json({
+      message: "Stakes retrieved successfully",
+      data: stakes,
+    });
+  } catch (error) {
+    console.error("Error retrieving stakes:", error);
+    return res.status(500).json({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+
+const getAllStake = async (req, res) => {
+  try {
+    const { member_user_id } = req.user;
+    const stakes = await Stake.find({ member_user_id: member_user_id });
 
     // Check if there are no stakes found
     if (!stakes || stakes.length === 0) {
@@ -585,4 +612,8 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+<<<<<<< HEAD
 module.exports = { getAllStakes, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser };
+=======
+module.exports = { getAllStake, getAllStakes, getAllTasks, addTask, getOneTask,getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };
+>>>>>>> 343875352213d1af43829b0ca306bb9fe14bed26
