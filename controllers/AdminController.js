@@ -8,6 +8,24 @@ const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storag
 const azurecontainer = process.env.AZURE_CONTAINER;
 const azureconnectionString = process.env.AZURE_STRING;
 
+
+const getuserbalance = async (req, res) => {
+  try {
+    const userId = req.user.member_user_id;
+
+    const member = await Member.findOne({ member_user_id: userId });
+
+    if (!member) {
+      return res.status(404).json({ message: 'Member not found' });
+    }
+
+    return res.status(200).json({ balance: member.coins });
+
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+  }
+
 const completeTask = async (req, res) => {
   try {
     const { taskId } = req.body;
@@ -632,4 +650,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance,getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
