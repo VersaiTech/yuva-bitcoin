@@ -121,11 +121,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.stake),
-            path: paths.dashboard.stake.index
+            path: paths.dashboard.stake.create
           },
           {
             title: t(tokens.nav.stakeHistory),
-            path: paths.dashboard.stake.stakeHistory
+            path: paths.dashboard.stake.index
           }
         ]
       },
