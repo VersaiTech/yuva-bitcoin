@@ -141,6 +141,7 @@ const Page = () => {
         </title>
       </Head>
       <Divider />
+      <DepositOperations/>
       <Box
         component="main"
         ref={rootRef}
@@ -164,9 +165,7 @@ const Page = () => {
             position: 'absolute',
             right: 0,
             top: 0,
-            
-          
-            
+  
         
           }}
         >
@@ -204,7 +203,7 @@ const Page = () => {
               rowsPerPage={search.rowsPerPage}
             />
           </DepositsListContainer> */}
-          <DepositOperations/>
+
           
           <OrderDrawer
             container={rootRef.current}
