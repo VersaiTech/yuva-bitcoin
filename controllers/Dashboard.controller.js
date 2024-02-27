@@ -2,7 +2,9 @@ const Member = require("../models/memberModel");
 const Admin = require("../models/AdminModel");
 
 const getDashboardData = async (req, res) => {
-  const member_user_id = req.user;
+  const {member_user_id} = req.user;
+
+  console.log(member_user_id);
 
   try {
     const user = await Member.findOne({member_user_id: member_user_id});
