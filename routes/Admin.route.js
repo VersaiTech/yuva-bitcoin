@@ -5,7 +5,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { getOverview } = require('../controllers/Overview.controller');
-const { getAllStakes,getAllStake, addTask, editTask, deleteTask, getOneTask,deleteUser, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks,getConfirmedTasksForUser,getPendingTasksForUser,getRejectedTasksForUser,getAllTasksUser } = require('../controllers/AdminController');
+const { getuserbalance,getAllStakes,getAllStake, addTask, editTask, deleteTask, getOneTask,deleteUser, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks,getConfirmedTasksForUser,getPendingTasksForUser,getRejectedTasksForUser,getAllTasksUser } = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask);
@@ -37,5 +37,7 @@ router.route("/getAllStakes").get(isAdmin, getAllStakes);
 router.route("/getAllStake").get(ValidMember, getAllStake);
 
 router.route("/getOverview").get(isAdmin, getOverview);
+
+router.route("/getuserbalance").get(ValidMember, getuserbalance);
 
 module.exports = router;
