@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import Head from 'next/head';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import { Avatar, Box,Button, Chip, Container, Link, Stack, SvgIcon, Typography, Card, CardHeader, CardContent, Divider, List } from '@mui/material';
+import { Avatar, Box, Button, Chip, Container, Link, Stack, SvgIcon, Typography, Card, CardHeader, CardContent, Divider, List } from '@mui/material';
 // import { customersApi } from '../../../../api/customers';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
@@ -123,126 +123,68 @@ const Page = () => {
                   </Typography>
                 </Link>
               </div>
-              <Box
-      sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
-      }}
-    >
-      <Container maxWidth="sm">
-        <Card>
-          <CardHeader
-            subheader={(
-              <Typography variant="h4">
-                {"₹" + customer}
-              </Typography>
-            )}
-            sx={{ pb: 0 }}
-            title={(
-              <Typography
-                color="text.secondary"
-                variant="overline"
-              >
-                Total balance
-              </Typography>
-            )}
-          />
-          <CardContent>
-            <Divider sx={{ mb: 2 }} />
-            <Typography
-              color="text.secondary"
-              variant="overline"
-            >
-              Available currency
-            </Typography>
-            {/* <List
-              disablePadding
-              sx={{ pt: 2 }}
-            >
-              {assets.map((currency) => {
-                const amount = numeral(currency.amount).format('$0,0.00');
-
-                return (
-                  <ListItem
-                    disableGutters
-                    key={currency.name}
-                    sx={{
-                      pb: 2,
-                      pt: 0
-                    }}
-                  >
-                    <ListItemText
-                      disableTypography
-                      primary={(
-                        <Stack
-                          alignItems="center"
-                          direction="row"
-                          justifyContent="space-between"
-                          spacing={2}
+              <div>
+                <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+                  <Card>
+                    <CardHeader
+                      subheader={(
+                        <Typography variant="h4" color="green">
+                          {"₹" + customer}
+                        </Typography>
+                      )}
+                      sx={{ pb: 0 }}
+                      title={(
+                        <Typography
+                          color="text.secondary"
+                          variant="overline"
                         >
-                          <Stack
-                            alignItems="center"
-                            direction="row"
-                            spacing={2}
-                          >
-                            <Box
-                              sx={{
-                                backgroundColor: currency.color,
-                                height: 8,
-                                width: 8,
-                                borderRadius: '50%'
-                              }}
-                            />
-                            <Typography variant="subtitle2">
-                              {currency.name}
-                            </Typography>
-                          </Stack>
-                          <Typography
-                            color="text.secondary"
-                            variant="subtitle2"
-                          >
-                            {amount}
-                          </Typography>
-                        </Stack>
+                          Total balance
+                        </Typography>
                       )}
                     />
-                  </ListItem>
-                );
-              })}
-            </List> */}
-            <Divider />
-            <Stack
-              alignItems="flex-start"
-              spacing={1}
-              sx={{ mt: 2 }}
-            >
-              <Button
-                color="inherit"
-                endIcon={(
-                  <SvgIcon>
-                    <ArrowRightIcon />
-                  </SvgIcon>
-                )}
-              >
-                Add money
-              </Button>
-              <Button
-                color="inherit"
-                endIcon={(
-                  <SvgIcon>
-                    <ArrowRightIcon />
-                  </SvgIcon>
-                )}
-              >
-                Withdraw funds
-              </Button>
-            </Stack>
-          </CardContent>
-        </Card>
-      </Container>
-    </Box>
+                    <CardContent>
+                      <Divider sx={{ mb: 2 }} />
+                      <Typography
+                        color="text.secondary"
+                        variant="overline"
+                      >
+                        Available currency
+                      </Typography>
+                      <Divider />
+                      <Stack
+                        alignItems="flex-start"
+                        spacing={1}
+                        sx={{ mt: 2 }}
+                      >
+                        <Link component={NextLink}  href={paths.dashboard.deposits.index}>
+                        <Button
+                          color="inherit"
+                          endIcon={(
+                            <SvgIcon>
+                              <ArrowRightIcon />
+                            </SvgIcon>
+                          )}
+                        >
+                          Add money
+                        </Button>
+                        </Link>
+                        <Link component={NextLink}  href={paths.dashboard.withdraw.index}>
+                        <Button
+                          color="inherit"
+                          endIcon={(
+                            <SvgIcon>
+                              <ArrowRightIcon />
+                            </SvgIcon>
+                          )}
+                        >
+                          Withdraw funds
+                        </Button>
+                        </Link>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Container>
+              </div>
               {/* <Stack
                 alignItems="flex-start"
                 direction={{
@@ -287,7 +229,7 @@ const Page = () => {
                 </Stack>
               </Stack> */}
             </Stack>
-             <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
+            <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>

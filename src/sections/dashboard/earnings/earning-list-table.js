@@ -371,7 +371,7 @@ export const EarningListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.dashboard.stake.index}
+                          href={paths.dashboard.earnings.index}
                           variant="subtitle2"
                         >
                           {customer.name}
