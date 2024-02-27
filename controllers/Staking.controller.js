@@ -269,7 +269,7 @@ async function transferToStaking(req, res) {
     // Save the new Stake
     const savedStake = await newStake.save();
 
-    res.status(201).json(savedStake);
+    res.status(200).json(savedStake);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
