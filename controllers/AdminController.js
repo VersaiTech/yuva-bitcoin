@@ -358,6 +358,7 @@ const deleteTask = async (req, res) => {
   }
 };
 
+// for admin
 const getAllStakes = async (req, res) => {
   try {
     // Retrieve Stakes from the database
@@ -384,7 +385,7 @@ const getAllStakes = async (req, res) => {
   }
 };
 
-
+//for user 
 const getAllStake = async (req, res) => {
   try {
     const { member_user_id } = req.user;
@@ -612,8 +613,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-<<<<<<< HEAD
-module.exports = { getAllStakes, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser };
-=======
-module.exports = { getAllStake, getAllStakes, getAllTasks, addTask, getOneTask,getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks };
->>>>>>> 343875352213d1af43829b0ca306bb9fe14bed26
+module.exports = { getAllStakes,getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser };
