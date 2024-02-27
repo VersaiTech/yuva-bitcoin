@@ -14,6 +14,9 @@ import { CryptoOperation } from '../../../sections/dashboard/crypto/crypto-opera
 import { DepositOperations } from './depositBanner';
 import { ceil } from 'lodash';
 import { auto } from '@popperjs/core';
+import axios from 'axios';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -41,7 +44,14 @@ const useOrders = (search) => {
 
   const getOrders = useCallback(async () => {
     try {
-      const response = await ordersApi.getOrders(search);
+
+     const token = localStorage.getItem('accessToken');
+      const headers = {
+        Authorization: token,
+      }
+
+      const response = await axios.get(`${BASEURL}/api/Deposit/getDepositsForUser`, { headers: headers })
+      console.log(response.data)
 
       if (isMounted()) {
         setState({
