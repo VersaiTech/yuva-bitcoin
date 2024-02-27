@@ -1,126 +1,255 @@
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import numeral from 'numeral';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import numeral from "numeral";
+import PropTypes from "prop-types";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
+  Avatar,
   Box,
+  Button,
+  Checkbox,
+  IconButton,
+  Link,
+  Stack,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { SeverityPill } from '../../../components/severity-pill';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "../../../components/scrollbar";
+import { paths } from "../../../paths";
+import { getInitials } from "../../../utils/get-initials";
 
-const statusMap = {
-  complete: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  rejected: 'error'
+const useSelectionModel = (customers) => {
+  const customerIds = useMemo(() => {
+    return customers.map((customer) => customer.member_user_id);
+  }, [customers]);
+  const [selected, setSelected] = useState([]);
+
+  useEffect(() => {
+    setSelected([]);
+  }, [customerIds]);
+
+  const selectOne = useCallback((customerId) => {
+    setSelected((prevState) => [...prevState, customerId]);
+  }, []);
+
+  const deselectOne = useCallback((customerId) => {
+    setSelected((prevState) => {
+      return prevState.filter((id) => id !== customerId);
+    });
+  }, []);
+
+  const selectAll = useCallback(() => {
+    setSelected([...customerIds]);
+  }, [customerIds]);
+
+  const deselectAll = useCallback(() => {
+    setSelected([]);
+  }, []);
+
+  return {
+    deselectAll,
+    deselectOne,
+    selectAll,
+    selectOne,
+    selected,
+  };
 };
 
-export const OrderListTable = (props) => {
+export const NewtaskListTable = (props) => {
   const {
-    onOrderSelect,
+    customers,
+    customersCount,
     onPageChange,
     onRowsPerPageChange,
-    orders,
-    ordersCount,
     page,
     rowsPerPage,
     ...other
   } = props;
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
+    useSelectionModel(customers);
+    
+
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
+
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
+
+  const selectedAll = selected.length === customers.length;
+  const selectedSome =
+    selected.length > 0 && selected.length < customers.length;
+  const enableBulkActions = selected.length > 0;
+
 
   return (
-    <div {...other}>
-      <Table>
-        <TableBody>
-          {orders.map((order) => {
-            const createdAtMonth = format(order.createdAt, 'LLL').toUpperCase();
-            const createdAtDay = format(order.createdAt, 'd');
-            const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
-            const statusColor = statusMap[order.status] || 'warning';
+    <Box sx={{ position: "relative" }} {...other}>
+      {enableBulkActions && (
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            px: 2,
+            py: 0.5,
+            zIndex: 10,
+          }}
+        >
+          <Checkbox
+            checked={selectedAll}
+            indeterminate={selectedSome}
+            onChange={handleToggleAll}
+          />
+          <Button color="inherit" size="small">
+            Delete
+          </Button>
+          <Button color="inherit" size="small">
+            Edit
+          </Button>
+        </Stack>
+      )}
+      <Scrollbar>
+        <Table sx={{ minWidth: 700 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell padding="checkbox">
+                <Checkbox
+                  checked={selectedAll}
+                  indeterminate={selectedSome}
+                  onChange={handleToggleAll}
+                />
+              </TableCell>
+              <TableCell>Task Name</TableCell>
+              <TableCell>Task Id</TableCell>
+              <TableCell>Coins</TableCell>
+              <TableCell> Description</TableCell>
+              <TableCell>Link</TableCell>
+              {/* <TableCell align="right">Actions</TableCell> */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {customers.map((customer) => {
+              const isSelected = selected.includes(customer.taskId);
+              // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
+              // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
-            return (
-              <TableRow
-                hover
-                key={order.id}
-                onClick={() => onOrderSelect?.(order.id)}
-                sx={{ cursor: 'pointer' }}
-              >
-                <TableCell
-                  sx={{
-                    alignItems: 'center',
-                    display: 'flex'
-                  }}
-                >
-                  <Box
-                    sx={{
-                      backgroundColor: (theme) => theme.palette.mode === 'dark'
-                        ? 'neutral.800'
-                        : 'neutral.200',
-                      borderRadius: 2,
-                      maxWidth: 'fit-content',
-                      ml: 3,
-                      p: 1
-                    }}
-                  >
-                    <Typography
-                      align="center"
-                      variant="subtitle2"
-                    >
-                      {createdAtMonth}
-                    </Typography>
-                    <Typography
-                      align="center"
-                      variant="h6"
-                    >
-                      {createdAtDay}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ ml: 2 }}>
+              return (
+                <TableRow hover key={customer.taskId + 1} selected={isSelected}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={isSelected}
+                      onChange={(event) => {
+                        const { checked } = event.target;
+
+                        if (checked) {
+                          selectOne(customer.taskId);
+                        } else {
+                          deselectOne(customer.taskId);
+                        }
+                      }}
+                      value={isSelected}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Stack alignItems="center" direction="row" spacing={1}>
+                      <Avatar
+                        src={customer.taskName}
+                        sx={{
+                          height: 42,
+                          width: 42,
+                        }}
+                      >
+                        {getInitials(customer.taskName)}
+                        
+                      </Avatar>
+                      <div>
+                        <Link
+                          color="inherit"
+                          component={NextLink}
+                          href={paths.dashboard.tasks.index}
+                          variant="subtitle2"
+                        >
+                          {customer.taskName}
+                        </Link>
+                        <Typography color="text.secondary" variant="body2">
+                          {customer.email}
+                        </Typography>
+                      </div>
+                    </Stack>
+                  </TableCell>
+                  <TableCell>{customer.taskId}</TableCell>
+                  
+
+                  <TableCell>{customer.coins}</TableCell>
+                  
+                  <TableCell>{customer.description}</TableCell>
+                  <TableCell>
                     <Typography variant="subtitle2">
-                      {order.number}
+                      {customer.link}
                     </Typography>
-                    <Typography
-                      color="text.secondary"
-                      variant="body2"
+                  </TableCell>
+                  <TableCell align="right">
+                    {/* <IconButton
+                      component={NextLink}
+                      href={`${paths.dashboard.users.edit}${customer.member_user_id}/edit`}
                     >
-                      Total of
-                      {' '}
-                      {totalAmount}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell align="right">
-                  <SeverityPill color={statusColor}>
-                    {order.status}
-                  </SeverityPill>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+                      <SvgIcon>
+                        <Edit02Icon />
+                      </SvgIcon>
+                    </IconButton> */}
+                    {/* <IconButton
+                      component={NextLink}
+                      href={paths.dashboard.customers.details}
+                    >
+                      <SvgIcon>
+                        <ArrowRightIcon />
+                      </SvgIcon>
+                    </IconButton> */}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </Scrollbar>
       <TablePagination
         component="div"
-        count={ordersCount}
+        count={customersCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-    </div>
+    </Box>
   );
 };
 
-OrderListTable.propTypes = {
-  onOrderSelect: PropTypes.func,
+NewtaskListTable.propTypes = {
+  customers: PropTypes.array.isRequired,
+  customersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
-  orders: PropTypes.array.isRequired,
-  ordersCount: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

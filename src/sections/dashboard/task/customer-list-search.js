@@ -16,20 +16,16 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'All',
+    label: 'Today Task',
     value: 'all'
   },
   {
-    label: 'Accepts Marketing',
+    label: 'Completed',
     value: 'hasAcceptedMarketing'
   },
   {
-    label: 'Prospect',
+    label: 'Failed',
     value: 'isProspect'
-  },
-  {
-    label: 'Returning',
-    value: 'isReturning'
   }
 ];
 
@@ -52,7 +48,7 @@ const sortOptions = [
   }
 ];
 
-export const CustomerListSearch = (props) => {
+export const TaskListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
@@ -169,7 +165,7 @@ export const CustomerListSearch = (props) => {
   );
 };
 
-CustomerListSearch.propTypes = {
+TaskListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
