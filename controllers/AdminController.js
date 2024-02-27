@@ -96,7 +96,7 @@ const getAllTasksUser = async (req, res) => {
   try {
     const userId = req.user.member_user_id;
     const tasks = await CompletedTask.find({userId});
-    res.json(tasks);
+    res.json(tasks); 
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
