@@ -44,7 +44,7 @@ const ProductCreate = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.tasks.index}
+                  href={paths.dashboard.newtask.index}
                   variant="subtitle2"
                 >
                   Task

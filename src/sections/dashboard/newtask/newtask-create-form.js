@@ -325,7 +325,7 @@ export const NewTaskForm = (props) => {
           justifyContent="flex-end"
           spacing={1}
         >
-          <Link href={paths.dashboard.tasks.index}><Button color="inherit">Cancel</Button></Link>
+          <Link href={paths.dashboard.newtask.index}><Button color="inherit">Cancel</Button></Link>
           <Button type="submit" variant="contained">
             Create
           </Button>
