@@ -23,14 +23,14 @@ const tabOptions = [
   //   label: 'Canceled',
   //   value: 'canceled'
   // },
-  {
-    label: 'Completed',
-    value: 'complete'
-  },
-  {
-    label: 'Failed',
-    value: 'pending'
-  },
+  // {
+  //   label: 'Completed',
+  //   value: 'complete'
+  // },
+  // {
+  //   label: 'Failed',
+  //   value: 'pending'
+  // },
   // {
   //   label: 'Rejected',
   //   value: 'rejected'

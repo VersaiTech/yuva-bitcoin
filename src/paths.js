@@ -68,6 +68,7 @@ export const paths = {
     },
     stake: {
       index: '/dashboard/stake',
+      create: '/dashboard/stake/create',
       stakeHistory: '/dashboard/stakehistory'
     },
     withdraw: {
