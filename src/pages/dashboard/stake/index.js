@@ -13,7 +13,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { customersApi } from "../../../api/customers";
+// import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
