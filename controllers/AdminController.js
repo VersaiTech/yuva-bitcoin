@@ -92,15 +92,15 @@ const confirmTaskCompletion = async (req, res) => {
   }
 };
 
-// Example controller to get all tasks
-// const getAllTasks = async (req, res) => {
-//   try {
-//     const tasks = await Task.find();
-//     res.json(tasks);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
+const getAllTasksUser = async (req, res) => {
+  try {
+    const userId = req.user.member_user_id;
+    const tasks = await CompletedTask.find({userId});
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 const getAllTasks = async (req, res) => {
@@ -632,4 +632,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser,getRejectedTasksForUser };
+module.exports = { getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
