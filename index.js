@@ -24,6 +24,7 @@ app.use(cors());
 // const db = require('./config/db.config.js');
 
 app.use('/admin', require('./routes/Admin.route'));
+app.use('/api/Coin', require('./routes/Coin.route'));
 app.use('/api/Auth', require('./routes/Auth.route'));
 app.use('/api/Dashboard', require('./routes/Dashboard.route'));
 app.use('/api/Staking', require('./routes/Staking.route'));
