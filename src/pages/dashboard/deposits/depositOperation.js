@@ -14,6 +14,8 @@ import { CryptoOperation } from '../../../sections/dashboard/crypto/crypto-opera
 import { DepositOperations } from './depositBanner';
 import { ceil } from 'lodash';
 import { auto } from '@popperjs/core';
+import axios from 'axios';
+
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -170,7 +172,7 @@ const Page = () => {
         
           }}
         >
-          {/* <DepositsListContainer open={drawer.isOpen}>
+          <DepositsListContainer open={drawer.isOpen}>
             <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
@@ -203,8 +205,8 @@ const Page = () => {
               page={search.page}
               rowsPerPage={search.rowsPerPage}
             />
-          </DepositsListContainer> */}
-          <DepositOperations/>
+          </DepositsListContainer>
+          {/* <DepositOperations/> */}
           
           <OrderDrawer
             container={rootRef.current}

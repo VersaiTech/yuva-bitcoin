@@ -140,7 +140,7 @@ export const NewtaskListTable = (props) => {
                 />
               </TableCell>
               <TableCell>Task Name</TableCell>
-              <TableCell>Task Id</TableCell>
+              {/* <TableCell>Task Id</TableCell> */}
               <TableCell>Coins</TableCell>
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
@@ -197,7 +197,7 @@ export const NewtaskListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{customer.taskId}</TableCell>
+                  {/* <TableCell>{customer.taskId}</TableCell> */}
                   
 
                   <TableCell>{customer.coins}</TableCell>

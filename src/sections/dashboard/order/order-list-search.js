@@ -16,11 +16,11 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'All Task',
+    label: 'Today Task',
     value: 'all',
   },
   {
-    label: 'Failed Task',
+    label: 'Pending  Task',
     value: 'hasAcceptedMarketing'
   },
   {

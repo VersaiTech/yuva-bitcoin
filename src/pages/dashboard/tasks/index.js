@@ -71,16 +71,23 @@ const useCustomers = (search) => {
       
       
         const completedTasks = await axios.get(
-          `${BASEURL}/admin/completeTask`,
+          `${BASEURL}/admin/getConfirmedTasksForUser`,
           { headers: headers }
           );
           console.log(completedTasks.data);
+
+
+          const pendingTasks = await axios.get(
+            `${BASEURL}/admin/getPendingTasksForUser`,
+            { headers: headers }
+          );
+          console.log(pendingTasks.data);
           
       if (isMounted()) {
         setState({
           customers: response.data,
           customersCount: response.count,
-          // pending: PendingTasks.data,
+          pending: pendingTasks.data,
           completed: completedTasks.data,
         });
       }
