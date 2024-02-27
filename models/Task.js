@@ -22,7 +22,7 @@ const completedTaskSchema = new mongoose.Schema({
     dateCompleted: { type: Date, default: Date.now },
     status: {
         type: String,
-        enum: ['pending', 'confirmed'],
+        enum: ['pending', 'confirmed','rejected'],
         default: 'pending'
     }
 }, { timestamps: true });

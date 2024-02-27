@@ -5,13 +5,14 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { getOverview } = require('../controllers/Overview.controller');
-const { getAllStakes,getAllStake, addTask, editTask, deleteTask, getOneTask,deleteUser, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks,getConfirmedTasksForUser,getPendingTasksForUser } = require('../controllers/AdminController');
+const { getAllStakes,getAllStake, addTask, editTask, deleteTask, getOneTask,deleteUser, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks,getConfirmedTasksForUser,getPendingTasksForUser,getRejectedTasksForUser } = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask);
 router.route('/getAllTasks').get(ValidMember, getAllTasks);
 router.route('/getConfirmedTasksForUser').get(ValidMember, getConfirmedTasksForUser);
 router.route('/getPendingTasksForUser').get(ValidMember, getPendingTasksForUser);
+router.route('/getRejectedTasksForUser').get(ValidMember, getRejectedTasksForUser);
 router.route('/getOneTask/:taskId').get(isAdmin, getOneTask);
 router.route('/getAllTasksAdmin').get(isAdmin, getAllTasks);
 router.route('/editTask/:taskId').post(isAdmin, upload.array('file', 10), editTask);

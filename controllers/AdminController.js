@@ -114,40 +114,59 @@ const getAllTasks = async (req, res) => {
 
 const getConfirmedTasksForUser = async (req, res) => {
   try {
-      const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
 
-      // Fetch confirmed tasks for the user
-      const confirmedTasks = await CompletedTask.find({
-          userId,
-          status: 'confirmed'
-      })
-      // .populate('taskId');  // Populate the 'taskId' field with the Task details
+    // Fetch confirmed tasks for the user
+    const confirmedTasks = await CompletedTask.find({
+      userId,
+      status: 'confirmed'
+    })
+    // .populate('taskId');  // Populate the 'taskId' field with the Task details
 
-      res.status(200).json(confirmedTasks);
+    res.status(200).json(confirmedTasks);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 
 const getPendingTasksForUser = async (req, res) => {
-    try {
-        const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
-  
-        // Fetch confirmed tasks for the user
-        const confirmedTasks = await CompletedTask.find({
-            userId,
-            status: 'pending'
-        })
-        // .populate('taskId');  // Populate the 'taskId' field with the Task details
-  
-        res.status(200).json(confirmedTasks);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-  };
+  try {
+    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+
+    // Fetch confirmed tasks for the user
+    const confirmedTasks = await CompletedTask.find({
+      userId,
+      status: 'pending'
+    })
+    // .populate('taskId');  // Populate the 'taskId' field with the Task details
+
+    res.status(200).json(confirmedTasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const getRejectedTasksForUser = async (req, res) => {
+  try {
+    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+
+    // Fetch confirmed tasks for the user
+    const confirmedTasks = await CompletedTask.find({
+      userId,
+      status: 'rejected'
+    })
+    // .populate('taskId');  // Populate the 'taskId' field with the Task details
+
+    res.status(200).json(confirmedTasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 const getOneTask = async (req, res) => {
   try {
@@ -613,4 +632,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getAllStakes,getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser };
+module.exports = { getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser,getRejectedTasksForUser };
