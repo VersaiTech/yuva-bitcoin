@@ -72,21 +72,22 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.earnings),
+        path: paths.dashboard.earnings.index,
         icon: (
           <SvgIcon fontSize="small">
             <LineChartUp04Icon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.earnings),
-            path: paths.dashboard.earnings.index
-          },
-          {
-            title: t(tokens.nav.earningsDetails),
-            path: paths.dashboard.earnings.details
-          }
-        ]
+        // items: [
+        //   {
+        //     title: t(tokens.nav.earnings),
+        //     path: paths.dashboard.earnings.index
+        //   },
+          // {
+          //   title: t(tokens.nav.earningsDetails),
+          //   path: paths.dashboard.earnings.details
+          // }
+        // ]
       },
     ],
   },
@@ -139,11 +140,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.withdraw),
-            path: paths.dashboard.withdraw.index
+            path: paths.dashboard.withdraw.create
           },
           {
             title: t(tokens.nav.withdrawHistory),
-            path: paths.dashboard.withdraw.withdrawHistory
+            path: paths.dashboard.withdraw.index
           }
         ]
       },

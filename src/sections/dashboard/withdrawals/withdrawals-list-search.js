@@ -19,22 +19,22 @@ const tabOptions = [
     label: 'All',
     value: 'all'
   },
-  {
-    label: 'Canceled',
-    value: 'canceled'
-  },
-  {
-    label: 'Completed',
-    value: 'complete'
-  },
-  {
-    label: 'Pending',
-    value: 'pending'
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected'
-  }
+  // {
+  //   label: 'Canceled',
+  //   value: 'canceled'
+  // },
+  // {
+  //   label: 'Completed',
+  //   value: 'complete'
+  // },
+  // {
+  //   label: 'Pending',
+  //   value: 'pending'
+  // },
+  // {
+  //   label: 'Rejected',
+  //   value: 'rejected'
+  // }
 ];
 
 const sortOptions = [
