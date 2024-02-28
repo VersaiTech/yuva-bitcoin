@@ -4,8 +4,7 @@ import numeral from "numeral";
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
-import YuvaLogo from "./yuvalogo2.svg"
-
+import YuvaLogo from "../../../../public/output-onlinepngtools.png";
 import {
   Avatar,
   Box,
@@ -26,6 +25,7 @@ import {
 import { Scrollbar } from "../../../components/scrollbar";
 import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
+import { useRouter } from "next/router";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -65,6 +65,7 @@ const useSelectionModel = (customers) => {
 };
 
 export const NewtaskListTable = (props) => {
+  const router = useRouter();
   const {
     customers,
     customersCount,
@@ -76,7 +77,7 @@ export const NewtaskListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
-    
+
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -182,7 +183,8 @@ export const NewtaskListTable = (props) => {
                         }}
                       >
                         {/* {getInitials(customer.taskName)} */}
-                        <img src={YuvaLogo} alt="Yuva Logo" />
+                        {/* <YuvaLogo/> */}
+                        <img src='/output-onlinepngtools.png' alt="Yuva Logo" />
 
                       </Avatar>
                       <div>
@@ -201,15 +203,29 @@ export const NewtaskListTable = (props) => {
                     </Stack>
                   </TableCell>
                   {/* <TableCell>{customer.taskId}</TableCell> */}
-                  
+
 
                   <TableCell>{customer.coins}</TableCell>
-                  
+
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">
-                      {customer.link}
-                    </Typography>
+                    {customer.link ? (
+                      <Link
+                        color="inherit"
+                        href={customer.link}
+                        target="_blank"
+                        variant="subtitle2"
+                        onClick={(e) => {
+                          e.preventDefault(); 
+                          router.push(customer.link); 
+                        }}
+                      >
+                        {customer.link}
+                      </Link>
+                    ) : (
+                      <Typography variant="subtitle2">N/A</Typography>
+                    )}
+
                   </TableCell>
                   <TableCell align="right">
                     {/* <IconButton
