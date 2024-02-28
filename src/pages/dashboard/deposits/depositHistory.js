@@ -18,12 +18,8 @@ import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-// import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
-// import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
-import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
-import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
-import { NewtaskListSearch } from "../../../sections/dashboard/task/order-list-search";
-import { NewtaskListTable } from "../../../sections/dashboard/task/order-list-table";
+import { DepositListSearch } from "../../../sections/dashboard/depostis/deposits-list-search";
+import { DepositListTable } from "../../../sections/dashboard/depostis/deposits-list-table";
 import axios from "axios";
 import { logs } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -64,31 +60,20 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/admin/getAllTasks`,
+        `${BASEURL}/api/Deposit/getDepositsForUser`,
         { headers: headers }
       );
         console.log(response.data);
       
       
-        const completedTasks = await axios.get(
-          `${BASEURL}/admin/getConfirmedTasksForUser`,
-          { headers: headers }
-          );
-          console.log(completedTasks.data);
-
-
-          const pendingTasks = await axios.get(
-            `${BASEURL}/admin/getPendingTasksForUser`,
-            { headers: headers }
-          );
-          console.log(pendingTasks.data);
+        
           
       if (isMounted()) {
         setState({
           customers: response.data,
           customersCount: response.count,
-          pending: pendingTasks.data,
-          completed: completedTasks.data,
+          // pending: pendingTasks.data,
+          // completed: completedTasks.data,
         });
       }
     } catch (err) {
@@ -219,7 +204,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <NewtaskListSearch
+              <DepositListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
@@ -229,7 +214,7 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <NewtaskListTable
+              <DepositListTable 
                 // customers={customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}

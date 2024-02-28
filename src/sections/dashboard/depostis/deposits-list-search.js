@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import {
@@ -14,48 +14,49 @@ import {
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
-const tabOptions = [
+const tabs = [
   {
-    label: 'All',
-    value: 'all'
-  },
-  {
-    label: 'Canceled',
-    value: 'canceled'
-  },
-  {
-    label: 'Completed',
-    value: 'complete'
-  },
-  {
-    label: 'Pending',
-    value: 'pending'
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected'
+    label: 'All Deposits',
+    value: 'all',
   }
+  // ,
+  // {
+  //   label: 'Returning',
+  //   value: 'isReturning'
+  // }
 ];
 
 const sortOptions = [
   {
-    label: 'Newest',
-    value: 'desc'
+    label: 'Last update (newest)',
+    value: 'updatedAt|desc'
   },
   {
-    label: 'Oldest',
-    value: 'asc'
+    label: 'Last update (oldest)',
+    value: 'updatedAt|asc'
   }
 ];
 
-export const DepositsListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
+export const DepositListSearch = (props) => {
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
   const queryRef = useRef(null);
-  const [currentTab, setCurrentTab] = useState('all');
-  const [filters, setFilters] = useState({
-    query: undefined,
-    status: undefined
-  });
+  // const [currentTab, setCurrentTab] = useState('all');
+  const [filters, setFilters] = useState({});
+
+  // const [activeUsers, setActiveUsers] = useState([]);
+  const urlParams = new URLSearchParams(window.location.search);
+  const sturl = urlParams.get('status');
+  console.log(sturl);
+
+  useEffect(() => {
+    if(sturl){
+      setCurrentTab(sturl);
+    }
+  }, [sturl]);
+
+  useEffect(() => {
+    console.log(currentTab);
+  })
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -65,32 +66,43 @@ export const DepositsListSearch = (props) => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
 
-  const handleTabsChange = useCallback((event, tab) => {
-    setCurrentTab(tab);
-    const status = tab === 'all' ? undefined : tab;
+  const handleTabsChange = useCallback(async(event, value) => {
+    setCurrentTab(value);
+    setFilters((prevState) => {
+      const updatedFilters = {
+        ...prevState,
+        hasAcceptedMarketing: undefined,
+        isProspect: undefined,
+        isReturning: undefined
+      };
 
-    setFilters((prevState) => ({
-      ...prevState,
-      status
-    }));
-  }, []);
+      if (value !== 'all') {
+        updatedFilters[value] = true;
+      }
+
+      return updatedFilters;
+    });
+  }, [setCurrentTab]);
 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
-    const query = queryRef.current?.value || '';
     setFilters((prevState) => ({
       ...prevState,
-      query
+      query: queryRef.current?.value
     }));
   }, []);
 
   const handleSortChange = useCallback((event) => {
-    const sortDir = event.target.value;
-    onSortChange?.(sortDir);
+    const [sortBy, sortDir] = event.target.value.split('|');
+
+    onSortChange?.({
+      sortBy,
+      sortDir
+    });
   }, [onSortChange]);
 
   return (
-    <div>
+    <>
       <Tabs
         indicatorColor="primary"
         onChange={handleTabsChange}
@@ -100,7 +112,7 @@ export const DepositsListSearch = (props) => {
         value={currentTab}
         variant="scrollable"
       >
-        {tabOptions.map((tab) => (
+        {tabs.map((tab) => (
           <Tab
             key={tab.value}
             label={tab.label}
@@ -113,7 +125,7 @@ export const DepositsListSearch = (props) => {
         alignItems="center"
         direction="row"
         flexWrap="wrap"
-        gap={3}
+        spacing={3}
         sx={{ p: 3 }}
       >
         <Box
@@ -125,8 +137,7 @@ export const DepositsListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            name="orderNumber"
-            placeholder="Search by order number"
+            placeholder="Search Deposit"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -142,7 +153,7 @@ export const DepositsListSearch = (props) => {
           onChange={handleSortChange}
           select
           SelectProps={{ native: true }}
-          value={sortDir}
+          value={`${sortBy}|${sortDir}`}
         >
           {sortOptions.map((option) => (
             <option
@@ -154,13 +165,15 @@ export const DepositsListSearch = (props) => {
           ))}
         </TextField>
       </Stack>
-    </div>
+    </>
   );
 };
 
-DepositsListSearch.propTypes = {
+DepositListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
-  sortDir: PropTypes.oneOf(['asc', 'desc'])
+  sortDir: PropTypes.oneOf(['asc', 'desc']),
+  pending: PropTypes.array,
+  completed: PropTypes.array,
 };

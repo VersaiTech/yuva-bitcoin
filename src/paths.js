@@ -59,7 +59,7 @@ export const paths = {
     },
     deposits:{
       index: '/dashboard/deposits',
-      depositsHistory: '/dashboard/deposits/depositOperation'
+      depositsHistory: '/dashboard/deposits/depositHistory'
     },
 
     refer : {
