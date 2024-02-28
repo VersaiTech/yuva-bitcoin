@@ -184,7 +184,7 @@ export const NewtaskListTable = (props) => {
                       >
                         {/* {getInitials(customer.taskName)} */}
                         {/* <YuvaLogo/> */}
-                        <img src='/output-onlinepngtools.png' alt="Yuva Logo" />
+                        <img src='/yuvalogo2 - copy.png' alt="Yuva Logo" />
 
                       </Avatar>
                       <div>
