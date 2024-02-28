@@ -162,7 +162,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Task</Typography>
+                <Typography variant="h4">Deposit History</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"

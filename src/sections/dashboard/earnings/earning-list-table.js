@@ -153,15 +153,14 @@
 //   rowsPerPage: PropTypes.number.isRequired
 // };
 
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
+import { SeverityPill } from "../../../components/severity-pill";
+import { useRouter } from "next/router";
 
-
-
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
-import { SeverityPill } from '../../../components/severity-pill';
 import {
   Avatar,
   Box,
@@ -177,18 +176,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from '../../../components/scrollbar';
-import { paths } from '../../../paths';
-import { getInitials } from '../../../utils/get-initials';
-
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "../../../components/scrollbar";
+import { paths } from "../../../paths";
+import { getInitials } from "../../../utils/get-initials";
 
 const statusMap = {
-  complete: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  rejected: 'error'
+  complete: "success",
+  pending: "info",
+  canceled: "warning",
+  rejected: "error",
 };
 
 const useSelectionModel = (orders) => {
@@ -224,11 +222,14 @@ const useSelectionModel = (orders) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
 export const EarningListTable = (props) => {
+  const router = useRouter();
+
+
   const {
     orders,
     ordersCount,
@@ -238,45 +239,46 @@ export const EarningListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(orders);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
+    useSelectionModel(orders);
 
-  console.log(orders)
+  console.log(orders);
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected.length === orders.length;
   const selectedSome = selected.length > 0 && selected.length < orders.length;
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <Checkbox
@@ -284,16 +286,10 @@ export const EarningListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Delete
           </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -302,34 +298,24 @@ export const EarningListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-              Description
-              </TableCell>
-              <TableCell>
-              Link
-              </TableCell>
-              <TableCell>
-              Coins
-              </TableCell>
-              <TableCell>
-              Status
-              </TableCell>
+              </TableCell> */}
+              <TableCell>Coins</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Link</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {orders.map((customer, index) => {
               const isSelected = selected.includes(customer.member_user_id);
-              const statusColor = statusMap[customer.status] || 'warning';
+              const statusColor = statusMap[customer.status] || "warning";
 
               return (
                 <TableRow
@@ -337,7 +323,7 @@ export const EarningListTable = (props) => {
                   key={customer.with_referrance}
                   selected={isSelected}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
@@ -351,58 +337,60 @@ export const EarningListTable = (props) => {
                       }}
                       value={isSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
                       >
-                        {getInitials(customer.name)}
+                        {/* {getInitials(customer.name)} */}
+                        <img src="/yuvalogo2 - copy.png" alt="Yuva Logo" />
                       </Avatar>
                       <div>
-                        <Link
+                        {/* <Link
                           color="inherit"
                           component={NextLink}
                           href={paths.dashboard.earnings.index}
                           variant="subtitle2"
                         >
                           {customer.name}
-                        </Link>
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
-                          {customer.taskName}
+                        </Link> */}
+                        <Typography color="yellow" variant="body2">
+                          <h2>{customer.coins}</h2>
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>
-                    {customer.description}
-                  </TableCell>
-                  <TableCell>
-                    {customer.link}
-                  </TableCell>
-                  <TableCell>
-                  {customer.coins}
-                  </TableCell>
-                  
+                  <TableCell>{customer.description}</TableCell>
+                  <TableCell>{customer.link ? (
+                      <Link
+                        color="inherit"
+                        href={customer.link}
+                        target="_blank"
+                        variant="subtitle2"
+                        onClick={(e) => {
+                          e.preventDefault(); 
+                          router.push(customer.link); 
+                        }}
+                      >
+                        {customer.link}
+                      </Link>
+                    ) : (
+                      <Typography variant="subtitle2">N/A</Typography>
+                    )}</TableCell>
+                  <TableCell>{customer.name}</TableCell>
+
                   <TableCell>
                     <Typography variant="subtitle2">
-                    <SeverityPill color={statusColor}>
-                      {customer.status}
-                    </SeverityPill>
+                      <SeverityPill color={statusColor}>
+                        {customer.status}
+                      </SeverityPill>
                     </Typography>
                   </TableCell>
-                 
                 </TableRow>
               );
             })}
@@ -428,5 +416,5 @@ EarningListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

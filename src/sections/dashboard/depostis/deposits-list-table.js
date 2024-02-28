@@ -133,13 +133,13 @@ export const DepositListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>Amount</TableCell>
               {/* <TableCell>Task Id</TableCell> */}
               <TableCell>Date</TableCell>
@@ -160,7 +160,7 @@ export const DepositListTable = (props) => {
                   key={customer.member_user_id + 1}
                   selected={isSelected}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
@@ -174,7 +174,7 @@ export const DepositListTable = (props) => {
                       }}
                       value={isSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar

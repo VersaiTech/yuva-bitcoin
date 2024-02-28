@@ -128,7 +128,6 @@
 //   rowsPerPage: PropTypes.number.isRequired
 // };
 
-
 // import { useCallback, useEffect, useMemo, useState } from 'react';
 // import NextLink from 'next/link';
 // import numeral from 'numeral';
@@ -408,15 +407,14 @@
 //   rowsPerPage: PropTypes.number.isRequired
 // };
 
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
+import { SeverityPill } from "../../../components/severity-pill";
+import TrendUp02Icon from "@untitled-ui/icons-react/build/esm/TrendUp02";
 
-
-
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
-import { SeverityPill } from '../../../components/severity-pill';
 import {
   Avatar,
   Box,
@@ -432,18 +430,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from '../../../components/scrollbar';
-import { paths } from '../../../paths';
-import { getInitials } from '../../../utils/get-initials';
-
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "../../../components/scrollbar";
+import { paths } from "../../../paths";
+import { getInitials } from "../../../utils/get-initials";
 
 const statusMap = {
-  Approved: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  Rejected: 'error'
+  Approved: "success",
+  pending: "info",
+  canceled: "warning",
+  Rejected: "error",
 };
 
 const useSelectionModel = (customers) => {
@@ -479,7 +476,7 @@ const useSelectionModel = (customers) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
@@ -493,45 +490,47 @@ export const WithdrawalsListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
+    useSelectionModel(customers);
 
-  console.log(customers)
+  console.log(customers);
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected.length === customers.length;
-  const selectedSome = selected.length > 0 && selected.length < customers.length;
+  const selectedSome =
+    selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <Checkbox
@@ -539,16 +538,10 @@ export const WithdrawalsListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Delete
           </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -557,22 +550,9 @@ export const WithdrawalsListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={handleToggleAll}
-                />
-              </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-              Amount
-              </TableCell>
-              <TableCell>
-              Status
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -586,35 +566,22 @@ export const WithdrawalsListTable = (props) => {
                   key={customer.with_referrance}
                   selected={isSelected}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        const { checked } = event.target;
-
-                        if (checked) {
-                          selectOne(customer.with_referrance);
-                        } else {
-                          deselectOne(customer.with_referrance);
-                        }
-                      }}
-                      value={isSelected}
-                    />
-                  </TableCell>
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
                       >
-                        {getInitials(customer.member_name)}
+                        <div>
+                          {/* Icon wrapped in a container with green color */}
+                          <span style={{ color: "green" }}>
+                            <TrendUp02Icon />
+                          </span>
+                        </div>
+                        {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
                         <Link
@@ -625,22 +592,19 @@ export const WithdrawalsListTable = (props) => {
                         >
                           {customer.member_name}
                         </Link>
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
+                        <Typography color="text.secondary" variant="body2">
                           {customer.member_user_id}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
+                  <TableCell>{customer.with_amt}</TableCell>
                   <TableCell>
-                    {customer.with_amt}
-                  </TableCell>
-                  <TableCell>
-                  <SeverityPill color={statusMap[customer.status] || 'warning'}>
-                  {customer.status}
-                  </SeverityPill>
+                    <SeverityPill
+                      color={statusMap[customer.status] || "warning"}
+                    >
+                      {customer.status}
+                    </SeverityPill>
                   </TableCell>
                 </TableRow>
               );
@@ -667,5 +631,5 @@ WithdrawalsListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };
