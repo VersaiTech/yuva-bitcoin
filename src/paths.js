@@ -73,6 +73,7 @@ export const paths = {
     },
     withdraw: {
       index: '/dashboard/withdrawals',
+      create: '/dashboard/withdrawals/create',
       withdrawHistory: '/dashboard/withdrawals'
     },
     account: '/dashboard/account',
