@@ -142,9 +142,9 @@ export const NewtaskListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell> */}
-              <TableCell>Task Name</TableCell>
               {/* <TableCell>Task Id</TableCell> */}
               <TableCell>Coins</TableCell>
+              <TableCell>Task Name</TableCell>
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
               {/* <TableCell align="right">Actions</TableCell> */}
@@ -194,7 +194,8 @@ export const NewtaskListTable = (props) => {
                           href={paths.dashboard.tasks.index}
                           variant="subtitle2"
                         >
-                          {customer.taskName}
+                          {customer.coins}
+                          
                         </Link>
                         <Typography color="text.secondary" variant="body2">
                           {customer.email}
@@ -205,7 +206,7 @@ export const NewtaskListTable = (props) => {
                   {/* <TableCell>{customer.taskId}</TableCell> */}
 
 
-                  <TableCell>{customer.coins}</TableCell>
+                  <TableCell>{customer.taskName}</TableCell>
 
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
