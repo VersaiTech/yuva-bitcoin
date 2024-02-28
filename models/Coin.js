@@ -6,17 +6,19 @@ const coinSchema = new mongoose.Schema({
     default: 'Yuva Bit-Coin',
     unique: true,
   },
-  usdtPrice: {
-    type: Number,
-    default: 0,
-  },
-  ethereumPrice: {
-    type: Number,
-    default: 0,
-  },
-  btcPrice: {
-    type: Number,
-    default: 0,
+  price: {
+    usdt: {
+      type: Number,
+      default: 0,
+    },
+    ethereum: {
+      type: Number,
+      default: 0,
+    },
+    btc: {
+      type: Number,
+      default: 0,
+    }
   },
 });
 

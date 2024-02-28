@@ -25,6 +25,7 @@ app.use(cors());
 
 app.use('/admin', require('./routes/Admin.route'));
 app.use('/api/Coin', require('./routes/Coin.route'));
+app.use('/api/Advertiser', require('./routes/Advertiser.route'));
 app.use('/api/Auth', require('./routes/Auth.route'));
 app.use('/api/Dashboard', require('./routes/Dashboard.route'));
 app.use('/api/Staking', require('./routes/Staking.route'));

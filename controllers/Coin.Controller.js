@@ -13,26 +13,28 @@ const getAllCoins = async (req, res) => {
 
 // Set prices for a specific coin
 const setCoinPrices = async (req, res) => {
-  const { usdtPrice, ethereumPrice, btcPrice } = req.body;
+  const { usdt, ethereum, btc } = req.body;
 
   try {
     let coin = await Coin.findOne();
 
     if (!coin) {
       coin = new Coin({
-        usdtPrice,
-        ethereumPrice,
-        btcPrice,
+        price: {
+          usdt,
+          ethereum,
+          btc,
+        },
       });
     } else {
-      coin.usdtPrice = usdtPrice;
-      coin.ethereumPrice = ethereumPrice;
-      coin.btcPrice = btcPrice;
+      coin.price.usdt = usdt;
+      coin.price.ethereum = ethereum;
+      coin.price.btc = btc;
     }
 
     await coin.save();
 
-    res.json({ message: 'Prices set successfully' ,coin});
+    res.json({ message: 'Prices set successfully', coin });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
