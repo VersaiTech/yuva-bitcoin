@@ -305,6 +305,7 @@ import {
 import { Scrollbar } from '../../../components/scrollbar';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
+import { textAlign } from '@mui/system';
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -417,22 +418,22 @@ export const StakeListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>
-                Name
+                Amount
               </TableCell>
               <TableCell>
               stakingDuration
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
               Amount
-              </TableCell>
+              </TableCell> */}
               <TableCell>
               interestCredited
               </TableCell>
@@ -457,21 +458,7 @@ export const StakeListTable = (props) => {
                   key={customer.with_referrance}
                   selected={isSelected}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        const { checked } = event.target;
-
-                        if (checked) {
-                          selectOne(customer.member_user_id);
-                        } else {
-                          deselectOne(customer.member_user_id);
-                        }
-                      }}
-                      value={isSelected}
-                    />
-                  </TableCell>
+                 
                   <TableCell>
                     <Stack
                       alignItems="center"
@@ -484,33 +471,30 @@ export const StakeListTable = (props) => {
                           height: 42,
                           width: 42
                         }}
-                      >
-                        {getInitials(customer.member_name)}
+                      > 
+                      <h2>₿</h2>
+                        {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
-                        <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.stake.index}
-                          variant="subtitle2"
-                        >
-                          {customer.member_name}
-                        </Link>
-                        <Typography
+                       
+                       <h3>   {customer.investment}</h3>
+                        
+                        {/* <Typography
                           color="text.secondary"
                           variant="body2"
                         >
                           {customer.member_user_id}
-                        </Typography>
+                        </Typography> */}
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>
+                  <TableCell 
+                  textalig>
                     {customer.stakingDuration}
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {customer.investment}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                   {customer.interestCredited ? 'True' : 'False'}
                   </TableCell>

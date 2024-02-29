@@ -308,7 +308,7 @@ export const EarningListTable = (props) => {
               <TableCell>Coins</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Link</TableCell>
-              <TableCell>Name</TableCell>
+              {/* <TableCell>Name</TableCell> */}
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -339,7 +339,7 @@ export const EarningListTable = (props) => {
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={1}>
+                    <Stack alignItems="center" direction="row" spacing={2}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
@@ -382,7 +382,7 @@ export const EarningListTable = (props) => {
                     ) : (
                       <Typography variant="subtitle2">N/A</Typography>
                     )}</TableCell>
-                  <TableCell>{customer.name}</TableCell>
+                  {/* <TableCell>{customer.name}</TableCell> */}
 
                   <TableCell>
                     <Typography variant="subtitle2">

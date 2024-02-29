@@ -550,9 +550,9 @@ export const WithdrawalsListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -590,22 +590,22 @@ export const WithdrawalsListTable = (props) => {
                           href={paths.dashboard.stake.index}
                           variant="subtitle2"
                         >
-                          {customer.member_name}
+                        <h3>  {customer.with_amt}</h3>
                         </Link>
-                        <Typography color="text.secondary" variant="body2">
+                        {/* <Typography color="text.secondary" variant="body2">
                           {customer.member_user_id}
-                        </Typography>
+                        </Typography> */}
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{customer.with_amt}</TableCell>
                   <TableCell>
                     <SeverityPill
                       color={statusMap[customer.status] || "warning"}
-                    >
+                      >
                       {customer.status}
                     </SeverityPill>
                   </TableCell>
+                      <TableCell>{customer.with_date}</TableCell>
                 </TableRow>
               );
             })}

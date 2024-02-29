@@ -126,7 +126,7 @@ export const EarningListSearch = (props) => {
             fullWidth
             inputProps={{ ref: queryRef }}
             name="orderNumber"
-            placeholder="Search by order number"
+            placeholder="Search Earnings"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>

@@ -298,7 +298,7 @@ const Page = () => {
                     <CardHeader
                       subheader={(
                         <Typography variant="h4" color="green">
-                          {"₹" + customer}
+                          {"₿" + customer}
                         </Typography>
                       )}
                       sx={{ pb: 0 }}
