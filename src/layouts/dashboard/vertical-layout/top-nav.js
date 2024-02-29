@@ -63,7 +63,7 @@ export const TopNav = (props) => {
         >
           <LanguageSwitch />
           <NotificationsButton />
-          <ContactsButton />
+          {/* <ContactsButton /> */}
           <AccountButton />
         </Stack>
       </Stack>

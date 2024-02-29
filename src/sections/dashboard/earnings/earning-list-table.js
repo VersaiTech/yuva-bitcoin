@@ -359,7 +359,7 @@ export const EarningListTable = (props) => {
                         >
                           {customer.name}
                         </Link> */}
-                        <Typography color="yellow" variant="body2">
+                        <Typography color="text.primary" variant="body2">
                           <h2>{customer.coins}</h2>
                         </Typography>
                       </div>

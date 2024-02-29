@@ -78,7 +78,6 @@ export const NewtaskListTable = (props) => {
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
 
-
   const handleToggleAll = useCallback(
     (event) => {
       const { checked } = event.target;
@@ -96,7 +95,6 @@ export const NewtaskListTable = (props) => {
   const selectedSome =
     selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
-
 
   return (
     <Box sx={{ position: "relative" }} {...other}>
@@ -142,7 +140,7 @@ export const NewtaskListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell> */}
-              {/* <TableCell>Task Id</TableCell> */}
+              <TableCell></TableCell>
               <TableCell>Coins</TableCell>
               <TableCell>Task Name</TableCell>
               <TableCell> Description</TableCell>
@@ -174,37 +172,28 @@ export const NewtaskListTable = (props) => {
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Avatar
-                        src={customer.taskName}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {/* {getInitials(customer.taskName)} */}
-                        {/* <YuvaLogo/> */}
-                        <img src='/yuvalogo2 - copy.png' alt="Yuva Logo" />
+                    <Avatar
+                      src={customer.taskName}
+                      sx={{
+                        height: 42,
+                        width: 42,
+                      }}
+                    >
+                      {/* {getInitials(customer.taskName)} */}
+                      {/* <YuvaLogo/> */}
+                      <img src="/yuvalogo2 - copy.png" alt="Yuva Logo" />
+                    </Avatar>
+                  </TableCell>
+                  <TableCell >
+                    <Stack alignItems="center" direction="row" spacing={1} >
+                      {customer.coins}
 
-                      </Avatar>
-                      <div>
-                        <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.tasks.index}
-                          variant="subtitle2"
-                        >
-                          {customer.coins}
-                          
-                        </Link>
-                        <Typography color="text.secondary" variant="body2">
-                          {customer.email}
-                        </Typography>
-                      </div>
+                      <Typography color="text.secondary" variant="body2">
+                        {customer.email}
+                      </Typography>
                     </Stack>
                   </TableCell>
                   {/* <TableCell>{customer.taskId}</TableCell> */}
-
 
                   <TableCell>{customer.taskName}</TableCell>
 
@@ -217,8 +206,8 @@ export const NewtaskListTable = (props) => {
                         target="_blank"
                         variant="subtitle2"
                         onClick={(e) => {
-                          e.preventDefault(); 
-                          router.push(customer.link); 
+                          e.preventDefault();
+                          router.push(customer.link);
                         }}
                       >
                         {customer.link}
@@ -226,7 +215,6 @@ export const NewtaskListTable = (props) => {
                     ) : (
                       <Typography variant="subtitle2">N/A</Typography>
                     )}
-
                   </TableCell>
                   <TableCell align="right">
                     {/* <IconButton

@@ -185,7 +185,7 @@ export const DepositListTable = (props) => {
                         }}
                       >
                         {/* <img src={IndianRupeeIcon} alt="Rupee" /> */}
-                        <h1>₹ </h1>
+                        <h1>₿</h1>
                         {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
