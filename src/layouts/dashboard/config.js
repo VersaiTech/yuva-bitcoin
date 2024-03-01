@@ -39,15 +39,15 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      {
-        title: t(tokens.nav.crypto),
-        path: paths.dashboard.index2,
-        icon: (
-          <SvgIcon fontSize="small">
-            <LayoutAlt02Icon />
-          </SvgIcon>
-        ),
-      },
+      // {
+      //   title: t(tokens.nav.crypto),
+      //   path: paths.dashboard.index2,
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <LayoutAlt02Icon />
+      //     </SvgIcon>
+      //   ),
+      // },
       {
         title: t(tokens.nav.tasks),
         icon: (
@@ -72,6 +72,7 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.earnings),
+        // path: paths.dashboard.earnings.index,
         icon: (
           <SvgIcon fontSize="small">
             <LineChartUp04Icon />
@@ -103,11 +104,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.deposit),
-            path: paths.dashboard.earnings.index
+            path: paths.dashboard.deposits.index
           },
           {
             title: t(tokens.nav.depositHistory),
-            path: paths.dashboard.earnings.details
+            path: paths.dashboard.deposits.depositsHistory
           }
         ]
       },
@@ -121,11 +122,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.stake),
-            path: paths.dashboard.stake.index
+            path: paths.dashboard.stake.create
           },
           {
             title: t(tokens.nav.stakeHistory),
-            path: paths.dashboard.stake.stakeHistory
+            path: paths.dashboard.stake.index
           }
         ]
       },
@@ -139,11 +140,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.withdraw),
-            path: paths.dashboard.withdraw.index
+            path: paths.dashboard.withdraw.create
           },
           {
             title: t(tokens.nav.withdrawHistory),
-            path: paths.dashboard.withdraw.withdrawHistory
+            path: paths.dashboard.withdraw.index
           }
         ]
       },
@@ -174,28 +175,28 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      {
-        title: t(tokens.nav.error),
-        icon: (
-          <SvgIcon fontSize="small">
-            <XSquareIcon />
-          </SvgIcon>
-        ),
-        items: [
-          {
-            title: "401",
-            path: paths["401"],
-          },
-          {
-            title: "404",
-            path: paths["404"],
-          },
-          {
-            title: "500",
-            path: paths["500"],
-          },
-        ],
-      },
+      // {
+      //   title: t(tokens.nav.error),
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <XSquareIcon />
+      //     </SvgIcon>
+      //   ),
+      //   items: [
+      //     {
+      //       title: "401",
+      //       path: paths["401"],
+      //     },
+      //     {
+      //       title: "404",
+      //       path: paths["404"],
+      //     },
+      //     {
+      //       title: "500",
+      //       path: paths["500"],
+      //     },
+      //   ],
+      // },
     ],
   },
 ];

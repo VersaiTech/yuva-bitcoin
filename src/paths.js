@@ -57,17 +57,24 @@ export const paths = {
       index: '/dashboard/earnings',
       details: '/dashboard/earnings'
     },
+    deposits:{
+      index: '/dashboard/deposits',
+      depositsHistory: '/dashboard/deposits/depositHistory'
+    },
+
     refer : {
       index: '/dashboard/refer',
       referHistory: '/dashboard/referhistory'
     },
     stake: {
       index: '/dashboard/stake',
+      create: '/dashboard/stake/create',
       stakeHistory: '/dashboard/stakehistory'
     },
     withdraw: {
-      index: '/dashboard/withdraw',
-      withdrawHistory: '/dashboard/withdrawhistory'
+      index: '/dashboard/withdrawals',
+      create: '/dashboard/withdrawals/create',
+      withdrawHistory: '/dashboard/withdrawals'
     },
     account: '/dashboard/account',
     portfolio: '/dashboard/portfolio',

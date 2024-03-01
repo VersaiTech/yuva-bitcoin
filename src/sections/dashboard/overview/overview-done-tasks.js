@@ -30,7 +30,7 @@ export const OverviewDoneTasks = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Done Tasks
+            Completed Tasks
           </Typography>
           <Typography
             color="text.primary"

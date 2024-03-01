@@ -22,7 +22,7 @@ import { paths } from '../../../paths';
 import { Issuer } from '../../../utils/auth';
 
 export const AccountPopover = (props) => {
-  const { anchorEl, onClose, open, ...other } = props;
+  const { profile,anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
 
@@ -77,13 +77,13 @@ export const AccountPopover = (props) => {
       {...other}>
       <Box sx={{ p: 2 }}>
         <Typography variant="body1">
-          Anika Visser
+          {profile.member_name}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          demo@rock34x.io
+          {profile.email}
         </Typography>
       </Box>
       <Divider />
