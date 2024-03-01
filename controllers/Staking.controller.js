@@ -143,6 +143,21 @@ const stakingSummary = async (req, res) => {
 };
 
 
+const getTotalInvestmentByUserId = async (req, res) => {
+  const userId = req.user.member_user_id; 
+  try {
+      const stakes = await Stake.find({ member_user_id: userId });
+      let totalInvestment = 0;
+      stakes.forEach(stake => {
+          totalInvestment += stake.investment;
+      });
+      res.status(200).json({ userId: userId, totalInvestment: totalInvestment });
+  } catch (error) {
+      console.error("Error occurred while getting total investment:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 // async function transferToStaking(req, res) {
 //   const userId = req.user.member_user_id;
 //   try {
@@ -327,7 +342,8 @@ module.exports = {
   stakingSummary,
   transferToStaking,
   transferToWallet,
-  stakingSummaryForAdmin
+  stakingSummaryForAdmin,
+  getTotalInvestmentByUserId
 };
 
 
