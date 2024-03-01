@@ -3,7 +3,7 @@ const Coin = require('../models/Coin');
 // Get all coins
 const getAllCoins = async (req, res) => {
   try {
-    const coins = await Coin.find({},{_id:false});
+    const coins = await Coin.find({}, { _id: false });
     res.json(coins);
   } catch (error) {
     console.error(error);
@@ -13,13 +13,14 @@ const getAllCoins = async (req, res) => {
 
 // Set prices for a specific coin
 const setCoinPrices = async (req, res) => {
-  const { usdt, ethereum, btc } = req.body;
+  const { inr, usdt, ethereum, btc } = req.body;
 
   try {
     let coin = await Coin.findOne();
 
     if (!coin) {
       coin = new Coin({
+        inr,
         price: {
           usdt,
           ethereum,
@@ -27,6 +28,7 @@ const setCoinPrices = async (req, res) => {
         },
       });
     } else {
+      coin.inr = inr;
       coin.price.usdt = usdt;
       coin.price.ethereum = ethereum;
       coin.price.btc = btc;

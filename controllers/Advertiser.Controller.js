@@ -1,69 +1,69 @@
 const Advertiser = require('../models/Advertiser');
 const Coin = require('../models/Coin');
 const Member = require('../models/memberModel');
-
+const Deposit = require('../models/deposit');
 // Create an order
-const createOrder = async (req, res) => {
-    const userId = req.user.member_user_id;
-    try {
-        const member = await Member.findOne({ member_user_id: userId });
-        if (!member) {
-            return res.status(400).json({ error: 'User not found' });
-        }
+// const createOrder = async (req, res) => {
+//     const userId = req.user.member_user_id;
+//     try {
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
 
-        const {
-            // Advertiser_name,
-            select_coin,
-            amount_currency,
-            select_currency,
-            Available,
-            limit,
-            payment_method,
-        } = req.body;
+//         const {
+//             // Advertiser_name,
+//             select_coin,
+//             amount_currency,
+//             select_currency,
+//             Available,
+//             limit,
+//             payment_method,
+//         } = req.body;
 
-        // Find the selected coin in the Coin model
-        const coin = await Coin.findOne();
+//         // Find the selected coin in the Coin model
+//         const coin = await Coin.findOne();
 
-        if (!coin) {
-            return res.status(400).json({ error: 'Selected coin not found' });
-        }
+//         if (!coin) {
+//             return res.status(400).json({ error: 'Selected coin not found' });
+//         }
 
-        // Create a new advertiser
-        const newAdvertiser = new Advertiser({
-            userId: member.member_user_id,
-            Advertiser_name: member.member_name,
-            select_coin,
-            amount_currency,
-            select_currency,
-            Available,
-            limit,
-            payment_method,
-        });
+//         // Create a new advertiser
+//         const newAdvertiser = new Advertiser({
+//             userId: member.member_user_id,
+//             Advertiser_name: member.member_name,
+//             select_coin,
+//             amount_currency,
+//             select_currency,
+//             Available,
+//             limit,
+//             payment_method,
+//         });
 
-        // Convert amount to selected coin
-        switch (select_coin) {
-            case 'usdt':
-                newAdvertiser.member_usdt = amount_currency / coin.price.usdt;
-                break;
-            case 'btc':
-                newAdvertiser.member_btc = amount_currency / coin.price.btc;
-                break;
-            case 'ethereum':
-                newAdvertiser.member_ethereum = amount_currency / coin.price.ethereum;
-                break;
-            default:
-                throw new Error('Invalid selected coin');
-        }
+//         // Convert amount to selected coin
+//         switch (select_coin) {
+//             case 'usdt':
+//                 newAdvertiser.member_usdt = amount_currency / coin.price.usdt;
+//                 break;
+//             case 'btc':
+//                 newAdvertiser.member_btc = amount_currency / coin.price.btc;
+//                 break;
+//             case 'ethereum':
+//                 newAdvertiser.member_ethereum = amount_currency / coin.price.ethereum;
+//                 break;
+//             default:
+//                 throw new Error('Invalid selected coin');
+//         }
 
-        // Save the new advertiser
-        await newAdvertiser.save();
+//         // Save the new advertiser
+//         await newAdvertiser.save();
 
-        res.status(200).json(newAdvertiser);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+//         res.status(200).json(newAdvertiser);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// };
 
 
 const getAllOrders = async (req, res) => {
@@ -128,16 +128,82 @@ const getOneMembersOrders = async (req, res) => {
 // for user
 const getAllOrdersUser = async (req, res) => {
     try {
-      const userId = req.user.member_user_id;
-      const oneUserOrders = await Advertiser.find({userId});
-      res.json(oneUserOrders); 
+        const userId = req.user.member_user_id;
+        const oneUserOrders = await Advertiser.find({ userId });
+        res.json(oneUserOrders);
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  };
-  
+};
+
+
+const createOrder = async (req, res) => {
+    const userId = req.user.member_user_id;
+    try {
+        const member = await Member.findOne({ member_user_id: userId });
+        if (!member) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        const {
+            // Advertiser_name,
+            select_coin,
+            amount_currency,
+            select_currency,
+            // Available,
+            // limit,
+            payment_method,
+        } = req.body;
+
+        // Find the selected coin in the Coin model
+        const coin = await Coin.findOne();
+
+        if (!coin) {
+            return res.status(400).json({ error: 'Selected coin not found' });
+        }
+
+        const amount = await  Deposit.findOne();
+        if (!amount) {
+            return res.status(400).json({ error: 'Insufficient Balance' });
+        }
+        // Create a new advertiser
+        const newAdvertiser = new Advertiser({
+            userId: member.member_user_id,
+            Advertiser_name: member.member_name,
+            select_coin,
+            amount_currency,
+            select_currency,
+            // Available,
+            // limit,
+            payment_method,
+        });
+
+        // Convert amount to selected coin
+        switch (select_coin) {
+            case 'usdt':
+                newAdvertiser.member_usdt = amount_currency / coin.price.usdt;
+                break;
+            case 'btc':
+                newAdvertiser.member_btc = amount_currency / coin.price.btc;
+                break;
+            case 'ethereum':
+                newAdvertiser.member_ethereum = amount_currency / coin.price.ethereum;
+                break;
+            default:
+                throw new Error('Invalid selected coin');
+        }
+
+        // Save the new advertiser
+        await newAdvertiser.save();
+
+        res.status(200).json(newAdvertiser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 
 module.exports = {
-    createOrder, getAllOrders, getOneMembersOrders,getAllOrdersUser
+    createOrder, getAllOrders, getOneMembersOrders, getAllOrdersUser
 };

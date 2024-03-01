@@ -198,43 +198,43 @@ function generateTransactionId() {
   return `${Date.now()}_${uuidv4()}`;
 }
 
-async function transferToWallet(req, res) {
-  const userId = req.user.member_user_id;
-  try {
-    const { amount } = req.body;
+// async function transferToWallet(req, res) {
+//   const userId = req.user.member_user_id;
+//   try {
+//     const { amount } = req.body;
 
-    // Check if the member exists
-    const member = await Member.findOne({ member_user_id: userId });
-    if (!member) {
-      return res.status(404).json({ error: 'Member not found' });
-    }
+//     // Check if the member exists
+//     const member = await Member.findOne({ member_user_id: userId }); 
+//     if (!member) {
+//       return res.status(404).json({ error: 'Member not found' });
+//     }
 
-    // Check if there is an existing staking for the member
-    const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+//     // Check if there is an existing staking for the member
+//     const existingStake = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
 
-    if (!existingStake) {
-      return res.status(400).json({ error: 'No staking found for the member' });
-    }
+//     if (!existingStake) {
+//       return res.status(400).json({ error: 'No staking found for the member' });
+//     }
 
-    // Check if the staking has enough funds
-    if (existingStake.investment < amount) {
-      return res.status(400).json({ error: 'Insufficient funds in the staking' });
-    }
+//     // Check if the staking has enough funds
+//     if (existingStake.investment < amount) {
+//       return res.status(400).json({ error: 'Insufficient funds in the staking' });
+//     }
 
-    // Add the amount to the member's wallet
-    member.coins += amount;
-    await member.save();
+//     // Add the amount to the member's wallet
+//     member.coins += amount;
+//     await member.save();
 
-    // Deduct the amount from the staking
-    existingStake.investment -= amount;
-    await existingStake.save();
+//     // Deduct the amount from the staking
+//     existingStake.investment -= amount;
+//     await existingStake.save();
 
-    res.status(200).json(existingStake);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
+//     res.status(200).json(existingStake);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
 
 async function transferToStaking(req, res) {
   const userId = req.user.member_user_id;
@@ -276,9 +276,55 @@ async function transferToStaking(req, res) {
   }
 }
 
+//====================================================================================
+async function transferToWallet(req, res) {
+  const userId = req.user.member_user_id;
+  try {
+    const { amount } = req.body;
+
+    // Check if the member exists
+    const member = await Member.findOne({ member_user_id: userId });
+    if (!member) {
+      return res.status(404).json({ error: 'Member not found' });
+    }
+
+    // Find all stakings for the member
+    const stakings = await Stake.find({ member_user_id: userId, stake_type: 'Wallet' });
+
+    if (stakings.length === 0) {
+      return res.status(400).json({ error: 'No staking found for the member' });
+    }
+
+    // Calculate the total staked amount
+    const totalStakedAmount = stakings.reduce((sum, stake) => sum + stake.investment, 0);
+
+    // Check if the staking has enough funds
+    if (totalStakedAmount < amount) {
+      return res.status(400).json({ error: 'Insufficient funds in the staking' });
+    }
+
+    // Add the total staked amount to the member's wallet
+    member.coins += totalStakedAmount;
+    await member.save();
+
+    // Deduct the total staked amount from the stakings
+    for (const stake of stakings) {
+      stake.investment = 0;
+      await stake.save();
+    }
+    const existingWhithdraw = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+
+    res.status(200).json({ message: 'Withdrawal successful',existingWhithdraw });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
 
 module.exports = {
-  stakingSummary, 
+  stakingSummary,
   transferToStaking,
   transferToWallet,
   stakingSummaryForAdmin

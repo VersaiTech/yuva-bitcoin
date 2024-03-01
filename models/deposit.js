@@ -2,13 +2,18 @@ const mongoose = require('mongoose');
 
 // Define the schema for cash deposit
 const depositSchema = new mongoose.Schema({
-  member_user_id: { type: String, required: true, ref: 'Member' },
-  member_name: { type: String },
-  sys_date: { type: Date, default: Date.now },
+  member: { type: String, ref: 'Member', required: true },
+  name: { type: String, required: true },
   amount: { type: Number, required: true },
-  transaction_id: { type: String },
-  deposit_method: { type: String, required: true }, // You can customize this field based on the methods you support
-});
+  transaction_hash: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  wallet_address: { type: String, required: true },
+  deposit_type: { type: String, enum: ['usdt', 'btc', 'ethereum'], required: true },
+  sys_date: { type: Date, default: Date.now },
+}, { timestamps: true });
 
 // Create a model from the schema
 const Deposit = mongoose.model('Deposit', depositSchema);
