@@ -123,7 +123,7 @@ const Page = () => {
             <ArrowLeftIcon />
           </SvgIcon>
           <Typography variant="subtitle2">
-            Dashboard
+            Home Page
           </Typography>
         </Link>
       </Box>
@@ -141,7 +141,8 @@ const Page = () => {
           Don&apos;t have an account?
           &nbsp;
           <Link
-            href="#"
+            component={NextLink}
+            href={paths.auth.register.modern}
             underline="hover"
             variant="subtitle2"
           >

@@ -24,45 +24,26 @@
       <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
       <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_11776_128604"/>
     </filter>
-    <filter id="filter1_f_11776_128604" x="237.712" y="-218.969" width="624.199" height="735.752" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_11776_128604"/>
-    </filter>
-    <filter id="filter2_f_11776_128604" x="691.712" y="-336.969" width="624.199" height="735.752" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_11776_128604"/>
-    </filter>
-    <filter id="filter3_f_11776_128604" x="324.748" y="-439.828" width="895.568" height="1014.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_11776_128604"/>
-    </filter>
-    <filter id="filter4_f_11776_128604" x="54.1165" y="-270.969" width="678.488" height="808.565" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-      <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_11776_128604"/>
-    </filter>
+    <!-- Modify linear gradients to Bitcoin colors -->
     <linearGradient id="paint0_linear_11776_128604" x1="1099.27" y1="-113.525" x2="1468.23" y2="326.183" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6366F1"/>
-      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+      <stop offset="0" stop-color="#F7931A"/>
+      <stop offset="1" stop-color="#F7931A" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="paint1_linear_11776_128604" x1="353.882" y1="-100.611" x2="722.84" y2="339.096" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6366F1"/>
-      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+      <stop offset="0" stop-color="#FFCB00"/>
+      <stop offset="1" stop-color="#FFCB00" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="paint2_linear_11776_128604" x1="807.882" y1="-218.611" x2="1176.84" y2="221.096" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6366F1"/>
-      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+      <stop offset="0" stop-color="#007ACC"/>
+      <stop offset="1" stop-color="#007ACC" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="paint3_linear_11776_128604" x1="533.72" y1="-274.334" x2="1020" y2="338" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#14B8A6"/>
-      <stop offset="1" stop-color="#14B8A6" stop-opacity="0"/>
+      <stop offset="0" stop-color="#231F20"/>
+      <stop offset="1" stop-color="#231F20" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="paint4_linear_11776_128604" x1="591.141" y1="353.001" x2="166.882" y2="-152.611" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#0EA5E9"/>
-      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0"/>
+      <stop offset="0" stop-color="#000000"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </linearGradient>
     <clipPath id="clip0_11776_128604">
       <rect width="1920" height="502" fill="white"/>

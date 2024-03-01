@@ -72,7 +72,7 @@ const Page = () => {
         <Link
           color="text.primary"
           component={NextLink}
-          href={paths.dashboard.index}
+          href={paths.auth.login.modern}
           sx={{
             alignItems: 'center',
             display: 'inline-flex'
@@ -83,7 +83,7 @@ const Page = () => {
             <ArrowLeftIcon />
           </SvgIcon>
           <Typography variant="subtitle2">
-            Dashboard
+            Home
           </Typography>
         </Link>
       </Box>
@@ -101,7 +101,8 @@ const Page = () => {
           Don&apos;t have an account?
           &nbsp;
           <Link
-            href="#"
+            component={NextLink}
+            href={paths.auth.register.modern}
             underline="hover"
             variant="subtitle2"
           >
@@ -149,7 +150,8 @@ const Page = () => {
         </Button>
         <Box sx={{ mt: 3 }}>
           <Link
-            href="#"
+             component={NextLink}
+            href={paths.auth.forgotPassword.modern}
             underline="hover"
             variant="subtitle2"
           >

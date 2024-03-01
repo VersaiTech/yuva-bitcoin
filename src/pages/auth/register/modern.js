@@ -1,11 +1,16 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { useState } from 'react'; // Import useState
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { useFormik } from 'formik';
+
 import {
   Box,
   Button,
   Checkbox,
+  IconButton,
   FormHelperText,
   Link,
   Stack,
@@ -15,11 +20,14 @@ import {
 } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
+import { useAuth } from '../../../hooks/use-auth';
+import { useMounted } from '../../../hooks/use-mounted';
 
 const initialValues = {
   email: '',
   name: '',
   password: '',
+  confirmPassword: '',
   policy: false
 };
 
@@ -38,17 +46,47 @@ const validationSchema = Yup.object({
     .min(7)
     .max(255)
     .required('Password is required'),
+  confirmPassword: Yup
+    .string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
   policy: Yup
     .boolean()
     .oneOf([true], 'This field must be checked')
 });
 
 const Page = () => {
+  const isMounted = useMounted();
+  const { issuer, signUp } = useAuth();
+  const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: async (values, helpers) => {
+      console.log(values);
+      try {
+        await signUp(values.name, values.email, values.password, values.confirmPassword);
+
+        if (isMounted()) {
+          router.push(returnTo || paths.dashboard.index);
+        }
+      } catch (err) {
+        console.error(err.response.data.message);
+
+        if (isMounted()) {
+          helpers.setStatus({ success: false });
+          helpers.setErrors({ submit: err.message });
+          helpers.setSubmitting(false);
+        }
+      }
+    }
   });
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
 
   return (
     <div>
@@ -56,7 +94,7 @@ const Page = () => {
         <Link
           color="text.primary"
           component={NextLink}
-          href={paths.dashboard.index}
+          href={paths.index}
           sx={{
             alignItems: 'center',
             display: 'inline-flex'
@@ -85,7 +123,8 @@ const Page = () => {
           Already have an account?
           &nbsp;
           <Link
-            href="#"
+            component={NextLink}
+            href={paths.auth.login.modern}
             underline="hover"
             variant="subtitle2"
           >
@@ -99,6 +138,7 @@ const Page = () => {
       >
         <Stack spacing={3}>
           <TextField
+            autoFocus
             error={!!(formik.touched.name && formik.errors.name)}
             fullWidth
             helperText={formik.touched.name && formik.errors.name}
@@ -127,8 +167,33 @@ const Page = () => {
             name="password"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type="password"
+            type={showPassword ? 'text' : 'password'} // Toggle visibility based on state
             value={formik.values.password}
+            InputProps={{ // Add eye icon button for toggling password visibility
+              endAdornment: (
+                <IconButton onClick={togglePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
+          />
+          <TextField
+            error={!!(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+            fullWidth
+            helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+            label="Confirm Password"
+            name="confirmPassword"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            type={showPassword ? 'text' : 'password'} // Toggle visibility based on state
+            value={formik.values.confirmPassword}
+            InputProps={{ // Add eye icon button for toggling password visibility
+              endAdornment: (
+                <IconButton onClick={togglePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
           />
         </Stack>
         <Box
