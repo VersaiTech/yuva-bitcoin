@@ -20,7 +20,6 @@ const setCoinPrices = async (req, res) => {
 
     if (!coin) {
       coin = new Coin({
-        inr,
         price: {
           usdt,
           ethereum,
@@ -28,7 +27,6 @@ const setCoinPrices = async (req, res) => {
         },
       });
     } else {
-      coin.inr = inr;
       coin.price.usdt = usdt;
       coin.price.ethereum = ethereum;
       coin.price.btc = btc;

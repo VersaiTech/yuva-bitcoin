@@ -1,47 +1,11 @@
-// const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
-
-// const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-
-// const memberSchema = new mongoose.Schema({
-//   member_user_id: { type: String, required: true, unique: true },
-//   sponcer_id: String,
-//   sponcer_name: String,
-//   member_name: { type: String, required: true },
-//   contact: { type: String, required: true },
-//   email: { type: String, required: true, unique: true },
-//   password: { type: String, required: true },
-//   registration_date: { type: Date, default: Date.now }
-// });
-
-// memberSchema.pre('save', async function(next) {
-//   const member = this;
-//   if (!member.isModified('password')) return next();
-//   const salt = await bcrypt.genSalt(10);
-//   member.password = await bcrypt.hash(member.password, salt);
-//   next();
-// });
-
-// memberSchema.methods.generateAuthToken = function() {
-//   const member = this;
-//   return jwt.sign({ _id: member._id }, JWT_SECRET_KEY, { expiresIn: '1h' });
-// };
-
-// const Member = mongoose.model('Member', memberSchema);
-
-// module.exports = Member;
-
-
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const memberSchema = new mongoose.Schema({
   member_user_id: { type: String, required: true, unique: true },
-  sponcer_id: { type: String },   //mongoose.Schema.Types.ObjectId
-  sponcer_name: { type: String },
-  contactNo: { type: String, required: true,unique: true },
+  // sponcer_id: { type: String },   //mongoose.Schema.Types.ObjectId
+  // sponcer_name: { type: String },
+  contactNo: { type: String, required: true, unique: true },
   member_name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -50,10 +14,23 @@ const memberSchema = new mongoose.Schema({
   userType: { type: String, default: 'member' },
   twitterId: { type: String, unique: true, required: true },
   isActive: { type: Boolean, default: true },
+
+  deposit_usdt: {
+    type: Number,
+    default: 0,
+  },
+  deposit_btc: {
+    type: Number,
+    default: 0,
+  },
+  deposit_ethereum: {
+    type: Number,
+    default: 0,
+  },
   // isBlocked: { type: Boolean, default: false },
 });
 
-memberSchema.pre('save', async function(next) {
+memberSchema.pre('save', async function (next) {
   const member = this;
   if (!member.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
