@@ -141,7 +141,8 @@ const Page = () => {
           Don&apos;t have an account?
           &nbsp;
           <Link
-            href="/auth/register/modern"
+            component={NextLink}
+            href={paths.auth.register.modern}
             underline="hover"
             variant="subtitle2"
           >

@@ -20,6 +20,8 @@ import {
 } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
+import { useAuth } from '../../../hooks/use-auth';
+import { useMounted } from '../../../hooks/use-mounted';
 
 const initialValues = {
   email: '',
@@ -54,12 +56,31 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
+  const isMounted = useMounted();
+  const { issuer, signUp } = useAuth();
   const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: async (values, helpers) => {
+      console.log(values);
+      try {
+        await signUp(values.name, values.email, values.password, values.confirmPassword);
+
+        if (isMounted()) {
+          router.push(returnTo || paths.dashboard.index);
+        }
+      } catch (err) {
+        console.error(err.response.data.message);
+
+        if (isMounted()) {
+          helpers.setStatus({ success: false });
+          helpers.setErrors({ submit: err.message });
+          helpers.setSubmitting(false);
+        }
+      }
+    }
   });
 
   // Function to toggle password visibility
@@ -73,7 +94,7 @@ const Page = () => {
         <Link
           color="text.primary"
           component={NextLink}
-          href={paths.dashboard.index}
+          href={paths.index}
           sx={{
             alignItems: 'center',
             display: 'inline-flex'
@@ -117,6 +138,7 @@ const Page = () => {
       >
         <Stack spacing={3}>
           <TextField
+            autoFocus
             error={!!(formik.touched.name && formik.errors.name)}
             fullWidth
             helperText={formik.touched.name && formik.errors.name}
