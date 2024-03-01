@@ -53,13 +53,13 @@ const memberSchema = new mongoose.Schema({
   // isBlocked: { type: Boolean, default: false },
 });
 
-memberSchema.pre('save', async function(next) {
-  const member = this;
-  if (!member.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  member.password = await bcrypt.hash(member.password, salt);
-  next();
-});
+// memberSchema.pre('save', async function(next) {
+//   const member = this;
+//   if (!member.isModified('password')) return next();
+//   const salt = await bcrypt.genSalt(10);
+//   member.password = await bcrypt.hash(member.password, salt);
+//   next();
+// });
 
 const Member = mongoose.model('Member', memberSchema);
 

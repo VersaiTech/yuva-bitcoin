@@ -413,8 +413,8 @@ async function register(req, res) {
       member = await Member.findOne({ member_user_id: member_user_id });
     }
 
-    // const salt = await bcrypt.genSalt(10);
-    // password = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    password = await bcrypt.hash(password, salt);
 
     // Create new member instance
     const newMember = new Member({
