@@ -72,22 +72,22 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.earnings),
-        path: paths.dashboard.earnings.index,
+        // path: paths.dashboard.earnings.index,
         icon: (
           <SvgIcon fontSize="small">
             <LineChartUp04Icon />
           </SvgIcon>
         ),
-        // items: [
-        //   {
-        //     title: t(tokens.nav.earnings),
-        //     path: paths.dashboard.earnings.index
-        //   },
-          // {
-          //   title: t(tokens.nav.earningsDetails),
-          //   path: paths.dashboard.earnings.details
-          // }
-        // ]
+        items: [
+          {
+            title: t(tokens.nav.earnings),
+            path: paths.dashboard.earnings.index
+          },
+          {
+            title: t(tokens.nav.earningsDetails),
+            path: paths.dashboard.earnings.details
+          }
+        ]
       },
     ],
   },

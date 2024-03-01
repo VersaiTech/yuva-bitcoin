@@ -37,12 +37,12 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getuserbalance`, {
+      const response = await axios.get(`${BASEURL}/api/Staking/getTotalInvestmentByUserId`, {
         headers: headers
       })
 
       console.log(response.data)
-      setCustomer(response.data.balance);
+      setCustomer(response.data.totalInvestment);
 
       // if (isMounted()) {
       // }
@@ -138,7 +138,7 @@ const Page = () => {
                           color="text.secondary"
                           variant="overline"
                         >
-                          Total balance
+                          Total Stake balance
                         </Typography>
                       )}
                     />
@@ -168,7 +168,7 @@ const Page = () => {
                           Add money
                         </Button>
                         </Link>
-                        <Link component={NextLink}  href={paths.dashboard.withdraw.index}>
+                        <Link component={NextLink}  href={paths.dashboard.withdraw.create}>
                         <Button
                           color="inherit"
                           endIcon={(

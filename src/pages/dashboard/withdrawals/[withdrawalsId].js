@@ -337,7 +337,7 @@ const Page = () => {
                           Add money
                         </Button>
                         </Link>
-                        <Link component={NextLink}  href={paths.dashboard.withdraw.index}>
+                        <Link component={NextLink}  href={paths.dashboard.withdraw.create}>
                         <Button
                           color="inherit"
                           endIcon={(

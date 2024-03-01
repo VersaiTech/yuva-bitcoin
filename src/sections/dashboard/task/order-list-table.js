@@ -145,6 +145,7 @@ export const NewtaskListTable = (props) => {
               <TableCell>Task Name</TableCell>
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
+              <TableCell>Date</TableCell>
               {/* <TableCell align="right">Actions</TableCell> */}
             </TableRow>
           </TableHead>
@@ -210,12 +211,16 @@ export const NewtaskListTable = (props) => {
                           router.push(customer.link);
                         }}
                       >
-                        {customer.link}
+                        {customer.link.length > 20 ? customer.link.substring(0, 20) + '...' : customer.link}
                       </Link>
                     ) : (
                       <Typography variant="subtitle2">N/A</Typography>
                     )}
                   </TableCell>
+                  <TableCell>
+                    {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'}
+                  </TableCell>
+
                   <TableCell align="right">
                     {/* <IconButton
                       component={NextLink}
