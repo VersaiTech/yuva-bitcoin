@@ -361,22 +361,18 @@ function htmlspecialchars(str) {
 
 async function register(req, res) {
   try {
-    let sponcer_id = req.query.sponcer_id;
-    let sponcer_name;
-    let member_user_id;
     let contactNo = req.body.contactNo.trim();
     let member_name = req.body.member_name.trim().toUpperCase();
     let password = req.body.password.trim();
-    let cpassword = req.body.cpassword.trim();
     let email = req.body.email.trim().toLowerCase();
     let twitterId = req.body.twitterId;
-
-    if (password !== cpassword) {
-      return res.status(400).send({
-        status: false,
-        message: "Password and confirm password not matched",
-      });
-    }
+    let wallet_address = req.body.wallet_address;
+    // if (password !== cpassword) {
+    //   return res.status(400).send({
+    //     status: false,
+    //     message: "Password and confirm password not matched",
+    //   });
+    // }
 
     // Check if the email is already registered
     const existingMember = await Member.findOne({ email: email });
@@ -419,10 +415,9 @@ async function register(req, res) {
     // Create new member instance
     const newMember = new Member({
       member_user_id,
-      sponcer_id,
-      sponcer_name,
       member_name,
       contactNo: contactNo,
+      wallet_address,
       email,
       password,
       registration_date: reg_date,

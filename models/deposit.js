@@ -21,6 +21,7 @@ const depositSchema = new mongoose.Schema({
   },
   wallet_address: {
     type: String,
+    ref: 'Member',
     required: true
   },
   deposit_type: {

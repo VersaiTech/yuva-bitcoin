@@ -13,11 +13,16 @@ function generateTransactionId() {
 async function createDeposit(req, res) {
   try {
     // Retrieve member information based on member_user_id
-    const { member_user_id, member_name } = req.user;
-    const member = await Member.findOne({ member_user_id });
+    const { member_user_id, member_name, wallet_address } = req.user;
+    const member = await Member.findOne({ member_user_id, wallet_address });
 
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
+    }
+
+    // Check if the provided wallet_address matches the member's wallet_address
+    if (wallet_address !== req.body.wallet_address) {
+      return res.status(400).json({ error: 'Invalid wallet address' });
     }
 
     // Create a new deposit
@@ -26,7 +31,8 @@ async function createDeposit(req, res) {
       name: member_name,
       amount: req.body.amount,
       transaction_hash: req.body.transaction_hash,
-      wallet_address: req.body.wallet_address,
+      // wallet_address: req.body.wallet_address,
+      wallet_address: wallet_address,
       deposit_type: req.body.deposit_type,
     });
 
@@ -76,7 +82,7 @@ async function getAllDepositsForAdmin(req, res) {
 
 async function getDepositsForUser(req, res) {
   const userId = req.user.member_user_id; // Assuming you're passing userId as a route parameter
-  
+
   try {
     // Retrieve deposits for the specific user
     const userDeposits = await Deposit.find({ member: userId });
