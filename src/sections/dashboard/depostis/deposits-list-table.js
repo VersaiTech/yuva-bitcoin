@@ -205,7 +205,8 @@ export const DepositListTable = (props) => {
                   </TableCell>
                   {/* <TableCell>{customer.taskId}</TableCell> */}
 
-                  <TableCell>{customer.sys_date}</TableCell>
+                  <TableCell>                    {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'}
+</TableCell>
 
                   <TableCell>{customer.deposit_method}</TableCell>
                   <TableCell>

@@ -20,7 +20,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Contact | Rock34x 
+          Contact | Yuva Bitcoin 
         </title>
       </Head>
       <Box
@@ -104,17 +104,16 @@ const Page = () => {
               sx={{ mb: 3 }}
               variant="body1"
             >
-              Have questions about integrating our APIs? Fill out the form
-              and a senior web expert will be in touch shortly.
+              Have you any query and doubt please contact us
             </Typography>
-            <Typography
+            {/* <Typography
               color="primary"
               sx={{ mb: 3 }}
               variant="h6"
             >
               Join 6,000+ forward-thinking companies:
-            </Typography>
-            <Stack
+            </Typography> */}
+            {/* <Stack
               alignItems="center"
               direction="row"
               flexWrap="wrap"
@@ -132,7 +131,7 @@ const Page = () => {
               <LogoAws />
               <LogoAccenture />
               <LogoAtt />
-            </Stack>
+            </Stack> */}
           </Container>
         </Box>
         <Box
@@ -154,7 +153,7 @@ const Page = () => {
               sx={{ pb: 3 }}
               variant="h6"
             >
-              Fill the form below
+              Fill the form below 
             </Typography>
             <ContactForm />
           </Container>
