@@ -5,23 +5,24 @@ export const sections = [
     subheader: 'Overview',
     items: [
       {
-        title: 'Welcome',
+        title: 'What is Yuva BitCoin?',
         path: paths.docs.welcome
       },
       {
-        title: 'Getting Started',
+        title: 'NFT Marketplace',
+        // path: paths.docs.nft
         path: paths.docs.gettingStarted
       },
       {
-        title: 'Dependencies',
+        title: 'Virtual Experiences Hub',
         path: paths.docs.dependencies
       },
       {
-        title: 'Environment Variables',
+        title: 'Our Vision',
         path: paths.docs.environmentVariables
       },
       {
-        title: 'Deployment',
+        title: 'Education',
         path: paths.docs.deployment
       },
       {

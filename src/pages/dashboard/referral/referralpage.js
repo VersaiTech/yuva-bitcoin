@@ -140,7 +140,7 @@ export const ReferralPage = () => {
                   </Stack>
                 </Box>
               </Stack>
-           <img src="./referral.png" alt="photo not showing"
+           <img src="/referral.png" alt="photo not showing"
            style={{width:'100%'}} />
  
             </CardContent>
