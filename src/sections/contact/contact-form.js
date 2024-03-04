@@ -53,7 +53,7 @@ export const ContactForm = () => {
                 mb: 1
               }}
             >
-              Company Name*
+              Twitter Id*
             </FormLabel>
             <OutlinedInput
               name="company"
@@ -72,7 +72,7 @@ export const ContactForm = () => {
                 mb: 1
               }}
             >
-              Work Email *
+               Email *
             </FormLabel>
             <OutlinedInput
               name="email"
@@ -92,7 +92,7 @@ export const ContactForm = () => {
                 mb: 1
               }}
             >
-              Phone Number *
+              User Id *
             </FormLabel>
             <OutlinedInput
               name="phone"
@@ -101,7 +101,7 @@ export const ContactForm = () => {
             />
           </FormControl>
         </Grid>
-        <Grid
+        {/* <Grid
           xs={12}
           sm={6}
         >
@@ -129,8 +129,8 @@ export const ContactForm = () => {
               </MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid
+        </Grid> */}
+        {/* <Grid
           xs={12}
           sm={6}
         >
@@ -155,8 +155,8 @@ export const ContactForm = () => {
               </MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid xs={12}>
+        </Grid> */}
+        {/* <Grid xs={12}>
           <FormControl fullWidth>
             <FormLabel
               sx={{
@@ -179,7 +179,7 @@ export const ContactForm = () => {
               </MenuItem>
             </Select>
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid xs={12}>
           <FormControl fullWidth>
             <FormLabel
@@ -212,6 +212,7 @@ export const ContactForm = () => {
           size="large"
           variant="contained"
         >
+          
           Let&apos;s Talk
         </Button>
       </Box>

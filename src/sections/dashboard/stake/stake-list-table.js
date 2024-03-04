@@ -501,7 +501,8 @@ export const StakeListTable = (props) => {
                   
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {customer.sys_date}
+                    {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'}
+
                     </Typography>
                   </TableCell>
                   <TableCell>

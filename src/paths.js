@@ -63,7 +63,7 @@ export const paths = {
     },
 
     refer : {
-      index: '/dashboard/refer',
+      index: '/dashboard/referral',
       referHistory: '/dashboard/referhistory'
     },
     stake: {
