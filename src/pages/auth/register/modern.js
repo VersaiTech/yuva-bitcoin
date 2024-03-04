@@ -1,10 +1,11 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
-import { useState } from 'react'; // Import useState
+import { useState } from 'react';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router'; // Import useRouter for navigation
 
 import {
   Box,
@@ -28,6 +29,8 @@ const initialValues = {
   name: '',
   password: '',
   confirmPassword: '',
+  contactNumber: '', // New field
+  twitterId: '', // New field
   policy: false
 };
 
@@ -50,26 +53,31 @@ const validationSchema = Yup.object({
     .string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
-  policy: Yup
-    .boolean()
-    .oneOf([true], 'This field must be checked')
+  contactNumber: Yup
+    .string()
+    .matches(/^\d{10}$/, 'Invalid phone number')
+    .required('Contact Number is required'),
+  twitterId: Yup
+    .string()
+    .max(15, 'Must be at most 15 characters')
+    .required('Twitter ID is required'),
 });
 
 const Page = () => {
   const isMounted = useMounted();
-  const { issuer, signUp } = useAuth();
-  const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
+  const router = useRouter(); // Initialize useRouter
+  const { signUp } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values, helpers) => {
-      console.log(values);
       try {
         await signUp(values.name, values.email, values.password, values.confirmPassword);
 
         if (isMounted()) {
-          router.push(returnTo || paths.dashboard.index);
+          router.push(paths.dashboard.index);
         }
       } catch (err) {
         console.error(err.response.data.message);
@@ -83,9 +91,8 @@ const Page = () => {
     }
   });
 
-  // Function to toggle password visibility
   const togglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
+    setShowPassword(prevShowPassword => !prevShowPassword);
   };
 
   return (
@@ -109,37 +116,22 @@ const Page = () => {
           </Typography>
         </Link>
       </Box>
-      <Stack
-        sx={{ mb: 4 }}
-        spacing={1}
-      >
+      <Stack sx={{ mb: 4 }} spacing={1}>
         <Typography variant="h5">
           Register
         </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
+        <Typography color="text.secondary" variant="body2">
           Already have an account?
-          &nbsp;
-          <Link
-            component={NextLink}
-            href={paths.auth.login.modern}
-            underline="hover"
-            variant="subtitle2"
-          >
+          {' '}
+          <Link component={NextLink} href={paths.auth.login.modern} underline="hover" variant="subtitle2">
             Log in
           </Link>
         </Typography>
       </Stack>
-      <form
-        noValidate
-        onSubmit={formik.handleSubmit}
-      >
+      <form noValidate onSubmit={formik.handleSubmit}>
         <Stack spacing={3}>
           <TextField
-            autoFocus
-            error={!!(formik.touched.name && formik.errors.name)}
+            error={formik.touched.name && !!formik.errors.name}
             fullWidth
             helperText={formik.touched.name && formik.errors.name}
             label="Name"
@@ -149,7 +141,7 @@ const Page = () => {
             value={formik.values.name}
           />
           <TextField
-            error={!!(formik.touched.email && formik.errors.email)}
+            error={formik.touched.email && !!formik.errors.email}
             fullWidth
             helperText={formik.touched.email && formik.errors.email}
             label="Email Address"
@@ -160,16 +152,16 @@ const Page = () => {
             value={formik.values.email}
           />
           <TextField
-            error={!!(formik.touched.password && formik.errors.password)}
+            error={formik.touched.password && !!formik.errors.password}
             fullWidth
             helperText={formik.touched.password && formik.errors.password}
             label="Password"
             name="password"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type={showPassword ? 'text' : 'password'} // Toggle visibility based on state
+            type={showPassword ? 'text' : 'password'}
             value={formik.values.password}
-            InputProps={{ // Add eye icon button for toggling password visibility
+            InputProps={{
               endAdornment: (
                 <IconButton onClick={togglePasswordVisibility} edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
@@ -178,16 +170,16 @@ const Page = () => {
             }}
           />
           <TextField
-            error={!!(formik.touched.confirmPassword && formik.errors.confirmPassword)}
+            error={formik.touched.confirmPassword && !!formik.errors.confirmPassword}
             fullWidth
             helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
             label="Confirm Password"
             name="confirmPassword"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type={showPassword ? 'text' : 'password'} // Toggle visibility based on state
+            type={showPassword ? 'text' : 'password'}
             value={formik.values.confirmPassword}
-            InputProps={{ // Add eye icon button for toggling password visibility
+            InputProps={{
               endAdornment: (
                 <IconButton onClick={togglePasswordVisibility} edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
@@ -195,46 +187,40 @@ const Page = () => {
               ),
             }}
           />
-        </Stack>
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            ml: -1,
-            mt: 1
-          }}
-        >
-          <Checkbox
-            checked={formik.values.policy}
-            name="policy"
+          <TextField
+            error={formik.touched.contactNumber && !!formik.errors.contactNumber}
+            fullWidth
+            helperText={formik.touched.contactNumber && formik.errors.contactNumber}
+            label="Contact Number"
+            name="contactNumber"
+            onBlur={formik.handleBlur}
             onChange={formik.handleChange}
+            value={formik.values.contactNumber}
           />
-          <Typography
-            color="text.secondary"
-            variant="body2"
-          >
-            I have read the
-            {' '}
-            <Link
-              component="a"
-              href="#"
-            >
+          <TextField
+            error={formik.touched.twitterId && !!formik.errors.twitterId}
+            fullWidth
+            helperText={formik.touched.twitterId && formik.errors.twitterId}
+            label="Twitter ID"
+            name="twitterId"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.twitterId}
+          />
+        </Stack>
+        <Box sx={{ alignItems: 'center', display: 'flex', ml: -1, mt: 1 }}>
+          <Checkbox checked={formik.values.policy} name="policy" onChange={formik.handleChange} />
+          <Typography color="text.secondary" variant="body2">
+            I have read the {' '}
+            <Link component="a" href="#">
               Terms and Conditions
             </Link>
           </Typography>
         </Box>
         {!!(formik.touched.policy && formik.errors.policy) && (
-          <FormHelperText error>
-            {formik.errors.policy}
-          </FormHelperText>
+          <FormHelperText error>{formik.errors.policy}</FormHelperText>
         )}
-        <Button
-          fullWidth
-          size="large"
-          sx={{ mt: 3 }}
-          type="submit"
-          variant="contained"
-        >
+        <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
           Register
         </Button>
       </form>
@@ -242,7 +228,7 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
+Page.getLayout = page => (
   <AuthLayout>
     {page}
   </AuthLayout>

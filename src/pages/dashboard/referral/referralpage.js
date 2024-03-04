@@ -118,7 +118,7 @@ export const ReferralPage = () => {
         <Grid
           xs={12}
           md={6}
-          paddingTop={0}
+          // paddingTop={}
         >
           <Card>
             <CardContent>
@@ -126,6 +126,7 @@ export const ReferralPage = () => {
                 alignItems="center"
                 direction="row"
                 spacing={2}
+                
                 // paddingTop={'50%'}
                 // paddingBottom={''}
               >
@@ -152,6 +153,7 @@ export const ReferralPage = () => {
         <Grid
           xs={12}
           md={6}
+          marginTop={'10%'}
         >
           <Card>
             <CardContent>
@@ -159,6 +161,10 @@ export const ReferralPage = () => {
                 alignItems="center"
                 direction="row"
                 spacing={2}
+                // marginBottom={'50%'}
+                
+                
+                
               >
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
@@ -182,6 +188,12 @@ export const ReferralPage = () => {
             </CardContent>
             <Divider />
             <CardActions 
+             sx={{
+              justifyContent: 'center',
+              
+              // alignItems: 'center',
+              // Center align the button horizontally
+            }}
             >
               <Button variant="outlined" onClick={handleSharePoster}>Share Referral Poster</Button>
             </CardActions>

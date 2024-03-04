@@ -116,7 +116,7 @@ const Page = () => {
       >
         <Stack spacing={3}>
           <TextField
-            autoFocus
+            // autoFocus
             error={!!(formik.touched.email && formik.errors.email)}
             fullWidth
             helperText={formik.touched.email && formik.errors.email}
