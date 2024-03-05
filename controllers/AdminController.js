@@ -24,7 +24,7 @@ const getuserbalance = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Internal server error' });
   }
-  }
+}
 
 const completeTask = async (req, res) => {
   try {
@@ -113,8 +113,8 @@ const confirmTaskCompletion = async (req, res) => {
 const getAllTasksUser = async (req, res) => {
   try {
     const userId = req.user.member_user_id;
-    const tasks = await CompletedTask.find({userId});
-    res.json(tasks); 
+    const tasks = await CompletedTask.find({ userId });
+    res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
@@ -287,74 +287,45 @@ const getCompletedTasks = async (req, res) => {
 
 const addTask = async (req, res) => {
   try {
-    // Extract task data from request body
-    const { taskName, description, coins, link, scheduledTime, estimatedCompletionTime } = req.body;
-    const imageFiles = req.files;
-
     // Check if the user making the request is an admin
-    const isAdmin = req.user.isAdmin; // Assuming you have a property in the user object indicating admin status
+    const isAdmin = req.user.userType === 'admin';
 
     if (!isAdmin) {
       return res.status(403).json({ error: 'Permission Denied. Only admin can set scheduled time.' });
     }
 
-    // Create a new task document
-    const newTask = new Task({
+    // Destructure variables from req.body
+    const {
       taskName,
+      description,
+      coins,
+      link,
+      scheduledTime,
+      completionDateTime,
+      submissionOpen,
+    } = req.body;
+
+    // Define newTask here with the correct variables
+    const newTask = new Task({
       taskId: generateRandomNumber(),
+      taskName,
       description,
       coins,
       link,
       imageUrls: [],
       scheduledTime,
-      estimatedCompletionTime,
-      submissionOpen: true, // Set submissionOpen to true by default
+      completionTime: completionDateTime,
+      submissionOpen,
     });
 
-    // Save the task to the database
-    await newTask.save();
+    const savedTask = await newTask.save();
 
-    // Check if the task is currently visible based on scheduled time
-    const currentTime = new Date();
-    if (scheduledTime <= currentTime) {
-      // Task is visible, update submissionOpen to true
-      newTask.submissionOpen = true;
-    }
-
-    // Update submissionOpen to false after the estimatedCompletionTime
-    setTimeout(async () => {
-      newTask.submissionOpen = false;
-      await newTask.save();
-    }, estimatedCompletionTime * 60 * 1000);
-
-    // Upload images to Azure Blob Storage
-    if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
-      const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
-      const containerName = azurecontainer;
-      const containerClient = blobServiceClient.getContainerClient(containerName);
-
-      // Loop through each image file
-      for (let i = 0; i < imageFiles.length; i++) {
-        const imageFile = imageFiles[i];
-        const blobName = `${newTask.taskId}-${imageFile.originalname}`;
-        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-        const imageData = imageFile.buffer;
-        await blockBlobClient.uploadData(imageData, imageData.length);
-
-        newTask.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
-      }
-    }
-
-    // Save the updated task to the database
-    await newTask.save();
-
-    res.status(201).json(newTask); // Respond with the newly created task
+    res.status(201).json(savedTask);
   } catch (error) {
     console.error('Error adding task:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
 
 
 
@@ -419,27 +390,6 @@ const editTask = async (req, res) => {
     if (!task) {
       console.log('Task not found');
       return res.status(404).json({ error: 'Task not found' });
-    }
-
-    if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
-      const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
-      const containerName = azurecontainer;
-      const containerClient = blobServiceClient.getContainerClient(containerName);
-
-      // Clear existing imageUrls
-      task.imageUrls = [];
-
-      // Loop through each image file
-      for (let i = 0; i < imageFiles.length; i++) {
-        const imageFile = imageFiles[i];
-        const blobName = `${task.taskId}-${imageFile.originalname}`;
-        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-        const imageData = imageFile.buffer;
-        await blockBlobClient.uploadData(imageData, imageData.length);
-
-        task.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
-      }
     }
 
     return res.status(200).json(task);
@@ -725,4 +675,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance,getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };

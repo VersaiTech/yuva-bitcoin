@@ -8,8 +8,8 @@ const taskSchema = new mongoose.Schema({
     coins: { type: Number, required: true },
     link: { type: String, required: true },
     imageUrls: { type: [String] },
-    cheduledTime: { type: Date },  // Scheduled time for task assignment
-    estimatedCompletionTime: { type: Number }, // Estimated completion time in minutes
+    scheduledTime: { type: Date },  // Scheduled time for task assignment
+    completionTime: { type: Date }, // Estimated completion time in minutes
     submissionOpen: { type: Boolean, default: true }, // Indicate whether submission is open
 }, { timestamps: true });
 

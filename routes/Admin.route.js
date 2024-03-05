@@ -1,8 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const multer = require("multer");
+const path = require('path');
+
 // Configure multer for handling file uploads
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+    destination: 'public/',
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const fileExtension = path.extname(file.originalname);
+        cb(null, uniqueSuffix + fileExtension);
+    }
+});
+
+
+
 const upload = multer({ storage: storage });
 const { getOverview } = require('../controllers/Overview.controller');
 const { getuserbalance,getAllStakes,getAllStake, addTask, editTask, deleteTask, getOneTask,deleteUser, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks,getConfirmedTasksForUser,getPendingTasksForUser,getRejectedTasksForUser,getAllTasksUser } = require('../controllers/AdminController');
