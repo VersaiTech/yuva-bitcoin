@@ -45,7 +45,7 @@ const useOrders = (search) => {
   const getOrders = useCallback(async () => {
     try {
 
-     const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem('accessToken');
       const headers = {
         Authorization: token,
       }
@@ -65,8 +65,8 @@ const useOrders = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-      getOrders();
-    },
+    getOrders();
+  },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
 
@@ -147,11 +147,11 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Earnings | Yuva Bitcoin 
+          Dashboard: Earnings | Yuva Bitcoin
         </title>
       </Head>
-      <Divider />
-      <DepositOperations/>
+      <Divider sx={{ mb: 3 }} />
+      <DepositOperations />
       <Box
         component="main"
         ref={rootRef}
@@ -160,7 +160,7 @@ const Page = () => {
           flex: '1 1 auto',
           overflow: 'hidden',
           position: 'relative',
-          
+
         }}
       >
         <Box
@@ -175,8 +175,8 @@ const Page = () => {
             position: 'absolute',
             right: 0,
             top: 0,
-  
-        
+
+
           }}
         >
           {/* <DepositsListContainer open={drawer.isOpen}>
@@ -214,7 +214,7 @@ const Page = () => {
             />
           </DepositsListContainer> */}
 
-          
+
           <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}

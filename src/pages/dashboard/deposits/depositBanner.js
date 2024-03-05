@@ -16,52 +16,28 @@ import {
 } from "@mui/material";
 
 const logoMap = {
-  BTC: "/assets/logos/logo-bitcoin.svg",
-  ETH: "/assets/logos/logo-eth.svg",
+  USDT: "/assets/logos/logo-usdt.svg",
+  Yuva_Bitcoin: "/assets/logos/logo-eth.svg",
 };
 
 export const DepositOperations = (props) => {
   const [op, setOp] = useState({
-    from: "BTC",
-    to: "ETH",
+    from: "USDT",
+    to: "Yuva_Bitcoin",
+    
   });
-
-  const handleSwitch = useCallback(() => {
-    if (op.from === "BTC") {
-      setOp({
-        from: "ETH",
-        to: "BTC",
-      });
-    } else {
-      setOp({
-        from: "BTC",
-        to: "ETH",
-      });
-    }
-  }, [op]);
 
   return (
     <Card
       {...props}
       sx={{
-        width: 1000, // Adjust width as needed
+        width: 1000, // Fixed
         maxWidth: "100%",
-        // display: "flex",
-        // Add any other styles you want to apply
         margin: "0 auto",
       }}
     >
       <CardHeader
         title="Buy Bitcoin"
-        action={
-          <Tabs value="buy">
-            <Tab label="Buy" value="buy" />
-            {/* <Tab
-              label="Sell"
-              value="sell"
-            /> */}
-          </Tabs>
-        }
       />
       <CardContent sx={{ pt: 0 }}>
         <TextField
@@ -95,7 +71,7 @@ export const DepositOperations = (props) => {
             my: 1,
           }}
         >
-          <IconButton onClick={handleSwitch}>
+          <IconButton>
             <SvgIcon fontSize="small">
               <SwitchVertical01Icon />
             </SvgIcon>
@@ -125,10 +101,15 @@ export const DepositOperations = (props) => {
           }}
           value="5.9093"
         />
-        <Typography color="text.secondary" sx={{ mt: 2 }} variant="body2">
+        <Typography color="text.secondary"
+          sx={{ mt: 2 }}
+          variant="body2">
           1 BTC = $20,024.90
         </Typography>
-        <Button fullWidth size="large" sx={{ mt: 2 }} variant="contained">
+        <Button fullWidth
+          size="large"
+          sx={{ mt: 2 }}
+          variant="contained">
           Buy {op.to === "BTC" ? "Bitcoin" : "Ethereum"}
         </Button>
       </CardContent>
