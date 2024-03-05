@@ -225,7 +225,7 @@ export const SideNav = (props) => {
               sx={{ mb: 2 }}
               variant="body2"
             >
-              Please check our docs.
+              Please check our whitepaper.
             </Typography>
             <Button
               component={NextLink}
@@ -238,7 +238,7 @@ export const SideNav = (props) => {
               )}
               variant="contained"
             >
-              Documentation
+              White Paper
             </Button>
           </Box>
         </Stack>
