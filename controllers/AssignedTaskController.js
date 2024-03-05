@@ -134,6 +134,4 @@ const deleteTweet = async (req, res) => {
 }
 
 
-
-
 module.exports = { assignTask, markTaskCompleted, confirmTaskCompletion, getUserInfo, postTweet, deleteTweet };

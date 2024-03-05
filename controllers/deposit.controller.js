@@ -8,8 +8,6 @@ function generateTransactionId() {
   return uuidv4(); // Using just UUID for simplicity, feel free to customize it further
 }
 
-//==================================================================================================================
-
 async function createDeposit(req, res) {
   try {
     // Retrieve member information based on member_user_id

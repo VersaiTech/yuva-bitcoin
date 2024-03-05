@@ -239,11 +239,64 @@ const getCompletedTasks = async (req, res) => {
 };
 
 
+// const addTask = async (req, res) => {
+//   try {
+//     // Extract task data from request body
+//     const { taskName, description, coins, link } = req.body;
+//     const imageFiles = req.files;
+
+//     // Create a new task document
+//     const newTask = new Task({
+//       taskName,
+//       taskId: generateRandomNumber(),
+//       description,
+//       coins,
+//       // imageUrl: null,
+//       link,
+//       imageUrls: [],
+//     });
+
+//     if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
+//       const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
+//       const containerName = azurecontainer;
+//       const containerClient = blobServiceClient.getContainerClient(containerName);
+
+//       // Loop through each image file
+//       for (let i = 0; i < imageFiles.length; i++) {
+//         const imageFile = imageFiles[i];
+//         const blobName = `${newTask.taskId}-${imageFile.originalname}`;
+//         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+//         const imageData = imageFile.buffer;
+//         await blockBlobClient.uploadData(imageData, imageData.length);
+
+//         newTask.imageUrls.push(blockBlobClient.url); // Add the image URL to the array
+//       }
+//     }
+
+//     // Save the task to the database
+//     await newTask.save();
+
+//     res.status(201).json(newTask); // Respond with the newly created task
+//   } catch (error) {
+//     console.error('Error adding task:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
+
+
 const addTask = async (req, res) => {
   try {
     // Extract task data from request body
-    const { taskName, description, coins, link } = req.body;
+    const { taskName, description, coins, link, scheduledTime, estimatedCompletionTime } = req.body;
     const imageFiles = req.files;
+
+    // Check if the user making the request is an admin
+    const isAdmin = req.user.isAdmin; // Assuming you have a property in the user object indicating admin status
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Permission Denied. Only admin can set scheduled time.' });
+    }
 
     // Create a new task document
     const newTask = new Task({
@@ -251,11 +304,30 @@ const addTask = async (req, res) => {
       taskId: generateRandomNumber(),
       description,
       coins,
-      // imageUrl: null,
       link,
       imageUrls: [],
+      scheduledTime,
+      estimatedCompletionTime,
+      submissionOpen: true, // Set submissionOpen to true by default
     });
 
+    // Save the task to the database
+    await newTask.save();
+
+    // Check if the task is currently visible based on scheduled time
+    const currentTime = new Date();
+    if (scheduledTime <= currentTime) {
+      // Task is visible, update submissionOpen to true
+      newTask.submissionOpen = true;
+    }
+
+    // Update submissionOpen to false after the estimatedCompletionTime
+    setTimeout(async () => {
+      newTask.submissionOpen = false;
+      await newTask.save();
+    }, estimatedCompletionTime * 60 * 1000);
+
+    // Upload images to Azure Blob Storage
     if (imageFiles && Array.isArray(imageFiles) && imageFiles.length > 0) {
       const blobServiceClient = BlobServiceClient.fromConnectionString(azureconnectionString);
       const containerName = azurecontainer;
@@ -274,7 +346,7 @@ const addTask = async (req, res) => {
       }
     }
 
-    // Save the task to the database
+    // Save the updated task to the database
     await newTask.save();
 
     res.status(201).json(newTask); // Respond with the newly created task
@@ -283,6 +355,9 @@ const addTask = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+
+
 
 // only one task can be added in a day code is below
 // const addTask = async (req, res) => {
