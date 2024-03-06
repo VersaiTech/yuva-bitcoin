@@ -16,7 +16,8 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Chart } from '../../../components/chart';
-
+import { paths } from '../../../paths';
+import Link from 'next/link';
 const useChartOptions = (labels) => {
   const theme = useTheme();
 
@@ -95,8 +96,8 @@ export const CryptoCurrentBalance = (props) => {
   return (
     <Card>
       <CardHeader
-        title="Current Balance"
-        subheader="Balance across all your accounts"
+        title="Total Stake"
+        subheader="Total coins you invested in the platform"
       />
       <CardContent>
         <Stack
@@ -130,7 +131,7 @@ export const CryptoCurrentBalance = (props) => {
                 color="text.secondary"
                 variant="overline"
               >
-                Total balance
+                Total Investment 
               </Typography>
               <Typography variant="h4">
                 {formattedTotalAmount}
@@ -141,7 +142,7 @@ export const CryptoCurrentBalance = (props) => {
                 color="text.secondary"
                 variant="overline"
               >
-                Available currency
+                Total Months
               </Typography>
               <Stack
                 component="ul"
@@ -193,6 +194,7 @@ export const CryptoCurrentBalance = (props) => {
       </CardContent>
       <Divider />
       <CardActions>
+      <Link  href={paths.dashboard.stake.create}> 
         <Button
           color="inherit"
           endIcon={(
@@ -204,6 +206,7 @@ export const CryptoCurrentBalance = (props) => {
         >
           Add funds
         </Button>
+      </Link>
         <Button
           color="inherit"
           endIcon={(

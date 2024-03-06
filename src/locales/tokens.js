@@ -56,7 +56,7 @@ export const tokens = {
     overview: 'nav.overview',
     todayTasks: 'nav.todayTasks',
     completedTasks: 'nav.completedTasks',
-    failed: 'nav.failed',
+    pending: 'nav.pending',
     pages: 'nav.pages',
     postCreate: 'nav.postCreate',
     postDetails: 'nav.postDetails',

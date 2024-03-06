@@ -446,7 +446,7 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <WithdrawalsListTable
+              <Withdrawals  ListTable
                 customers={customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}

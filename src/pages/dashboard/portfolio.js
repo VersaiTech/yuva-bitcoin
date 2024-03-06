@@ -23,6 +23,8 @@ import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-cur
 import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
 import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-open-tickets';
 import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
+// import OverviewEarnings  from "../../sections/dashboard/overview/overview-earnings";
+
 
 
 const now = new Date();
@@ -66,6 +68,12 @@ const Page = () => {
               xs={12}
               md={4}
             >
+              <OverviewOpenTickets amount={5} />
+            </Grid>
+            <Grid
+              xs={12}
+              md={4}
+            >
               <OverviewDoneTasks amount={31} />
             </Grid>
             <Grid
@@ -74,16 +82,10 @@ const Page = () => {
             >
               <OverviewPendingIssues amount={12} />
             </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
-              <OverviewOpenTickets amount={5} />
-            </Grid>
 
 
             
-            <Grid xs={12} md={8}>
+            <Grid xs={12} md={12}>
               <Stack
                 spacing={{
                   xs: 3,
@@ -92,9 +94,9 @@ const Page = () => {
               >
                 <CryptoCurrentBalance
                   chartSeries={[16213.2, 9626.8, 10076.81]}
-                  labels={["Bitcoin", "Ethereum", "US Dollars"]}
+                  labels={["3 Month Investment", "6 Month Investment", "9 Month "]}
                 />
-                <CryptoTransactions
+                {/* <CryptoTransactions
                   transactions={[
                     {
                       id: "3cc450e88286fdd4e220c719",
@@ -121,19 +123,20 @@ const Page = () => {
                       title: "Sell BTC",
                     },
                   ]}
-                />
+                /> */}
+            <OverviewEarnings />
               </Stack>
             </Grid>
-            <Grid xs={12} md={4}>
-              <Stack
-                spacing={{
-                  xs: 3,
-                  lg: 4,
-                }}
-              >
-                
-              </Stack>
-            </Grid>
+            {/* <Grid xs={12} md={4}>
+                <Stack
+                  spacing={{
+                    xs: 3,
+                    lg: 4,
+                  }}
+                >
+                  
+                </Stack>
+            </Grid> */}
           </Grid>
         </Container>
       </Box>

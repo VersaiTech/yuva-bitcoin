@@ -61,12 +61,12 @@ export const getSections = (t) => [
             path: paths.dashboard.tasks.today
           },
           {
-            title: t(tokens.nav.completedTasks),
-            path: paths.dashboard.tasks.completedTasks
+            title: t(tokens.nav.pending),
+            path: paths.dashboard.tasks.pending
           },
           {
-            title: t(tokens.nav.failed),
-            path: paths.dashboard.tasks.failed
+            title: t(tokens.nav.completedTasks),
+            path: paths.dashboard.tasks.completedTasks
           }
         ]
       },

@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import Link from 'next/link';
+import { paths } from '../../../paths';
 
 export const OverviewOpenTickets = (props) => {
   const { amount } = props;
@@ -42,17 +44,20 @@ export const OverviewOpenTickets = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Button
-          color="inherit"
-          endIcon={(
-            <SvgIcon>
-              <ArrowRightIcon />
-            </SvgIcon>
-          )}
-          size="small"
-        >
-          See all Tasks
-        </Button>
+        {/* Use Link component from Next.js to navigate to the desired route */}
+        <Link  href={paths.dashboard.tasks.index}> 
+          <Button
+            color="inherit"
+            endIcon={(
+              <SvgIcon>
+                <ArrowRightIcon />
+              </SvgIcon>
+            )}
+            size="small"
+          >
+            See all tasks
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );

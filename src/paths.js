@@ -123,7 +123,7 @@ export const paths = {
       today: '/dashboard/tasks',
       details: '/dashboard/tasks/:taskId',
       completedTasks: '/dashboard/tasks?s=completed',
-      failed: '/dashboard/tasks?s=failed'
+      pending: '/dashboard/tasks?s=failed'
     },
     products: {
       index: '/dashboard/products',
