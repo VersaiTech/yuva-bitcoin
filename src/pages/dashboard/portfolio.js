@@ -23,7 +23,8 @@ import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-cur
 import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
 import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-open-tickets';
 import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
-// import OverviewEarnings  from "../../sections/dashboard/overview/overview-earnings";
+// import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
+import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 
 
 
