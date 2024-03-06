@@ -1,4 +1,4 @@
-import { order, orders } from './data';
+``import { order, orders } from './data';
 import { deepCopy } from '../../utils/deep-copy';
 import { applyPagination } from '../../utils/apply-pagination';
 import { applySort } from '../../utils/apply-sort';

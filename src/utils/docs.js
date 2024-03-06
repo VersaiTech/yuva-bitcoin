@@ -23,6 +23,7 @@ export const getArticle = (slug, fields = []) => {
     if (typeof data[field] !== 'undefined') {
       article[field] = data[field];
     }
+
   });
 
   return article;
