@@ -33,6 +33,10 @@ export const TaskListTable = (props) => {
     ...other
   } = props;
 
+  // orders.forEach(element => {
+  //   console.log(format(new Date(element.createdAt), 'LLL').toUpperCase());
+  // });
+
   return (
     <div {...other}>
       <Table>
@@ -46,10 +50,10 @@ export const TaskListTable = (props) => {
         <TableBody>
           {orders.map((order) => {
             // Ensure createdAt is a valid Date object before formatting
-            const createdAtMonth = order.createdAt ? format(order.createdAt, 'LLL').toUpperCase() : '';
-            const createdAtDay = order.createdAt ? format(order.createdAt, 'd') : '';
-            const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
-            const statusColor = statusMap[order.status] || 'warning';
+            const createdAtMonth = order.createdAt ? format(new Date(order.createdAt), 'LLL').toUpperCase() : '';
+            const createdAtDay = order.createdAt ? format(new Date(order.createdAt), 'd') : '';
+            // const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+            // const statusColor = statusMap[order.status] || 'warning';
 
             return (
               <TableRow
@@ -97,16 +101,16 @@ export const TaskListTable = (props) => {
                         color="text.secondary"
                         variant="body2"
                       >
-                        Total of {totalAmount}
+                        {/* Total of {totalAmount} */}
                       </Typography>
                     </Box>
                   </Box>
                 </TableCell>
                 <TableCell align="right">{order.details}</TableCell>
                 <TableCell align="right">
-                  <SeverityPill color={statusColor}>
+                  {/* <SeverityPill color={statusColor}>
                     {order.status}
-                  </SeverityPill>
+                  </SeverityPill> */}
                 </TableCell>
               </TableRow>
             );
