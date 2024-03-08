@@ -43,14 +43,14 @@ const sortOptions = [
     label: 'Last update (oldest)',
     value: 'updatedAt|asc'
   },
-  {
-    label: 'Total orders (highest)',
-    value: 'totalOrders|desc'
-  },
-  {
-    label: 'Total orders (lowest)',
-    value: 'totalOrders|asc'
-  }
+  // {
+  //   label: 'Total orders (highest)',
+  //   value: 'totalOrders|desc'
+  // },
+  // {
+  //   label: 'Total orders (lowest)',
+  //   value: 'totalOrders|asc'
+  // }
 ];
 
 export const NewtaskListSearch = (props) => {
@@ -153,7 +153,7 @@ export const NewtaskListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search customers"
+            placeholder="Search Task"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>

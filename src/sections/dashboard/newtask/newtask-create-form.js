@@ -102,7 +102,7 @@ export const NewTaskForm = (props) => {
         });
         console.log(response.data);
         toast.success("Task created");
-        router.push(paths.dashboard.tasks.index);
+        router.push(paths.dashboard.newtask.index);
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
