@@ -18,6 +18,7 @@ import { useTheme } from '@mui/material/styles';
 import { Chart } from '../../../components/chart';
 import { paths } from '../../../paths';
 import Link from 'next/link';
+
 const useChartOptions = (labels) => {
   const theme = useTheme();
 
@@ -28,7 +29,8 @@ const useChartOptions = (labels) => {
     colors: [
       theme.palette.primary.main,
       theme.palette.info.main,
-      theme.palette.warning.main
+      theme.palette.warning.main,
+      theme.palette.error.main,
     ],
     dataLabels: {
       enabled: false
@@ -91,7 +93,7 @@ export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
   const chartOptions = useChartOptions(labels);
   const totalAmount = chartSeries.reduce((acc, item) => acc += item, 0);
-  const formattedTotalAmount = numeral(totalAmount).format('$0,0.00');
+  const formattedTotalAmount = numeral(totalAmount).format('$0,0');
 
   return (
     <Card>

@@ -25,7 +25,7 @@ import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-
 import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
 // import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
-
+import { useTotalInvestment } from "./stake/[stakeId]";
 
 
 const now = new Date();
@@ -33,7 +33,10 @@ const now = new Date();
 const Page = () => {
   const settings = useSettings();
   const theme = useTheme();
-
+  const totalInvestment = useTotalInvestment();
+  const chartSeries = [
+     totalInvestment
+  ];
   usePageView();
 
   return (
@@ -96,7 +99,7 @@ const Page = () => {
             <OverviewEarnings />
 
                 <CryptoCurrentBalance
-                  chartSeries={[16213.2, 9626.8, 10076.81]}
+                  chartSeries={chartSeries}
                   labels={["3 Month Investment", "6 Month Investment", "9 Month "]}
                 />
                 {/* <CryptoTransactions

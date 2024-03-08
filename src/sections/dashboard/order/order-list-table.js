@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import { subDays, subHours } from 'date-fns';
 import numeral from 'numeral';
 import {
   Box,
@@ -46,15 +47,15 @@ export const OrderListTable = (props) => {
         <TableBody>
           {orders.map((order) => {
             // Ensure createdAt is a valid Date object before formatting
-            const createdAtMonth = order.createdAt ? format(order.createdAt, 'LLL').toUpperCase() : '';
-            const createdAtDay = order.createdAt ? format(order.createdAt, 'd') : '';
-            const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
-            const statusColor = statusMap[order.status] || 'warning';
+            // const createdAtMonth = order.createdAt ? format(order.createdAt, 'LLL').toUpperCase() : '';
+            // const createdAtDay = order.createdAt ? format(order.createdAt, 'd') : '';
+            // const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+            // const statusColor = statusMap[order.status] || 'warning';
 
             return (
               <TableRow
                 hover
-                key={order.id}
+                key={order.taskId}
                 onClick={() => onOrderSelect?.(order.id)}
                 sx={{ cursor: 'pointer' }}
               >
@@ -80,13 +81,13 @@ export const OrderListTable = (props) => {
                         align="center"
                         variant="subtitle2"
                       >
-                        {createdAtMonth}
+                        {/* {createdAtMonth} */}
                       </Typography>
                       <Typography
                         align="center"
                         variant="h6"
                       >
-                        {createdAtDay}
+                        {/* {createdAtDay} */}
                       </Typography>
                     </Box>
                     <Box sx={{ ml: 2 }}>
@@ -97,16 +98,16 @@ export const OrderListTable = (props) => {
                         color="text.secondary"
                         variant="body2"
                       >
-                        Total of {totalAmount}
+                        {/* Total of {totalAmount} */}
                       </Typography>
                     </Box>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{order.details}</TableCell>
+                {/* <TableCell align="right">{order.details}</TableCell> */}
                 <TableCell align="right">
-                  <SeverityPill color={statusColor}>
+                  {/* <SeverityPill color={statusColor}>
                     {order.status}
-                  </SeverityPill>
+                  </SeverityPill> */}
                 </TableCell>
               </TableRow>
             );

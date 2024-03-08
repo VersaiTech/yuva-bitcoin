@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
+import NextLink from "next/link";
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { paths } from "../../../paths";
 import {
   Box,
   Button,
@@ -10,21 +12,20 @@ import {
   Container,
   Stack,
   SvgIcon,
-  Link,
   Typography,
 } from "@mui/material";
-// import { customersApi } from "../../../api/customers";
+import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 // import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
 // import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
-import { StakeListSearch } from "../../../sections/dashboard/stake/stake-list-search";
-import { StakeListTable } from "../../../sections/dashboard/stake/stake-list-table";
-import { paths } from "../../../paths";
-import NextLink from "next/link";
-
+import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
+import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
+import { NewtaskListSearch } from "../../../sections/dashboard/task/task-list-search";
+import { NewtaskListTable } from "../../../sections/dashboard/task/task-list-table";
 import axios from "axios";
+import { logs } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -48,7 +49,7 @@ const useSearch = () => {
 
 const useCustomers = (search) => {
   const isMounted = useMounted();
-  const [state, setState] = useState({  
+  const [state, setState] = useState({
     customers: [],
     customersCount: 0,
   });
@@ -62,24 +63,33 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(
-        `${BASEURL}/admin/getAllStake`,
+      const response = await axios.get(`${BASEURL}/admin/getAllTasks`, {
+        headers: headers,
+      });
+      console.log(response.data);
+
+      const completedTasks = await axios.get(
+        `${BASEURL}/admin/getConfirmedTasksForUser`,
         { headers: headers }
       );
+      console.log(completedTasks.data);
 
-      console.log(response.data.data);
+      const pendingTasks = await axios.get(
+        `${BASEURL}/admin/getPendingTasksForUser`,
+        { headers: headers }
+      );
+      console.log(pendingTasks.data);
 
       if (isMounted()) {
         setState({
-          customers: response.data.data,
+          customers: response.data,
           customersCount: response.count,
-          // pending: PendingWithdrawals.data.data,
-          // rejected: rejectedWithdrawals.data.data,
-          // completed: completedWithdrawals.data.data,
+          pending: pendingTasks.data,
+          completed: completedTasks.data,
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
     }
   }, [search, isMounted]);
 
@@ -151,7 +161,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Stake List | Yuva Bitcoin</title>
+        <title>Dashboard: Task | Yuva Bitcoin</title>
       </Head>
       <Box
         component="main"
@@ -164,7 +174,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Stakes</Typography>
+                <Typography variant="h4">All Task</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
@@ -191,41 +201,45 @@ const Page = () => {
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                <Link component={NextLink} color="inherit" href={paths.dashboard.stake.create}>
-                  <Button
-                    startIcon={
-                      <SvgIcon>
-                        <PlusIcon />
-                      </SvgIcon>
-                    }
-                    variant="contained"
-                  >
-                    Add
-                  </Button>
-                </Link>
+                {/* <Button
+                  component={NextLink}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                  href={paths.dashboard.tasks.create}
+                >
+                  Add
+                </Button> */}
               </Stack>
             </Stack>
             <Card>
-              <StakeListSearch
+              <NewtaskListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                // completed={completed}
-                // pending={pending}
-                // rejected={rejected}
+                completed={completed}
+                pending={pending}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <StakeListTable
-                customers={customers}
+              <NewtaskListTable
+                // customers={customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                // customers={
-                //   currentTab === "all"
-                //     ? customers
-                // }
+                customers={
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "hasAcceptedMarketing"
+                    ? pending
+                    : currentTab === "isProspect"
+                    ? completed
+                    : []
+                }
                 // customersCount={
                 //   currentTab === 'all' ? customersCount :
                 //     currentTab === 'pending' ? pending.length :

@@ -1,31 +1,39 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Head from 'next/head';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import { Box, Button, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-import { ordersApi } from '../../../api/orders';
-import { useMounted } from '../../../hooks/use-mounted';
-import { usePageView } from '../../../hooks/use-page-view';
-import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
-import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
-import { OrderListSearch } from '../../../sections/dashboard/order/order-list-search';
-import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Head from "next/head";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
+import { ordersApi } from "../../../api/orders";
+import { useMounted } from "../../../hooks/use-mounted";
+import { usePageView } from "../../../hooks/use-page-view";
+import { Layout as DashboardLayout } from "../../../layouts/dashboard";
+import { OrderDrawer } from "../../../sections/dashboard/order/order-drawer";
+import { OrderListContainer } from "../../../sections/dashboard/order/order-list-container";
+import { OrderListSearch } from "../../../sections/dashboard/order/order-list-search";
+// import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
+import { OrderListTable } from "../../../sections/dashboard/order/order-list-table";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
-      status: undefined
+      status: undefined,
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'createdAt',
-    sortDir: 'desc'
+    sortBy: "createdAt",
+    sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -33,7 +41,7 @@ const useOrders = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     orders: [],
-    ordersCount: 0
+    ordersCount: 0,
   });
 
   const getOrders = useCallback(async () => {
@@ -43,7 +51,7 @@ const useOrders = (search) => {
       if (isMounted()) {
         setState({
           orders: response.data,
-          ordersCount: response.count
+          ordersCount: response.count,
         });
       }
     } catch (err) {
@@ -51,11 +59,13 @@ const useOrders = (search) => {
     }
   }, [search, isMounted]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       getOrders();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [search]
+  );
 
   return state;
 };
@@ -66,7 +76,7 @@ const Page = () => {
   const { orders, ordersCount } = useOrders(search);
   const [drawer, setDrawer] = useState({
     isOpen: false,
-    data: undefined
+    data: undefined,
   });
   const currentOrder = useMemo(() => {
     if (!drawer.data) {
@@ -78,85 +88,98 @@ const Page = () => {
 
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleSortChange = useCallback((sortDir) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      sortDir
-    }));
-  }, [updateSearch]);
+  const handleSortChange = useCallback(
+    (sortDir) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        sortDir,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleOrderOpen = useCallback((orderId) => {
-    // Close drawer if is the same order
+  const handleOrderOpen = useCallback(
+    (orderId) => {
+      // Close drawer if is the same order
 
-    if (drawer.isOpen && drawer.data === orderId) {
+      if (drawer.isOpen && drawer.data === orderId) {
+        setDrawer({
+          isOpen: false,
+          data: undefined,
+        });
+        return;
+      }
+
       setDrawer({
-        isOpen: false,
-        data: undefined
+        isOpen: true,
+        data: orderId,
       });
-      return;
-    }
-
-    setDrawer({
-      isOpen: true,
-      data: orderId
-    });
-  }, [drawer]);
+    },
+    [drawer]
+  );
 
   const handleOrderClose = useCallback(() => {
     setDrawer({
       isOpen: false,
-      data: undefined
+      data: undefined,
     });
   }, []);
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Order List | Rock34x 
-        </title>
+        <title>Dashboard: Order List | Rock34x</title>
       </Head>
       <Divider />
       <Box
         component="main"
         ref={rootRef}
         sx={{
-          display: 'flex',
-          flex: '1 1 auto',
-          overflow: 'hidden',
-          position: 'relative'
+          display: "flex",
+          flex: "1 1 auto",
+          overflow: "hidden",
+          position: "relative",
         }}
       >
         <Box
           ref={rootRef}
           sx={{
             bottom: 0,
-            display: 'flex',
+            display: "flex",
             left: 0,
-            position: 'absolute',
+            position: "absolute",
             right: 0,
-            top: 0
+            top: 0,
           }}
         >
           <OrderListContainer open={drawer.isOpen}>
@@ -168,17 +191,15 @@ const Page = () => {
                 spacing={4}
               >
                 <div>
-                  <Typography variant="h4">
-                    Orders
-                  </Typography>
+                  <Typography variant="h4">Orders</Typography>
                 </div>
                 <div>
                   <Button
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <PlusIcon />
                       </SvgIcon>
-                    )}
+                    }
                     variant="contained"
                   >
                     Add
@@ -216,10 +237,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
