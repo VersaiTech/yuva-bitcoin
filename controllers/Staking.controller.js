@@ -144,19 +144,59 @@ const stakingSummary = async (req, res) => {
 
 
 const getTotalInvestmentByUserId = async (req, res) => {
-  const userId = req.user.member_user_id; 
+  const userId = req.user.member_user_id;
   try {
-      const stakes = await Stake.find({ member_user_id: userId });
-      let totalInvestment = 0;
-      stakes.forEach(stake => {
-          totalInvestment += stake.investment;
-      });
-      res.status(200).json({ userId: userId, totalInvestment: totalInvestment });
+    const stakes = await Stake.find({ member_user_id: userId });
+    let totalInvestment = 0;
+    stakes.forEach(stake => {
+      totalInvestment += stake.investment;
+    });
+    res.status(200).json({ userId: userId, totalInvestment: totalInvestment });
   } catch (error) {
-      console.error("Error occurred while getting total investment:", error);
-      res.status(500).json({ error: "Internal server error" });
+    console.error("Error occurred while getting total investment:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
+
+
+const get3MonthsStake = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ stakingDuration: 3 });
+
+
+    res.status(200).json({ userId: userId, stakes: stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 3 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const get6MonthsStake = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ stakingDuration: 6 });
+
+
+    res.status(200).json({ userId: userId, stakes: stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 6 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const get12MonthsStake = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ stakingDuration: 12 });
+
+
+    res.status(200).json({ userId: userId, stakes: stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 12 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 // async function transferToStaking(req, res) {
 //   const userId = req.user.member_user_id;
@@ -329,7 +369,7 @@ async function transferToWallet(req, res) {
     }
     const existingWhithdraw = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
 
-    res.status(200).json({ message: 'Withdrawal successful',existingWhithdraw });
+    res.status(200).json({ message: 'Withdrawal successful', existingWhithdraw });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -343,7 +383,10 @@ module.exports = {
   transferToStaking,
   transferToWallet,
   stakingSummaryForAdmin,
-  getTotalInvestmentByUserId
+  getTotalInvestmentByUserId,
+  get3MonthsStake,
+  get6MonthsStake,
+  get12MonthsStake,
 };
 
 
