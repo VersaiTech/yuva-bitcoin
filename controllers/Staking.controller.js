@@ -198,6 +198,47 @@ const get12MonthsStake = async (req, res) => {
   }
 };
 
+//=========================================================================================================================
+
+const get3MonthsUser = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 3 });
+
+
+    res.status(200).json({ stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 3 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const get6MonthsUser = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 6 });
+
+
+    res.status(200).json({ stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 6 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const get12MonthsUser = async (req, res) => {
+  const userId = req.user.member_user_id;
+  try {
+    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 12 });
+
+
+    res.status(200).json({ stakes });
+  } catch (error) {
+    console.error("Error occurred while getting Stake duration of 12 months", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 // async function transferToStaking(req, res) {
 //   const userId = req.user.member_user_id;
 //   try {
@@ -386,7 +427,7 @@ module.exports = {
   getTotalInvestmentByUserId,
   get3MonthsStake,
   get6MonthsStake,
-  get12MonthsStake,
+  get12MonthsStake, get3MonthsUser, get6MonthsUser, get12MonthsUser
 };
 
 
