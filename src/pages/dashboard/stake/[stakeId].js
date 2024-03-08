@@ -185,7 +185,7 @@ const Page = () => {
                   </Card>
                 </Container>
               </div>
-              {/* <Stack
+              <Stack
                 alignItems="flex-start"
                 direction={{
                   xs: 'column',
@@ -227,7 +227,7 @@ const Page = () => {
                     </Stack>
                   </Stack>
                 </Stack>
-              </Stack> */}
+              </Stack>
             </Stack>
             <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
           </Stack>

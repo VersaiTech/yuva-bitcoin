@@ -153,13 +153,16 @@ import {
   Stack,
   SvgIcon,
   Typography,
-  Link,
+  // Link,
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Chart } from '../../../components/chart';
 import { useCustomer } from '../../../pages/dashboard/withdrawals/useCustomer';
 import {paths} from '../../../paths';
+// import Link/ from '@mui/material';
+
+ import Link from 'next/link';
 
 const chartSeries = [83];
 
@@ -290,17 +293,28 @@ export const OverviewEarnings = () => {
                 direction="row"
                 spacing={2}
               >
-                <Chart
+                {/* <Chart
                   height={120}
                   options={chartOptions}
                   series={chartSeries}
                   type="radialBar"
                   width={120}
+                /> */}
+                 <img
+                  src="/Wallet.png " // Replace with the path to your image
+                  alt="Your Image"
+                  style={{
+                    width: 100, // Adjust the width of the image as needed
+                    height: 100, // Adjust the height of the image as needed
+                    objectFit: 'contain', // Ensure the image covers the entire container
+                    // borderRadius: '50%', // Apply border radius to make it circular
+                    zIndex: 1 // Ensure the image is above other content
+                  }}
                 />
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {customer} {/* Display the customer balance */}
+                      {customer + " Coins"} {/* Display the customer balance */}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance

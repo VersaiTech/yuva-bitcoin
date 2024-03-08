@@ -171,9 +171,11 @@ import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { paths } from '../../../paths';
 import Link from 'next/link';
+// import Nextlink from 'next/link';
 import { WithdrawalsCreateForm } from '../../../sections/dashboard/withdrawals/withdrawals-create-form';
 import { useCustomer } from './useCustomer'; // Import the useCustomer hook from the new file
 import Head from 'next/head';
+
 
 const Page = () => {
   const customer = useCustomer();
@@ -197,7 +199,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.index}
+                  href={paths.dashboard.withdraw.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'

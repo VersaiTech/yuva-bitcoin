@@ -93,6 +93,8 @@ const Page = () => {
                   lg: 4,
                 }}
               >
+            <OverviewEarnings />
+
                 <CryptoCurrentBalance
                   chartSeries={[16213.2, 9626.8, 10076.81]}
                   labels={["3 Month Investment", "6 Month Investment", "9 Month "]}
@@ -125,7 +127,6 @@ const Page = () => {
                     },
                   ]}
                 /> */}
-            <OverviewEarnings />
               </Stack>
             </Grid>
             {/* <Grid xs={12} md={4}>

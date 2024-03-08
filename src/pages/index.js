@@ -246,11 +246,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../hooks/use-auth';
 import { paths } from '../paths';
+import Page from "./dashboard/portfolio";
 
 
 const now = new Date();
 
-const Page = () => {
+const MyPage = () => {
   const settings = useSettings();
   const theme = useTheme();
   const router = useRouter();
@@ -267,112 +268,12 @@ const Page = () => {
 
   return (
     <>
-      <Head>
-        <title>Dashboard: Overview | Rock34x</title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 4,
-        }}
-      >
-        <Container maxWidth={settings.stretch ? false : "xl"}>
-          <Grid
-            container
-            disableEqualOverflow
-            spacing={{
-              xs: 3,
-              lg: 4,
-            }}
-          >
-            <Grid xs={12}>
-              <Stack direction="row" justifyContent="space-between" spacing={4}>
-                <div>
-                  <Typography variant="h4">Overview</Typography>
-                </div>
-              </Stack>
-            </Grid>
-
-            <Grid
-              xs={12}
-              md={4}
-            >
-              <OverviewDoneTasks amount={31} />
-            </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
-              <OverviewPendingIssues amount={12} />
-            </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
-              <OverviewOpenTickets amount={5} />
-            </Grid>
-
-
-            
-            <Grid xs={12} md={8}>
-              <Stack
-                spacing={{
-                  xs: 3,
-                  lg: 4,
-                }}
-              >
-                <CryptoCurrentBalance
-                  chartSeries={[16213.2, 9626.8, 10076.81]}
-                  labels={["Bitcoin", "Ethereum", "US Dollars"]}
-                />
-                <CryptoTransactions
-                  transactions={[
-                    {
-                      id: "3cc450e88286fdd4e220c719",
-                      amount: 0.1337,
-                      balance: 4805,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 43), 5),
-                        3
-                      ).getTime(),
-                      operation: "add",
-                      title: "Buy BTC",
-                    },
-                    {
-                      id: "6442793e96a90d4e584a19f7",
-                      amount: 0.2105,
-                      balance: 2344,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 32), 54),
-                        6
-                      ).getTime(),
-                      operation: "sub",
-                      title: "Sell BTC",
-                    },
-                  ]}
-                />
-              </Stack>
-            </Grid>
-            <Grid xs={12} md={4}>
-              <Stack
-                spacing={{
-                  xs: 3,
-                  lg: 4,
-                }}
-              >
-                
-              </Stack>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      
+      <Page />
     </>
   );
 };
 
-Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+MyPage.getLayout = (MyPage) => <DashboardLayout>{MyPage}</DashboardLayout>;
 
-export default Page;
+export default MyPage;
