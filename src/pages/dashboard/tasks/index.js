@@ -15,9 +15,11 @@ import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { OrderDrawer } from "../../../sections/dashboard/order/order-drawer";
 import { OrderListContainer } from "../../../sections/dashboard/order/order-list-container";
-import { OrderListSearch } from "../../../sections/dashboard/order/order-list-search";
+// import { OrderListSearch } from "../../../sections/dashboard/order/order-list-search";
 // import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
-import { OrderListTable } from "../../../sections/dashboard/order/order-list-table";
+// import { OrderListTable } from "../../../sections/dashboard/order/order-list-table";
+import { TaskListSearch } from "../../../sections/dashboard/tasks/order-list-search";
+import { TaskListTable } from "../../../sections/dashboard/tasks/order-list-table";
 import axios from "axios";
 import { logs } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -232,7 +234,7 @@ const Page = () => {
               </Stack>
             </Box>
             <Divider />
-            <OrderListSearch
+            <TaskListSearch
               onFiltersChange={handleFiltersChange}
               onSortChange={handleSortChange}
               sortBy={search.sortBy}
@@ -243,7 +245,7 @@ const Page = () => {
               //   setCurrentTab={setCurrentTab}
             />
             <Divider />
-            <OrderListTable
+            <TaskListTable
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}

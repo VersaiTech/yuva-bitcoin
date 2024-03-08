@@ -48,7 +48,7 @@ const sortOptions = [
   }
 ];
 
-export const OrderListSearch = (props) => {
+export const TaskListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
@@ -158,7 +158,7 @@ export const OrderListSearch = (props) => {
   );
 };
 
-OrderListSearch.propTypes = {
+TaskListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
