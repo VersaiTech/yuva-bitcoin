@@ -52,6 +52,9 @@ export const TaskListTable = (props) => {
             // Ensure createdAt is a valid Date object before formatting
             const createdAtMonth = order.createdAt ? format(new Date(order.createdAt), 'LLL').toUpperCase() : '';
             const createdAtDay = order.createdAt ? format(new Date(order.createdAt), 'd') : '';
+            // const createdEndMonth = order.completionTime ? format(new Date(order.completionTime), 'LLL dd').toUpperCase() : '';
+            //
+            const createdEndDay = order.completionTime ? format(new Date(order.completionTime), 'hh mm ss') : '';
             // const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
             // const statusColor = statusMap[order.status] || 'warning';
 
@@ -76,7 +79,7 @@ export const TaskListTable = (props) => {
                           : 'neutral.200',
                         borderRadius: 2,
                         maxWidth: 'fit-content',
-                        ml: 3,
+                        // ml: 3,
                         p: 1
                       }}
                     >
@@ -95,18 +98,19 @@ export const TaskListTable = (props) => {
                     </Box>
                     <Box sx={{ ml: 2 }}>
                       <Typography variant="subtitle2">
-                        {order.number}
+                        {order.taskName}
                       </Typography>
                       <Typography
                         color="text.secondary"
                         variant="body2"
                       >
-                        {/* Total of {totalAmount} */}
+                        Reward <b>{order.coins } </b> Coins
                       </Typography>
                     </Box>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{order.details}</TableCell>
+                {/* <TableCell align="right">{createdEndMonth}</TableCell> */}
+                <TableCell align="right">{createdEndDay}</TableCell>
                 <TableCell align="right">
                   {/* <SeverityPill color={statusColor}>
                     {order.status}
