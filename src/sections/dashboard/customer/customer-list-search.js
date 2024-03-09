@@ -34,24 +34,24 @@ const tabs = [
   // }
 ];
 
-const sortOptions = [
-  {
-    label: 'Last update (newest)',
-    value: 'updatedAt|desc'
-  },
-  {
-    label: 'Last update (oldest)',
-    value: 'updatedAt|asc'
-  },
-  {
-    label: 'Total orders (highest)',
-    value: 'totalOrders|desc'
-  },
-  {
-    label: 'Total orders (lowest)',
-    value: 'totalOrders|asc'
-  }
-];
+// const sortOptions = [
+//   {
+//     label: 'Last update (newest)',
+//     value: 'updatedAt|desc'
+//   },
+//   {
+//     label: 'Last update (oldest)',
+//     value: 'updatedAt|asc'
+//   },
+//   {
+//     label: 'Total orders (highest)',
+//     value: 'totalOrders|desc'
+//   },
+//   {
+//     label: 'Total orders (lowest)',
+//     value: 'totalOrders|asc'
+//   }
+// ];
 
 export const CustomerListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
@@ -153,7 +153,7 @@ export const CustomerListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search customers"
+            placeholder="Search Users"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -163,7 +163,7 @@ export const CustomerListSearch = (props) => {
             )}
           />
         </Box>
-        <TextField
+        {/* <TextField
           label="Sort By"
           name="sort"
           onChange={handleSortChange}
@@ -179,7 +179,7 @@ export const CustomerListSearch = (props) => {
               {option.label}
             </option>
           ))}
-        </TextField>
+        </TextField> */}
       </Stack>
     </>
   );

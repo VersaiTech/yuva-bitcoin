@@ -118,7 +118,7 @@ export const CustomerListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button
+          {/* <Button
             color="inherit"
             size="small"
           >
@@ -129,7 +129,7 @@ export const CustomerListTable = (props) => {
             size="small"
           >
             Edit
-          </Button>
+          </Button> */}
         </Stack>
       )}
       <Scrollbar>
