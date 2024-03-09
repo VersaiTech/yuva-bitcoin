@@ -1,6 +1,7 @@
 const { Task, CompletedTask } = require('../models/Task');
 const Member = require('../models/memberModel');
 const Stake = require('../models/stake');
+const Joi = require('joi');
 
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
@@ -582,12 +583,55 @@ async function getMemberByUserId(req, res) {
   }
 }
 
-async function getAllMembers(req, res) {
-  try {
-    // Fetch all members from the database
-    const members = await Member.find();
+// async function getAllMembers(req, res) {
+//   try {
+//     // Fetch all members from the database
+//     const members = await Member.find();
 
-    // If there are no members found, return an empty array
+//     // If there are no members found, return an empty array
+//     if (!members || members.length === 0) {
+//       return res.status(404).json({
+//         status: false,
+//         message: "No members found",
+//         members: [],
+//       });
+//     }
+
+//     // Return the list of members
+//     return res.status(200).json({
+//       status: true,
+//       message: "Members found",
+//       members: members,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching members:", error);
+//     return res.status(500).json({
+//       status: false,
+//       message: "Internal server error",
+//     });
+//   }
+// }
+const getAllMembers = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number().required(),
+    count: Joi.number().required(),
+  });
+
+  const { error, value } = Schema.validate(req.query); // Adjust the validation based on your request structure
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+    const page_number = value.page_number;
+    const count = value.count;
+    const offset = (page_number - 1) * count;
+
+    const members = await Member.find()
+      .skip(offset)
+      .limit(count);
+
     if (!members || members.length === 0) {
       return res.status(404).json({
         status: false,
@@ -596,7 +640,6 @@ async function getAllMembers(req, res) {
       });
     }
 
-    // Return the list of members
     return res.status(200).json({
       status: true,
       message: "Members found",
@@ -609,7 +652,8 @@ async function getAllMembers(req, res) {
       message: "Internal server error",
     });
   }
-}
+};
+
 
 async function getActiveMembers(req, res) {
   try {

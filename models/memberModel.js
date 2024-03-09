@@ -27,7 +27,8 @@ const memberSchema = new mongoose.Schema({
     default: 0,
   },
   // isBlocked: { type: Boolean, default: false },
-});
+},{
+  timestamps: true});
 
 // memberSchema.pre('save', async function(next) {
 //   const member = this;
