@@ -561,7 +561,7 @@ async function getMemberByUserId(req, res) {
 
     // If the member is not found, return a 404 response
     if (!member) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
         message: `Member with user_id ${member_user_id} not found`,
         member: null,
@@ -633,7 +633,7 @@ const getAllMembers = async (req, res) => {
       .limit(count);
 
     if (!members || members.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
         message: "No members found",
         members: [],
@@ -686,12 +686,10 @@ async function getActiveMembers(req, res) {
 
 async function getBlockedMembers(req, res) {
   try {
-    // Fetch active members from the database
     const activeMembers = await Member.find({ isActive: false });
 
-    // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
         message: "No Blocked members found",
         members: [],
