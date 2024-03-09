@@ -305,6 +305,30 @@ const addTask = async (req, res) => {
       submissionOpen,
     } = req.body;
 
+    // Convert date strings to Date objects
+    const parsedScheduledTime = new Date(scheduledTime);
+    const parsedCompletionDateTime = new Date(completionDateTime);
+
+    // Check if completion time is before scheduled time
+    if (parsedCompletionDateTime < parsedScheduledTime) {
+      return res.status(400).json({ error: 'Completion time cannot be before scheduled time.' });
+    }
+
+    // Check if scheduled time is in the past
+    if (parsedScheduledTime < new Date()) {
+      return res.status(400).json({ error: 'Scheduled time cannot be in the past.' });
+    }
+
+    // Check if completion time is in the past
+    if (parsedCompletionDateTime < new Date()) {
+      return res.status(400).json({ error: 'Completion time cannot be in the past.' });
+    }
+
+    // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
+    const currentTime = new Date();
+    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionDateTime);
+
+
     // Define newTask here with the correct variables
     const newTask = new Task({
       taskId: generateRandomNumber(),
@@ -313,9 +337,9 @@ const addTask = async (req, res) => {
       coins,
       link,
       imageUrls: [],
-      scheduledTime,
-      completionTime: completionDateTime,
-      submissionOpen,
+      scheduledTime: parsedScheduledTime,
+      completionTime: parsedCompletionDateTime,
+      submissionOpen: isSubmissionOpen,
     });
 
     const savedTask = await newTask.save();
@@ -376,11 +400,35 @@ const editTask = async (req, res) => {
   try {
     // Extract task data from request body
     const { taskId } = req.params;
-    const imageFiles = req.files;
+    const { scheduledTime, completionDateTime } = req.body; // Add this line to extract scheduledTime and completionDateTime
+
+    // Convert date strings to Date objects
+    const parsedScheduledTime = new Date(scheduledTime);
+    const parsedCompletionDateTime = new Date(completionDateTime);
+
+    // Check if completion time is before scheduled time
+    if (parsedCompletionDateTime < parsedScheduledTime) {
+      return res.status(400).json({ error: 'Completion time cannot be before scheduled time.' });
+    }
+
+
+    // Check if scheduled time is in the past
+    if (parsedScheduledTime < new Date()) {
+      return res.status(400).json({ error: 'Scheduled time cannot be in the past.' });
+    }
+
+    // Check if completion time is in the past
+    if (parsedCompletionDateTime < new Date()) {
+      return res.status(400).json({ error: 'Completion time cannot be in the past.' });
+    }
     const imageData = [];
+    // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
+    const currentTime = new Date();
+    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionDateTime);
+
 
     // Find the task by taskId
-    const updatedData = { ...req.body, images: imageData };
+    const updatedData = { ...req.body, images: imageData, submissionOpen: isSubmissionOpen };
     const task = await Task.findOneAndUpdate(
       { taskId },
       { $set: updatedData },
@@ -419,6 +467,34 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+const deleteManyTasks = async (req, res) => {
+  try {
+    // Extract taskIds from request body
+    const { taskIds } = req.body;
+
+    // Check if taskIds array is provided
+    if (!taskIds || !Array.isArray(taskIds) || taskIds.length === 0) {
+      return res.status(400).json({ error: 'Invalid or empty taskIds array provided.' });
+    }
+
+    // Find and delete tasks by taskIds
+    const deletedTasks = await Task.deleteMany({ taskId: { $in: taskIds } });
+
+    if (deletedTasks.deletedCount === 0) {
+      console.log('Tasks not found');
+      return res.status(404).json({ error: 'Tasks not found' });
+    }
+
+    // Respond with a success message
+    return res.status(200).json({ message: 'Tasks deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 // for admin
 const getAllStakes = async (req, res) => {
@@ -675,4 +751,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask,deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };

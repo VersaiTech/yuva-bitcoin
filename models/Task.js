@@ -9,7 +9,7 @@ const taskSchema = new mongoose.Schema({
     link: { type: String, required: true },
     imageUrls: { type: [String] },
     scheduledTime: { type: Date, required: true },  // Scheduled time for task assignment
-    completionTime: { type: Date,required: true }, // Estimated completion time in minutes
+    completionTime: { type: Date, required: true }, // Estimated completion time in minutes
     submissionOpen: { type: Boolean, default: true }, // Indicate whether submission is open
 }, { timestamps: true });
 
@@ -24,8 +24,8 @@ const completedTaskSchema = new mongoose.Schema({
     coins: { type: Number, required: true, ref: 'Task' },
     dateCompleted: { type: Date, default: Date.now },
     status: {
-        type: String,
-        enum: ['pending', 'confirmed','rejected'],
+        type: String,   
+        enum: ['pending', 'confirmed', 'rejected'],
         default: 'pending'
     }
 }, { timestamps: true });
