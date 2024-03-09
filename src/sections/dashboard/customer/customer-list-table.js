@@ -74,6 +74,8 @@ export const CustomerListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
 
+  console.log(customers);
+
   const handleToggleAll = useCallback((event) => {
     const { checked } = event.target;
 
@@ -154,7 +156,7 @@ export const CustomerListTable = (props) => {
                 Contact No.
               </TableCell>
               <TableCell align="right">
-                Actions
+                Edit users
               </TableCell>
             </TableRow>
           </TableHead>
@@ -201,14 +203,14 @@ export const CustomerListTable = (props) => {
                         {getInitials(customer.member_name)}
                       </Avatar>
                       <div>
-                        <Link
+                        {/* <Link
                           color="inherit"
                           component={NextLink}
                           href={paths.dashboard.users.details}
                           variant="subtitle2"
-                        >
+                        > */}
                           {customer.member_name}
-                        </Link>
+                        {/* </Link> */}
                         <Typography
                           color="text.secondary"
                           variant="body2"
@@ -238,14 +240,14 @@ export const CustomerListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       component={NextLink}
                       href={paths.dashboard.customers.details}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />
                       </SvgIcon>
-                    </IconButton>
+                    </IconButton> */}
                   </TableCell>
                 </TableRow>
               );

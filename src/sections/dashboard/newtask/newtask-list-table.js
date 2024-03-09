@@ -9,6 +9,10 @@ import {
   Box,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Link,
   Stack,
@@ -24,6 +28,8 @@ import {
 import { Scrollbar } from "../../../components/scrollbar";
 import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
+import axios from "axios";
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -74,7 +80,8 @@ export const NewtaskListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
-    
+
+  const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -94,6 +101,38 @@ export const NewtaskListTable = (props) => {
     selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
+  const handleDeleteConfirm = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      // Assuming your endpoint to delete tasks is DELETE /admin/deleteTasks
+      for (const taskId of selected) {
+        const response = await axios.delete(
+          `${BASEURL}/admin/deleteTask/${taskId}`,
+          {
+            headers: headers,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log(response.data);
+        } else {
+          console.error("Error deleting task:", taskId, response.data);
+        }
+      }
+
+      // Assuming you want to reload the data after deletion
+      // Reload data or fetch the updated data
+      // reloadData();
+      // Close confirmation dialog
+      setConfirmDeleteDialogOpen(false);
+    } catch (err) {
+      console.error("Error deleting tasks:", err);
+    }
+  };
 
   return (
     <Box sx={{ position: "relative" }} {...other}>
@@ -120,12 +159,16 @@ export const NewtaskListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit" size="small">
+          <Button
+            color="inherit"
+            size="small"
+            onClick={() => setConfirmDeleteDialogOpen(true)}
+          >
             Delete
           </Button>
-          <Button color="inherit" size="small">
+          {/* <Button color="inherit" size="small">
             Edit
-          </Button>
+          </Button> */}
         </Stack>
       )}
       <Scrollbar>
@@ -144,14 +187,12 @@ export const NewtaskListTable = (props) => {
               <TableCell>Coins</TableCell>
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right">Edit Task</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {customers.map((customer) => {
               const isSelected = selected.includes(customer.taskId);
-              // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
               return (
                 <TableRow hover key={customer.taskId + 1} selected={isSelected}>
@@ -180,17 +221,16 @@ export const NewtaskListTable = (props) => {
                         }}
                       >
                         {getInitials(customer.taskName)}
-                        
                       </Avatar>
                       <div>
-                        <Link
+                        {/* <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.dashboard.users.details}
+                          href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
                           variant="subtitle2"
-                        >
+                        > */}
                           {customer.taskName}
-                        </Link>
+                        {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
                           {customer.email}
                         </Typography>
@@ -198,14 +238,18 @@ export const NewtaskListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>{customer.taskId}</TableCell>
-                  
-
                   <TableCell>{customer.coins}</TableCell>
-                  
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {customer.link}
+                      <Link
+                        href={customer.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {customer.link.substring(0, 20)} {/* Displaying only the first 20 characters */}
+                  {customer.link.length > 20 && '...'} {/* Adding ellipsis if link is longer than 20 characters */}
+                      </Link>
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -217,14 +261,14 @@ export const NewtaskListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       component={NextLink}
-                      href={paths.dashboard.customers.details}
+                      href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />
                       </SvgIcon>
-                    </IconButton>
+                    </IconButton> */}
                   </TableCell>
                 </TableRow>
               );
@@ -241,6 +285,30 @@ export const NewtaskListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
+
+      {/* Delete confirmation dialog */}
+      <Dialog
+        open={confirmDeleteDialogOpen}
+        onClose={() => setConfirmDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            Are you sure you want to delete all selected tasks?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDeleteDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDeleteConfirm(customers.taskId)}
+            color="error"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

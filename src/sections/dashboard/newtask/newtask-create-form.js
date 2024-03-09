@@ -13,67 +13,35 @@ import {
   FormHelperText,
   MenuItem,
   Stack,
-  Switch,
+  Grid,
   TextField,
   Typography,
-  Unstable_Grid2 as Grid,
 } from "@mui/material";
-import { FileDropzone } from "../../../components/file-dropzone";
-import { QuillEditor } from "../../../components/quill-editor";
 import { paths } from "../../../paths";
 import Link from "next/link";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-
-// const categoryOptions = [
-//   {
-//     label: "Healthcare",
-//     value: "healthcare",
-//   },
-//   {
-//     label: "Makeup",
-//     value: "makeup",
-//   },
-//   {
-//     label: "Dress",
-//     value: "dress",
-//   },
-//   {
-//     label: "Skincare",
-//     value: "skincare",
-//   },
-//   {
-//     label: "Jewelry",
-//     value: "jewelry",
-//   },
-//   {
-//     label: "Blouse",
-//     value: "blouse",
-//   },
-// ];
-
 const initialValues = {
-  // barcode: "925487986526",
-  // category: "",
-  description: "",
-  images: [],
   name: "",
-  newPrice: 0,
+  description: "",
   oldPrice: 0,
-  // sku: "IYV-8745",
+  url: "",
+  openDate: "",
+  startTime: "", // Add startTime field
+  endTime: "", // Add endTime field
   submit: null,
 };
 
 const validationSchema = Yup.object({
-  barcode: Yup.string().max(255),
-  category: Yup.string().max(255),
-  description: Yup.string().max(5000).required(),
-  images: Yup.array(),
   name: Yup.string().max(255).required(),
-  newPrice: Yup.number().min(0).required(),
-  oldPrice: Yup.number().min(0),
-  sku: Yup.string().max(255),
+  description: Yup.string().max(5000).required(),
+  oldPrice: Yup.number().min(0).required(),
+  url: Yup.string().url().required(),
+  openDate: Yup.date().required(),
+  startTime: Yup.string().required(), // Add validation for startTime
+  endTime: Yup.string().required(), // Add validation for endTime
+  endDate: Yup.date().min(Yup.ref("openDate")).required(),
 });
 
 export const NewTaskForm = (props) => {
@@ -84,19 +52,19 @@ export const NewTaskForm = (props) => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
         const token = localStorage.getItem("accessToken");
-        console.log(values)
         const headers = {
           Authorization: token,
         };
         const data = {
           taskName: values.name,
           description: values.description,
-          coins:values.oldPrice,
-          link:values.url
-        }
-      
+          coins: values.oldPrice,
+          link: values.url,
+          scheduledTime: `${values.openDate}T${values.startTime}`, // Combine openDate and startTime
+          completionDateTime: `${values.endDate}T${values.endTime}`, // Combine endDate and endTime
+        };
+
         const response = await axios.post(`${BASEURL}/admin/addTask`, data, {
           headers: headers,
         });
@@ -113,38 +81,94 @@ export const NewTaskForm = (props) => {
     },
   });
 
-  const handleFilesDrop = useCallback((newFiles) => {
-    setFiles((prevFiles) => {
-      return [...prevFiles, ...newFiles];
-    });
-  }, []);
-
-  const handleFileRemove = useCallback((file) => {
-    setFiles((prevFiles) => {
-      return prevFiles.filter((_file) => _file.path !== file.path);
-    });
-  }, []);
-
-  const handleFilesRemoveAll = useCallback(() => {
-    setFiles([]);
-  }, []);
-
   return (
     <form onSubmit={formik.handleSubmit} {...props}>
       <Stack spacing={4}>
         <Card>
           <CardContent>
             <Grid container spacing={3}>
-              <Grid xs={12} md={4}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h6">New Task Details</Typography>
               </Grid>
-              <Grid xs={12} md={8}>
+              <Grid item xs={12} md={8}>
                 <Stack spacing={3}>
+                  <Grid container spacing={3}>
+                    {/* Grid for start and end time */}
+                    <Grid item xs={6}>
+                      {/* Add TextField for startTime */}
+                      <TextField
+                        error={
+                          !!(formik.touched.startTime &&
+                          formik.errors.startTime)
+                        }
+                        fullWidth
+                        label="Start Time"
+                        name="startTime"
+                        type="time"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.startTime}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      {/* Add TextField for endTime */}
+                      <TextField
+                        error={
+                          !!(formik.touched.endTime && formik.errors.endTime)
+                        }
+                        fullWidth
+                        label="End Time"
+                        name="endTime"
+                        type="time"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.endTime}
+                      />
+                    </Grid>
+                    {/* Grid for open and end date */}
+                    <Grid item xs={6}>
+                      {/* Add TextField for openDate */}
+                      <TextField
+                        error={
+                          !!(formik.touched.openDate &&
+                          formik.errors.openDate)
+                        }
+                        fullWidth
+                        label="Open Date"
+                        name="openDate"
+                        type="date"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.openDate}
+                        inputProps={{
+                          min: new Date().toISOString().split("T")[0], // Set min value to today
+                          placeholder: "", // Remove the placeholder
+                        }}
+                      
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      {/* Add TextField for endDate */}
+                      <TextField
+                        error={
+                          !!(formik.touched.endDate && formik.errors.endDate)
+                        }
+                        fullWidth
+                        label="End Date"
+                        name="endDate"
+                        type="date"
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        value={formik.values.endDate}
+                      />
+                    </Grid>
+                  </Grid>
+                  {/* Remaining TextField components */}
                   <TextField
                     error={!!(formik.touched.name && formik.errors.name)}
                     fullWidth
                     helperText={formik.touched.name && formik.errors.name}
-                    label="Task Name "
+                    label="Task Name"
                     name="name"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -164,103 +188,8 @@ export const NewTaskForm = (props) => {
                     name="description"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    // multiline
-                    // rows={2}
                     value={formik.values.description}
                   />
-
-                  {/* <TextField
-                    error={
-                      !!(
-                        formik.touched.description && formik.errors.description
-                      )
-                    }
-                    fullWidth
-                    helperText={
-                      formik.touched.description && formik.errors.description
-                    }
-                    label="Description "
-                    description="description"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.description}
-                  /> */}
-
-                  {/* <div>
-                    <Typography
-                      color="text.secondary"
-                      sx={{ mb: 2 }}
-                      variant="subtitle2"
-                    >
-                      Description
-                    </Typography>
-                    <QuillEditor
-                      onChange={(value) => {
-                        formik.setFieldValue('description', value);
-                      }}
-                      placeholder="Write something"
-                      sx={{ height: 400 }}
-                      value={formik.values.description}
-                    />
-                    {!!(formik.touched.description && formik.errors.description) && (
-                      <Box sx={{ mt: 2 }}>
-                        <FormHelperText error>
-                          {formik.errors.description}
-                        </FormHelperText>
-                      </Box>
-                    )}
-                  </div> */}
-                </Stack>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-        {/* <Card>
-          <CardContent>
-            <Grid
-              container
-              spacing={3}
-            >
-              <Grid
-                xs={12}
-                md={4}
-              >
-                <Stack spacing={1}>
-                  <Typography variant="h6">
-                    Images
-                  </Typography>
-                  <Typography
-                    color="text.secondary"
-                    variant="body2"
-                  >
-                    Images will appear in the store front of your website.
-                  </Typography>
-                </Stack>
-              </Grid>
-              <Grid
-                xs={12}
-                md={8}
-              >
-                <FileDropzone
-                  accept={{ 'image/*': [] }}
-                  caption="(SVG, JPG, PNG, or gif maximum 900x400)"
-                  files={files}
-                  onDrop={handleFilesDrop}
-                  onRemove={handleFileRemove}
-                  onRemoveAll={handleFilesRemoveAll}
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card> */}
-        <Card>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid xs={12} md={4}>
-                <Typography variant="h6">Coins</Typography>
-              </Grid>
-              <Grid xs={12} md={8}>
-                <Stack spacing={3}>
                   <TextField
                     error={
                       !!(formik.touched.oldPrice && formik.errors.oldPrice)
@@ -273,50 +202,18 @@ export const NewTaskForm = (props) => {
                     type="number"
                     value={formik.values.oldPrice}
                   />
-                  {/* <TextField
-                    error={
-                      !!(formik.touched.newPrice && formik.errors.newPrice)
-                    }
+                  <TextField
+                    error={!!(formik.touched.url && formik.errors.url)}
                     fullWidth
-                    label="New Price"
-                    name="newPrice"
+                    label="Social Media Link"
+                    name="url"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    type="number"
-                    value={formik.values.newPrice}
-                  /> */}
-                  {/* <div>
-                    <FormControlLabel
-                      control={<Switch defaultChecked />}
-                      label="Keep selling when stock is empty"
-                    />
-                  </div> */}
+                    value={formik.values.url}
+                  />
                 </Stack>
               </Grid>
             </Grid>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-          <Grid container spacing={3}>
-  <Grid xs={12} md={4}>
-    <Typography variant="h6">Social Media Link</Typography>
-  </Grid>
-  <Grid xs={12} md={8}>
-    <Stack spacing={3}>
-      <TextField
-        error={!!(formik.touched.url && formik.errors.url)}
-        fullWidth
-        label="Social Media Link"
-        name="url"
-        onBlur={formik.handleBlur}
-        onChange={formik.handleChange}
-        value={formik.values.url}
-      />
-    </Stack>
-  </Grid>
-</Grid>
-
           </CardContent>
         </Card>
         <Stack
@@ -325,7 +222,9 @@ export const NewTaskForm = (props) => {
           justifyContent="flex-end"
           spacing={1}
         >
-          <Link href={paths.dashboard.newtask.index}><Button color="inherit">Cancel</Button></Link>
+          <Link href={paths.dashboard.newtask.index}>
+            <Button color="inherit">Cancel</Button>
+          </Link>
           <Button type="submit" variant="contained">
             Create
           </Button>

@@ -106,7 +106,7 @@ export const CustomerEditForm = (props) => {
       onSubmit={formik.handleSubmit}
       {...other}>
       <Card>
-        <CardHeader title="Edit Customer" />
+        <CardHeader title="Edit User" />
         <CardContent sx={{ pt: 0 }}>
           <Grid
             container
