@@ -71,6 +71,11 @@ export const paths = {
       create: '/dashboard/stake/create',
       stakeHistory: '/dashboard/stakehistory'
     },
+    news:{
+      index: '/dashboard/news',
+      newsDetails :'/dashboard/news/:newsId',
+      newsCreate :'/dashboard/news/create'
+    },
     withdraw: {
       index: '/dashboard/withdrawals',
       create: '/dashboard/withdrawals/create',
