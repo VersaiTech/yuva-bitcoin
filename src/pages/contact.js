@@ -12,6 +12,7 @@ import { LogoBolt } from '../components/companies-logos/logo-bolt';
 import { LogoAws } from '../components/companies-logos/logo-aws';
 import { LogoAccenture } from '../components/companies-logos/logo-accenture';
 import { LogoAtt } from '../components/companies-logos/logo-att';
+import SupportList from './dashboard/support/supportList';
 
 const Page = () => {
   usePageView();
@@ -156,7 +157,10 @@ const Page = () => {
             >
               Fill the form below
             </Typography>
-            <ContactForm />
+            {/* <ContactForm /> */}
+            <SupportList />
+            
+
           </Container>
         </Box>
       </Box>

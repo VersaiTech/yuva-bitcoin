@@ -108,6 +108,12 @@ export const paths = {
       create: "/dashboard/newtask/create",
       edit: "/dashboard/newtask/",
     },
+    news: {
+      index: "/dashboard/news",
+      details: "/dashboard/newtask/:taskId",
+      create: "/dashboard/newtask/create",
+      edit: "/dashboard/newtask/",
+    },
     
     deposit: {
       index: "/dashboard/deposit",

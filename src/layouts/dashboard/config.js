@@ -29,6 +29,7 @@ import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
 import PendingWithdrawalIcon from "../../icons/untitled-ui/duocolor/pendingwithdrawal";
 import UsersIcon from "../../icons/untitled-ui/duocolor/users-icon";
+import NewsIcon from "../../icons/untitled-ui/duocolor/news";
 
 export const getSections = (t) => [
   {
@@ -53,12 +54,21 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.newtask),
-        path: paths.dashboard.newtask.index,
         icon: (
           <SvgIcon fontSize="small">
             <BarChartSquare02Icon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.createtask),
+            path: paths.dashboard.newtask.index,
+          },
+          {
+            title: t(tokens.nav.approvetask),
+            path: paths.dashboard.newtask.index,
+          },
+        ],
       },
       // {
       //   title: t(tokens.nav.ecommerce),
@@ -370,6 +380,8 @@ export const getSections = (t) => [
           // },
         ],
       },
+
+      
       {
         title: t(tokens.nav.withdrawal),
         icon: (
@@ -485,7 +497,7 @@ export const getSections = (t) => [
         //   },
         // ],
       },
-    
+
       {
         title: t(tokens.nav.support),
         path: paths.contact,
@@ -494,6 +506,27 @@ export const getSections = (t) => [
             <Mail04Icon />
           </SvgIcon>
         ),
+      },
+
+      {
+        title: t(tokens.nav.news),
+        // path: paths.contact,
+        icon: (
+          <SvgIcon fontSize="small">
+            {/* <Mail04Icon /> */}
+            <NewsIcon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.createnews),
+            path: paths.dashboard.news.index,
+          },
+          {
+            title: t(tokens.nav.newslist),
+            path: paths.dashboard.deposit.pending,
+          },
+        ],
       },
       // {
       //   title: t(tokens.nav.error),
