@@ -42,7 +42,7 @@ router.route('/updateMemberStatus/:member_user_id').post(isAdmin, updateMemberSt
 router.route('/deleteUser/:member_user_id').delete(isAdmin, deleteUser);
 
 router.route('/getMemberByUserId/:member_user_id').get(isAdmin, getMemberByUserId);
-router.route('/getAllMembers').get(isAdmin, getAllMembers);
+router.route('/getAllMembers/:page_number/:count').get(isAdmin, getAllMembers);
 router.route('/getActiveMembers').get(isAdmin, getActiveMembers);
 router.route('/getBlockedMembers').get(isAdmin, getBlockedMembers);
 

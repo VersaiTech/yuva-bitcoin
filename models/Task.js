@@ -10,7 +10,7 @@ const taskSchema = new mongoose.Schema({
     imageUrls: { type: [String] },
     scheduledTime: { type: Date, required: true },  // Scheduled time for task assignment
     completionTime: { type: Date, required: true }, // Estimated completion time in minutes
-    submissionOpen: { type: Boolean, default: true }, // Indicate whether submission is open
+    // submissionOpen: { type: Boolean, default: true }, // Indicate whether submission is open
 }, { timestamps: true });
 
 

@@ -32,23 +32,49 @@ const completeTask = async (req, res) => {
     const { taskId } = req.body;
     const userId = req.user.member_user_id; // Assuming you have the authenticated user stored in req.user
 
-    // Check if the user has already completed this task
-    const existingCompletedTask = await CompletedTask.findOne({ userId, taskId });
-    if (existingCompletedTask) {
-      return res.status(400).json({ message: 'Task already completed by this user' });
-    }
-
     // Fetch user details
     const member = await Member.findOne({ member_user_id: userId });
 
     if (!member) {
-      return res.status(404).json({ message: 'member not found' });
+      console.log('Member not found for userId:', userId);
+      return res.status(404).json({ message: 'Member not found' });
     }
 
     // Fetch task details
     const task = await Task.findOne({ taskId });
+
     if (!task) {
+      console.log('Task not found for taskId:', taskId);
       return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Retrieve scheduledTime and completionTime from the task object
+    const { scheduledTime, completionTime } = task;
+
+    const options = { timeZone: 'Asia/Kolkata' };
+
+    // Convert date strings to Date objects
+    const currentTime = new Date();
+    const parsedScheduledTime = new Date(scheduledTime);
+    const parsedCompletionDateTime = new Date(completionTime);
+
+    // Adjust date objects to the specified time zone and assign the formatted strings
+    const formattedCurrentTime = currentTime.toLocaleString('en-US', options);
+    const formattedScheduledTime = parsedScheduledTime.toLocaleString('en-US', options);
+    const formattedCompletionDateTime = parsedCompletionDateTime.toLocaleString('en-US', options);
+
+    console.log("Time of completed task :", formattedCurrentTime, formattedScheduledTime, formattedCompletionDateTime);
+
+    if (currentTime < parsedScheduledTime || currentTime > parsedCompletionDateTime) {
+      console.log('Task submission is not allowed at this time.');
+      return res.status(400).json({ message: 'Task submission is not allowed at this time.' });
+    }
+
+    // Check if the user has already completed this task
+    const existingCompletedTask = await CompletedTask.findOne({ userId, taskId });
+    if (existingCompletedTask) {
+      console.log('Task already completed by this user.');
+      return res.status(400).json({ message: 'Task already Submitted by this user; Admin will review and reward to your task' });
     }
 
     // Create a new completed task record
@@ -62,17 +88,22 @@ const completeTask = async (req, res) => {
       link: task.link,
       status: 'pending'
     });
+
     await completedTask.save();
 
     // Reward the user (Update user's coins balance, etc.)
     // Your reward logic goes here...
 
-    res.status(200).json({ message: 'Task in review admin will review and confirm completion' });
+    console.log('Task submitted successfully.');
+    res.status(200).json({ message: 'Task in review; admin will review and confirm completion' });
   } catch (error) {
     console.error('Error completing task:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
 
 const confirmTaskCompletion = async (req, res) => {
   try {
@@ -286,7 +317,7 @@ const getCompletedTasks = async (req, res) => {
 // }
 
 
-const addTask = async (req, res) => {
+const  addTask = async (req, res) => {
   try {
     // Check if the user making the request is an admin
     const isAdmin = req.user.userType === 'admin';
@@ -302,13 +333,18 @@ const addTask = async (req, res) => {
       coins,
       link,
       scheduledTime,
-      completionDateTime,
-      submissionOpen,
+      completionTime,
     } = req.body;
+
+    const options = { timeZone: 'Asia/Kolkata' }; // 'Asia/Kolkata' is the time zone for Indian Standard Time
 
     // Convert date strings to Date objects
     const parsedScheduledTime = new Date(scheduledTime);
-    const parsedCompletionDateTime = new Date(completionDateTime);
+    const parsedCompletionDateTime = new Date(completionTime);
+
+    // Adjust date objects to the specified time zone
+    parsedScheduledTime.toLocaleString('en-US', options);
+    parsedCompletionDateTime.toLocaleString('en-US', options);
 
     // Check if completion time is before scheduled time
     if (parsedCompletionDateTime < parsedScheduledTime) {
@@ -327,8 +363,8 @@ const addTask = async (req, res) => {
 
     // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
     const currentTime = new Date();
-    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionDateTime);
 
+    console.log(currentTime, parsedScheduledTime, parsedCompletionDateTime);
 
     // Define newTask here with the correct variables
     const newTask = new Task({
@@ -340,7 +376,7 @@ const addTask = async (req, res) => {
       imageUrls: [],
       scheduledTime: parsedScheduledTime,
       completionTime: parsedCompletionDateTime,
-      submissionOpen: isSubmissionOpen,
+      // submissionOpen: isSubmissionOpen,
     });
 
     const savedTask = await newTask.save();
@@ -401,17 +437,16 @@ const editTask = async (req, res) => {
   try {
     // Extract task data from request body
     const { taskId } = req.params;
-    const { scheduledTime, completionDateTime } = req.body; // Add this line to extract scheduledTime and completionDateTime
+    const { scheduledTime, completionTime } = req.body; // Add this line to extract scheduledTime and completionDateTime
 
     // Convert date strings to Date objects
     const parsedScheduledTime = new Date(scheduledTime);
-    const parsedCompletionDateTime = new Date(completionDateTime);
+    const parsedCompletionDateTime = new Date(completionTime);
 
     // Check if completion time is before scheduled time
     if (parsedCompletionDateTime < parsedScheduledTime) {
       return res.status(400).json({ error: 'Completion time cannot be before scheduled time.' });
     }
-
 
     // Check if scheduled time is in the past
     if (parsedScheduledTime < new Date()) {
@@ -422,14 +457,16 @@ const editTask = async (req, res) => {
     if (parsedCompletionDateTime < new Date()) {
       return res.status(400).json({ error: 'Completion time cannot be in the past.' });
     }
+
+
     const imageData = [];
     // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
     const currentTime = new Date();
-    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionDateTime);
+    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionTime);
 
 
     // Find the task by taskId
-    const updatedData = { ...req.body, images: imageData, submissionOpen: isSubmissionOpen };
+    const updatedData = { ...req.body, images: imageData };
     const task = await Task.findOneAndUpdate(
       { taskId },
       { $set: updatedData },
@@ -611,13 +648,17 @@ async function getMemberByUserId(req, res) {
 //     });
 //   }
 // }
+
+// =============================================================================================
+
+
 const getAllMembers = async (req, res) => {
   const Schema = Joi.object({
     page_number: Joi.number().required(),
     count: Joi.number().required(),
   });
 
-  const { error, value } = Schema.validate(req.query); // Adjust the validation based on your request structure
+  const { error, value } = Schema.validate(req.params); // Adjust the validation based on your request structure
 
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
@@ -793,4 +834,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask,deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };

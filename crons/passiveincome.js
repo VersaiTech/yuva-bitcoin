@@ -133,6 +133,7 @@
 const cron = require('node-cron');
 const Stake = require('../models/stake');
 const Member = require('../models/memberModel');
+const { Task, CompletedTask } = require('../models/Task');
 
 // Define the cron job to run every day at midnight
 cron.schedule('0 0 * * *', async () => {
@@ -196,6 +197,9 @@ function getInterestRate(durationMonths) {
       return null;
   }
 }
+
+
+
 
 
 
