@@ -117,12 +117,12 @@ export const CryptoCurrentBalance = (props) => {
               width: 200
             }}
           >
-            <Chart
+            {/* <Chart
               height={200}
               options={chartOptions}
               series={chartSeries}
               type="donut"
-            />
+            /> */}
           </Box>
           <Stack
             spacing={4}
