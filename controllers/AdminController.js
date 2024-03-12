@@ -197,7 +197,7 @@ const getAllTasks = async (req, res) => {
   }
   try {
 
-    console.log(req.user.member_user_id);
+
     // Set default values if not provided
     const page_number = value.page_number || 1;
     const count = value.count || 10; // You can adjust the default count as needed
@@ -216,19 +216,23 @@ const getAllTasks = async (req, res) => {
       });
     }
 
-    const completedTasks = await CompletedTask.find();
-    if (completedTasks && completedTasks.length > 0) {
-      console.log(completedTasks[0].status);
-    } else {
-      console.log("No completed tasks found");
-    }
+
+    const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id, status: 'completed' });
+    const completedTaskIds = allUsersTask.map(task => task.taskId);
+    console.log(completedTaskIds);
+    const updatedTasks = [];
+
+    tasks.forEach(task => {
+      const status = completedTaskIds.includes(task.taskId) ? 'completed' : 'pending';
+      updatedTasks.push({ ...task.toObject(), status });
+    });
+
 
     // const tasks = await Task.find();
     return res.status(200).json({
       status: true,
       message: "Tasks found",
-      completedTasks: completedTasks[0].status,
-      tasks: tasks,
+      tasks: updatedTasks,
     });
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error' });
