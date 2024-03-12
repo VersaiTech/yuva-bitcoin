@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import NextLink from 'next/link';
-import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
+import NextLink from "next/link";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
-import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 import { paths } from "../../../paths";
 import {
   Box,
@@ -14,17 +12,12 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
-import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
-import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
-import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
-import { NewtaskListSearch } from "../../../sections/dashboard/newtask/newtask-list-search";
-import { NewtaskListTable } from "../../../sections/dashboard/newtask/newtask-list-table";
 import axios from "axios";
+import { WorkTaskSearch } from "../../../sections/dashboard/work-task/work-task-list-search";
+import { WorkListTable } from "../../../sections/dashboard/work-task/work-task-list-table";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -62,26 +55,19 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(
-        `${BASEURL}/admin/getAllTasksAdmin`,
+      const PendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
+        headers: headers,
+      });
+
+      const completedTasks = await axios.get(
+        `${BASEURL}/admin/getCompletedTasks`,
         { headers: headers }
       );
-      
-      const PendingTasks = await axios.get(
-        `${BASEURL}/admin/getPendingTasks`,
-        { headers: headers }
-        );
-        
-        const completedTasks = await axios.get(
-          `${BASEURL}/admin/getCompletedTasks`,
-          { headers: headers }
-          );
-          // console.log(completedTasks.data);
-          
+      console.log(PendingTasks.data);
+      console.log(completedTasks.data);
+
       if (isMounted()) {
         setState({
-          customers: response.data,
-          customersCount: response.count,
           pending: PendingTasks.data,
           completed: completedTasks.data,
         });
@@ -91,13 +77,10 @@ const useCustomers = (search) => {
     }
   }, [search, isMounted]);
 
-  useEffect(
-    () => {
-      getCustomers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]
-  );
+  useEffect(() => {
+    console.log("calling useeffect");
+    getCustomers();
+  }, []);
 
   return state;
 };
@@ -108,12 +91,41 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } =
-    useCustomers(search);
+  const { completed, rejected, pending } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState("all");
+  const [currentTab, setCurrentTab] = useState("pending");
+  const [customersCount, setCustomersCount] = useState(5);
+
+  const [currentData, setCurrentData] = useState(pending);
 
   usePageView();
+
+  useEffect(() => {
+    console.log(search?.filters?.query);
+
+    if (search?.filters?.query) {
+      setCurrentData(
+        currentData.filter((customer) => {
+          return (
+            customer.taskName.toLowerCase().includes(search.filters.query)
+          )
+        }
+
+      ))
+    }
+
+    // Set current tab with sorted and filtered data
+    setCurrentTab(currentData);
+  }, [search]);
+
+  useEffect(() => {
+    console.log(currentTab);
+    if (currentTab === "pending") {
+      setCurrentData(pending);
+    } else if (currentTab === "completed") {
+      setCurrentData(completed);
+    }
+  }, [currentTab]);
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -127,6 +139,7 @@ const Page = () => {
 
   const handleSortChange = useCallback(
     (sort) => {
+      console.log(sort.sortBy);
       updateSearch((prevState) => ({
         ...prevState,
         sortBy: sort.sortBy,
@@ -172,7 +185,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Task</Typography>
+                <Typography variant="h4">Apporve Task</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
@@ -197,42 +210,41 @@ const Page = () => {
                     Export
                   </Button> */}
                 </Stack>
-              </Stack> 
+              </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-              <Button
-  component={NextLink}
-  startIcon={
-    <SvgIcon>
-      <PlusIcon />
-    </SvgIcon>
-  }
-  variant="contained"
-  href={paths.dashboard.newtask.create}
-  sx={{
-    position: 'relative',
-    overflow: 'hidden',
-    '&:hover::after': {
-      content: '""',
-      position: 'absolute',
-      zIndex: 1,
-      top: '50%',
-      left: '50%',
-      width: '300%',
-      height: '300%',
-      background: 'rgba(255, 255, 255, 0.3)',
-      borderRadius: '50%',
-      transition: 'all 0.6s ease',
-      transform: 'translate(-50%, -50%)',
-    },
-  }}
->
-  Add Task
-</Button>
-
+                <Button
+                  component={NextLink}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                  href={paths.dashboard.newtask.create}
+                  sx={{
+                    position: "relative",
+                    overflow: "hidden",
+                    "&:hover::after": {
+                      content: '""',
+                      position: "absolute",
+                      zIndex: 1,
+                      top: "50%",
+                      left: "50%",
+                      width: "300%",
+                      height: "300%",
+                      background: "rgba(255, 255, 255, 0.3)",
+                      borderRadius: "50%",
+                      transition: "all 0.6s ease",
+                      transform: "translate(-50%, -50%)",
+                    },
+                  }}
+                >
+                  Add Task
+                </Button>
               </Stack>
             </Stack>
             <Card>
-              <NewtaskListSearch
+              <WorkTaskSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
@@ -242,31 +254,12 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <NewtaskListTable
-                // customers={customers}
-                // customersCount={customersCount}
-                // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                customers={
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "hasAcceptedMarketing"
-                    ? pending
-                    : currentTab === "isProspect"
-                    ? completed
-                    : []
-                }
-                // customersCount={
-                //   currentTab === 'all' ? customersCount :
-                //     currentTab === 'pending' ? pending.length :
-                //       currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                //         currentTab === 'isProspect' ? completed.length :
-                //           0
-                // }
+              <WorkListTable
+                customers={currentData ? currentData : []}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={search.rowsPerPage}
-                page={search.page}
+                rowsPerPage={customersCount}
+                page={5}
               />
             </Card>
           </Stack>

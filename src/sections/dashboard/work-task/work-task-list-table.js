@@ -32,7 +32,6 @@ import axios from "axios";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSelectionModel = (customers) => {
-  console.log(customers);
   const customerIds = useMemo(() => {
     return customers.map((customer) => customer.taskId);
   }, [customers]);
@@ -69,7 +68,7 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const NewtaskListTable = (props) => {
+export const WorkListTable = (props) => {
   const {
     customers,
     customersCount,
@@ -192,11 +191,11 @@ export const NewtaskListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
+            {customers.map((customer, index) => {
               const isSelected = selected.includes(customer.taskId);
 
               return (
-                <TableRow hover key={customer.taskId + 1} selected={isSelected}>
+                <TableRow hover key={index} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
@@ -277,7 +276,7 @@ export const NewtaskListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
-      <TablePagination
+      {/* <TablePagination
         component="div"
         count={customersCount}
         onPageChange={onPageChange}
@@ -285,7 +284,7 @@ export const NewtaskListTable = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
-      />
+      /> */}
 
       {/* Delete confirmation dialog */}
       <Dialog
@@ -314,9 +313,9 @@ export const NewtaskListTable = (props) => {
   );
 };
 
-NewtaskListTable.propTypes = {
+WorkListTable.propTypes = {
   customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
+  // customersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

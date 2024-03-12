@@ -160,10 +160,6 @@ export const NewTaskForm = (props) => {
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         value={formik.values.endDate}
-                        inputProps={{
-                          min: new Date().toISOString().split("T")[0], // Set min value to today
-                          placeholder: "", // Remove the placeholder
-                        }}
                       />
                     </Grid>
                   </Grid>

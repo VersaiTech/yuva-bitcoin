@@ -16,17 +16,13 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'All Task',
-    value: 'all',
+    label: 'Pending Task',
+    value: 'pending'
   },
-  // {
-  //   label: 'Pending Task',
-  //   value: 'hasAcceptedMarketing'
-  // },
-  // {
-  //   label: 'Completed Task',
-  //   value: 'isProspect'
-  // }
+  {
+    label: 'Completed Task',
+    value: 'completed'
+  }
   // ,
   // {
   //   label: 'Returning',
@@ -39,6 +35,7 @@ const sortOptions = [
     label: 'Last update (newest)',
     value: 'updatedAt|desc'
   },
+
   {
     label: 'Last update (oldest)',
     value: 'updatedAt|asc'
@@ -53,7 +50,7 @@ const sortOptions = [
   // }
 ];
 
-export const NewtaskListSearch = (props) => {
+export const WorkTaskSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
@@ -62,7 +59,6 @@ export const NewtaskListSearch = (props) => {
   // const [activeUsers, setActiveUsers] = useState([]);
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
-  console.log(sturl);
 
   useEffect(() => {
     if(sturl){
@@ -152,6 +148,12 @@ export const NewtaskListSearch = (props) => {
           <OutlinedInput
             defaultValue=""
             fullWidth
+            onChange={(e) => {
+              setFilters((prevState) => ({
+                ...prevState,
+                query: e.target.value
+              }));
+            }}
             inputProps={{ ref: queryRef }}
             placeholder="Search Task"
             startAdornment={(
@@ -185,7 +187,7 @@ export const NewtaskListSearch = (props) => {
   );
 };
 
-NewtaskListSearch.propTypes = {
+WorkTaskSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,

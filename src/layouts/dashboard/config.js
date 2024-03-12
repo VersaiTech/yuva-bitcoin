@@ -66,7 +66,7 @@ export const getSections = (t) => [
           },
           {
             title: t(tokens.nav.approvetask),
-            path: paths.dashboard.newtask.index,
+            path: paths.dashboard.taskwork.index,
           },
         ],
       },
