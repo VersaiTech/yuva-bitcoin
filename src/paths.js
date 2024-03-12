@@ -53,6 +53,9 @@ export const paths = {
       index: '/dashboard/academy',
       courseDetails: '/dashboard/academy/courses/:courseId'
     },
+    marketplace:{
+      index: ' /dashboard/marketplace'
+    },
     earnings:{
       index: '/dashboard/earnings',
       details: '/dashboard/earnings'
@@ -70,6 +73,11 @@ export const paths = {
       index: '/dashboard/stake',
       create: '/dashboard/stake/create',
       stakeHistory: '/dashboard/stakehistory'
+    },
+    news:{
+      index: '/dashboard/news',
+      newsDetails :'/dashboard/news/:newsId',
+      newsCreate :'/dashboard/news/create'
     },
     withdraw: {
       index: '/dashboard/withdrawals',
