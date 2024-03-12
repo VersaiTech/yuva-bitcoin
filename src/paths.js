@@ -116,7 +116,7 @@ export const paths = {
     },
     news: {
       index: "/dashboard/news/index",
-      details: "/dashboard/newtask/:taskId",
+      list: "/dashboard/news/news-list",
       create: "/dashboard/newtask/create",
       edit: "/dashboard/newtask/",
     },

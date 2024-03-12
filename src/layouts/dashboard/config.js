@@ -520,11 +520,11 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.createnews),
-            path: paths.dashboard.news.index,
+            path: paths.dashboard.news.create,
           },
           {
             title: t(tokens.nav.newslist),
-            path: paths.dashboard.deposit.pending,
+            path: paths.dashboard.news.list,
           },
         ],
       },
