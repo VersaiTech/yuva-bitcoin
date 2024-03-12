@@ -39,15 +39,20 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
-      // {
-      //   title: t(tokens.nav.crypto),
-      //   path: paths.dashboard.index2,
-      //   icon: (
-      //     <SvgIcon fontSize="small">
-      //       <LayoutAlt02Icon />
-      //     </SvgIcon>
-      //   ),
-      // },
+      {
+        title: t(tokens.nav.marketplace),
+        icon: (
+          <SvgIcon fontSize="small">
+            <BarChartSquare02Icon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.cryptos),
+            path: paths.dashboard.marketplace.index
+          },
+        ]
+      },
       {
         title: t(tokens.nav.tasks),
         icon: (
