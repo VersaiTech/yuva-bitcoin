@@ -143,10 +143,41 @@ const confirmTaskCompletion = async (req, res) => {
 };
 
 const getAllTasksUser = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
     const userId = req.user.member_user_id;
-    const tasks = await CompletedTask.find({ userId });
-    res.json(tasks);
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ userId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found for the user",
+        tasks: [],
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
@@ -154,26 +185,82 @@ const getAllTasksUser = async (req, res) => {
 
 
 const getAllTasks = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
-    res.json(tasks);
+    // Set default values if not provided
+    const page_number = value.page_number || 1;
+    const count = value.count || 10; // You can adjust the default count as needed
+    const offset = (page_number - 1) * count;
+
+    const tasks = await Task.find()
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found",
+        tasks: [],
+      });
+    }
+    // const tasks = await Task.find();
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found",
+      tasks: tasks,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const getConfirmedTasksForUser = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
   try {
-    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+    const userId = req.user.member_user_id;
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    // Fetch confirmed tasks for the user
-    const confirmedTasks = await CompletedTask.find({
-      userId,
-      status: 'confirmed'
-    })
-    // .populate('taskId');  // Populate the 'taskId' field with the Task details
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ userId, status: 'confirmed' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
-    res.status(200).json(confirmedTasks);
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found for the user",
+        tasks: [],
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -182,17 +269,41 @@ const getConfirmedTasksForUser = async (req, res) => {
 
 
 const getPendingTasksForUser = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
-    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+    const userId = req.user.member_user_id;
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    // Fetch confirmed tasks for the user
-    const confirmedTasks = await CompletedTask.find({
-      userId,
-      status: 'pending'
-    })
-    // .populate('taskId');  // Populate the 'taskId' field with the Task details
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ userId, status: 'pending' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
-    res.status(200).json(confirmedTasks);
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found for the user",
+        tasks: [],
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -200,17 +311,41 @@ const getPendingTasksForUser = async (req, res) => {
 };
 
 const getRejectedTasksForUser = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
-    const userId = req.user.member_user_id;  // Assuming userId is passed as a parameter
+    const userId = req.user.member_user_id;
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    // Fetch confirmed tasks for the user
-    const confirmedTasks = await CompletedTask.find({
-      userId,
-      status: 'rejected'
-    })
-    // .populate('taskId');  // Populate the 'taskId' field with the Task details
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ userId, status: 'rejected' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
-    res.status(200).json(confirmedTasks);
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found for the user",
+        tasks: [],
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -235,41 +370,125 @@ const getOneTask = async (req, res) => {
 };
 
 const getPendingTasks = async (req, res) => {
-  try {
-    const pendingTasks = await CompletedTask.find({ status: 'pending' }).sort({ createdAt: -1 });
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
-    if (pendingTasks.length === 0) {
-      return res.status(404).json({
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ status: 'pending' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
         status: false,
-        message: 'No pending tasks available.',
+        message: "No tasks found for the user",
         tasks: [],
       });
     }
 
-    res.json(pendingTasks);
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const getCompletedTasks = async (req, res) => {
-  try {
-    const completedTasks = await CompletedTask.find({ status: 'confirmed' }).sort({ createdAt: -1 });
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
-    if (completedTasks.length === 0) {
-      return res.status(404).json({
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ status: 'confirmed' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
         status: false,
-        message: 'No completed tasks available.',
+        message: "No tasks found for the user",
         tasks: [],
       });
     }
 
-    res.json(completedTasks);
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+
+const getRejectedTasks = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    // Fetch tasks for the user with sorting and pagination
+    const tasks = await CompletedTask.find({ status: 'rejected' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found for the user",
+        tasks: [],
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found for the user",
+      tasks: tasks,
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 // const addTask = async (req, res) => {
 //   try {
@@ -317,7 +536,7 @@ const getCompletedTasks = async (req, res) => {
 // }
 
 
-const  addTask = async (req, res) => {
+const addTask = async (req, res) => {
   try {
     // Check if the user making the request is an admin
     const isAdmin = req.user.userType === 'admin';
@@ -462,7 +681,7 @@ const editTask = async (req, res) => {
     const imageData = [];
     // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
     const currentTime = new Date();
-    const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionTime);
+    // const isSubmissionOpen = currentTime >= new Date(scheduledTime) && currentTime <= new Date(completionTime);
 
 
     // Find the task by taskId
@@ -536,25 +755,47 @@ const deleteManyTasks = async (req, res) => {
 
 // for admin
 const getAllStakes = async (req, res) => {
-  try {
-    // Retrieve Stakes from the database
-    const stakes = await Stake.find();
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
-    // Check if there are no stakes found
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    // Fetch all stakes with sorting and pagination
+    const stakes = await Stake.find()
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    // If there are no stakes found, return an empty array
     if (!stakes || stakes.length === 0) {
       return res.status(404).json({
+        status: false,
         message: "No stakes found",
+        stakes: [],
       });
     }
 
-    // Respond with the Stakes
+    // Return the list of stakes
     return res.status(200).json({
-      message: "Stakes retrieved successfully",
-      data: stakes,
+      status: true,
+      message: "Stakes found",
+      stakes: stakes,
     });
   } catch (error) {
     console.error("Error retrieving stakes:", error);
     return res.status(500).json({
+      status: false,
       message: "Internal Server Error",
       error: error.message,
     });
@@ -654,22 +895,24 @@ async function getMemberByUserId(req, res) {
 
 const getAllMembers = async (req, res) => {
   const Schema = Joi.object({
-    page_number: Joi.number().required(),
-    count: Joi.number().required(),
+    page_number: Joi.number(),
+    count: Joi.number(),
   });
 
-  const { error, value } = Schema.validate(req.params); // Adjust the validation based on your request structure
+  const { error, value } = Schema.validate(req.params);
 
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
 
   try {
-    const page_number = value.page_number;
-    const count = value.count;
+    // Set default values if not provided
+    const page_number = value.page_number || 1;
+    const count = value.count || 10; // You can adjust the default count as needed
     const offset = (page_number - 1) * count;
 
     const members = await Member.find()
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
 
@@ -696,10 +939,29 @@ const getAllMembers = async (req, res) => {
 };
 
 
+
 async function getActiveMembers(req, res) {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
   try {
-    // Fetch active members from the database
-    const activeMembers = await Member.find({ isActive: true });
+    const page_number = value.page_number || 1;
+    const count = value.count || 10; // You can adjust the default count as needed
+    const offset = (page_number - 1) * count;
+
+    // Fetch active members with sorting and pagination
+    const activeMembers = await Member.find({ isActive: true })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
     // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
@@ -725,12 +987,33 @@ async function getActiveMembers(req, res) {
   }
 }
 
-async function getBlockedMembers(req, res) {
-  try {
-    const activeMembers = await Member.find({ isActive: false });
 
+async function getBlockedMembers(req, res) {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10; // You can adjust the default count as needed
+    const offset = (page_number - 1) * count;
+
+    // Fetch active members with sorting and pagination
+    const activeMembers = await Member.find({ isActive: false })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
-      return res.status(200).json({
+      return res.status(404).json({
         status: false,
         message: "No Blocked members found",
         members: [],
@@ -834,4 +1117,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };

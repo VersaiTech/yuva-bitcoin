@@ -17,12 +17,11 @@ const upload2 = multer({ storage: storage });
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 const { createBlog, 
     // getAllBlogs, 
-    getAllBlogsUser, updateBlogById, deleteBlogById } = require('../controllers/Blog.Controller');
+    getAllBlogs, updateBlogById, deleteBlogById } = require('../controllers/Blog.Controller');
 
 router.route('/createBlog').post(isAdmin, upload2.array('file', 10), createBlog);
-router.route('/updateBlog/:blogId').post(isAdmin, upload2.array('file', 10), updateBlogById);
-// router.route("/getAllBlogs").get(isAdmin, getAllBlogs);
-router.route("/getAllBlogsUser").get(getAllBlogsUser);
+router.route('/updateBlog/:blogId').patch(isAdmin, upload2.array('file', 10), updateBlogById);
+router.route("/getAllBlogs/:page_number?/:count?").get(getAllBlogs);
 router.route("/deleteBlog/:blogId").delete(isAdmin, deleteBlogById);
 
 
