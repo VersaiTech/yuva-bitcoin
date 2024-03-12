@@ -196,6 +196,8 @@ const getAllTasks = async (req, res) => {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
   try {
+
+    console.log(req.user.member_user_id);
     // Set default values if not provided
     const page_number = value.page_number || 1;
     const count = value.count || 10; // You can adjust the default count as needed
@@ -213,10 +215,19 @@ const getAllTasks = async (req, res) => {
         tasks: [],
       });
     }
+
+    const completedTasks = await CompletedTask.find();
+    if (completedTasks && completedTasks.length > 0) {
+      console.log(completedTasks[0].status);
+    } else {
+      console.log("No completed tasks found");
+    }
+
     // const tasks = await Task.find();
     return res.status(200).json({
       status: true,
       message: "Tasks found",
+      completedTasks: completedTasks[0].status,
       tasks: tasks,
     });
   } catch (error) {
