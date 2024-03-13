@@ -7,10 +7,13 @@ import {
   Container,
   Divider,
   Stack,
-  Typography
+  Typography,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard'; // Importing the Layout component
 import { GridList2 } from '../../../sections/components/grid-lists/grid-list-2';
+import {Table1} from '../../../sections/components/tables/table-1'
 import { paths } from '../../../paths'; // Importing the paths
 
 
@@ -250,6 +253,8 @@ const dummyListings = [
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
+  const [status, setStatus] = useState('Listed'); // Initial status is 'Listed'
+
 
   useEffect(() => {
     // Simulating data fetching with a delay
@@ -259,6 +264,12 @@ const CryptoMarketplacePage = () => {
     };
     fetchData();
   }, []);
+  
+   // Function to handle status change
+   const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
+
 
   return (
     <>
@@ -279,8 +290,35 @@ const CryptoMarketplacePage = () => {
           <Typography variant="h4" sx={{ mt: 4 }}> {/* Added margin top */}
             Featured Listings
           </Typography>
+          <Select
+  value={status}
+  onChange={handleStatusChange}
+  displayEmpty
+  fullWidth
+  sx={{ mt: 2, width: '50%' }} // Adjust the width as needed
+  renderValue={(selected) => (
+    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+      {selected === 'Listed' ? 'Listed' : 'Ordered'}
+    </Typography>
+  )}
+>
+  <MenuItem value="Listed">
+    <Typography variant="body1">
+      Listed
+    </Typography>
+  </MenuItem>
+  <MenuItem value="Ordered">
+    <Typography variant="body1">
+      Ordered
+    </Typography>
+  </MenuItem>
+</Select>
           <Divider sx={{ my: 3 }} /> {/* Increased spacing */}
-          <GridList2 projects={listings} />
+          {status === 'Listed' ? (
+            <GridList2 projects={listings} /> // Render GridList2 component when status is 'Listed'
+          ) : (
+            <Table1/> 
+          )}
         </Container>
       </Box>
     </>
