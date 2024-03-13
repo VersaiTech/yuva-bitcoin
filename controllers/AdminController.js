@@ -196,8 +196,6 @@ const getAllTasks = async (req, res) => {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
   try {
-
-
     // Set default values if not provided
     const page_number = value.page_number || 1;
     const count = value.count || 10; // You can adjust the default count as needed

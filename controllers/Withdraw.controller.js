@@ -2,6 +2,7 @@
 const Withdraw = require('../models/withdrawModel');
 const Member = require('../models/memberModel');
 const Coin = require('../models/Coin');
+const Joi = require('joi');
 
 const withdrawRequest = async (req, res) => {
   const { member_user_id } = req.user;
@@ -218,7 +219,7 @@ async function getWithdrawByUserId(req, res) {
 const updateWithdrawalStatus = async (req, res) => {
   try {
     const { with_referrance } = req.params;
-    const { status, processed_by, remarks, conversion_type,transection_hash } = req.body;
+    const { status, processed_by, remarks, conversion_type, transection_hash } = req.body;
 
     // Find the withdrawal request by reference ID
     const withdrawal = await Withdraw.findOne({ with_referrance });
@@ -304,24 +305,43 @@ const updateWithdrawalStatus = async (req, res) => {
 
 const getWithdrawRequests = async (req, res) => {
   // const { member_user_id } = req.user;
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
     // Fetch withdrawal requests for the current member
     // status 0 for pending
-    const withdrawRequests = await Withdraw.find();
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    if (withdrawRequests.length === 0) {
-      return res.status(400).json({
+    const withdrawRequests = await Withdraw.find()
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+
+    if (!withdrawRequests || withdrawRequests.length === 0) {
+      return res.status(200).json({
         status: false,
         message: 'No withdrawal requests',
-      });
-    } else {
-      return res.status(200).json({
-        status: true,
-        message: 'Withdrawal requests',
-        data: withdrawRequests,
+        withdrawRequest: []
       });
     }
+
+    return res.status(200).json({
+      status: true,
+      message: 'Withdrawal requests',
+      data: withdrawRequests,
+    });
+
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({
@@ -333,24 +353,41 @@ const getWithdrawRequests = async (req, res) => {
 
 const getWithdrawPending = async (req, res) => {
   // const { member_user_id } = req.user;
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
     // Fetch withdrawal requests for the current member
     // status 0 for pending
-    const withdrawRequests = await Withdraw.find({ status: 'Pending' });
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    if (withdrawRequests.length === 0) {
+    const withdrawRequests = await Withdraw.find({ status: 'Pending' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!withdrawRequests || withdrawRequests.length === 0) {
       return res.status(400).json({
         status: false,
-        message: 'No withdrawal requests',
-      });
-    } else {
-      return res.status(200).json({
-        status: true,
-        message: 'Withdrawal requests',
-        data: withdrawRequests,
+        message: 'No withdrawal pending',
+        withdrawRequest: [],
       });
     }
+    return res.status(200).json({
+      status: true,
+      message: 'Withdrawal Pending : ',
+      data: withdrawRequests,
+    });
+
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({
@@ -362,24 +399,43 @@ const getWithdrawPending = async (req, res) => {
 
 const getWithdrawApproved = async (req, res) => {
   // const { member_user_id } = req.user;
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
 
   try {
     // Fetch withdrawal requests for the current member
     // status 0 for pending
-    const withdrawRequests = await Withdraw.find({ status: 'Approved' });
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    if (withdrawRequests.length === 0) {
+    const withdrawRequests = await Withdraw.find({ status: 'Approved' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+
+    if (!withdrawRequests || withdrawRequests.length === 0) {
       return res.status(400).json({
         status: false,
-        message: 'No withdrawal requests',
-      });
-    } else {
-      return res.status(200).json({
-        status: true,
-        message: 'Withdrawal requests',
-        data: withdrawRequests,
+        message: 'No withdrawal Approved',
+        withdrawRequests: []
       });
     }
+    return res.status(200).json({
+      status: true,
+      message: 'Withdrawal Approved : ',
+      data: withdrawRequests,
+    });
+
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({
@@ -392,24 +448,42 @@ const getWithdrawApproved = async (req, res) => {
 
 const getWithdrawRejected = async (req, res) => {
   // const { member_user_id } = req.user;
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
 
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
     // Fetch withdrawal requests for the current member
     // status 0 for pending
-    const withdrawRequests = await Withdraw.find({ status: 'Rejected' });
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    if (withdrawRequests.length === 0) {
+    const withdrawRequests = await Withdraw.find({ status: 'Rejected' })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+
+    if (!withdrawRequests || withdrawRequests.length === 0) {
       return res.status(400).json({
         status: false,
-        message: 'No withdrawal requests',
-      });
-    } else {
-      return res.status(200).json({
-        status: true,
-        message: 'Withdrawal requests',
-        data: withdrawRequests,
+        message: 'No withdrawal Rejected',
+        withdrawRequests: []
       });
     }
+    return res.status(200).json({
+      status: true,
+      message: 'Withdrawal rejected :',
+      data: withdrawRequests,
+    });
+
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({
@@ -420,24 +494,42 @@ const getWithdrawRejected = async (req, res) => {
 };
 
 const getUserWithdraws = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   const { member_user_id } = req.user;
 
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
     // Fetch withdrawal requests for the current member
-    const withdrawRequests = await Withdraw.find({ member_user_id });
+    const withdrawRequests = await Withdraw.find({ member_user_id })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
-    if (withdrawRequests.length === 0) {
+
+    if (!withdrawRequests ||withdrawRequests.length === 0) {
       return res.status(400).json({
         status: false,
-        message: 'No withdrawal requests',
-      });
-    } else {
-      return res.status(200).json({
-        status: true,
-        message: 'Withdrawal requests',
-        data: withdrawRequests,
+        message: 'No User withdrawal requests',
+        withdrawRequests: []
       });
     }
+    return res.status(200).json({
+      status: true,
+      message: 'Withdrawal requests',
+      data: withdrawRequests,
+    });
+
   } catch (err) {
     console.error('Error:', err);
     return res.status(500).json({
