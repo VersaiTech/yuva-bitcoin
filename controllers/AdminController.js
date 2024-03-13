@@ -28,8 +28,16 @@ const getuserbalance = async (req, res) => {
 }
 
 const completeTask = async (req, res) => {
+  const completeTaskSchema = Joi.object({
+    taskId: Joi.string().required(),
+  });
   try {
-    const { taskId } = req.body;
+    // Validate request body
+    const { error, value } = completeTaskSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const { taskId } = value;
     const userId = req.user.member_user_id; // Assuming you have the authenticated user stored in req.user
 
     // Fetch user details
@@ -106,8 +114,17 @@ const completeTask = async (req, res) => {
 
 
 const confirmTaskCompletion = async (req, res) => {
+  const confirmTaskCompletionSchema = Joi.object({
+    taskId: Joi.string().required(),
+    userId: Joi.string().required(),
+  });
   try {
-    const { taskId, userId } = req.body;
+    // Validate request body
+    const { error, value } = confirmTaskCompletionSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const { taskId, userId } = value;
 
     const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId, status: 'pending' });
 
@@ -159,6 +176,7 @@ const getAllTasksUser = async (req, res) => {
     const count = value.count || 10;
     const offset = (page_number - 1) * count;
 
+    const totalUserTasks = await CompletedTask.countDocuments({ userId });
     // Fetch tasks for the user with sorting and pagination
     const tasks = await CompletedTask.find({ userId })
       .sort({ createdAt: -1 })
@@ -169,6 +187,7 @@ const getAllTasksUser = async (req, res) => {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalUserTasks,
         tasks: [],
       });
     }
@@ -176,6 +195,7 @@ const getAllTasksUser = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalUserTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -200,7 +220,7 @@ const getAllTasks = async (req, res) => {
     const page_number = value.page_number || 1;
     const count = value.count || 10; // You can adjust the default count as needed
     const offset = (page_number - 1) * count;
-
+    const allTasks = await Task.find();
     const tasks = await Task.find()
       .sort({ createdAt: -1 })
       .skip(offset)
@@ -210,6 +230,7 @@ const getAllTasks = async (req, res) => {
       return res.status(200).json({
         status: false,
         message: "No tasks found",
+        allTasks: allTasks.length,
         tasks: [],
       });
     }
@@ -230,6 +251,7 @@ const getAllTasks = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found",
+      allTasks: allTasks.length,
       tasks: updatedTasks,
     });
   } catch (error) {
@@ -261,10 +283,13 @@ const getConfirmedTasksForUser = async (req, res) => {
       .skip(offset)
       .limit(count);
 
+    const totalCompletedTasks = await CompletedTask.countDocuments({ userId, status: 'confirmed' });
+
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalCompletedTasks,
         tasks: [],
       });
     }
@@ -272,7 +297,9 @@ const getConfirmedTasksForUser = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalCompletedTasks,
       tasks: tasks,
+
     });
   } catch (error) {
     console.error(error);
@@ -303,11 +330,12 @@ const getPendingTasksForUser = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-
+    const totalPenidngTasks = await CompletedTask.countDocuments({ userId, status: 'pending' });
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalPenidngTasks,
         tasks: [],
       });
     }
@@ -315,6 +343,7 @@ const getPendingTasksForUser = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalPenidngTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -345,11 +374,12 @@ const getRejectedTasksForUser = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-
+    const totalRejectedTasks = await CompletedTask.countDocuments({ userId, status: 'rejected' });
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalRejectedTasks,
         tasks: [],
       });
     }
@@ -357,6 +387,7 @@ const getRejectedTasksForUser = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalRejectedTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -404,10 +435,13 @@ const getPendingTasks = async (req, res) => {
       .skip(offset)
       .limit(count);
 
+    const totalPendingTasks = await CompletedTask.countDocuments({ status: 'pending' });
+
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalPendingTasks: totalPendingTasks,
         tasks: [],
       });
     }
@@ -415,6 +449,7 @@ const getPendingTasks = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalPendingTasks: totalPendingTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -444,10 +479,13 @@ const getCompletedTasks = async (req, res) => {
       .skip(offset)
       .limit(count);
 
+    const totalCompletedTasks = await CompletedTask.countDocuments({ status: 'confirmed' });
+
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalCompletedTasks: totalCompletedTasks,
         tasks: [],
       });
     }
@@ -455,6 +493,7 @@ const getCompletedTasks = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalCompletedTasks: totalCompletedTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -484,11 +523,13 @@ const getRejectedTasks = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
+    const totalRejectedTasks = await CompletedTask.countDocuments({ status: 'rejected' });
 
     if (!tasks || tasks.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No tasks found for the user",
+        totalRejectedTasks: totalRejectedTasks,
         tasks: [],
       });
     }
@@ -496,6 +537,7 @@ const getRejectedTasks = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
+      totalRejectedTasks: totalRejectedTasks,
       tasks: tasks,
     });
   } catch (error) {
@@ -550,6 +592,14 @@ const getRejectedTasks = async (req, res) => {
 
 
 const addTask = async (req, res) => {
+  const addTaskSchema = Joi.object({
+    taskName: Joi.string().required(),
+    description: Joi.string().required(),
+    coins: Joi.number().required(),
+    link: Joi.string().uri().required(),
+    scheduledTime: Joi.date().iso().required(),
+    completionTime: Joi.date().iso().required(),
+  });
   try {
     // Check if the user making the request is an admin
     const isAdmin = req.user.userType === 'admin';
@@ -557,7 +607,11 @@ const addTask = async (req, res) => {
     if (!isAdmin) {
       return res.status(403).json({ error: 'Permission Denied. Only admin can set scheduled time.' });
     }
-
+    // Validate request body
+    const { error, value } = addTaskSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     // Destructure variables from req.body
     const {
       taskName,
@@ -566,7 +620,7 @@ const addTask = async (req, res) => {
       link,
       scheduledTime,
       completionTime,
-    } = req.body;
+    } = value;
 
     const options = { timeZone: 'Asia/Kolkata' }; // 'Asia/Kolkata' is the time zone for Indian Standard Time
 
@@ -666,14 +720,23 @@ const addTask = async (req, res) => {
 // };
 
 const editTask = async (req, res) => {
+  const editTaskSchema = Joi.object({
+    scheduledTime: Joi.date().iso().required(),
+    completionTime: Joi.date().iso().required(),
+  });
   try {
     // Extract task data from request body
     const { taskId } = req.params;
     const { scheduledTime, completionTime } = req.body; // Add this line to extract scheduledTime and completionDateTime
 
+
+    const { error, value } = editTaskSchema.validate({ scheduledTime, completionTime });
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     // Convert date strings to Date objects
-    const parsedScheduledTime = new Date(scheduledTime);
-    const parsedCompletionDateTime = new Date(completionTime);
+    const parsedScheduledTime = new Date(value.scheduledTime);
+    const parsedCompletionDateTime = new Date(value.completionTime);
 
     // Check if completion time is before scheduled time
     if (parsedCompletionDateTime < parsedScheduledTime) {
@@ -718,9 +781,18 @@ const editTask = async (req, res) => {
 };
 
 const deleteTask = async (req, res) => {
+  const deleteTaskSchema = Joi.object({
+    taskId: Joi.string().required()
+  });
   try {
+    // Validate request parameters
+    const { error, value } = deleteTaskSchema.validate(req.params);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
     // Extract taskId from request parameters
-    const { taskId } = req.params;
+    const { taskId } = value;
 
     // Find the task by taskId and delete it
     const task = await Task.findOneAndDelete({ taskId });
@@ -740,9 +812,17 @@ const deleteTask = async (req, res) => {
 
 
 const deleteManyTasks = async (req, res) => {
+  const deleteManyTasksSchema = Joi.object({
+    taskIds: Joi.array().items(Joi.string().required()).min(1).required()
+  });
   try {
+    // Validate request body
+    const { error, value } = deleteManyTasksSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     // Extract taskIds from request body
-    const { taskIds } = req.body;
+    const { taskIds } = value;
 
     // Check if taskIds array is provided
     if (!taskIds || !Array.isArray(taskIds) || taskIds.length === 0) {
@@ -928,11 +1008,13 @@ const getAllMembers = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-
+    // Count total members
+    const totalMembers = await Member.countDocuments();
     if (!members || members.length === 0) {
       return res.status(200).json({
         status: false,
         message: "No members found",
+        totalMembers: totalMembers,
         members: [],
       });
     }
@@ -940,6 +1022,7 @@ const getAllMembers = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Members found",
+      totalMembers: totalMembers,
       members: members,
     });
   } catch (error) {
@@ -976,11 +1059,16 @@ async function getActiveMembers(req, res) {
       .skip(offset)
       .limit(count);
 
+
+    const totalActiveMembers = await Member.countDocuments({ isActive: true });
+
+
     // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
       return res.status(404).json({
         status: false,
         message: "No active members found",
+        totalActiveMembers: totalActiveMembers,
         members: [],
       });
     }
@@ -989,6 +1077,7 @@ async function getActiveMembers(req, res) {
     return res.status(200).json({
       status: true,
       message: "Active members found",
+      totalActiveMembers: totalActiveMembers,
       members: activeMembers,
     });
   } catch (error) {
@@ -1023,12 +1112,13 @@ async function getBlockedMembers(req, res) {
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-
+    const totalActiveMembers = await Member.countDocuments({ isActive: false });
     // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
       return res.status(404).json({
         status: false,
         message: "No Blocked members found",
+        totalActiveMembers: totalActiveMembers,
         members: [],
       });
     }
@@ -1037,6 +1127,7 @@ async function getBlockedMembers(req, res) {
     return res.status(200).json({
       status: true,
       message: "Blocked members found",
+      totalActiveMembers: totalActiveMembers,
       members: activeMembers,
     });
   } catch (error) {
@@ -1050,6 +1141,10 @@ async function getBlockedMembers(req, res) {
 
 
 const updateMemberStatus = async (req, res) => {
+  const updateMemberStatusSchema = Joi.object({
+    isActive: Joi.boolean().required(),
+  });
+
   try {
     // Check if the user making the request is an admin
     if (!req.user || req.user.userType !== 'admin') {
@@ -1057,8 +1152,11 @@ const updateMemberStatus = async (req, res) => {
     }
 
     const { member_user_id } = req.params;
-    const { isActive } = req.body;
-
+    const { error, value } = updateMemberStatusSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+    const { isActive } = value;
     // Validate if member_user_id is provided
     if (!member_user_id) {
       return res.status(400).json({ error: 'Member user ID is required.' });
@@ -1092,13 +1190,21 @@ const updateMemberStatus = async (req, res) => {
 
 
 const deleteUser = async (req, res) => {
+  const deleteUserSchema = Joi.object({
+    member_user_id: Joi.string().required(),
+  });
   try {
     // Check if the user making the request is an admin
     if (!req.user || req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Permission denied. Only admin can delete a user.' });
     }
+    // Validate request parameters
+    const { error, value } = deleteUserSchema.validate(req.params);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
 
-    const { member_user_id } = req.params;
+    const { member_user_id } = value;
 
     // Validate if member_user_id is provided
     if (!member_user_id) {

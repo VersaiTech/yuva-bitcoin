@@ -18,6 +18,7 @@ const getDashboardData = async (req, res) => {
 
     const returnObject = {
       member_user_id: member_user_id,
+      coin: user.coin,
       member_name: user.member_name,
       sponcer_id: user.sponcer_id,
       sponcer_name: user.sponcer_name,

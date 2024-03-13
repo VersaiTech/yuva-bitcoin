@@ -2,6 +2,7 @@ const Deposit = require('../models/deposit');
 const Coin = require('../models/Coin');
 const Member = require('../models/memberModel');
 const { v4: uuidv4 } = require('uuid');
+const Joi = require('joi');
 
 
 function generateTransactionId() {
@@ -9,7 +10,19 @@ function generateTransactionId() {
 }
 
 async function createDeposit(req, res) {
+  // Define a schema for request body validation
+  const schema = Joi.object({
+    amount: Joi.number().positive().required(),
+    transaction_hash: Joi.string().required(),
+    wallet_address: Joi.string().required(),
+    deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+  });
   try {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     // Retrieve member information based on member_user_id
     const { member_user_id, member_name, wallet_address } = req.user;
     const member = await Member.findOne({ member_user_id, wallet_address });
@@ -19,7 +32,7 @@ async function createDeposit(req, res) {
     }
 
     // Check if the provided wallet_address matches the member's wallet_address
-    if (wallet_address !== req.body.wallet_address) {
+    if (wallet_address !== value.wallet_address) {
       return res.status(400).json({ error: 'Invalid wallet address' });
     }
 
@@ -27,23 +40,23 @@ async function createDeposit(req, res) {
     const newDeposit = new Deposit({
       member: member_user_id,
       name: member_name,
-      amount: req.body.amount,
-      transaction_hash: req.body.transaction_hash,
+      amount: value.amount,
+      transaction_hash: value.transaction_hash,
       // wallet_address: req.body.wallet_address,
       wallet_address: wallet_address,
-      deposit_type: req.body.deposit_type,
+      deposit_type: value.deposit_type,
     });
 
     // Update the total deposit for the specific deposit type in the Member schema
     switch (req.body.deposit_type) {
       case 'usdt':
-        member.deposit_usdt += req.body.amount;
+        member.deposit_usdt += value.amount;
         break;
       case 'btc':
-        member.deposit_btc += req.body.amount;
+        member.deposit_btc += value.amount;
         break;
       case 'ethereum':
-        member.deposit_ethereum += req.body.amount;
+        member.deposit_ethereum += value.amount;
         break;
       default:
         return res.status(400).json({ error: 'Invalid deposit type' });
@@ -94,7 +107,17 @@ async function getDepositsForUser(req, res) {
 }
 
 async function convertDepositToCoins(req, res) {
+  const schema = Joi.object({
+    deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+    amount: Joi.number().positive().required(),
+  });
   try {
+    // Validate the request body
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     // Retrieve member information based on member_user_id
     const { member_user_id } = req.user;
     const member = await Member.findOne({ member_user_id });
@@ -102,19 +125,12 @@ async function convertDepositToCoins(req, res) {
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
     }
-
+    const { deposit_type, amount } = value;
     // Check if the member has sufficient deposits to convert
-    if (
-      req.body.deposit_type !== 'usdt' &&
-      req.body.deposit_type !== 'btc' &&
-      req.body.deposit_type !== 'ethereum'
-    ) {
-      return res.status(400).json({ error: 'Invalid deposit type' });
-    }
+    const depositAmount = member[`deposit_${deposit_type}`];
 
-    const depositAmount = member[`deposit_${req.body.deposit_type}`];
 
-    if (depositAmount < req.body.amount) {
+    if (depositAmount < amount) {
       return res.status(400).json({ error: 'Insufficient deposit amount' });
     }
 

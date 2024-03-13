@@ -19,8 +19,8 @@ const { createBlog,
     // getAllBlogs, 
     getAllBlogs, updateBlogById, deleteBlogById } = require('../controllers/Blog.Controller');
 
-router.route('/createBlog').post(isAdmin, upload2.array('file', 10), createBlog);
-router.route('/updateBlog/:blogId').patch(isAdmin, upload2.array('file', 10), updateBlogById);
+router.route('/createBlog').post(isAdmin, upload2.array('file', 10), createBlog);  // 
+router.route('/updateBlog/:blogId').patch(isAdmin, upload2.array('file', 10), updateBlogById); //
 router.route("/getAllBlogs/:page_number?/:count?").get(getAllBlogs);
 router.route("/deleteBlog/:blogId").delete(isAdmin, deleteBlogById);
 

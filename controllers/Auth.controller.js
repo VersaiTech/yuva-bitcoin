@@ -270,6 +270,7 @@ const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Joi = require('@hapi/joi');
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -360,19 +361,26 @@ function htmlspecialchars(str) {
 // }
 
 async function register(req, res) {
+  const registerSchema = Joi.object({
+    contactNo: Joi.string().trim().min(10).max(10).required(),
+    member_name: Joi.string().trim().min(3).required(),
+    password: Joi.string().trim().min(6).required(),
+    email: Joi.string().trim().email().lowercase().required(),
+    twitterId: Joi.string().trim(),
+    wallet_address: Joi.string().trim(),
+  });
+
   try {
-    let contactNo = req.body.contactNo.trim();
-    let member_name = req.body.member_name.trim().toUpperCase();
-    let password = req.body.password.trim();
-    let email = req.body.email.trim().toLowerCase();
-    let twitterId = req.body.twitterId;
-    let wallet_address = req.body.wallet_address;
-    // if (password !== cpassword) {
-    //   return res.status(400).send({
-    //     status: false,
-    //     message: "Password and confirm password not matched",
-    //   });
-    // }
+    // Validate request body parameters
+    const { error, value } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+    let { contactNo, member_name, password, email, twitterId, wallet_address } = value;
+
 
     // Check if the email is already registered
     const existingMember = await Member.findOne({ email: email });
@@ -382,7 +390,7 @@ async function register(req, res) {
         message: "Email already registered",
       });
     }
-    
+
     // Check if the contact number is already registered
     const existingMemberContact = await Member.findOne({ contactNo: contactNo });
     if (existingMemberContact) {
@@ -444,9 +452,23 @@ async function register(req, res) {
 };
 
 async function login(req, res) {
-  const { email, password } = req.body;
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).required(),
+  });
+
+
 
   try {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+    const { email, password } = value;
     const user = await Member.findOne({ email: email });
 
     console.log(user)
@@ -525,9 +547,22 @@ async function getRegister(req, res) {
 }
 
 async function adminRegister(req, res) {
+  const schema = Joi.object({
+    admin_name: Joi.string().required(),
+    password: Joi.string().min(6).required(),
+    email: Joi.string().email().required(),
+  });
   try {
-    // Extract data from request body
-    const { admin_name, password, email } = req.body;
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+    // Extract data from validated request body
+    const { admin_name, password, email } = value;
 
     // Check if email is already registered
     const existingAdmin = await Admin.findOne({ email });
@@ -570,9 +605,23 @@ async function adminRegister(req, res) {
 }
 
 async function adminLogin(req, res) {
-  const { email, password } = req.body;
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  });
 
   try {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+  
+    const { email, password } = value;
+  
     // Find admin by email
     const admin = await Admin.findOne({ email });
 
