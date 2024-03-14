@@ -1065,7 +1065,7 @@ async function getActiveMembers(req, res) {
 
     // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
         message: "No active members found",
         totalActiveMembers: totalActiveMembers,
@@ -1115,7 +1115,7 @@ async function getBlockedMembers(req, res) {
     const totalActiveMembers = await Member.countDocuments({ isActive: false });
     // If there are no active members found, return an empty array
     if (!activeMembers || activeMembers.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
         message: "No Blocked members found",
         totalActiveMembers: totalActiveMembers,
