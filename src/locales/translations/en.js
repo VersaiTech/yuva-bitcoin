@@ -18,6 +18,8 @@ export const en = {
   [tokens.nav.course]: 'Course',
   [tokens.nav.create]: 'Create',
   [tokens.nav.crypto]: 'Crypto',
+  [tokens.nav.cryptos]: 'Cryptos',
+  [tokens.nav.marketplace] : 'Market Place',
   [tokens.nav.customers]: 'Customers',
   [tokens.nav.dashboard]: 'Dashboard',
   [tokens.nav.details]: 'Details',

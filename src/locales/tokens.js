@@ -4,6 +4,8 @@ export const tokens = {
   },
   nav: {
     academy: 'nav.academy',
+    marketplace: 'nav.marketplace',
+    cryptos: 'nav.cryptos',
     account: 'nav.account',
     portfolio: 'nav.portfolio',
     tasks: 'nav.tasks',

@@ -7,10 +7,13 @@ import {
   Container,
   Divider,
   Stack,
-  Typography
+  Typography,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard'; // Importing the Layout component
 import { GridList2 } from '../../../sections/components/grid-lists/grid-list-2';
+import {Table1} from '../../../sections/components/tables/table-1'
 import { paths } from '../../../paths'; // Importing the paths
 
 
@@ -28,8 +31,9 @@ const dummyListings = [
         avatar: '/assets/logos/logo-bitcoin.svg',
         name: 'Bitcoin'
       },
-      marketCap: '$1.1 trillion',
-      volume: '$50 billion',
+      lot:'25',
+      marketCap: '0.212',
+      volume: '5000',
       circulatingSupply: '18.7 million BTC',
       allTimeHigh: '$64,863.10',
       website: 'https://bitcoin.org/',
@@ -65,8 +69,9 @@ const dummyListings = [
         avatar: '/assets/logos/ethereum.svg',
         name: 'Ethereum'
       },
-      marketCap: '$300 billion',
-      volume: '$20 billion',
+      lot:'25',
+      marketCap: '0.012',
+      volume: '2000',
       circulatingSupply: '115 million ETH',
       allTimeHigh: '$4,879.68',
       website: 'https://ethereum.org/',
@@ -102,8 +107,9 @@ const dummyListings = [
         avatar: '/assets/logos/cardano.svg',
         name: 'Cardano'
       },
-      marketCap: '$50 billion',
-      volume: '$5 billion',
+      lot:'25',
+      marketCap: '1.256',
+      volume: '5500',
       circulatingSupply: '32 billion ADA',
       allTimeHigh: '$3.10',
       website: 'https://cardano.org/',
@@ -139,8 +145,9 @@ const dummyListings = [
         avatar: '/assets/logos/ripple.svg',
         name: 'Ripple'
       },
-      marketCap: '$50 billion',
-      volume: '$10 billion',
+      lot:'25',
+      marketCap: '0.044',
+      volume: '1200',
       circulatingSupply: '45 billion XRP',
       allTimeHigh: '$3.84',
       website: 'https://ripple.com/',
@@ -176,8 +183,9 @@ const dummyListings = [
         avatar: '/assets/logos/litecoin.svg',
         name: 'Litecoin'
       },
-      marketCap: '$10 billion',
-      volume: '$1 billion',
+      lot:'25',
+      marketCap: '0.124',
+      volume: '1000',
       circulatingSupply: '66 million LTC',
       allTimeHigh: '$360.66',
       website: 'https://litecoin.org/',
@@ -213,8 +221,9 @@ const dummyListings = [
         avatar: '/assets/logos/logo-bitcoin.svg',
         name: 'Chainlink'
       },
-      marketCap: '$15 billion',
-      volume: '$2 billion',
+      lot:'25',
+      marketCap: '0.2165',
+      volume: '2500',
       circulatingSupply: '400 million LINK',
       allTimeHigh: '$52.88',
       website: 'https://chain.link/',
@@ -244,6 +253,8 @@ const dummyListings = [
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
+  const [status, setStatus] = useState('Listed'); // Initial status is 'Listed'
+
 
   useEffect(() => {
     // Simulating data fetching with a delay
@@ -253,6 +264,12 @@ const CryptoMarketplacePage = () => {
     };
     fetchData();
   }, []);
+  
+   // Function to handle status change
+   const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
+
 
   return (
     <>
@@ -273,8 +290,35 @@ const CryptoMarketplacePage = () => {
           <Typography variant="h4" sx={{ mt: 4 }}> {/* Added margin top */}
             Featured Listings
           </Typography>
+          <Select
+  value={status}
+  onChange={handleStatusChange}
+  displayEmpty
+  fullWidth
+  sx={{ mt: 2, width: '50%' }} // Adjust the width as needed
+  renderValue={(selected) => (
+    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+      {selected === 'Listed' ? 'Listed' : 'Ordered'}
+    </Typography>
+  )}
+>
+  <MenuItem value="Listed">
+    <Typography variant="body1">
+      Listed
+    </Typography>
+  </MenuItem>
+  <MenuItem value="Ordered">
+    <Typography variant="body1">
+      Ordered
+    </Typography>
+  </MenuItem>
+</Select>
           <Divider sx={{ my: 3 }} /> {/* Increased spacing */}
-          <GridList2 projects={listings} />
+          {status === 'Listed' ? (
+            <GridList2 projects={listings} /> // Render GridList2 component when status is 'Listed'
+          ) : (
+            <Table1/> 
+          )}
         </Container>
       </Box>
     </>
