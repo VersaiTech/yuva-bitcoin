@@ -1,24 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import numeral from 'numeral';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { format } from "date-fns";
 import {
   Box,
   Table,
   TableBody,
   TableCell,
-  TableHead, // Import TableHead component
+  TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { SeverityPill } from '../../../components/severity-pill';
+  Typography,
+} from "@mui/material";
+import { SeverityPill } from "../../../components/severity-pill";
 
 const statusMap = {
-  complete: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  rejected: 'error'
+  complete: "success",
+  pending: "info",
+  canceled: "warning",
+  rejected: "error",
 };
 
 export const TaskListTable = (props) => {
@@ -33,9 +32,46 @@ export const TaskListTable = (props) => {
     ...other
   } = props;
 
-  // orders.forEach(element => {
-  //   console.log(format(new Date(element.createdAt), 'LLL').toUpperCase());
-  // });
+  const [countdowns, setCountdowns] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateCountdowns();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const updateCountdowns = () => {
+    const updatedCountdowns = orders.map((order) => {
+      const completionTime = new Date(order.completionTime);
+      const currentTime = new Date();
+      let timeDifference = completionTime - currentTime;
+  
+      if (timeDifference <= 0) {
+        return "Task Completed";
+      } else {
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        timeDifference -= days * (1000 * 60 * 60 * 24); // Remove days from time difference
+        const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+        timeDifference -= hours * (1000 * 60 * 60); // Remove hours from time difference
+        const minutes = Math.floor(timeDifference / (1000 * 60));
+        timeDifference -= minutes * (1000 * 60); // Remove minutes from time difference
+        const seconds = Math.floor(timeDifference / 1000);
+  
+        if (days > 0) {
+          return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+        } else if (hours > 0) {
+          return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+        } else {
+          return `${minutes} minutes  seconds} seconds`;
+        }
+      }
+    });
+    setCountdowns(updatedCountdowns);
+  };
+  
+  
 
   return (
     <div {...other}>
@@ -43,56 +79,55 @@ export const TaskListTable = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Details</TableCell>
+            <TableCell >Details</TableCell>
+            <TableCell>End Date</TableCell>
             <TableCell>Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((order) => {
-            // Ensure createdAt is a valid Date object before formatting
-            const createdAtMonth = order.createdAt ? format(new Date(order.createdAt), 'LLL').toUpperCase() : '';
-            const createdAtDay = order.createdAt ? format(new Date(order.createdAt), 'd') : '';
-            // const createdEndMonth = order.completionTime ? format(new Date(order.completionTime), 'LLL dd').toUpperCase() : '';
-            //
-            const createdEndDay = order.completionTime ? format(new Date(order.completionTime), 'hh mm ss') : '';
-            // const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
-            // const statusColor = statusMap[order.status] || 'warning';
+          {orders.map((order, index) => {
+            const createdAtMonth = order.createdAt
+              ? format(new Date(order.createdAt), "LLL").toUpperCase()
+              : "";
+            const createdAtDay = order.createdAt
+              ? format(new Date(order.createdAt), "d")
+              : "";
+
+            const words = order.description.split(' ');
+            let description = order.description;
+            if (words.length > 6) {
+              description = words.slice(0, 6).join(' ') + '...';
+            }
 
             return (
               <TableRow
                 hover
                 key={order.id}
-                onClick={() => onOrderSelect?.(order.id)}
-                sx={{ cursor: 'pointer' }}
+                onClick={() => onOrderSelect?.(order)}
+                sx={{ cursor: "pointer" }}
               >
                 <TableCell>
                   <Box
                     sx={{
-                      display: 'flex',
-                      alignItems: 'center'
+                      display: "flex",
+                      alignItems: "center",
                     }}
                   >
                     <Box
                       sx={{
-                        backgroundColor: (theme) => theme.palette.mode === 'dark'
-                          ? 'neutral.800'
-                          : 'neutral.200',
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === "dark"
+                            ? "neutral.800"
+                            : "neutral.200",
                         borderRadius: 2,
-                        maxWidth: 'fit-content',
-                        // ml: 3,
-                        p: 1
+                        maxWidth: "fit-content",
+                        p: 1,
                       }}
                     >
-                      <Typography
-                        align="center"
-                        variant="subtitle2"
-                      >
+                      <Typography align="center" variant="subtitle2">
                         {createdAtMonth}
                       </Typography>
-                      <Typography
-                        align="center"
-                        variant="h6"
-                      >
+                      <Typography align="center" variant="h6">
                         {createdAtDay}
                       </Typography>
                     </Box>
@@ -100,21 +135,18 @@ export const TaskListTable = (props) => {
                       <Typography variant="subtitle2">
                         {order.taskName}
                       </Typography>
-                      <Typography
-                        color="text.secondary"
-                        variant="body2"
-                      >
-                        Reward <b>{order.coins } </b> Coins
+                      <Typography color="text.secondary" variant="body2">
+                        Reward <b>{order.coins} </b> Coins
                       </Typography>
                     </Box>
                   </Box>
                 </TableCell>
-                {/* <TableCell align="right">{createdEndMonth}</TableCell> */}
-                <TableCell align="right">{createdEndDay}</TableCell>
-                <TableCell align="right">
-                  {/* <SeverityPill color={statusColor}>
+                <TableCell >{description}</TableCell>
+                <TableCell >{countdowns[index]}</TableCell>
+                <TableCell >
+                  <SeverityPill color={statusMap[order.status] || 'warning'}>
                     {order.status}
-                  </SeverityPill> */}
+                  </SeverityPill>
                 </TableCell>
               </TableRow>
             );
@@ -141,5 +173,5 @@ TaskListTable.propTypes = {
   orders: PropTypes.array.isRequired,
   ordersCount: PropTypes.number.isRequired,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import XIcon from '@untitled-ui/icons-react/build/esm/X';
 import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material';
 import { DepositDetails } from '../../depostis/deposits-drawer/deposit-details';
-import { OrderEdit } from './order-edit';
+import { OrderEdit, TaskEdit } from './order-edit';
+import { OrderDetails } from './order-details';
 
-export const OrderDrawer = (props) => {
+export const TaskDrawer = (props) => {
   const { container, onClose, open, order } = props;
   const [isEditing, setIsEditing] = useState(false);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -19,6 +20,7 @@ export const OrderDrawer = (props) => {
   }, []);
 
   let content = null;
+  console.log(order)
 
   if (order) {
     content = (
@@ -36,7 +38,7 @@ export const OrderDrawer = (props) => {
             color="inherit"
             variant="h6"
           >
-            {order.number}
+            Task Details
           </Typography>
           <IconButton
             color="inherit"
@@ -55,7 +57,7 @@ export const OrderDrawer = (props) => {
         >
           {!isEditing
             ? (
-              <DepositDetails
+              <OrderDetails
                 onApprove={onClose}
                 onEdit={handleEditOpen}
                 onReject={onClose}
@@ -63,7 +65,7 @@ export const OrderDrawer = (props) => {
               />
             )
             : (
-              <OrderEdit
+              <TaskEdit
                 onCancel={handleEditCancel}
                 onSave={handleEditCancel}
                 order={order}
@@ -122,7 +124,7 @@ export const OrderDrawer = (props) => {
   );
 };
 
-OrderDrawer.propTypes = {
+TaskDrawer.propTypes = {
   container: PropTypes.any,
   onClose: PropTypes.func,
   open: PropTypes.bool,

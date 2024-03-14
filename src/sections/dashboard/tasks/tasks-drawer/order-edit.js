@@ -21,7 +21,7 @@ const statusOptions = [
   }
 ];
 
-export const OrderEdit = (props) => {
+export const TaskEdit = (props) => {
   const { onCancel, onSave, order } = props;
 
   const createdAt = format(order.createdAt, 'dd/MM/yyyy HH:mm');
@@ -130,7 +130,7 @@ export const OrderEdit = (props) => {
   );
 };
 
-OrderEdit.propTypes = {
+TaskEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
   // @ts-ignore

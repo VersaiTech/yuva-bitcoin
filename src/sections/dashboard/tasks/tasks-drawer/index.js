@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import XIcon from '@untitled-ui/icons-react/build/esm/X';
 import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material';
 import { DepositDetails } from '../../depostis/deposits-drawer/deposit-details';
-import { OrderEdit } from './order-edit';
+// import { OrderEdit } from './order-edit';
+import { TaskEdit } from './order-edit';
 
 export const OrderDrawer = (props) => {
   const { container, onClose, open, order } = props;
@@ -19,6 +20,7 @@ export const OrderDrawer = (props) => {
   }, []);
 
   let content = null;
+  console.log(order)
 
   if (order) {
     content = (
@@ -36,7 +38,7 @@ export const OrderDrawer = (props) => {
             color="inherit"
             variant="h6"
           >
-            {order.number}
+            {order.taskName}
           </Typography>
           <IconButton
             color="inherit"
@@ -63,7 +65,7 @@ export const OrderDrawer = (props) => {
               />
             )
             : (
-              <OrderEdit
+              <TaskEdit
                 onCancel={handleEditCancel}
                 onSave={handleEditCancel}
                 order={order}
