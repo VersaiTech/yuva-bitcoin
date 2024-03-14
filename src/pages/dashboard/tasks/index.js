@@ -13,7 +13,7 @@ import { ordersApi } from "../../../api/orders";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { OrderDrawer } from "../../../sections/dashboard/order/order-drawer";
+import { OrderDrawer, TaskDrawer } from "../../../sections/dashboard/order/order-drawer";
 import { OrderListContainer } from "../../../sections/dashboard/order/order-list-container";
 // import { OrderListSearch } from "../../../sections/dashboard/order/order-list-search";
 // import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
@@ -56,7 +56,7 @@ const useOrders = (search) => {
       const headers = {
         Authorization: token,
       };
-      const response = await axios.get(`${BASEURL}/admin/getAllTasks`, {
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth`, {
         headers: headers,
       });
       console.log(response.data);
@@ -64,7 +64,7 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getConfirmedTasksForUser`,
         { headers: headers }
       );
-      console.log(completedTasks.data);
+      console.log(completedTasks.data.tasks);
 
       const pendingTasks = await axios.get(
         `${BASEURL}/admin/getPendingTasksForUser`,
@@ -74,7 +74,7 @@ const useOrders = (search) => {
 
       if (isMounted()) {
         setState({
-          orders: response.data,
+          orders: response.data.tasks,
           ordersCount: response.count,
           pending: pendingTasks.data,
           completed: completedTasks.data,
@@ -108,8 +108,7 @@ const Page = () => {
     if (!drawer.data) {
       return undefined;
     }
-
-    return orders.find((order) => order.id === drawer.data);
+    return orders.find((order) => order.taskId === drawer.data.taskId);
   }, [drawer, orders]);
 
   usePageView();
@@ -157,6 +156,7 @@ const Page = () => {
   const handleOrderOpen = useCallback(
     (orderId) => {
       // Close drawer if is the same order
+      console.log(drawer)
 
       if (drawer.isOpen && drawer.data === orderId) {
         setDrawer({
@@ -184,7 +184,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Order List | Rock34x</title>
+        <title>Dashboard: All Task | Yuva Bitcoin</title>
       </Head>
       <Divider />
       <Box
@@ -217,19 +217,19 @@ const Page = () => {
                 spacing={4}
               >
                 <div>
-                  <Typography variant="h4">Orders</Typography>
+                  <Typography variant="h4">All Taks</Typography>
                 </div>
                 <div>
-                  <Button
-                    startIcon={
-                      <SvgIcon>
-                        <PlusIcon />
-                      </SvgIcon>
-                    }
-                    variant="contained"
-                  >
-                    Add
-                  </Button>
+                    {/* <Button
+                      startIcon={
+                        <SvgIcon>
+                          <PlusIcon />
+                        </SvgIcon>
+                      }
+                      variant="contained"
+                    >
+                      Add
+                    </Button> */}
                 </div>
               </Stack>
             </Box>
@@ -264,7 +264,8 @@ const Page = () => {
               // }
             />
           </OrderListContainer>
-          <OrderDrawer
+          <TaskDrawer
+            // orders = {orders}
             container={rootRef.current}
             onClose={handleOrderClose}
             open={drawer.isOpen}

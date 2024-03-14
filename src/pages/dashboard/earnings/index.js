@@ -1,18 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import { Box, Button, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-import { ordersApi } from '../../../api/orders';
+import { Box, Divider, Stack, Typography } from '@mui/material';
+import axios from 'axios';
+
+import { Layout as DashboardLayout } from '../../../layouts/dashboard';
+// import { EarningListSearch } from '../../../sections/dashboard/earnings/earning-list-search';
+// import { EarningListTable } from '../../../sections/dashboard/earnings/earning-list-table';
+// import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
+import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
-import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
-import { OrderListContainer } from '../../../sections/dashboard/order/order-list-container';
+import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
 import { EarningListSearch } from '../../../sections/dashboard/earnings/earning-list-search';
 import { EarningListTable } from '../../../sections/dashboard/earnings/earning-list-table';
-import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
 
-import axios from 'axios';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -43,20 +44,17 @@ const useOrders = (search) => {
 
   const getOrders = useCallback(async () => {
     try {
-      // const response = await ordersApi.getOrders(search);
       const token = localStorage.getItem('accessToken');
       const headers = {
         Authorization: token,
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getAllTasksUser`, { headers: headers })
-
-      console.log(response.data)
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksUser`, { headers: headers });
 
       if (isMounted()) {
         setState({
           orders: response.data,
-          ordersCount: response.count
+          ordersCount: response.data.length
         });
       }
     } catch (err) {
@@ -65,10 +63,8 @@ const useOrders = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-      getOrders();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    getOrders();
+  }, [getOrders]);
 
   return state;
 };
@@ -81,13 +77,6 @@ const Page = () => {
     isOpen: false,
     data: undefined
   });
-  const currentOrder = useMemo(() => {
-    if (!drawer.data) {
-      return undefined;
-    }
-
-    return orders.find((order) => order.id === drawer.data);
-  }, [drawer, orders]);
 
   usePageView();
 
@@ -120,8 +109,6 @@ const Page = () => {
   }, [updateSearch]);
 
   const handleOrderOpen = useCallback((orderId) => {
-    // Close drawer if is the same order
-
     if (drawer.isOpen && drawer.data === orderId) {
       setDrawer({
         isOpen: false,
@@ -147,7 +134,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Earnings | Yuva Bitcoin 
+          Dashboard: Earnings | Yuva Bitcoin
         </title>
       </Head>
       <Divider />
@@ -185,7 +172,6 @@ const Page = () => {
                     All Earnings
                   </Typography>
                 </div>
-              
               </Stack>
             </Box>
             <Divider />
@@ -210,7 +196,7 @@ const Page = () => {
             container={rootRef.current}
             onClose={handleOrderClose}
             open={drawer.isOpen}
-            order={currentOrder}
+            order={orders.find(order => order.id === drawer.data)}
           />
         </Box>
       </Box>

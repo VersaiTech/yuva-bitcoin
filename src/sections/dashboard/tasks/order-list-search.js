@@ -19,10 +19,10 @@ const tabOptions = [
     label: 'All',
     value: 'all'
   },
-  {
-    label: 'Canceled',
-    value: 'canceled'
-  },
+  // {
+  //   label: 'Canceled',
+  //   value: 'canceled'
+  // },
   {
     label: 'Completed',
     value: 'complete'
@@ -126,7 +126,7 @@ export const TaskListSearch = (props) => {
             fullWidth
             inputProps={{ ref: queryRef }}
             name="orderNumber"
-            placeholder="Search by order number"
+            placeholder="Search Task by Name"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -136,7 +136,7 @@ export const TaskListSearch = (props) => {
             )}
           />
         </Box>
-        <TextField
+        {/* <TextField
           label="Sort By"
           name="sort"
           onChange={handleSortChange}
@@ -152,7 +152,7 @@ export const TaskListSearch = (props) => {
               {option.label}
             </option>
           ))}
-        </TextField>
+        </TextField> */}
       </Stack>
     </div>
   );
