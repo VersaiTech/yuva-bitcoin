@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import NextLink from 'next/link';
+import NextLink from "next/link";
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
@@ -25,6 +25,7 @@ import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/wi
 import { NewtaskListSearch } from "../../../sections/dashboard/newtask/newtask-list-search";
 import { NewtaskListTable } from "../../../sections/dashboard/newtask/newtask-list-table";
 import axios from "axios";
+import { customer, customers } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -53,6 +54,9 @@ const useCustomers = (search) => {
     customersCount: 0,
   });
 
+  const { page, rowsPerPage } = search;
+  console.log(search);
+
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
@@ -63,44 +67,50 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/admin/getAllTasksAdmin`,
+        `${BASEURL}/admin/getAllTasks/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
-      
+
       const PendingTasks = await axios.get(
-        `${BASEURL}/admin/getPendingTasks`,
+        `${BASEURL}/admin/getPendingTasks/${page + 1}/${rowsPerPage}`,
         { headers: headers }
-        );
-        
-        const completedTasks = await axios.get(
-          `${BASEURL}/admin/getCompletedTasks`,
-          { headers: headers }
-          );
-          // console.log(completedTasks.data);
-          
+      );
+
+      const completedTasks = await axios.get(
+        `${BASEURL}/admin/getCompletedTasks/${page + 1}/${rowsPerPage}`,
+        { headers: headers }
+      );
+      // console.log(completedTasks.data);
+      console.log(response.data);
+
+      // console.log(setState(response.data));
+
       if (isMounted()) {
         setState({
-          customers: response.data,
-          customersCount: response.count,
+          customers: response.data.tasks,
+          customersCount: 10,
           pending: PendingTasks.data,
           completed: completedTasks.data,
         });
       }
+      console.log(customers.data.tasks);
     } catch (err) {
-      console.error(err);
+      // console.error(err.response.datax);
     }
+
   }, [search, isMounted]);
 
+  
   useEffect(
     () => {
       getCustomers();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]
-  );
-
-  return state;
-};
+    );
+    
+    return state;
+  };
 
 const Page = () => {
   // get url status from query
@@ -108,12 +118,20 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
+
   const { customers, customersCount, completed, rejected, pending } =
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
 
   usePageView();
+
+  // const handlePageChange = useCallback(
+  //   (event, pageData) => {
+  //     console.log(pageData);
+  //   },
+  //   [updateSearch]
+  // );
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -138,6 +156,7 @@ const Page = () => {
 
   const handlePageChange = useCallback(
     (event, page) => {
+      console.log(page);
       updateSearch((prevState) => ({
         ...prevState,
         page,
@@ -197,38 +216,37 @@ const Page = () => {
                     Export
                   </Button> */}
                 </Stack>
-              </Stack> 
+              </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-              <Button
-  component={NextLink}
-  startIcon={
-    <SvgIcon>
-      <PlusIcon />
-    </SvgIcon>
-  }
-  variant="contained"
-  href={paths.dashboard.newtask.create}
-  sx={{
-    position: 'relative',
-    overflow: 'hidden',
-    '&:hover::after': {
-      content: '""',
-      position: 'absolute',
-      zIndex: 1,
-      top: '50%',
-      left: '50%',
-      width: '300%',
-      height: '300%',
-      background: 'rgba(255, 255, 255, 0.3)',
-      borderRadius: '50%',
-      transition: 'all 0.6s ease',
-      transform: 'translate(-50%, -50%)',
-    },
-  }}
->
-  Add Task
-</Button>
-
+                <Button
+                  component={NextLink}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                  href={paths.dashboard.newtask.create}
+                  sx={{
+                    position: "relative",
+                    overflow: "hidden",
+                    "&:hover::after": {
+                      content: '""',
+                      position: "absolute",
+                      zIndex: 1,
+                      top: "50%",
+                      left: "50%",
+                      width: "300%",
+                      height: "300%",
+                      background: "rgba(255, 255, 255, 0.3)",
+                      borderRadius: "50%",
+                      transition: "all 0.6s ease",
+                      transform: "translate(-50%, -50%)",
+                    },
+                  }}
+                >
+                  Add Task
+                </Button>
               </Stack>
             </Stack>
             <Card>
@@ -244,7 +262,7 @@ const Page = () => {
               />
               <NewtaskListTable
                 // customers={customers}
-                // customersCount={customersCount}
+                customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
                 customers={

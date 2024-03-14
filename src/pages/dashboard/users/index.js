@@ -82,7 +82,7 @@ const useCustomers = (search) => {
       if (!blockedUsersResponse) {
         blockedUsersResponse = [];
       }
-      console.log(activeUsersResponse)
+      console.log(activeUsersResponse);
       if (isMounted()) {
         setState({
           customers: response.data.members,
@@ -90,6 +90,9 @@ const useCustomers = (search) => {
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
         });
+
+        console.log(blockedUsersResponse.data.members);
+        console.log(response.data.members)
       }
     } catch (err) {
       setState({

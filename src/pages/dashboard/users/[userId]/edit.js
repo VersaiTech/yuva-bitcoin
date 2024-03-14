@@ -36,7 +36,7 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getMemberByUserId/${userId}`, {
+      const response = await axios.patch(`${BASEURL}/admin/updateMemberStatus/${userId}`, {
         headers: headers
       })
 
@@ -48,6 +48,7 @@ const useCustomer = () => {
       }
     } catch (err) {
       console.error(err);
+      console.log(err.response.data);
     }
   }, [isMounted]);
 

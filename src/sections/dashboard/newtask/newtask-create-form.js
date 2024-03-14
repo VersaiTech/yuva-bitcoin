@@ -27,8 +27,8 @@ const initialValues = {
   description: "",
   oldPrice: 0,
   url: "",
-  openDate: "",
-  startTime: "", // Add startTime field
+  openDate: new Date().toISOString().split("T")[0],
+  startTime: "", //Add startTime field
   endTime: "", // Add endTime field
   submit: null,
 };
@@ -56,14 +56,20 @@ export const NewTaskForm = (props) => {
         const headers = {
           Authorization: token,
         };
-        const data = {
-          taskName: values.name,
-          description: values.description,
-          coins: values.oldPrice,
-          link: values.url,
-          scheduledTime: `${values.openDate}T${values.startTime}`, // Combine openDate and startTime
-          completionDateTime: `${values.endDate}T${values.endTime}`, // Combine endDate and endTime
-        };
+        
+
+        
+        const data = new FormData();
+        data.append("taskName", values.name);
+        data.append("description", values.description);
+        data.append("coins", values.oldPrice);
+        data.append("link", values.url);
+        data.append("scheduledTime", `${values.openDate}T${values.startTime}`);
+        data.append("completionTime", `${values.openDate}T${values.endTime}`);
+        // Add any other fields as necessary
+
+
+        console.log(data)
 
         const response = await axios.post(`${BASEURL}/admin/addTask`, data, {
           headers: headers,
@@ -73,6 +79,7 @@ export const NewTaskForm = (props) => {
         router.push(paths.dashboard.newtask.index);
       } catch (err) {
         console.error(err);
+        console.log(err);
         toast.error("Something went wrong!");
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -137,6 +144,7 @@ export const NewTaskForm = (props) => {
                         label="Open Date"
                         name="openDate"
                         type="date"
+                        
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         value={formik.values.openDate}

@@ -138,9 +138,9 @@ const Page = () => {
         spacing={1}
       >
         <Typography variant="h5">
-          Log in
+        Admin  Log in
         </Typography>
-        <Typography
+        {/* <Typography
           color="text.secondary"
           variant="body2"
         >
@@ -153,7 +153,7 @@ const Page = () => {
           >
             Register
           </Link>
-        </Typography>
+        </Typography> */}
       </Stack>
       <form
         noValidate
@@ -195,7 +195,7 @@ const Page = () => {
         </Button>
         <Box sx={{ mt: 3 }}>
           <Link
-            href="#"
+            href={paths.auth.forgotPassword.modern}
             underline="hover"
             variant="subtitle2"
           >

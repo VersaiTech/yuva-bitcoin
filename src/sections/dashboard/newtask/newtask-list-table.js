@@ -230,7 +230,7 @@ export const NewtaskListTable = (props) => {
                           href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
                           variant="subtitle2"
                         > */}
-                          {customer.taskName}
+                        {customer.taskName}
                         {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
                           {customer.email}
@@ -248,8 +248,10 @@ export const NewtaskListTable = (props) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {customer.link.substring(0, 20)} {/* Displaying only the first 20 characters */}
-                  {customer.link.length > 20 && '...'} {/* Adding ellipsis if link is longer than 20 characters */}
+                        {customer.link.substring(0, 20)}{" "}
+                        {/* Displaying only the first 20 characters */}
+                        {customer.link.length > 20 && "..."}{" "}
+                        {/* Adding ellipsis if link is longer than 20 characters */}
                       </Link>
                     </Typography>
                   </TableCell>
