@@ -136,13 +136,13 @@ const getAllOrdersUser = async (req, res) => {
     }
 };
 
-
+const Joi = require('joi')
 const createOrder = async (req, res) => {
     const createOrderSchema = Joi.object({
         select_coin: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
         amount_currency: Joi.number().positive().required(),
         select_currency: Joi.string().required(),
-        payment_method: Joi.string().required(),
+        payment_method: Joi.string().required(), // Update this line
       });
     const userId = req.user.member_user_id;
     try {

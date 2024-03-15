@@ -40,7 +40,7 @@ router.route('/getRejectedTasks/:page_number?/:count?').get(isAdmin, getRejected
 router.route('/completeTask').post(ValidMember, completeTask); //
 router.route('/confirmTaskCompletion').post(isAdmin, confirmTaskCompletion); //
 
-router.route('/updateMemberStatus/:member_user_id').patch(isAdmin, updateMemberStatus); //
+router.route('/updateMemberStatus/:member_user_id').post(isAdmin, updateMemberStatus); //
 router.route('/deleteUser/:member_user_id').delete(isAdmin, deleteUser); //
 
 router.route('/getMemberByUserId/:member_user_id').get(isAdmin, getMemberByUserId);
