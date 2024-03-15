@@ -251,7 +251,7 @@ const updateWithdrawalStatus = async (req, res) => {
     const withdrawal = await Withdraw.findOne({ with_referrance });
 
     if (!withdrawal) {
-      return res.status(404).json({ error: 'Withdrawal request not found' });
+      return res.status(200).json({ error: 'Withdrawal request not found' });
     }
 
     // Check if the withdrawal request has already been processed

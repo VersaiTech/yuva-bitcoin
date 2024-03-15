@@ -33,6 +33,7 @@ app.use('/api/Deposit', require('./routes/deposit.route'));
 app.use('/api/Team', require('./routes/Team.route'));
 app.use('/api/Earning', require('./routes/Earning.route'));
 app.use('/api/Withdraw', require('./routes/Withdraw.route'));
+app.use('/api/Order', require('./routes/Order.route'));
 // Create an API endpoint to manually trigger the cron job
 
 
