@@ -28,7 +28,7 @@ export const PostCard = (props) => {
     ...other
   } = props;
 
-  const formattedPublishedAt = format(publishedAt, 'MMM d, yyyy');
+ const formattedPublishedAt = format(publishedAt);
 
   return (
     <Card {...other}>
@@ -86,7 +86,7 @@ export const PostCard = (props) => {
               {' '}
               •
               {' '}
-              {formattedPublishedAt}
+              {/* {formattedPublishedAt} */}
             </Typography>
           </Stack>
           <Typography

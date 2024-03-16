@@ -22,31 +22,49 @@ import { paths } from '../../../paths';
 import { PostNewsletter } from '../../../sections/dashboard/blog/post-newsletter';
 import { PostCard } from '../../../sections/dashboard/blog/post-card';
 import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator';
+import axios from "axios";
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+
 
 const useNews = () => {
   const isMounted = useMounted();
   const [news, setNews] = useState([]);
-
+  console.log("News:", news);
+  
   const getNews = useCallback(async () => {
     try {
-      const response = await newsApi.getNews();
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+      
+      console.log("Token:", token);
+      console.log("Headers:", headers);
+      console.log("URL:", `${BASEURL}/api/Blog/getAllBlogs`);
+
+      const response = await axios.get(`${BASEURL}/api/Blog/getAllBlogs`, {
+        headers: headers,
+      });
+      
+      console.log("Response from API:", response.data.blogs);
 
       if (isMounted()) {
-        setNews(response);
+        // Assuming the response data is an array of blog posts
+        setNews(response.data.blogs); // Adjust based on actual data structure
       }
     } catch (err) {
       console.error(err);
     }
   }, [isMounted]);
+  
 
   useEffect(() => {
-      getNews();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    getNews();
+  }, [getNews]);
 
   return news;
 };
+
 
 const Page = () => {
   const news = useNews();
@@ -145,20 +163,20 @@ const Page = () => {
           >
             {news.map((newsArticle) => (
               <Grid
-                key={newsArticle.title}
+                  key={newsArticle.blogId}
                 item // Changed to 'item'
                 xs={12}
                 md={6}
               >
                 <PostCard
-                  href={`/dashboard/news/${newsArticle.id}`}
-                  authorAvatar={newsArticle.author.avatar}
-                  authorName={newsArticle.author.name}
-                  category={newsArticle.category}
-                  cover={newsArticle.cover}
-                  publishedAt={newsArticle.publishedAt}
-                  readTime={newsArticle.readTime}
-                  shortDescription={newsArticle.shortDescription}
+                  href={`/dashboard/news/${newsArticle.blogId}`}
+                  // authorAvatar={newsArticle.author.avatar}
+                  // authorName={newsArticle.author.name}
+                  // category={newsArticle.category}
+                  // cover={newsArticle.cover}
+                  publishedAt={newsArticle.updatedAt}
+                  // readTime={newsArticle.readTime}
+                  shortDescription={newsArticle.content}
                   title={newsArticle.title}
                   sx={{ height: '100%' }}
                 />

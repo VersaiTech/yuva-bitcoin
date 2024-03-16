@@ -40,7 +40,7 @@ export const TenantSwitch = (props) => {
             color="neutral.400"
             variant="body2"
           >
-            Production
+            Admin Pannel 
           </Typography>
         </Box>
         {/* <IconButton

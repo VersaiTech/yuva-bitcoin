@@ -10,29 +10,24 @@ import {
   CardHeader,
   Divider,
   Stack,
-  Switch,
   TextField,
   Typography,
   MenuItem,
   Select,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { paths } from '../../../paths';
-import { wait } from '../../../utils/wait';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
+import { paths } from '../../../paths';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-
 
 export const WithdrawalEditForm = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { customer, ...other } = props;
   const formik = useFormik({
     initialValues: {
-      // address1: customer.address1 || '',
-      // address2: customer.address2 || '',
       with_amt: customer.with_amt || '',
       email: customer.email || '',
       hasDiscount: customer.hasDiscount || false,
@@ -42,69 +37,44 @@ export const WithdrawalEditForm = (props) => {
       with_date: customer.with_date || '',
       submit: null,
       status: customer.status,
+      processed_by: '',
+      remarks: ''
     },
     validationSchema: Yup.object({
-      // address1: Yup.string().max(255),
-      // address2: Yup.string().max(255),
-      // country: Yup.string().max(255),
-      // email: Yup
-      //   .string()
-      //   .email('Must be a valid email')
-      //   .max(255)
-      //   .required('Email is required'),
-      // hasDiscount: Yup.bool(),
-      // isVerified: Yup.bool(),
-      // name: Yup
-      //   .string()
-      //   .max(255)
-      //   .required('Name is required'),
-      // phone: Yup.string().max(15),
-      // twitterId: Yup.string().max(255)
+      // Add validation schema if necessary
     }),
     onSubmit: async (values, helpers) => {
-      try{
+      try {
         const token = localStorage.getItem('accessToken');
-        console.log(token);
         const headers = {
           'Authorization': token
         }
         
         const valuesData = {
-          status: values.status
+          status: values.status,
+          processed_by: values.processed_by,
+          remarks: values.remarks
         }
         
-        console.log('Form values:', valuesData);
-        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`,valuesData, { headers: headers })
+        const response = await axios.post(`${BASEURL}/api/Withdraw/updateWithdrawalStatus/${customer.with_referrance}`, valuesData, { headers: headers })
 
-        enqueueSnackbar('Withrdrawal updated successfully', { variant: 'success' });
+        enqueueSnackbar('Withdrawal updated successfully', { variant: 'success' });
         console.log(response.data);
+
+        window.location.href = paths.dashboard.withdrawal.index;
       }
-      catch(err){
+      catch(err) {
         enqueueSnackbar(err.response.data.error, { variant: 'error' });
         console.log(err.response.data.error);
       }
-
-      // try {
-      //   // NOTE: Make API request
-      //   await wait(500);
-      //   helpers.setStatus({ success: true });
-      //   helpers.setSubmitting(false);
-      //   toast.success('Customer updated');
-      // } catch (err) {
-      //   console.error(err);
-      //   toast.error('Something went wrong!');
-      //   helpers.setStatus({ success: false });
-      //   helpers.setErrors({ submit: err.message });
-      //   helpers.setSubmitting(false);
-      // }
     }
   });
-
 
   return (
     <form
       onSubmit={formik.handleSubmit}
-      {...other}>
+      {...other}
+    >
       <Card>
         <CardHeader title="Edit Withdrawal" />
         <CardContent sx={{ pt: 0 }}>
@@ -118,47 +88,21 @@ export const WithdrawalEditForm = (props) => {
             >
               <TextField
                 disabled
-                error={!!(formik.touched.member_name && formik.errors.member_name)}
                 fullWidth
-                helperText={formik.touched.member_name && formik.errors.member_name}
                 label="Full name"
                 name="member_name"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
                 value={formik.values.member_name}
               />
             </Grid>
-            {/* <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                disabled
-                error={!!(formik.touched.email && formik.errors.email)}
-                fullWidth
-                helperText={formik.touched.email && formik.errors.email}
-                label="Email address"
-                name="email"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.email}
-              />
-            </Grid> */}
             <Grid
               xs={12}
               md={6}
             >
               <TextField
                 disabled
-                error={!!(formik.touched.with_amt && formik.errors.with_amt)}
                 fullWidth
-                helperText={formik.touched.with_amt && formik.errors.with_amt}
                 label="Withdraw Amount"
                 name="with_amt"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
                 value={formik.values.with_amt}
               />
             </Grid>
@@ -168,32 +112,12 @@ export const WithdrawalEditForm = (props) => {
             >
               <TextField
                 disabled
-                error={!!(formik.touched.with_date && formik.errors.with_date)}
                 fullWidth
-                helperText={formik.touched.with_date && formik.errors.with_date}
                 label="Withdraw Date"
                 name="with_date"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
                 value={formik.values.with_date}
               />
             </Grid>
-            {/* <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                disabled
-                error={!!(formik.touched.contactNo && formik.errors.contactNo)}
-                fullWidth
-                helperText={formik.touched.contactNo && formik.errors.contactNo}
-                label="Phone number"
-                name="contactNo"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.contactNo}
-              />
-            </Grid> */}
             <Grid
               xs={12}
               md={6}
@@ -206,28 +130,23 @@ export const WithdrawalEditForm = (props) => {
                 value={formik.values.status}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                helperText={formik.touched.status && formik.errors.status}
-                error={!!(formik.touched.status && formik.errors.status)}
               >
                 <MenuItem value={"Approved"}>Approved</MenuItem>
                 <MenuItem value={"Rejected"}>Rejected</MenuItem>
                 <MenuItem value={"Pending"}>Pending</MenuItem>
               </Select>
             </Grid>
-
-            {/*  <Grid
+            <Grid
               xs={12}
               md={6}
             >
-             <TextField
-                error={!!(formik.touched.address1 && formik.errors.address1)}
+              <TextField
                 fullWidth
-                helperText={formik.touched.address1 && formik.errors.address1}
-                label="Address 1"
-                name="address1"
+                label="Processed By"
+                name="processed_by"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.address1}
+                value={formik.values.processed_by}
               />
             </Grid>
             <Grid
@@ -235,83 +154,15 @@ export const WithdrawalEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.address2 && formik.errors.address2)}
                 fullWidth
-                helperText={formik.touched.address2 && formik.errors.address2}
-                label="Address 2"
-                name="address2"
+                label="Remarks"
+                name="remarks"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.address2}
+                value={formik.values.remarks}
               />
-            </Grid> */}
+            </Grid>
           </Grid>
-          {/* <Stack
-            divider={<Divider />}
-            spacing={3}
-            sx={{ mt: 3 }}
-          >
-            <Stack
-              alignItems="center"
-              direction="row"
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Stack spacing={1}>
-                <Typography
-                  gutterBottom
-                  variant="subtitle1"
-                >
-                  Make Contact Info Public
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  Means that anyone viewing your profile will be able to see your contacts
-                  details
-                </Typography>
-              </Stack>
-              <Switch
-                checked={formik.values.isVerified}
-                color="primary"
-                edge="start"
-                name="isVerified"
-                onChange={formik.handleChange}
-                value={formik.values.isVerified}
-              />
-            </Stack>
-            <Stack
-              alignItems="center"
-              direction="row"
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Stack spacing={1}>
-                <Typography
-                  gutterBottom
-                  variant="subtitle1"
-                >
-                  Available to hire
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  Toggling this will let your teammates know that you are available for
-                  acquiring new projects
-                </Typography>
-              </Stack>
-              <Switch
-                checked={formik.values.hasDiscount}
-                color="primary"
-                edge="start"
-                name="hasDiscount"
-                onChange={formik.handleChange}
-                value={formik.values.hasDiscount}
-              />
-            </Stack>
-          </Stack> */}
         </CardContent>
         <Stack
           direction={{
@@ -323,7 +174,6 @@ export const WithdrawalEditForm = (props) => {
           sx={{ p: 3 }}
         >
           <Button
-            // disabled={formik.isSubmitting}
             type="submit"
             variant="contained"
           >
@@ -332,7 +182,6 @@ export const WithdrawalEditForm = (props) => {
           <Button
             color="inherit"
             component={NextLink}
-            disabled={formik.isSubmitting}
             href={paths.dashboard.withdrawal.index}
           >
             Cancel
@@ -344,6 +193,5 @@ export const WithdrawalEditForm = (props) => {
 };
 
 WithdrawalEditForm.propTypes = {
-  // @ts-ignore
   customer: PropTypes.object.isRequired
 };

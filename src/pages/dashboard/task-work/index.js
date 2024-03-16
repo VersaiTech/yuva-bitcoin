@@ -46,6 +46,8 @@ const useCustomers = (search) => {
     customersCount: 0,
   });
 
+  
+
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
@@ -63,13 +65,13 @@ const useCustomers = (search) => {
         `${BASEURL}/admin/getCompletedTasks`,
         { headers: headers }
       );
-      console.log(PendingTasks.data);
-      console.log(completedTasks.data);
+      console.log(PendingTasks.data.tasks);
+      console.log(completedTasks.data.tasks);
 
       if (isMounted()) {
         setState({
-          pending: PendingTasks.data,
-          completed: completedTasks.data,
+          pending: PendingTasks.data.tasks,
+          completed: completedTasks.data.tasks,
         });
       }
     } catch (err) {
@@ -90,10 +92,11 @@ const Page = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const status = urlParams.get("status");
 
-  const { search, updateSearch } = useSearch();
+  const {   search, updateSearch } = useSearch();
   const { completed, rejected, pending } = useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("pending");
+  
   const [customersCount, setCustomersCount] = useState(5);
 
   const [currentData, setCurrentData] = useState(pending);

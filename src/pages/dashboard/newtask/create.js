@@ -30,7 +30,7 @@ const ProductCreate = () => {
           <Stack spacing={3}>
             <Stack spacing={1}>
               <Typography variant="h4">
-                Create New Task
+                 Task
               </Typography>
               <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                 <Link

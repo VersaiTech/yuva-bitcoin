@@ -108,6 +108,9 @@ export const paths = {
       create: "/dashboard/newtask/create",
       edit: "/dashboard/newtask/",
     },
+
+    
+
     taskwork: {
       index: "/dashboard/task-work",
       details: "/dashboard/newtask/:taskId",
@@ -115,7 +118,7 @@ export const paths = {
       edit: "/dashboard/newtask/",
     },
     news: {
-      index: "/dashboard/news/index",
+      index: "/dashboard/news",
       list: "/dashboard/news/news-list",
       create: "/dashboard/newtask/create",
       edit: "/dashboard/newtask/",

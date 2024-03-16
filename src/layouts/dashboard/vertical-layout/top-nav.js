@@ -32,7 +32,7 @@ export const TopNav = (props) => {
         zIndex: (theme) => theme.zIndex.appBar
       }}
       {...other}>
-      <Stack
+      {/* <Stack
         alignItems="center"
         direction="row"
         justifyContent="space-between"
@@ -66,7 +66,7 @@ export const TopNav = (props) => {
           <ContactsButton />
           <AccountButton />
         </Stack>
-      </Stack>
+      </Stack> */}
     </Box>
   );
 };

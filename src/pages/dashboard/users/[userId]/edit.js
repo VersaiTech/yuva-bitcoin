@@ -36,7 +36,7 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.patch(`${BASEURL}/admin/updateMemberStatus/${userId}`, {
+      const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${userId}`, {
         headers: headers
       })
 

@@ -519,14 +519,14 @@ export const WithdrawalsListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       component={NextLink}
                       href={paths.dashboard.withdrawal.details}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />
                       </SvgIcon>
-                    </IconButton>
+                    </IconButton> */}
                   </TableCell>
                 </TableRow>
               );
