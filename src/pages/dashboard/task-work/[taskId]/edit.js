@@ -225,24 +225,17 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
+      const response = await axios.get(`${BASEURL}/admin/getOneTask/${taskId}`, {
         headers: headers
       })
 
-
-      console.log(response.data.tasks);
-      // want to console member_user_id from api
-      
-
-
-
-    
+      console.log(response.data);    
 
       if (isMounted()) {
-        setCustomer(response.data.tasks);
+        setCustomer(response.data);
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data.error);
     }
   }, [isMounted]);
 
@@ -276,6 +269,8 @@ console.log(customer.name)
 
 const Page = () => {
   const customer = useCustomer();
+  const router = useRouter();
+  const {userId} = router.query;
 
   usePageView();
 
@@ -304,7 +299,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.newtask.index}
+                  href={paths.dashboard.taskwork.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'
@@ -340,7 +335,7 @@ const Page = () => {
                       width: 64
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(customer.taskName)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
@@ -355,7 +350,7 @@ const Page = () => {
                         userId:
                       </Typography>
                       <Chip
-                        label={customer.name}
+                        label={userId}
                         size="small"
                       />
                     </Stack>

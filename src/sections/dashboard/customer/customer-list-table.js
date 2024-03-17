@@ -4,6 +4,7 @@ import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Avatar,
   Box,
@@ -24,6 +25,11 @@ import {
 import { Scrollbar } from '../../../components/scrollbar';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -62,6 +68,9 @@ const useSelectionModel = (customers) => {
   };
 };
 
+
+
+
 export const CustomerListTable = (props) => {
   const {
     customers,
@@ -75,6 +84,33 @@ export const CustomerListTable = (props) => {
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
 
   console.log(customers);
+
+  const router = useRouter();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDelete = async (customerId) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+  
+      const response = await axios.delete(
+        `${BASEURL}/admin/deleteUser/${customerId}`,
+        { headers: headers }
+      );
+      if (response.status === 200) {
+        enqueueSnackbar("Member deleted successfully", { variant: "success" });
+        router.push(paths.dashboard.users.index);
+      } else {
+        enqueueSnackbar("Something went wrong", { variant: "error" });
+      }
+    } catch (err) {
+      enqueueSnackbar(err.message, { variant: "error" });
+      console.log(err);
+    }
+  };
 
   const handleToggleAll = useCallback((event) => {
     const { checked } = event.target;
@@ -209,7 +245,7 @@ export const CustomerListTable = (props) => {
                           href={paths.dashboard.users.details}
                           variant="subtitle2"
                         > */}
-                          {customer.member_name}
+                        {customer.member_name}
                         {/* </Link> */}
                         <Typography
                           color="text.secondary"
@@ -240,14 +276,11 @@ export const CustomerListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    {/* <IconButton
-                      component={NextLink}
-                      href={paths.dashboard.customers.details}
-                    >
+                    <IconButton onClick={() => handleDelete(customer.member_user_id)}>
                       <SvgIcon>
-                        <ArrowRightIcon />
+                        <DeleteIcon />
                       </SvgIcon>
-                    </IconButton> */}
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               );

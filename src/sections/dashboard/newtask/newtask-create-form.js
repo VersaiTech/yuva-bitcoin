@@ -27,9 +27,8 @@ const initialValues = {
   description: "",
   oldPrice: 0,
   url: "",
-  openDate: new Date().toISOString().split("T")[0],
-  startTime: "", //Add startTime field
-  endTime: "", // Add endTime field
+  openDateTime: new Date().toISOString().split("T")[0], // Combine start date and time
+  endDateTime: new Date().toISOString().split("T")[0], // Combine end date and time
   submit: null,
 };
 
@@ -38,10 +37,10 @@ const validationSchema = Yup.object({
   description: Yup.string().max(5000).required(),
   oldPrice: Yup.number().min(0).required(),
   url: Yup.string().url().required(),
-  openDate: Yup.date().required(),
-  startTime: Yup.string().required(), // Add validation for startTime
-  endTime: Yup.string().required(), // Add validation for endTime
-  endDate: Yup.date().min(Yup.ref("openDate")).required(),
+  openDateTime: Yup.date().required(),
+  endDateTime: Yup.date()
+    .min(Yup.ref("openDateTime"), "End date must be after start date")
+    .required(),
 });
 
 export const NewTaskForm = (props) => {
@@ -57,29 +56,22 @@ export const NewTaskForm = (props) => {
           Authorization: token,
         };
         
-
-        
-        const data = new FormData();
-        data.append("taskName", values.name);
-        data.append("description", values.description);
-        data.append("coins", values.oldPrice);
-        data.append("link", values.url);
-        data.append("scheduledTime", `${values.openDate}T${values.startTime}`);
-        data.append("completionTime", `${values.openDate}T${values.endTime}`);
-        // Add any other fields as necessary
-
-
-        console.log(data)
+        const data = {
+          taskName: values.name,
+          description: values.description,
+          coins: values.oldPrice,
+          link: values.url,
+          scheduledTime: values.openDateTime,
+          completionTime: values.endDateTime,
+        };
 
         const response = await axios.post(`${BASEURL}/admin/addTask`, data, {
           headers: headers,
         });
-        console.log(response.data);
         toast.success("Task created");
         router.push(paths.dashboard.newtask.index);
       } catch (err) {
         console.error(err);
-        console.log(err);
         toast.error("Something went wrong!");
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -100,77 +92,42 @@ export const NewTaskForm = (props) => {
               <Grid item xs={12} md={8}>
                 <Stack spacing={3}>
                   <Grid container spacing={3}>
-                    {/* Grid for start and end time */}
+                    {/* Grid for start and end date/time */}
                     <Grid item xs={6}>
-                      {/* Add TextField for startTime */}
+                      {/* Combine startDate and startTime into one field */}
                       <TextField
                         error={
-                          !!(formik.touched.startTime &&
-                          formik.errors.startTime)
+                          !!(formik.touched.openDateTime &&
+                          formik.errors.openDateTime)
                         }
                         fullWidth
-                        label="Start Time"
-                        name="startTime"
-                        type="time"
+                        label="Start Date & Time"
+                        name="openDateTime"
+                        type="datetime-local" // Use datetime-local input type
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
-                        value={formik.values.startTime}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      {/* Add TextField for endTime */}
-                      <TextField
-                        error={
-                          !!(formik.touched.endTime && formik.errors.endTime)
-                        }
-                        fullWidth
-                        label="End Time"
-                        name="endTime"
-                        type="time"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.endTime}
-                      />
-                    </Grid>
-                    {/* Grid for open and end date */}
-                    <Grid item xs={6}>
-                      {/* Add TextField for openDate */}
-                      <TextField
-                        error={
-                          !!(formik.touched.openDate &&
-                          formik.errors.openDate)
-                        }
-                        fullWidth
-                        label="Open Date"
-                        name="openDate"
-                        type="date"
-                        
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.openDate}
+                        value={formik.values.openDateTime} // Combine startDate and startTime into one value
                         inputProps={{
                           min: new Date().toISOString().split("T")[0], // Set min value to today
-                          placeholder: "", // Remove the placeholder
                         }}
-                      
                       />
                     </Grid>
                     <Grid item xs={6}>
-                      {/* Add TextField for endDate */}
+                      {/* Combine endDate and endTime into one field */}
                       <TextField
                         error={
-                          !!(formik.touched.endDate && formik.errors.endDate)
+                          !!(formik.touched.endDateTime &&
+                          formik.errors.endDateTime)
                         }
                         fullWidth
-                        label="End Date"
-                        name="endDate"
-                        type="date"
+                        label="End Date & Time"
+                        name="endDateTime"
+                        type="datetime-local" // Use datetime-local input type
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
-                        value={formik.values.endDate}
+                        value={formik.values.endDateTime} // Combine endDate and endTime into one value
                         inputProps={{
                           min: new Date().toISOString().split("T")[0], // Set min value to today
-                          placeholder: "", // Remove the placeholder
                         }}
                       />
                     </Grid>
