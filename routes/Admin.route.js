@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const { getOverview } = require('../controllers/Overview.controller');
-const { getuserbalance, getAllStakes, getAllStake, addTask, editTask, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser } = require('../controllers/AdminController');
+const { getuserbalance, getAllStakes, getAllStake, addTask, editTask,getOneTaskforAdminConfirmationTask, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser } = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask); //
@@ -33,6 +33,8 @@ router.route('/editTask/:taskId').post(isAdmin, upload.array('file', 10), editTa
 router.route('/deleteTask/:taskId').delete(isAdmin, deleteTask); //
 router.route('/deleteManyTasks').delete(isAdmin, deleteManyTasks); //
 
+
+router.route('/getOneTaskforAdminConfirmationTask/:taskId/:userId').get(isAdmin, getOneTaskforAdminConfirmationTask);  // pending task of users will show to admin
 router.route('/getPendingTasks/:page_number?/:count?').get(isAdmin, getPendingTasks);  // pending task of users will show to admin
 router.route('/getCompletedTasks/:page_number?/:count?').get(isAdmin, getCompletedTasks); // completed task of users will show to admin
 router.route('/getRejectedTasks/:page_number?/:count?').get(isAdmin, getRejectedTasks); // rejected task of users will show to admin

@@ -32,6 +32,11 @@ const orderSchema = new mongoose.Schema({
         type: Number, // Assuming the total is a numeric value
         required: true,
     },
+    transactionType:{
+        type:String,
+        required:true,
+        ref:"TransactionHistory"
+    }
 },{
     timestamps: true});
 

@@ -413,6 +413,24 @@ const getOneTask = async (req, res) => {
   }
 };
 
+const getOneTaskforAdminConfirmationTask = async (req, res) => {
+  try {
+    const { taskId, userId } = req.params;
+
+    const task = await CompletedTask.findOne({ taskId, userId });
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 const getPendingTasks = async (req, res) => {
   const Schema = Joi.object({
     page_number: Joi.number(),
@@ -1236,4 +1254,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser };

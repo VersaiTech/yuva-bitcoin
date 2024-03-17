@@ -89,7 +89,8 @@ const createOrder = async (req, res) => {
             coin,
             amount,
             exchange_currency,
-            payment_method
+            payment_method,
+            transactionType: 'order_sell'
         });
 
         // Calculate total
@@ -145,6 +146,67 @@ const createOrder = async (req, res) => {
 };
 
 
+const updateOrder = async (req, res) => {
+    try {
+        // Extract data from request body
+        const { orderId, userId, coin, amount, exchange_currency, payment_method, active, transactionType } = req.body;
+
+        // Find the order by orderId
+        let order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Find the member by userId to check sufficient balance
+        const member = await Member.findOne({ member_user_id: userId });
+        if (!member) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        // Calculate total of the updated order
+        const newTotal = amount * exchange_currency;
+
+        // Calculate the difference in total amount compared to the previous order
+        const totalDifference = newTotal - order.total;
+
+        // Check if the member has sufficient balance for the updated order
+        if (totalDifference > 0 && member.coins < totalDifference) {
+            return res.status(400).json({ error: 'Insufficient balance' });
+        }
+
+        // Update order fields
+        order.userId = userId;
+        order.coin = coin;
+        order.amount = amount;
+        order.exchange_currency = exchange_currency;
+        order.payment_method = payment_method;
+        order.active = active;
+        order.total = newTotal;
+        order.transactionType = transactionType;
+
+        // Update member's balance if necessary
+        if (totalDifference > 0) {
+            // Deduct the difference from member's coins
+            member.coins -= totalDifference;
+        } else if (totalDifference < 0) {
+            // Add the absolute difference to member's coins
+            member.coins += Math.abs(totalDifference);
+        }
+
+        // Save the updated member object
+        await member.save();
+
+        // Save the updated order
+        order = await order.save();
+
+        res.status(200).json({ message: 'Order updated successfully', order });
+    } catch (error) {
+        console.error('Error updating order:', error);
+        res.status(500).json({ error: 'Failed to update order' });
+    }
+};
+
+
 const getAllOrder = async (req, res) => {
     const Schema = Joi.object({
         page_number: Joi.number(),
@@ -189,8 +251,101 @@ const getAllOrder = async (req, res) => {
     }
 };
 
+const getAllOrderForOneUSer = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const userId = req.user.member_user_id;
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+        const toalOrders = await Order.find({ userId, transactionType: "order_sell" });
+        // Fetch tasks for the user with sorting and pagination
+        const order = await Order.find({ userId, transactionType: "order_sell" })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+        // Find all orders
+        // const orders = await Order.find({ userId, transactionType: "order_sell" });
+        if (!order || order.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No order ",
+                toalOrders,
+                order: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Orders Found",
+            totalOrders: toalOrders.length,
+            order: order,
+
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
+
+const getOrdersForAdminForOneUser = async (req, res) => {
+    const Schema = Joi.object({
+        userId: Joi.string().required(), // Expecting userId in the request params
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params); // Corrected: req.params
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+
+    try {
+        const { userId, page_number = 1, count = 10 } = value;
+        const offset = (page_number - 1) * count;
+
+        // Fetch total orders count for the user
+        const totalOrders = await Order.find({ userId }).countDocuments();
+
+        // Fetch orders for the user with sorting and pagination
+        const orders = await Order.find({ userId })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No orders found for the user",
+                totalOrders: 0,
+                orders: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Orders found for the user",
+            totalOrders,
+            orders,
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
+
 
 
 module.exports = {
-    createOrder, getAllOrder,
+    createOrder,updateOrder, getAllOrder, getAllOrderForOneUSer,getOrdersForAdminForOneUser
 };
