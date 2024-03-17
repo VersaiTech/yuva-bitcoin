@@ -33,12 +33,17 @@ const useCustomer = () => {
       // const response = await customersApi.getCustomer();
       const token = localStorage.getItem('accessToken');
       const headers = {
+
         'Authorization': token
+
       }
+      // console.log(headers)
 
       const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${userId}`, {
         headers: headers
       })
+
+      console.log(response)
 
 
       console.log(response.data.member)

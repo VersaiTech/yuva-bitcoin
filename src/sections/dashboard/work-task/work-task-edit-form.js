@@ -21,7 +21,7 @@ import { paths } from "../../../paths";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -31,13 +31,11 @@ const validationSchema = Yup.object({
   coins: Yup.number().min(0).required("Coins is required"),
   taskName: Yup.string().max(255).required("Task Name is required"),
   link: Yup.string().url().required("Link is required"),
-  openDate: Yup.date().required("Open Date is required"),
-  startTime: Yup.string().required("Start Time is required"),
-  endDate: Yup.date().min(Yup.ref("openDate")).required("End Date is required"),
-  endTime: Yup.string().required("End Time is required"),
+  userTwitterId: Yup.string().required("User Twitter ID is required"),
+  taskSubmitDate: Yup.date().required("Task Submit Date is required"),
 });
 
-export const NewTaskEditForm = ({ customer, ...other }) => {
+export const WorkTaskEditForm = ({ customer, ...other }) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openDialog, setOpenDialog] = useState(false);
@@ -49,78 +47,22 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
       coins: customer.coins || "",
       taskName: customer.taskName || "",
       link: customer.link || "",
-      openDate: customer.scheduledTime
-        ? customer.scheduledTime.split("T")[0]
-        : "", // Extracting date from scheduledTime
-      startTime: customer.scheduledTime
-        ? customer.scheduledTime.split("T")[1]
-        : "", // Extracting time from scheduledTime
-      endDate: customer.completionDateTime
-        ? customer.completionDateTime.split("T")[0]
-        : "", // Extracting date from completionDateTime
-      endTime: customer.completionDateTime
-        ? customer.completionDateTime.split("T")[1]
-        : "", // Extracting time from completionDateTime
+      userTwitterId: customer.userTwitterId || "",
+      taskSubmitDate: "2024-03-16", // Dummy date, replace with API value
       submit: null,
     },
     validationSchema: validationSchema,
     onSubmit: async (values, helpers) => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        const headers = {
-          Authorization: token,
-        };
-
-        const data = {
-          taskId: values.taskId,
-          description: values.description,
-          coins: values.coins,
-          taskName: values.taskName,
-          link: values.link,
-          scheduledTime: `${values.openDate}T${values.startTime}`,
-          completionDateTime: `${values.endDate}T${values.endTime}`,
-        };
-
-        const response = await axios.post(
-          `${BASEURL}/admin/editTask/${customer.taskId}`,
-          data,
-          { headers: headers }
-        );
-
-        if (response.status === 200) {
-          enqueueSnackbar("Task updated successfully", { variant: "success" });
-          router.push(paths.dashboard.newtask.index);
-        } else {
-          enqueueSnackbar("Something went wrong", { variant: "error" });
-        }
-      } catch (err) {
-        enqueueSnackbar(err.message, { variant: "error" });
-        console.log(err);
-      }
+      // Your submission logic
     },
   });
 
-  const handleDeleteTask = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const headers = {
-        Authorization: token,
-      };
+  const handleConfirmRequest = async () => {
+    // Your confirmation logic
+  };
 
-      const response = await axios.delete(
-        `${BASEURL}/admin/deleteTask/${customer.taskId}`,
-        { headers: headers }
-      );
-      if (response.status === 200) {
-        enqueueSnackbar("Task deleted successfully", { variant: "success" });
-        router.push(paths.dashboard.newtask.index);
-      } else {
-        enqueueSnackbar("Something went wrong", { variant: "error" });
-      }
-    } catch (err) {
-      enqueueSnackbar(err.message, { variant: "error" });
-      console.log(err);
-    }
+  const handleRejectRequest = async () => {
+    // Your rejection logic
   };
 
   const handleOpenDialog = () => {
@@ -134,7 +76,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
   return (
     <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
-        <CardHeader title="Edit Task" />
+        <CardHeader title="Approve or Reject Task" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={2}>
             {/* Existing form fields */}
@@ -143,7 +85,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 error={!!(formik.touched.taskName && formik.errors.taskName)}
                 fullWidth
                 helperText={formik.touched.taskName && formik.errors.taskName}
-                label="Task Name"
+                label="User Name"
                 name="taskName"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -156,7 +98,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 error={!!(formik.touched.taskId && formik.errors.taskId)}
                 fullWidth
                 helperText={formik.touched.taskId && formik.errors.taskId}
-                label="Task ID"
+                label="User Id"
                 name="taskId"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -203,63 +145,27 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.coins}
               />
             </Grid>
-            {/* Date and Time Fields */}
             <Grid item xs={12} md={6}>
               <TextField
-                error={!!(formik.touched.openDate && formik.errors.openDate)}
+                error={!!(formik.touched.userTwitterId && formik.errors.userTwitterId)}
                 fullWidth
-                helperText={formik.touched.openDate && formik.errors.openDate}
-                label="Open Date"
-                name="openDate"
-                type="date"
+                helperText={formik.touched.userTwitterId && formik.errors.userTwitterId}
+                label="User Twitter ID"
+                name="userTwitterId"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.openDate}
-                inputProps={{
-                  min: new Date().toISOString().split("T")[0], // Set min value to today
-                }}
+                value={formik.values.userTwitterId}
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
-                error={!!(formik.touched.startTime && formik.errors.startTime)}
+                disabled
                 fullWidth
-                helperText={formik.touched.startTime && formik.errors.startTime}
-                label="Start Time"
-                name="startTime"
-                type="time"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.startTime}
+                label="Task Submit Date"
+                value={formik.values.taskSubmitDate}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.endDate && formik.errors.endDate)}
-                fullWidth
-                helperText={formik.touched.endDate && formik.errors.endDate}
-                label="End Date"
-                name="endDate"
-                type="date"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.endDate}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.endTime && formik.errors.endTime)}
-                fullWidth
-                helperText={formik.touched.endTime && formik.errors.endTime}
-                label="End Time"
-                name="endTime"
-                type="time"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.endTime}
-              />
-            </Grid>
-          </Grid> 
+          </Grid>
         </CardContent>
         <Stack
           direction={{
@@ -270,19 +176,11 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button type="submit" variant="contained">
-            Update
+          <Button onClick={handleConfirmRequest} variant="contained">
+            Confirm Request
           </Button>
-          <Button color="error" onClick={handleOpenDialog} variant="contained">
-            Delete Task
-          </Button>
-          <Button
-            color="inherit"
-            component={NextLink}
-            href={paths.dashboard.newtask.index}
-            variant="outlined"
-          >
-            Cancel
+          <Button onClick={handleRejectRequest} color="error" variant="contained">
+            Reject Request
           </Button>
         </Stack>
       </Card>
@@ -299,7 +197,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
           <Button onClick={handleCloseDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteTask} color="error" autoFocus>
+          <Button color="error" autoFocus>
             Delete
           </Button>
         </DialogActions>
@@ -308,6 +206,6 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
   );
 };
 
-NewTaskEditForm.propTypes = {
+WorkTaskEditForm.propTypes = {
   customer: PropTypes.object.isRequired,
 };

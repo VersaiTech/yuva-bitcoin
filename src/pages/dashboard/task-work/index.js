@@ -46,8 +46,6 @@ const useCustomers = (search) => {
     customersCount: 0,
   });
 
-  
-
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
@@ -190,28 +188,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Apporve Task</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
-                  {/* <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Upload01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Download01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Export
-                  </Button> */}
+               
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
@@ -251,7 +228,7 @@ const Page = () => {
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
-                sortDir={search.sortDir}
+                sortDir={search.sortDir}  
                 completed={completed}
                 pending={pending}
                 currentTab={currentTab}

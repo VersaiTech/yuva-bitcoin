@@ -29,6 +29,14 @@ import { Scrollbar } from "../../../components/scrollbar";
 import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
 import axios from "axios";
+import { SeverityPill } from "../../../components/severity-pill";
+const statusMap = {
+  complete: "success",
+  pending: "info",
+  canceled: "warning",
+  rejected: "error",
+};
+
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSelectionModel = (customers) => {
@@ -182,17 +190,18 @@ export const WorkListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>Task Name</TableCell>
+              <TableCell>Usesr Name</TableCell>
               <TableCell>Task Id</TableCell>
-              <TableCell>Coins</TableCell>
+              {/* <TableCell>Coins</TableCell> */}
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
               <TableCell align="right">Edit Task</TableCell>
+              <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {customers.map((customer, index) => {
-              const isSelected = selected.includes(customer.taskId);
+              const isSelected = selected.includes(customer.userId);
 
               return (
                 <TableRow hover key={index} selected={isSelected}>
@@ -203,9 +212,9 @@ export const WorkListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(customer.taskId);
+                          selectOne(customer.userId);
                         } else {
-                          deselectOne(customer.taskId);
+                          deselectOne(customer.userId);
                         }
                       }}
                       value={isSelected}
@@ -213,15 +222,15 @@ export const WorkListTable = (props) => {
                   </TableCell>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                      <Avatar
-                        src={customer.taskName}
+                      {/* <Avatar
+                        src={customer.name}
                         sx={{
                           height: 42,
                           width: 42,
                         }}
                       >
-                        {getInitials(customer.taskName)}
-                      </Avatar>
+                        {getInitials(customer.name)}
+                      </Avatar> */}
                       <div>
                         {/* <Link
                           color="inherit"
@@ -229,16 +238,34 @@ export const WorkListTable = (props) => {
                           href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
                           variant="subtitle2"
                         > */}
-                          {customer.taskName}
+                        {customer.name}
                         {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
-                          {customer.email}
+                          {"id:"+customer.userId}
+                        </Typography>
+                        <Typography color="text.secondary" variant="body2">
+                          {customer.userId}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{customer.taskId}</TableCell>
-                  <TableCell>{customer.coins}</TableCell>
+                  <TableCell>
+                    <Stack alignItems="center" direction="row" spacing={1}>
+                    
+                      <div>
+                       
+                        {customer.taskName}
+                        {/* </Link> */}
+                        <Typography color="text.secondary" variant="body2">
+                          {"taskId:" + customer.taskId}
+                        </Typography>
+                        <Typography color="text.secondary" variant="body2">
+                          {"coin:"+customer.coins}
+                        </Typography>
+                      </div>
+                    </Stack>{" "}
+                  </TableCell>
+                  {/* <TableCell>{customer.coins}</TableCell> */}
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
@@ -247,28 +274,29 @@ export const WorkListTable = (props) => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {customer.link.substring(0, 20)} {/* Displaying only the first 20 characters */}
-                  {customer.link.length > 20 && '...'} {/* Adding ellipsis if link is longer than 20 characters */}
+                        {customer.link.substring(0, 20)}{" "}
+                        {/* Displaying only the first 20 characters */}
+                        {customer.link.length > 20 && "..."}{" "}
+                        {/* Adding ellipsis if link is longer than 20 characters */}
                       </Link>
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
+                      href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit`}
                     >
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    {/* <IconButton
-                      component={NextLink}
-                      href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
+                  </TableCell>
+                  <TableCell>
+                    <SeverityPill
+                      color={statusMap[customer.status] || "warning"}
                     >
-                      <SvgIcon>
-                        <ArrowRightIcon />
-                      </SvgIcon>
-                    </IconButton> */}
+                      {customer.status}
+                    </SeverityPill>
                   </TableCell>
                 </TableRow>
               );

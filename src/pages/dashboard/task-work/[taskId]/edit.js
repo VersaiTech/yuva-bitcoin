@@ -199,6 +199,8 @@ import { NewTaskEditForm } from '../../../../sections/dashboard/newtask/newtask-
 import { getInitials } from '../../../../utils/get-initials';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { WorkTaskEditForm } from '../../../../sections/dashboard/work-task/work-task-edit-form';
+import { customer } from '../../../../api/customers/data';
 
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -223,15 +225,21 @@ const useCustomer = () => {
         'Authorization': token
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getOneTask/${taskId}`, {
+      const response = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
         headers: headers
       })
 
 
-      console.log(response.data)
+      console.log(response.data.tasks);
+      // want to console member_user_id from api
+      
+
+
+
+    
 
       if (isMounted()) {
-        setCustomer(response.data);
+        setCustomer(response.data.tasks);
       }
     } catch (err) {
       console.error(err);
@@ -247,6 +255,7 @@ const useCustomer = () => {
   return customer;
 };
 
+console.log(customer.name)
 
 // const handleSubmit = async (values) => {
 //   try{
@@ -331,7 +340,7 @@ const Page = () => {
                       width: 64
                     }}
                   >
-                    {getInitials(customer.taskId)}
+                    {getInitials(customer.name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
@@ -343,10 +352,10 @@ const Page = () => {
                       spacing={1}
                     >
                       <Typography variant="subtitle2">
-                        taskId:
+                        userId:
                       </Typography>
                       <Chip
-                        label={customer.taskId}
+                        label={customer.name}
                         size="small"
                       />
                     </Stack>
@@ -354,7 +363,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-             <NewTaskEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
+             <WorkTaskEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>

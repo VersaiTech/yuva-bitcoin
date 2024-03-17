@@ -71,16 +71,7 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      const PendingTasks = await axios.get(
-        `${BASEURL}/admin/getPendingTasks/${page + 1}/${rowsPerPage}`,
-        { headers: headers }
-      );
-
-      const completedTasks = await axios.get(
-        `${BASEURL}/admin/getCompletedTasks/${page + 1}/${rowsPerPage}`,
-        { headers: headers }
-      );
-      // console.log(completedTasks.data);
+      
       console.log(response.data);
 
       // console.log(setState(response.data));
@@ -89,8 +80,7 @@ const useCustomers = (search) => {
         setState({
           customers: response.data.tasks,
           customersCount: 10,
-          pending: PendingTasks.data,
-          completed: completedTasks.data,
+         
         });
       }
       console.log(customers.data.tasks);
@@ -193,28 +183,7 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">All Task</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
-                  {/* <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Upload01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Download01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Export
-                  </Button> */}
+                 
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
@@ -255,32 +224,18 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                completed={completed}
-                pending={pending}
+                // completed={completed}
+                // pending={pending}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
               <NewtaskListTable
                 // customers={customers}
                 customersCount={customersCount}
-                // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                customers={
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "hasAcceptedMarketing"
-                    ? pending
-                    : currentTab === "isProspect"
-                    ? completed
-                    : []
-                }
-                // customersCount={
-                //   currentTab === 'all' ? customersCount :
-                //     currentTab === 'pending' ? pending.length :
-                //       currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                //         currentTab === 'isProspect' ? completed.length :
-                //           0
-                // }
+              
+                customers={currentTab === "all" ? customers : []}
+
+              
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
