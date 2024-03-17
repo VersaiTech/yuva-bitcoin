@@ -1,6 +1,5 @@
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 import {
   Avatar,
   Box,
@@ -14,6 +13,8 @@ import {
 } from '@mui/material';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
+import { format } from 'date-fns';
+
 
 export const PostCard = (props) => {
   const {
@@ -28,7 +29,9 @@ export const PostCard = (props) => {
     ...other
   } = props;
 
-  const formattedPublishedAt = format(publishedAt, 'MMM d, yyyy');
+  // const formattedPublishedAt = format(publishedAt, 'MMM d, yyyy');
+  // const formattedPublishedAt = format(new Date(publishedAt), 'MMM d, yyyy');
+
 
   return (
     <Card {...other}>
@@ -85,8 +88,6 @@ export const PostCard = (props) => {
               {authorName}
               {' '}
               •
-              {' '}
-              {formattedPublishedAt}
             </Typography>
           </Stack>
           <Typography

@@ -20,30 +20,47 @@ import { paths } from '../../../paths';
 import { PostNewsletter } from '../../../sections/dashboard/blog/post-newsletter';
 import { PostCard } from '../../../sections/dashboard/blog/post-card';
 import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator';
+import axios from "axios";
+
 
 const useNews = () => {
+  const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
   const isMounted = useMounted();
   const [news, setNews] = useState([]);
+  console.log("News:", news);
 
-  const getNews = useCallback(async () => {
-    try {
-      const response = await newsApi.getNews();
+const getNews = useCallback(async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization: token,
+    };
+    
+    console.log("Token:", token);
+    console.log("Headers:", headers);
+    console.log("URL:", `${BASEURL}/api/Blog/getAllBlogs`);
 
-      if (isMounted()) {
-        setNews(response);
-      }
-    } catch (err) {
-      console.error(err);
+    const response = await axios.get(`${BASEURL}/api/Blog/getAllBlogs`, {
+      headers: headers,
+    });
+    
+    console.log("Response from API:", response.data.blogs);
+
+    if (isMounted()) {
+      // Assuming the response data is an array of blog posts
+      setNews(response.data.blogs); // Adjust based on actual data structure
     }
-  }, [isMounted]);
+  } catch (err) {
+    console.error(err);
+  }
+}, [isMounted]);
 
-  useEffect(() => {
-      getNews();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
 
-  return news;
+useEffect(() => {
+  getNews();
+}, [getNews]);
+
+return news;
 };
 
 const Page = () => {
@@ -95,30 +112,7 @@ const Page = () => {
               </Typography>
             </Breadcrumbs>
           </Stack>
-          <Card
-            elevation={16}
-            sx={{
-              alignItems: 'center',
-              borderRadius: 1,
-              display: 'flex',
-              justifyContent: 'space-between',
-              mb: 8,
-              mt: 6,
-              px: 3,
-              py: 2
-            }}
-          >
-            <Typography variant="subtitle1">
-              Hello, User
-            </Typography>
-            <Button
-              component={Link} // Changed to 'Link'
-              href={paths.dashboard.news.newsCreate} // Changed to 'href'
-              variant="contained"
-            >
-              New Article
-            </Button>
-          </Card>
+         
           <Typography variant="h4">
             Recent Articles
           </Typography>
@@ -143,23 +137,23 @@ const Page = () => {
           >
             {news.map((newsArticle) => (
               <Grid
-                key={newsArticle.title}
+                key={newsArticle.blogId}
                 item // Changed to 'item'
                 xs={12}
                 md={6}
               >
-                <PostCard
-                  href={`/dashboard/news/${newsArticle.id}`}
-                  authorAvatar={newsArticle.author.avatar}
-                  authorName={newsArticle.author.name}
-                  category={newsArticle.category}
-                  cover={newsArticle.cover}
-                  publishedAt={newsArticle.publishedAt}
-                  readTime={newsArticle.readTime}
-                  shortDescription={newsArticle.shortDescription}
-                  title={newsArticle.title}
-                  sx={{ height: '100%' }}
-                />
+              <PostCard
+              href={`/dashboard/news/${newsArticle.blogId}`}
+              authorAvatar="/assets/avatars/avatar-alcides-antonio.png" // Pass a static URL for the default avatar image
+              authorName="yuva Bitcoin" // Pass a static name for the author
+              category="Crypto" // Pass a static category
+              cover="/assets/covers/abstract-1-4x3-large.png" // Pass a static URL for the default cover image
+              publishedAt={newsArticle.createdAt} // Pass a static published date
+              readTime="5 min" // Pass a static read time
+              shortDescription={newsArticle.content} // Pass a static short description
+              title={newsArticle.title}
+              sx={{ height: '100%' }}
+            />
               </Grid>
             ))}
           </Grid>
