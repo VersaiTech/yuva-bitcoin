@@ -27,6 +27,9 @@ const memberSchema = new mongoose.Schema({
     default: 0,
   },
   // isBlocked: { type: Boolean, default: false },
+
+  lastDeletionDate: { type: Date }, // New field to store the date of the last deletion
+  deletionCount: { type: Number, default: 0 }, // New field to store the count of deletions
 },{
   timestamps: true});
 

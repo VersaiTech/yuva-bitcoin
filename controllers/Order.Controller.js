@@ -8,69 +8,6 @@ const Joi = require('joi');
 
 //=============================================================================================================================//
 //================================================selling section==============================================================//   
-// const createOrder = async (req, res) => {
-//     try {
-//         const userId = req.user.member_user_id;
-//         const member = await Member.findOne({ member_user_id: userId });
-//         if (!member) {
-//             return res.status(400).json({ error: 'User not found' });
-//         }
-
-//         // Extract data from request body
-//         const { coin, amount, exchange_currency, payment_method } = req.body;
-
-//         // Check if the member has sufficient balance of the specified coin
-//         if (member.coins < amount) {
-//             return res.status(400).json({ error: 'Insufficient balance' });
-//         }
-
-//         // Create a new order instance
-//         const order = new Order({
-//             userId,
-//             coin,
-//             amount,
-//             exchange_currency,
-//             payment_method
-//         });
-
-//         // Calculate total
-//         order.total = await order.calculateTotal();
-
-//         // Deduct the amount from the member's balance
-//         member.coins -= amount;
-
-//         // Save the updated member object
-//         await member.save();
-
-//         // Find the admin record (assuming there's an Admin model)
-//         let admin = await Admin.findOne();
-//         console.log(admin)
-
-//         // Ensure admin record exists
-//         if (!admin) {
-//             return res.status(400).json({ error: 'Admin not found' });
-//         }
-
-//         // Update the admin's data with the deducted amount based on coin type
-//         if (coin === 'yuva') {
-//             admin.yuva += amount;
-//         } else if (coin === 'usdt') {
-//             admin.usdt += amount;
-//         }
-
-//         // Save the updated admin object
-//         await admin.save();
-
-//         // Save the order to the database
-//         await order.save();
-
-//         res.status(201).json({ message: 'Order created successfully', order });
-//     } catch (error) {
-//         console.error('Error creating order:', error);
-//         res.status(500).json({ error: 'Failed to create order' });
-//     }
-// };
-
 const createOrder = async (req, res) => {
     try {
         const userId = req.user.member_user_id;
@@ -83,7 +20,16 @@ const createOrder = async (req, res) => {
         const { coin, amount, exchange_currency, payment_method } = req.body;
 
         // Check if the member has sufficient balance of the specified coin
-        if (member.coins < amount) {
+        let coinToDeductFrom;
+        if (coin === 'yuva') {
+            coinToDeductFrom = 'coins'; // Deduct from the general coins balance
+        } else if (coin === 'usdt') {
+            coinToDeductFrom = 'deposit_usdt'; // Deduct from the USDT deposit balance
+        } else {
+            return res.status(400).json({ error: 'Invalid coin type' });
+        }
+
+        if (member[coinToDeductFrom] < amount) {
             return res.status(400).json({ error: 'Insufficient balance' });
         }
 
@@ -101,12 +47,12 @@ const createOrder = async (req, res) => {
         order.total = await order.calculateTotal();
 
         // Deduct the amount from the member's balance
-        member.coins -= amount;
+        member[coinToDeductFrom] -= amount;
 
         // Save the updated member object
         await member.save();
 
-        // Find the admin record (assuming there's an Admin model)
+        // Find the admin record
         let admin = await Admin.findOne();
 
         // Ensure admin record exists
@@ -114,6 +60,7 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ error: 'Admin not found' });
         }
 
+        // Your existing logic for admin handling...
         // Check if the coin field exists in the admin document
         if (!admin[coin]) {
             // If the coin field does not exist, create it with the value of the deducted amount
@@ -148,6 +95,86 @@ const createOrder = async (req, res) => {
         res.status(500).json({ error: 'Failed to create order' });
     }
 };
+
+
+
+// const createOrder = async (req, res) => {
+//     try {
+//         const userId = req.user.member_user_id;
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
+
+//         // Extract data from request body
+//         const { coin, amount, exchange_currency, payment_method } = req.body;
+
+//         // Check if the member has sufficient balance of the specified coin
+//         if (member.coins < amount) {
+//             return res.status(400).json({ error: 'Insufficient balance' });
+//         }
+
+//         // Create a new order instance
+//         const order = new Order({
+//             userId,
+//             coin,
+//             amount,
+//             exchange_currency,
+//             payment_method,
+//             transactionType: 'order_sell'
+//         });
+
+//         // Calculate total
+//         order.total = await order.calculateTotal();
+
+//         // Deduct the amount from the member's balance
+//         member.coins -= amount;
+
+//         // Save the updated member object
+//         await member.save();
+
+//         // Find the admin record (assuming there's an Admin model)
+//         let admin = await Admin.findOne();
+
+//         // Ensure admin record exists
+//         if (!admin) {
+//             return res.status(400).json({ error: 'Admin not found' });
+//         }
+
+//         // Check if the coin field exists in the admin document
+//         if (!admin[coin]) {
+//             // If the coin field does not exist, create it with the value of the deducted amount
+//             admin.set(coin, amount);
+//         } else {
+//             // If the coin field exists, add the deducted amount to its existing value
+//             admin.set(coin, admin[coin] + amount);
+//         }
+
+//         // Save the updated admin object
+//         await admin.save();
+
+//         // Save the order to the database
+//         await order.save();
+
+//         // Create a new TransactionHistory document for the order
+//         const transactionHistory = new TransactionHistory({
+//             orderId: order._id,
+//             userId: member.member_user_id,
+//             adminId: admin.admin_user_id,
+//             coin,
+//             amount,
+//             transactionType: 'order_sell' // This indicates it's a transaction related to an order
+//         });
+
+//         // Save the transaction history
+//         await transactionHistory.save();
+
+//         res.status(201).json({ message: 'Order created successfully', order });
+//     } catch (error) {
+//         console.error('Error creating order:', error);
+//         res.status(500).json({ error: 'Failed to create order' });
+//     }
+// };
 
 //1st
 // const updateOrder = async (req, res) => {
@@ -469,6 +496,134 @@ const getOrdersForAdminForOneUser = async (req, res) => {
     }
 };
 
+// const deleteOrder = async (req, res) => {
+//     try {
+//         // Extract data from request body
+//         const { orderId, userId } = req.body;
+
+//         // Find the order by orderId
+//         const order = await Order.findById(orderId);
+//         if (!order) {
+//             return res.status(404).json({ error: 'Order not found' });
+//         }
+
+//         // Check if the order belongs to the user
+//         if (order.userId !== userId) {
+//             return res.status(403).json({ error: 'You are not authorized to delete this order' });
+//         }
+
+//         // Find the member by userId
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
+
+//         // Add the order's amount back to the member's coins
+//         member.coins += order.amount;
+
+//         // Save the updated member object
+//         await member.save();
+
+//         // Find the admin record (assuming there's an Admin model)
+//         let admin = await Admin.findOne();
+
+//         // Ensure admin record exists
+//         if (!admin) {
+//             return res.status(400).json({ error: 'Admin not found' });
+//         }
+
+//         // Check if the coin field exists in the admin document
+//         if (admin[order.coin]) {
+//             // If the coin field exists, deduct the amount from its existing value
+//             admin.set(order.coin, admin[order.coin] - order.amount);
+//             // Save the updated admin object
+//             await admin.save();
+//         }
+
+//         // Delete the order from the database
+//         await Order.findByIdAndDelete(orderId);
+
+//         res.status(200).json({ message: 'Order deleted successfully' });
+//     } catch (error) {
+//         console.error('Error deleting order:', error);
+//         res.status(500).json({ error: 'Failed to delete order' });
+//     }
+// };
+
+
+//=======================================below is main deletion with restriction =============================================//
+// const deleteOrder = async (req, res) => {
+//     try {
+//         // Extract data from request body
+//         const { orderId, userId } = req.body;
+
+//         // Find the order by orderId
+//         const order = await Order.findById(orderId);
+//         if (!order) {
+//             return res.status(404).json({ error: 'Order not found' });
+//         }
+
+//         // Check if the order belongs to the user
+//         if (order.userId !== userId) {
+//             return res.status(403).json({ error: 'You are not authorized to delete this order' });
+//         }
+
+//         // Find the member by userId
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
+
+//         // Get the current date in YYYY-MM-DD format
+//         const currentDate = new Date().toISOString().split('T')[0];
+
+//         // Check if the current date is different from the last deletion date
+//         if (member.lastDeletionDate && member.lastDeletionDate.toISOString().split('T')[0] !== currentDate) {
+//             // If it's a new day, reset the deletion count and update the last deletion date
+//             member.deletionCount = 0;
+//             member.lastDeletionDate = new Date();
+//         }
+
+//         // Check if the user has exceeded the daily deletion limit (3 deletions per day)
+//         if (member.deletionCount >= 3) {
+//             return res.status(403).json({ error: 'You have reached the maximum daily deletion limit. Please try again tomorrow.' });
+//         }
+
+//         // Add the order's amount back to the member's coins
+//         member.coins += order.amount;
+
+//         // Increment the deletion count after successfully deleting an order
+//         member.deletionCount++;
+
+//         // Save the updated member object
+//         await member.save();
+
+//         // Find the admin record (assuming there's an Admin model)
+//         let admin = await Admin.findOne();
+
+//         // Ensure admin record exists
+//         if (!admin) {
+//             return res.status(400).json({ error: 'Admin not found' });
+//         }
+
+//         // Check if the coin field exists in the admin document
+//         if (admin[order.coin]) {
+//             // If the coin field exists, deduct the amount from its existing value
+//             admin.set(order.coin, admin[order.coin] - order.amount);
+//             // Save the updated admin object
+//             await admin.save();
+//         }
+
+//         // Delete the order from the database
+//         await Order.findByIdAndDelete(orderId);
+
+//         res.status(200).json({ message: 'Order deleted successfully' });
+//     } catch (error) {
+//         console.error('Error deleting order:', error);
+//         res.status(500).json({ error: 'Failed to delete order' });
+//     }
+// };
+
 const deleteOrder = async (req, res) => {
     try {
         // Extract data from request body
@@ -480,38 +635,34 @@ const deleteOrder = async (req, res) => {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        // Check if the order belongs to the user
-        if (order.userId !== userId) {
-            return res.status(403).json({ error: 'You are not authorized to delete this order' });
-        }
-
         // Find the member by userId
         const member = await Member.findOne({ member_user_id: userId });
         if (!member) {
             return res.status(400).json({ error: 'User not found' });
         }
 
-        // Add the order's amount back to the member's coins
-        member.coins += order.amount;
+        // Get the current date
+        const currentDate = new Date();
+        // Get the last deletion date from the member's record
+        const lastDeletionDate = member.lastDeletionDate || new Date(0); // If lastDeletionDate is not set, default to epoch
+
+        // Compare dates to check if it's a new day
+        if (!isSameDay(currentDate, lastDeletionDate)) {
+            // If it's a new day, reset the deletion count and update the last deletion date
+            member.deletionCount = 0;
+            member.lastDeletionDate = currentDate;
+        }
+
+        // Check if the user has exceeded the daily deletion limit (3 deletions per day)
+        if (member.deletionCount >= 3) {
+            return res.status(403).json({ error: 'You have reached the maximum daily deletion limit. Please try again tomorrow.' });
+        }
+
+        // Increment the deletion count after successfully deleting an order
+        member.deletionCount++;
 
         // Save the updated member object
         await member.save();
-
-        // Find the admin record (assuming there's an Admin model)
-        let admin = await Admin.findOne();
-
-        // Ensure admin record exists
-        if (!admin) {
-            return res.status(400).json({ error: 'Admin not found' });
-        }
-
-        // Check if the coin field exists in the admin document
-        if (admin[order.coin]) {
-            // If the coin field exists, deduct the amount from its existing value
-            admin.set(order.coin, admin[order.coin] - order.amount);
-            // Save the updated admin object
-            await admin.save();
-        }
 
         // Delete the order from the database
         await Order.findByIdAndDelete(orderId);
@@ -522,6 +673,18 @@ const deleteOrder = async (req, res) => {
         res.status(500).json({ error: 'Failed to delete order' });
     }
 };
+
+// Function to check if two dates are the same day
+function isSameDay(date1, date2) {
+    return date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate();
+}
+
+module.exports = deleteOrder;
+
+
+
 
 //===================================================================================================================================//
 
