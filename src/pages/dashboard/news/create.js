@@ -1,3 +1,8 @@
+// 
+
+
+
+
 import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { QuillEditor } from '../../../components/quill-editor';
@@ -10,21 +15,11 @@ const CreateNewsPage = () => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    // Remove image field from initial state
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.size <= 2 * 1024 * 1024) { // 2 MB in bytes
-      setFormData({ ...formData, image: file });
-    } else {
-      console.error("Image size should be no more than 2 MB");
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -34,25 +29,19 @@ const CreateNewsPage = () => {
       const headers = {
         'Authorization': token
       };
-
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('content', formData.content);
-      // Append image only if it exists
-      if (formData.image) {
-        formDataToSend.append('image', formData.image);
-      }
-
-      const response = await axios.post(`${BASEURL}/api/Blog/createBlog`, formDataToSend, {
+  
+      // Convert HTML content to plain text
+      const plainTextContent = formData.content.replace(/<[^>]+>/g, '');
+  
+      const response = await axios.post(`${BASEURL}/api/Blog/createBlog`, { ...formData, content: plainTextContent }, {
         headers: headers
       });
-
+  
       console.log('News created:', response.data);
       // Reset form data after successful submission if needed
       setFormData({
         title: '',
         content: '',
-        image: null,
       });
     } catch (error) {
       console.error('Error creating news:', error);
@@ -85,22 +74,6 @@ const CreateNewsPage = () => {
           value={formData.content}
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="subtitle2">
-            Upload Image
-          </Typography>
-          <input
-            accept="image/*"
-            id="contained-button-file"
-            type="file"
-            onChange={handleImageChange}
-          />
-          <label htmlFor="contained-button-file">
-            <Button variant="contained" component="span">
-              Choose Image
-            </Button>
-          </label>
-        </Box>
         <Box sx={{ mt: 3 }}>
           <Button type="submit" variant="contained" color="primary">
             Create News

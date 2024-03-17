@@ -168,18 +168,18 @@ const Page = () => {
                 xs={12}
                 md={6}
               >
-                <PostCard
-                  href={`/dashboard/news/${newsArticle.blogId}`}
-                  // authorAvatar={newsArticle.author.avatar}
-                  // authorName={newsArticle.author.name}
-                  // category={newsArticle.category}
-                  // cover={newsArticle.cover}
-                  publishedAt={newsArticle.updatedAt}
-                  // readTime={newsArticle.readTime}
-                  shortDescription={newsArticle.content}
-                  title={newsArticle.title}
-                  sx={{ height: '100%' }}
-                />
+              <PostCard
+              href={`/dashboard/news/${newsArticle.blogId}`}
+              authorAvatar="/assets/avatars/avatar-alcides-antonio.png" // Pass a static URL for the default avatar image
+              authorName="yuva Bitcoin" // Pass a static name for the author
+              category="Crypto" // Pass a static category
+              cover="/assets/covers/abstract-1-4x3-large.png" // Pass a static URL for the default cover image
+              publishedAt={newsArticle.createdAt} // Pass a static published date
+              readTime="5 min" // Pass a static read time
+              shortDescription={newsArticle.content} // Pass a static short description
+              title={newsArticle.title}
+              sx={{ height: '100%' }}
+            />
               </Grid>
             ))}
           </Grid>

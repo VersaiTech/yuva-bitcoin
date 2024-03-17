@@ -120,7 +120,7 @@ export const paths = {
     news: {
       index: "/dashboard/news",
       list: "/dashboard/news/news-list",
-      create: "/dashboard/newtask/create",
+      create: "/dashboard/news/create",
       edit: "/dashboard/newtask/",
     },
     

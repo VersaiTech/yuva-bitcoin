@@ -1,6 +1,8 @@
+// 
+
+
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 import {
   Avatar,
   Box,
@@ -14,6 +16,8 @@ import {
 } from '@mui/material';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
+import { format } from 'date-fns';
+
 
 export const PostCard = (props) => {
   const {
@@ -28,20 +32,22 @@ export const PostCard = (props) => {
     ...other
   } = props;
 
-//  const formattedPublishedAt = format(publishedAt);
+  // const formattedPublishedAt = format(publishedAt, 'MMM d, yyyy');
+  // const formattedPublishedAt = format(new Date(publishedAt), 'MMM d, yyyy');
+
 
   return (
     <Card {...other}>
-      {/* <CardMedia
+      <CardMedia
         component={NextLink}
         href={paths.dashboard.blog.postDetails}
         image={cover}
         sx={{ height: 280 }}
-      /> */}
+      />
       <CardContent>
-        {/* <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 2 }}>
           <Chip label={category} />
-        </Box> */}
+        </Box>
         <Link
           color="text.primary"
           component={NextLink}
@@ -82,21 +88,19 @@ export const PostCard = (props) => {
             <Typography variant="subtitle2">
               By
               {' '}
-              {"Yuva Bitcoin"}
+              {authorName}
               {' '}
               •
-              {' '}
-              {/* {formattedPublishedAt} */}
             </Typography>
           </Stack>
-          {/* <Typography
+          <Typography
             align="right"
             color="text.secondary"
             sx={{ flexGrow: 1 }}
             variant="body2"
           >
             {readTime} read
-          </Typography> */}
+          </Typography>
         </Stack>
       </CardContent>
     </Card>
