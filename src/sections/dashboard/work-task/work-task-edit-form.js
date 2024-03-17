@@ -37,18 +37,26 @@ const validationSchema = Yup.object({
 
 export const WorkTaskEditForm = ({ customer, ...other }) => {
   const router = useRouter();
+  const {userId} = router.query;
+
+  console.log(userId);
   const { enqueueSnackbar } = useSnackbar();
   const [openDialog, setOpenDialog] = useState(false);
 
+
+
+  console.log(customer);
+
   const formik = useFormik({
     initialValues: {
+      userId: userId || "",
       taskId: customer.taskId || "",
       description: customer.description || "",
       coins: customer.coins || "",
       taskName: customer.taskName || "",
       link: customer.link || "",
       userTwitterId: customer.userTwitterId || "",
-      taskSubmitDate: "2024-03-16", // Dummy date, replace with API value
+      taskSubmitDate: customer.completionTime || "", // Dummy date, replace with API value
       submit: null,
     },
     validationSchema: validationSchema,
@@ -58,7 +66,43 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
   });
 
   const handleConfirmRequest = async () => {
-    // Your confirmation logic
+    try
+    {
+      const token = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization:token
+    }
+
+    // const Data = {
+    //   taskId: formik.values.taskId,
+    //   userId: formik.values.userId,
+    // }
+
+    const response = await axios.post(`${BASEURL}/admin/confirmTaskCompletion`, 
+    {taskId: formik.values.taskId,
+      userId: formik.values.userId},
+    {
+      headers: headers
+    })
+
+    if (response.status === 200) {
+      enqueueSnackbar("Request confirmed successfully", {
+        variant: "success",
+      });
+      router.push(paths.dashboard.taskwork.index);
+    }
+    else {
+      enqueueSnackbar("Something went wrong", {
+        variant: "error",
+      });
+    }
+  }
+  catch (error) {
+    enqueueSnackbar(error.message, {
+      variant: "error",
+    });
+  }
+
   };
 
   const handleRejectRequest = async () => {
@@ -80,25 +124,27 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={2}>
             {/* Existing form fields */}
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <TextField
+              disabled
                 error={!!(formik.touched.taskName && formik.errors.taskName)}
                 fullWidth
                 helperText={formik.touched.taskName && formik.errors.taskName}
-                label="User Name"
+                label="Task Name"
                 name="taskName"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
                 value={formik.values.taskName}
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={6}>
               <TextField
+              disabled
                 error={!!(formik.touched.taskId && formik.errors.taskId)}
                 fullWidth
                 helperText={formik.touched.taskId && formik.errors.taskId}
-                label="User Id"
+                label="Task Id"
                 name="taskId"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -107,6 +153,20 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
+              disabled
+                error={!!(formik.touched.userId && formik.errors.userId)}
+                fullWidth
+                helperText={formik.touched.userId && formik.errors.userId}
+                label="User Id"
+                name="userId"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.userId}
+              />
+            </Grid>
+            {/* <Grid item xs={12} md={6}>
+              <TextField
+              disabled
                 error={!!(formik.touched.link && formik.errors.link)}
                 fullWidth
                 helperText={formik.touched.link && formik.errors.link}
@@ -116,9 +176,10 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
                 onChange={formik.handleChange}
                 value={formik.values.link}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} md={6}>
               <TextField
+              disabled
                 error={
                   !!(formik.touched.description && formik.errors.description)
                 }
@@ -132,9 +193,10 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} md={6}>
               <TextField
+              disabled
                 error={!!(formik.touched.coins && formik.errors.coins)}
                 fullWidth
                 helperText={formik.touched.coins && formik.errors.coins}
@@ -144,8 +206,8 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
                 onChange={formik.handleChange}
                 value={formik.values.coins}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} md={6}>
               <TextField
                 error={!!(formik.touched.userTwitterId && formik.errors.userTwitterId)}
                 fullWidth
@@ -156,15 +218,15 @@ export const WorkTaskEditForm = ({ customer, ...other }) => {
                 onChange={formik.handleChange}
                 value={formik.values.userTwitterId}
               />
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} md={6}>
               <TextField
                 disabled
                 fullWidth
                 label="Task Submit Date"
                 value={formik.values.taskSubmitDate}
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Stack

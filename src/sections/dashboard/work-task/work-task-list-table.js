@@ -190,7 +190,7 @@ export const WorkListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>Usesr Name</TableCell>
+              <TableCell>User Name</TableCell>
               <TableCell>Task Id</TableCell>
               {/* <TableCell>Coins</TableCell> */}
               <TableCell> Description</TableCell>
@@ -284,7 +284,7 @@ export const WorkListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit`}
+                      href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit?userId=${customer.userId}`}
                     >
                       <SvgIcon>
                         <Edit02Icon />

@@ -21,29 +21,47 @@ const useCustomer = () => {
   //need to get member_user_id from params
 
   const router = useRouter();
-  const {userId} = router.query;
+  const { userId } = router.query;
 
   console.log(userId)
 
   const isMounted = useMounted();
   const [customer, setCustomer] = useState(null);
 
+  // const getCustomer = useCallback(async () => {
+  //   try {
+  //     // const response = await customersApi.getCustomer();
+  //     const token = localStorage.getItem("accessToken");
+  //     const headers = {
+  //       authorization: token,
+  //     }
+  //     // console.log(headers)
+
+  //     const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${userId}`,{}, { headers: headers })
+
+
+  //     console.log(response.data.member)
+
+  //     if (isMounted()) {
+  //       setCustomer(response.data.member);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     console.log(err.response.data);
+  //   }
+  // }, [isMounted]);
+
   const getCustomer = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomer();
       const token = localStorage.getItem('accessToken');
       const headers = {
-
         'Authorization': token
-
       }
-      // console.log(headers)
 
-      const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/${userId}`, {
+      const response = await axios.get(`${BASEURL}/admin/getMemberByUserId/${userId}`, {
         headers: headers
       })
-
-      console.log(response)
 
 
       console.log(response.data.member)
@@ -53,10 +71,10 @@ const useCustomer = () => {
       }
     } catch (err) {
       console.error(err);
-      console.log(err.response.data);
     }
   }, [isMounted]);
 
+  
   useEffect(() => {
     getCustomer();
   },
@@ -173,7 +191,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-             <CustomerEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
+            <CustomerEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
           </Stack>
         </Container>
       </Box>
