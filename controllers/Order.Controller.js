@@ -4,6 +4,10 @@ const Admin = require('../models/AdminModel');
 const TransactionHistory = require('../models/Transaction');
 const Joi = require('joi');
 
+
+
+//=============================================================================================================================//
+//================================================selling section==============================================================//   
 // const createOrder = async (req, res) => {
 //     try {
 //         const userId = req.user.member_user_id;
@@ -145,7 +149,62 @@ const createOrder = async (req, res) => {
     }
 };
 
+//1st
+// const updateOrder = async (req, res) => {
+//     try {
+//         // Extract data from request body
+//         const { orderId, userId, coin, amount, exchange_currency, payment_method, active, transactionType } = req.body;
 
+//         // Find the order by orderId
+//         let order = await Order.findById(orderId);
+//         if (!order) {
+//             return res.status(404).json({ error: 'Order not found' });
+//         }
+
+//         // Find the member by userId
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
+
+//         // Calculate total of the updated order
+//         const newTotal = amount * exchange_currency;
+
+//         // Check if the member has sufficient balance for the updated order
+//         if (amount > member.coins) {
+//             return res.status(400).json({ error: 'Insufficient balance' });
+//         }
+
+//         // Calculate the difference in total amount compared to the previous order
+//         const totalDifference = newTotal - order.total;
+
+//         // Update order fields
+//         order.userId = userId;
+//         order.coin = coin;
+//         order.amount = amount;
+//         order.exchange_currency = exchange_currency;
+//         order.payment_method = payment_method;
+//         order.active = active;
+//         order.total = newTotal;
+//         order.transactionType = transactionType;
+
+//         // Deduct the amount from member's coins
+//         member.coins -= totalDifference;
+
+//         // Save the updated member object
+//         await member.save();
+
+//         // Save the updated order
+//         order = await order.save();
+
+//         res.status(200).json({ message: 'Order updated successfully', order });
+//     } catch (error) {
+//         console.error('Error updating order:', error);
+//         res.status(500).json({ error: 'Failed to update order' });
+//     }
+// };
+
+// Final Update controller
 const updateOrder = async (req, res) => {
     try {
         // Extract data from request body
@@ -157,7 +216,7 @@ const updateOrder = async (req, res) => {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        // Find the member by userId to check sufficient balance
+        // Find the member by userId
         const member = await Member.findOne({ member_user_id: userId });
         if (!member) {
             return res.status(400).json({ error: 'User not found' });
@@ -166,13 +225,13 @@ const updateOrder = async (req, res) => {
         // Calculate total of the updated order
         const newTotal = amount * exchange_currency;
 
-        // Calculate the difference in total amount compared to the previous order
-        const totalDifference = newTotal - order.total;
-
         // Check if the member has sufficient balance for the updated order
-        if (totalDifference > 0 && member.coins < totalDifference) {
+        if (amount > member.coins) {
             return res.status(400).json({ error: 'Insufficient balance' });
         }
+
+        // Calculate the difference in amount compared to the previous order
+        const amountDifference = amount - order.amount;
 
         // Update order fields
         order.userId = userId;
@@ -184,17 +243,31 @@ const updateOrder = async (req, res) => {
         order.total = newTotal;
         order.transactionType = transactionType;
 
-        // Update member's balance if necessary
-        if (totalDifference > 0) {
-            // Deduct the difference from member's coins
-            member.coins -= totalDifference;
-        } else if (totalDifference < 0) {
-            // Add the absolute difference to member's coins
-            member.coins += Math.abs(totalDifference);
-        }
+        // Deduct the difference from member's coins
+        member.coins -= amountDifference;
 
         // Save the updated member object
         await member.save();
+
+        // Find the admin record (assuming there's an Admin model)
+        let admin = await Admin.findOne();
+
+        // Ensure admin record exists
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
+
+        // Check if the coin field exists in the admin document
+        if (!admin[coin]) {
+            // If the coin field does not exist, create it with the value of the deducted amount
+            admin.set(coin, amountDifference);
+        } else {
+            // If the coin field exists, add the deducted amount to its existing value
+            admin.set(coin, admin[coin] + amountDifference);
+        }
+
+        // Save the updated admin object
+        await admin.save();
 
         // Save the updated order
         order = await order.save();
@@ -206,7 +279,60 @@ const updateOrder = async (req, res) => {
     }
 };
 
+// 2nd number
+// const updateOrder = async (req, res) => {
+//     try {
+//         // Extract data from request body
+//         const { orderId, userId, coin, amount, exchange_currency, payment_method, active, transactionType } = req.body;
 
+//         // Find the order by orderId
+//         let order = await Order.findById(orderId);
+//         if (!order) {
+//             return res.status(404).json({ error: 'Order not found' });
+//         }
+
+//         // Find the member by userId
+//         const member = await Member.findOne({ member_user_id: userId });
+//         if (!member) {
+//             return res.status(400).json({ error: 'User not found' });
+//         }
+
+//         // Calculate total of the updated order
+//         const newTotal = amount * exchange_currency;
+
+//         // Check if the member has sufficient balance for the updated order
+//         if (amount > member.coins) {
+//             return res.status(400).json({ error: 'Insufficient balance' });
+//         }
+
+//         // Calculate the difference in amount compared to the previous order
+//         const amountDifference = amount - order.amount;
+
+//         // Update order fields
+//         order.userId = userId;
+//         order.coin = coin;
+//         order.amount = amount;
+//         order.exchange_currency = exchange_currency;
+//         order.payment_method = payment_method;
+//         order.active = active;
+//         order.total = newTotal;
+//         order.transactionType = transactionType;
+
+//         // Deduct the difference from member's coins
+//         member.coins -= amountDifference;
+
+//         // Save the updated member object
+//         await member.save();
+
+//         // Save the updated order
+//         order = await order.save();
+
+//         res.status(200).json({ message: 'Order updated successfully', order });
+//     } catch (error) {
+//         console.error('Error updating order:', error);
+//         res.status(500).json({ error: 'Failed to update order' });
+//     }
+// };
 const getAllOrder = async (req, res) => {
     const Schema = Joi.object({
         page_number: Joi.number(),
@@ -343,9 +469,63 @@ const getOrdersForAdminForOneUser = async (req, res) => {
     }
 };
 
+const deleteOrder = async (req, res) => {
+    try {
+        // Extract data from request body
+        const { orderId, userId } = req.body;
 
+        // Find the order by orderId
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
 
+        // Check if the order belongs to the user
+        if (order.userId !== userId) {
+            return res.status(403).json({ error: 'You are not authorized to delete this order' });
+        }
 
+        // Find the member by userId
+        const member = await Member.findOne({ member_user_id: userId });
+        if (!member) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        // Add the order's amount back to the member's coins
+        member.coins += order.amount;
+
+        // Save the updated member object
+        await member.save();
+
+        // Find the admin record (assuming there's an Admin model)
+        let admin = await Admin.findOne();
+
+        // Ensure admin record exists
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
+
+        // Check if the coin field exists in the admin document
+        if (admin[order.coin]) {
+            // If the coin field exists, deduct the amount from its existing value
+            admin.set(order.coin, admin[order.coin] - order.amount);
+            // Save the updated admin object
+            await admin.save();
+        }
+
+        // Delete the order from the database
+        await Order.findByIdAndDelete(orderId);
+
+        res.status(200).json({ message: 'Order deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting order:', error);
+        res.status(500).json({ error: 'Failed to delete order' });
+    }
+};
+
+//===================================================================================================================================//
+
+//==================================================Buying Orders=============================================================//
 module.exports = {
-    createOrder,updateOrder, getAllOrder, getAllOrderForOneUSer,getOrdersForAdminForOneUser
+    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder
 };
