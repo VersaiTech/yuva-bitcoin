@@ -136,14 +136,25 @@ const getAllOrdersUser = async (req, res) => {
     }
 };
 
-
+const Joi = require('joi')
 const createOrder = async (req, res) => {
+    const createOrderSchema = Joi.object({
+        select_coin: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+        amount_currency: Joi.number().positive().required(),
+        select_currency: Joi.string().required(),
+        payment_method: Joi.string().required(), // Update this line
+      });
     const userId = req.user.member_user_id;
     try {
         const member = await Member.findOne({ member_user_id: userId });
         if (!member) {
             return res.status(400).json({ error: 'User not found' });
         }
+          // Validate request body
+    const { error, value } = createOrderSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
 
         const {
             // Advertiser_name,
@@ -153,7 +164,7 @@ const createOrder = async (req, res) => {
             // Available,
             // limit,
             payment_method,
-        } = req.body;
+        } = value;
 
         // Find the selected coin in the Coin model
         const coin = await Coin.findOne();

@@ -5,9 +5,9 @@ const {
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 // router.route("/").get(getStakingData).post(ValidMember, stakingRequest);
-router.route("/createDeposit").post(ValidMember, createDeposit);
+router.route("/createDeposit").post(ValidMember, createDeposit);  //
 router.route("/getDepositsForUser").get(ValidMember, getDepositsForUser);
 router.route("/getAllDepositsForAdmin").get(isAdmin, getAllDepositsForAdmin);
-router.route("/convertDepositToCoins").post(ValidMember, convertDepositToCoins);
+router.route("/convertDepositToCoins").post(ValidMember, convertDepositToCoins); //
 
 module.exports = router;

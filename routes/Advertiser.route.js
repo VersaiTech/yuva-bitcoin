@@ -4,7 +4,7 @@ const { createOrder, getAllOrders, getOneMembersOrders, getAllOrdersUser } = req
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 
-router.route("/createOrder").post(ValidMember, createOrder);
+router.route("/createOrder").post(ValidMember, createOrder); //
 router.route("/getAllOrders").get(isAdmin, getAllOrders);
 router.route("/getAllMemberOrders").get(getAllOrders);
 router.route("/getOneMembersOrders/:member_user_id").get(isAdmin, getOneMembersOrders);

@@ -10,7 +10,7 @@ require("dotenv").config();
 
 const cron = require('./crons/passiveincome');
 
-const assignedTaskController = require('./controllers/AssignedTaskController');
+// const assignedTaskController = require('./controllers/AssignedTaskController');
 
 
 const port = process.env.PORT || 5001;
@@ -23,15 +23,17 @@ app.use(cors());
 // const db = require('./config/db.config.js');
 
 app.use('/admin', require('./routes/Admin.route'));
-app.use('/api/Coin', require('./routes/Coin.route'));
 app.use('/api/Advertiser', require('./routes/Advertiser.route'));
 app.use('/api/Auth', require('./routes/Auth.route'));
+app.use('/api/Blog', require('./routes/Blog.route'));
+app.use('/api/Coin', require('./routes/Coin.route'));
 app.use('/api/Dashboard', require('./routes/Dashboard.route'));
 app.use('/api/Staking', require('./routes/Staking.route'));
 app.use('/api/Deposit', require('./routes/deposit.route'));
 app.use('/api/Team', require('./routes/Team.route'));
 app.use('/api/Earning', require('./routes/Earning.route'));
 app.use('/api/Withdraw', require('./routes/Withdraw.route'));
+app.use('/api/Order', require('./routes/Order.route'));
 // Create an API endpoint to manually trigger the cron job
 
 
@@ -60,11 +62,11 @@ app.use('/api/Withdraw', require('./routes/Withdraw.route'));
 
 
 //twitter routes
-app.post('/post-tweet', assignedTaskController.postTweet);
+// app.post('/post-tweet', assignedTaskController.postTweet);
 
-app.get('/user-info', assignedTaskController.getUserInfo);
+// app.get('/user-info', assignedTaskController.getUserInfo);
 
-app.delete('/delete-tweet/:tweetId', assignedTaskController.deleteTweet);
+// app.delete('/delete-tweet/:tweetId', assignedTaskController.deleteTweet);
 
 
 

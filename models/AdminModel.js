@@ -8,7 +8,9 @@ const adminSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   registration_date: { type: Date, default: Date.now },
-  userType: { type: String, default: 'admin' } 
+  userType: { type: String, default: 'admin' } ,
+  yuva: { type: Number, default: 0 },
+  usdt:{type: Number, default: 0},
 });
 
 adminSchema.pre('save', async function(next) {

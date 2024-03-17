@@ -7,8 +7,8 @@ const {ValidMember, isAdmin} = require('../middleware/Auth.middleware');
 
 // router.route("/").get(getStakingData).post(ValidMember, stakingRequest);
 router.route("/Summary").get(ValidMember,stakingSummary);
-router.route("/transferToStaking").post(ValidMember,transferToStaking);
-router.route("/transferToWallet").post(ValidMember,transferToWallet);
+router.route("/transferToStaking").post(ValidMember,transferToStaking); //
+router.route("/transferToWallet").post(ValidMember,transferToWallet);  //
 
 router.route("/getTotalInvestmentByUserId").get(ValidMember,getTotalInvestmentByUserId);
 router.route("/get3MonthsStake").get(isAdmin,get3MonthsStake);

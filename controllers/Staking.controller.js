@@ -333,9 +333,23 @@ function generateTransactionId() {
 // }
 
 async function transferToStaking(req, res) {
-  const userId = req.user.member_user_id;
+
+  // Define a schema for request body validation
+  const schema = Joi.object({
+    investment: Joi.number().positive().required(),
+    stakingDuration: Joi.number().positive().required(),
+  });
   try {
-    const { investment, stakingDuration } = req.body;
+    const userId = req.user.member_user_id;
+    // Validate the request body
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const { investment, stakingDuration } = value;
+
 
     // Check if the member exists
     const member = await Member.findOne({ member_user_id: userId });
@@ -374,9 +388,20 @@ async function transferToStaking(req, res) {
 
 //====================================================================================
 async function transferToWallet(req, res) {
-  const userId = req.user.member_user_id;
+  // Define a schema for request body validation
+  const schema = Joi.object({
+    amount: Joi.number().positive().required()
+  });
   try {
-    const { amount } = req.body;
+    const userId = req.user.member_user_id;
+    // Validate the request body
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const { amount } = value;
 
     // Check if the member exists
     const member = await Member.findOne({ member_user_id: userId });
