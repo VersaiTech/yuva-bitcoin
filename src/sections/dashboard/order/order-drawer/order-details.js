@@ -23,6 +23,8 @@ export const OrderDetails = (props) => {
   const [linkClicked, setLinkClicked] = useState(false);
   const [taskCompleted, setTaskCompleted] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     const interval = setInterval(() => {
       updateCountdown();
@@ -88,16 +90,19 @@ export const OrderDetails = (props) => {
           // Task submission was successful
           setTaskCompleted(true);
           onApprove();
+          enqueueSnackbar('Task submitted successfully', { variant: 'success' });
           console.log("Task submitted successfully");
           // Call any additional function or update state if needed
         } else {
           // Task submission failed, handle the error
+          enqueueSnackbar(response.data.message , { variant: 'error' });
           console.error("Task submission failed:", response.data.message);
           // Display an error message to the user or handle it as per your application flow
         }
       } catch (error) {
         // Handle any errors that occur during the request
-        console.error("Error submitting task:", error);
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        console.error("Error submitting task:", error.response.data.message);
         // Display an error message to the user or handle it as per your application flow
       }
     }
