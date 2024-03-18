@@ -33,6 +33,7 @@ const orderSchema = new mongoose.Schema({
     transactionType: {
         type: String,
         required: true,
+        enum: ['order_sell'],
     }
 }, {
     timestamps: true
