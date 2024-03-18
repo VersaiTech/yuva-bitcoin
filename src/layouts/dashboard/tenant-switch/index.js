@@ -34,7 +34,7 @@ export const TenantSwitch = (props) => {
             color="inherit"
             variant="h6"
           >
-            Rock34x
+            Yuva Bitcoin
           </Typography>
           <Typography
             color="neutral.400"
@@ -43,14 +43,14 @@ export const TenantSwitch = (props) => {
             User
           </Typography>
         </Box>
-        <IconButton
+        {/* <IconButton
           onClick={handlePopoverOpen}
           ref={anchorRef}
         >
           <SvgIcon sx={{ fontSize: 16 }}>
             <ChevronDownIcon />
           </SvgIcon>
-        </IconButton>
+        </IconButton> */}
       </Stack>
       <TenantPopover
         anchorEl={anchorRef.current}
