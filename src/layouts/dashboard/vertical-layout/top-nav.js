@@ -32,7 +32,7 @@ export const TopNav = (props) => {
         zIndex: (theme) => theme.zIndex.appBar
       }}
       {...other}>
-      {/* <Stack
+      <Stack
         alignItems="center"
         direction="row"
         justifyContent="space-between"
@@ -54,19 +54,19 @@ export const TopNav = (props) => {
               </SvgIcon>
             </IconButton>
           )}
-          <SearchButton />
+          {/* <SearchButton /> */}
         </Stack>
         <Stack
           alignItems="center"
           direction="row"
           spacing={2}
         >
-          <LanguageSwitch />
+          {/* <LanguageSwitch />
           <NotificationsButton />
-          <ContactsButton />
-          <AccountButton />
+          <ContactsButton /> */}
+          <AccountButton /> 
         </Stack>
-      </Stack> */}
+      </Stack>
     </Box>
   );
 };

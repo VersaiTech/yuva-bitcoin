@@ -10,6 +10,11 @@ import {
   Box,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Link,
   Stack,
@@ -68,9 +73,6 @@ const useSelectionModel = (customers) => {
   };
 };
 
-
-
-
 export const CustomerListTable = (props) => {
   const {
     customers,
@@ -83,11 +85,12 @@ export const CustomerListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
 
-  console.log(customers);
-
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
   const handleDelete = async (customerId) => {
     try {
@@ -110,6 +113,21 @@ export const CustomerListTable = (props) => {
       enqueueSnackbar(err.message, { variant: "error" });
       console.log(err);
     }
+  };
+
+  const handleDeleteDialogOpen = (customerId) => {
+    setSelectedCustomerId(customerId);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setSelectedCustomerId(null);
+    setOpenDeleteDialog(false);
+  };
+
+  const handleDeleteConfirmed = () => {
+    handleDelete(selectedCustomerId);
+    handleDeleteDialogClose();
   };
 
   const handleToggleAll = useCallback((event) => {
@@ -154,18 +172,6 @@ export const CustomerListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          {/* <Button
-            color="inherit"
-            size="small"
-          >
-            Delete
-          </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
-            Edit
-          </Button> */}
         </Stack>
       )}
       <Scrollbar>
@@ -199,8 +205,6 @@ export const CustomerListTable = (props) => {
           <TableBody>
             {customers?.map((customer) => {
               const isSelected = selected.includes(customer.member_user_id);
-              // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
               return (
                 <TableRow
@@ -239,14 +243,7 @@ export const CustomerListTable = (props) => {
                         {getInitials(customer.member_name)}
                       </Avatar>
                       <div>
-                        {/* <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.users.details}
-                          variant="subtitle2"
-                        > */}
                         {customer.member_name}
-                        {/* </Link> */}
                         <Typography
                           color="text.secondary"
                           variant="body2"
@@ -276,7 +273,7 @@ export const CustomerListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(customer.member_user_id)}>
+                    <IconButton onClick={() => handleDeleteDialogOpen(customer.member_user_id)}>
                       <SvgIcon>
                         <DeleteIcon />
                       </SvgIcon>
@@ -297,6 +294,28 @@ export const CustomerListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleDeleteDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete User"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this user permanently?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirmed} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

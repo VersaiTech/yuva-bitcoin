@@ -441,12 +441,21 @@ export const CustomerEditForm = ({ customer, ...other }) => {
                 value={formik.values.member_name}
               />
             </Grid>
+          
             <Grid item xs={12} md={6}>
               <TextField
                 disabled
                 fullWidth
                 label="Email address"
                 value={formik.values.email}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                disabled
+                fullWidth
+                label="Twitter id"
+                value={formik.values.twitterId}
               />
             </Grid>
             {/* Add more fields as needed */}

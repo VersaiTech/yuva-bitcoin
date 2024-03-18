@@ -88,9 +88,9 @@ export const AccountPopover = (props) => {
          {admin.email}
         </Typography>
       </Box>
-      <Divider />
+      {/* <Divider /> */}
       <Box sx={{ p: 1 }}>
-        <ListItemButton
+        {/* <ListItemButton
           component={NextLink}
           href={paths.dashboard.social.profile}
           sx={{
@@ -111,8 +111,8 @@ export const AccountPopover = (props) => {
               </Typography>
             )}
           />
-        </ListItemButton>
-        <ListItemButton
+        </ListItemButton> */}
+        {/* <ListItemButton
           component={NextLink}
           href={paths.dashboard.account}
           sx={{
@@ -133,8 +133,8 @@ export const AccountPopover = (props) => {
               </Typography>
             )}
           />
-        </ListItemButton>
-        <ListItemButton
+        </ListItemButton> */}
+        {/* <ListItemButton
           component={NextLink}
           href={paths.dashboard.index}
           sx={{
@@ -155,7 +155,7 @@ export const AccountPopover = (props) => {
               </Typography>
             )}
           />
-        </ListItemButton>
+        </ListItemButton> */}
       </Box>
       <Divider sx={{ my: '0 !important' }} />
       <Box
