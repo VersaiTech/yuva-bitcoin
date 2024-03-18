@@ -408,7 +408,7 @@ const getWithdrawPending = async (req, res) => {
     const totalPendingWithdrawRequests = await Withdraw.countDocuments({ status: 'Pending' });
 
     if (!withdrawRequests || withdrawRequests.length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: false,
         message: 'No withdrawal pending',
         totalPendingWithdrawRequests: totalPendingWithdrawRequests,
@@ -458,7 +458,7 @@ const getWithdrawApproved = async (req, res) => {
     const totalApprovedWithdrawRequests = await Withdraw.countDocuments({ status: 'Approved' });
 
     if (!withdrawRequests || withdrawRequests.length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: false,
         message: 'No withdrawal Approved',
         totalApprovedWithdrawRequests: totalApprovedWithdrawRequests,
@@ -508,7 +508,7 @@ const getWithdrawRejected = async (req, res) => {
 
     const totalRejectedWithdrawRequests = await Withdraw.countDocuments({ status: 'Rejected' });
     if (!withdrawRequests || withdrawRequests.length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: false,
         message: 'No withdrawal Rejected',
         totalRejectedWithdrawRequests: totalRejectedWithdrawRequests,
@@ -556,7 +556,7 @@ const getUserWithdraws = async (req, res) => {
 
     const totalUserWithdrawRequests = await Withdraw.countDocuments({ member_user_id });
     if (!withdrawRequests || withdrawRequests.length === 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: false,
         message: 'No User withdrawal requests',
         totalUserWithdrawRequests: totalUserWithdrawRequests,

@@ -45,7 +45,7 @@ const createOrder = async (req, res) => {
         });
 
         // Calculate total
-        order.total = await order.calculateTotal();
+        order.total = await order.calculateTotal(); // Make sure order.calculateTotal is properly defined
 
         // Deduct the amount from the member's balance
         member[coinToDeductFrom] -= amount;
@@ -366,28 +366,32 @@ const getAllOrder = async (req, res) => {
         page_number: Joi.number(),
         count: Joi.number(),
     });
+
     const { error, value } = Schema.validate(req.params);
 
     if (error) {
         return res.status(400).json({ status: false, error: error.details[0].message });
     }
+
     try {
         const page_number = value.page_number || 1;
         const count = value.count || 10;
         const offset = (page_number - 1) * count;
-        const toalOrders = await Order.find();
-        // Fetch tasks for the user with sorting and pagination
-        const order = await Order.find()
+
+        // Fetch total count of orders
+        const totalOrders = await Order.countDocuments();
+
+        // Fetch orders for the specified page with sorting and pagination
+        const orders = await Order.find()
             .sort({ createdAt: -1 })
             .skip(offset)
             .limit(count);
-        // Find all orders
-        const orders = await Order.find();
-        if (!order || order.length === 0) {
+
+        if (!orders || orders.length === 0) {
             return res.status(200).json({
                 status: false,
                 message: "No order ",
-                toalOrders,
+                totalOrders: totalOrders,
                 order: [],
             });
         }
@@ -395,15 +399,15 @@ const getAllOrder = async (req, res) => {
         return res.status(200).json({
             status: true,
             message: "Orders Found",
-            totalOrders: toalOrders.length,
-            order: order,
-
+            totalOrders: totalOrders,
+            order: orders,
         });
     } catch (error) {
         console.error('Error fetching orders:', error);
         res.status(500).json({ error: 'Failed to fetch orders' });
     }
 };
+
 
 const getAllOrderForOneUSer = async (req, res) => {
     const Schema = Joi.object({
