@@ -180,6 +180,15 @@ export const getSections = (t) => [
           </SvgIcon>
         ),
       },
+      {
+        title: t(tokens.nav.news),
+        path: paths.dashboard.news.index,
+        icon: (
+          <SvgIcon fontSize="small">
+            <Mail04Icon />
+          </SvgIcon>
+        ),
+      },
       // {
       //   title: t(tokens.nav.error),
       //   icon: (
