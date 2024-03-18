@@ -810,115 +810,115 @@ module.exports = deleteOrder;
 //     }
 // };
 
-const createBuyOrder = async (req, res) => {
-    try {
-        const buyerId = req.user.member_user_id;
-        const sellerId = req.body.sellerId; // Assuming the seller's ID is provided in the request body
 
-        // Fetch buyer and seller details
-        const buyer = await Member.findOne({ member_user_id: buyerId });
-        const seller = await Member.findOne({ member_user_id: sellerId });
+// below is final createBuyOrder
+// const createBuyOrder = async (req, res) => {
+//     try {
+//         const buyerId = req.user.member_user_id;
+//         const sellerId = req.body.sellerId; // Assuming the seller's ID is provided in the request body
 
-        // Check if buyer and seller exist
-        if (!buyer || !seller) {
-            console.log('Buyer or seller not found');
-            return res.status(404).json({ message: 'Buyer or seller not found' });
-        }
+//         // Fetch buyer and seller details
+//         const buyer = await Member.findOne({ member_user_id: buyerId });
+//         const seller = await Member.findOne({ member_user_id: sellerId });
 
-        const orderId = req.params._id;
+//         // Check if buyer and seller exist
+//         if (!buyer || !seller) {
+//             console.log('Buyer or seller not found');
+//             return res.status(404).json({ message: 'Buyer or seller not found' });
+//         }
 
-        // Check if the order exists
-        const sellOrder = await Order.findById(orderId);
+//         const orderId = req.params._id;
 
-        if (!sellOrder) {
-            return res.status(400).json({ error: 'Sell order not found' });
-        }
+//         // Check if the order exists
+//         const sellOrder = await Order.findById(orderId);
 
-        // Check if the sell order is active
-        if (!sellOrder.active) {
-            return res.status(400).json({ error: 'Sell order is not active' });
-        }
+//         if (!sellOrder) {
+//             return res.status(400).json({ error: 'Sell order not found' });
+//         }
 
-        // Check if the coin of the buy order matches the coin of the sell order
-        if (sellOrder.coin !== req.body.coin) {
-            return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
-        }
+//         // Check if the sell order is active
+//         if (!sellOrder.active) {
+//             return res.status(400).json({ error: 'Sell order is not active' });
+//         }
 
-        // Check if the buyer has sufficient funds in their deposit_usdt balance
-        if (buyer.deposit_usdt < sellOrder.total) {
-            return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
-        }
+//         // Check if the coin of the buy order matches the coin of the sell order
+//         if (sellOrder.coin !== req.body.coin) {
+//             return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
+//         }
 
-        // Find the admin record
-        let admin = await Admin.findOne();
-        if (!admin) {
-            return res.status(400).json({ error: 'Admin not found' });
-        }
+//         // Check if the buyer has sufficient funds in their deposit_usdt balance
+//         if (buyer.deposit_usdt < sellOrder.total) {
+//             return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
+//         }
 
-        let deductionAmount = sellOrder.amount;
+//         // Find the admin record
+//         let admin = await Admin.findOne();
+//         if (!admin) {
+//             return res.status(400).json({ error: 'Admin not found' });
+//         }
 
-        // Deduct the amount from the admin's balance based on the coin type
-        if (sellOrder.coin === 'yuva') {
-            if (admin.yuva < deductionAmount) {
-                return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
-            }
-            admin.yuva -= deductionAmount;
-            // Add the deducted amount to the buyer's coins
-            buyer.coins += deductionAmount;
-        } else if (sellOrder.coin === 'usdt') {
-            if (admin.usdt < deductionAmount) {
-                return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${deductionAmount}, Available: ${admin.usdt}` });
-            }
-            admin.usdt -= deductionAmount;
-            // Add the deducted amount to the buyer's deposit_usdt balance
-            buyer.deposit_usdt += deductionAmount;
-        } else {
-            return res.status(400).json({ error: 'Invalid coin type' });
-        }
+//         let deductionAmount = sellOrder.amount;
 
-        // Create a new buy order instance
-        const buyOrder = new BuyOrder({
-            userId: buyerId,
-            sellerId: sellerId,
-            coin: sellOrder.coin,
-            amount: sellOrder.amount,
-            purchasedCurrency: sellOrder.coin,
-            total: sellOrder.total,
-            transactionType: 'order_buy'
-        });
+//         // Deduct the amount from the admin's balance based on the coin type
+//         if (sellOrder.coin === 'yuva') {
+//             if (admin.yuva < deductionAmount) {
+//                 return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
+//             }
+//             admin.yuva -= deductionAmount;
+//             // Add the deducted amount to the buyer's coins
+//             buyer.coins += deductionAmount;
+//         } else if (sellOrder.coin === 'usdt') {
+//             if (admin.usdt < deductionAmount) {
+//                 return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${deductionAmount}, Available: ${admin.usdt}` });
+//             }
+//             admin.usdt -= deductionAmount;
+//             // Add the deducted amount to the buyer's deposit_usdt balance
+//             buyer.deposit_usdt += deductionAmount;
+//         } else {
+//             return res.status(400).json({ error: 'Invalid coin type' });
+//         }
 
-        // Transfer the total amount from buyer to seller
-        buyer.deposit_usdt -= sellOrder.total;
-        seller.deposit_usdt += sellOrder.total;
+//         // Create a new buy order instance
+//         const buyOrder = new BuyOrder({
+//             userId: buyerId,
+//             sellerId: sellerId,
+//             coin: sellOrder.coin,
+//             amount: sellOrder.amount,
+//             purchasedCurrency: sellOrder.coin,
+//             total: sellOrder.total,
+//             transactionType: 'order_buy'
+//         });
 
-        await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save()]);
+//         // Transfer the total amount from buyer to seller
+//         buyer.deposit_usdt -= sellOrder.total;
+//         seller.deposit_usdt += sellOrder.total;
 
-           // Create a new TransactionHistory document for the buyer order
-           const transactionHistoryBuyer = new TransactionHistory({
-            orderId: buyOrder._id, // Use buyOrder's _id
-            userId: buyer.member_user_id, // Assuming this is the correct field for the member's user id
-            adminId: admin.admin_user_id,
-            coin: sellOrder.coin,
-            amount: sellOrder.amount,
-            transactionType: 'order_buy' // This indicates it's a transaction related to a buy order
-        });
+//         await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save()]);
 
-        // Save the transaction history for the buyer order
-        await transactionHistoryBuyer.save();
+//            // Create a new TransactionHistory document for the buyer order
+//            const transactionHistoryBuyer = new TransactionHistory({
+//             orderId: buyOrder._id, // Use buyOrder's _id
+//             userId: buyer.member_user_id, // Assuming this is the correct field for the member's user id
+//             adminId: admin.admin_user_id,
+//             coin: sellOrder.coin,
+//             amount: sellOrder.amount,
+//             transactionType: 'order_buy' // This indicates it's a transaction related to a buy order
+//         });
 
-
-        // Set the sellOrder as inactive
-        sellOrder.active = false;
-        await sellOrder.save();
-
-        res.status(201).json({ message: 'Buy order created successfully', buyOrder });
-    } catch (error) {
-        console.error('Error creating buy order:', error);
-        res.status(500).json({ error: error.message }); // Send the error message back to the client
-    }
-};
+//         // Save the transaction history for the buyer order
+//         await transactionHistoryBuyer.save();
 
 
+//         // Set the sellOrder as inactive
+//         sellOrder.active = false;
+//         await sellOrder.save();
+
+//         res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+//     } catch (error) {
+//         console.error('Error creating buy order:', error);
+//         res.status(500).json({ error: error.message }); // Send the error message back to the client
+//     }
+// };
 
 // const createBuyOrder = async (req, res) => {
 //     try {
@@ -1016,7 +1016,477 @@ const createBuyOrder = async (req, res) => {
 // };
 
 
+//second final
+// const createBuyOrder = async (req, res) => {
+//     try {
+//         const buyerId = req.user.member_user_id;
+//         const sellerId = req.body.sellerId; // Assuming the seller's ID is provided in the request body
+//         const buyAmount = req.body.amount; // The amount the buyer wants to buy
+
+//         // Fetch buyer and seller details
+//         const buyer = await Member.findOne({ member_user_id: buyerId });
+//         const seller = await Member.findOne({ member_user_id: sellerId });
+
+//         // Check if buyer and seller exist
+//         if (!buyer || !seller) {
+//             console.log('Buyer or seller not found');
+//             return res.status(404).json({ message: 'Buyer or seller not found' });
+//         }
+
+//         const orderId = req.params._id;
+
+//         // Check if the order exists
+//         const sellOrder = await Order.findById(orderId);
+
+//         if (!sellOrder) {
+//             return res.status(400).json({ error: 'Sell order not found' });
+//         }
+
+//         // Check if the sell order is active
+//         if (!sellOrder.active) {
+//             return res.status(400).json({ error: 'Sell order is not active' });
+//         }
+
+//         // Check if the coin of the buy order matches the coin of the sell order
+//         if (sellOrder.coin !== req.body.coin) {
+//             return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
+//         }
+
+//         // Calculate the total price based on the buy amount and sell price
+//         const totalPrice = sellOrder.exchange_currency * buyAmount;
+
+//         // Check if the buyer has sufficient funds in their deposit_usdt balance
+//         if (buyer.deposit_usdt < totalPrice) {
+//             return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
+//         }
+
+//         // Find the admin record
+//         let admin = await Admin.findOne();
+//         if (!admin) {
+//             return res.status(400).json({ error: 'Admin not found' });
+//         }
+
+//         // Deduct the amount from the admin's balance based on the coin type
+//         let deductionAmount = buyAmount;
+
+//         if (sellOrder.coin === 'yuva') {
+//             if (admin.yuva < deductionAmount) {
+//                 return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
+//             }
+//             admin.yuva -= deductionAmount;
+//             // Add the deducted amount to the buyer's coins
+//             buyer.coins += deductionAmount;
+//         } else if (sellOrder.coin === 'usdt') {
+//             if (admin.usdt < totalPrice) {
+//                 return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${totalPrice}, Available: ${admin.usdt}` });
+//             }
+//             admin.usdt -= totalPrice;
+//             // Add the deducted amount to the buyer's deposit_usdt balance
+//             buyer.deposit_usdt -= totalPrice;
+//         } else {
+//             return res.status(400).json({ error: 'Invalid coin type' });
+//         }
+
+//         // Create a new buy order instance
+//         const buyOrder = new BuyOrder({
+//             userId: buyerId,
+//             sellerId: sellerId,
+//             coin: sellOrder.coin,
+//             amount: buyAmount,
+//             purchasedCurrency: sellOrder.coin,
+//             total: totalPrice,
+//             transactionType: 'order_buy'
+//         });
+
+//         // Transfer the total amount from buyer to seller
+//         seller.deposit_usdt += totalPrice;
+
+//         await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save()]);
+
+//         // Create a new TransactionHistory document for the buyer order
+//         const transactionHistoryBuyer = new TransactionHistory({
+//             orderId: buyOrder._id,
+//             userId: buyer.member_user_id,
+//             adminId: admin.admin_user_id,
+//             coin: sellOrder.coin,
+//             amount: totalPrice, // The total amount bought
+//             transactionType: 'order_buy'
+//         });
+
+//         // Save the transaction history for the buyer order
+//         await transactionHistoryBuyer.save();
+
+//         // Set the sellOrder as inactive if the buy amount equals the sell amount
+//         if (buyAmount === sellOrder.amount) {
+//             sellOrder.active = false;
+//             await sellOrder.save();
+//         }
+
+//         res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+//     } catch (error) {
+//         console.error('Error creating buy order:', error);
+//         res.status(500).json({ error: error.message }); // Send the error message back to the client
+//     }
+// };
+
+
+const updateBuyOrder = async (req, res) => {
+    try {
+        const buyerId = req.user.member_user_id;
+        const orderId = req.params._id;
+
+        // Fetch buyer details
+        const buyer = await Member.findOne({ member_user_id: buyerId });
+
+        // Check if buyer exists
+        if (!buyer) {
+            return res.status(404).json({ message: 'Buyer not found' });
+        }
+
+        // Fetch the buy order
+        let buyOrder = await BuyOrder.findById(orderId);
+        if (!buyOrder) {
+            return res.status(404).json({ message: 'Buy order not found' });
+        }
+
+        // Calculate the difference in amount compared to the previous order
+        const amountDifference = req.body.amount - buyOrder.amount;
+
+        // Check if the buyer has sufficient balance for the updated buy order
+        if (req.body.amount > buyer.deposit_usdt) {
+            return res.status(400).json({ error: 'Insufficient balance' });
+        }
+
+        // Update buy order fields
+        buyOrder.amount = req.body.amount;
+        buyOrder.total = req.body.total;
+
+        // Deduct the difference from buyer's deposit_usdt
+        buyer.deposit_usdt -= amountDifference;
+
+        // Save the updated buyer object
+        await buyer.save();
+
+        // Transfer the total amount from buyer to seller
+        const seller = await Member.findOne({ member_user_id: buyOrder.sellerId });
+        if (!seller) {
+            return res.status(404).json({ message: 'Seller not found' });
+        }
+
+        seller.deposit_usdt += amountDifference;
+
+        // Save the updated seller object
+        await seller.save();
+
+        // Save the updated buy order
+        buyOrder = await buyOrder.save();
+
+        res.status(200).json({ message: 'Buy order updated successfully', buyOrder });
+    } catch (error) {
+        console.error('Error updating buy order:', error);
+        res.status(500).json({ error: 'Failed to update buy order' });
+    }
+};
+
+const createBuyOrder = async (req, res) => {
+    try {
+        const buyerId = req.user.member_user_id;
+        const sellerId = req.body.sellerId; // Assuming the seller's ID is provided in the request body
+        const buyAmount = req.body.amount; // The amount the buyer wants to buy
+
+        // Fetch buyer and seller details
+        const buyer = await Member.findOne({ member_user_id: buyerId });
+        const seller = await Member.findOne({ member_user_id: sellerId });
+
+        // Check if buyer and seller exist
+        if (!buyer || !seller) {
+            console.log('Buyer or seller not found');
+            return res.status(404).json({ message: 'Buyer or seller not found' });
+        }
+
+        const orderId = req.params._id;
+
+        // Check if the order exists
+        const sellOrder = await Order.findById(orderId);
+
+        if (!sellOrder) {
+            return res.status(400).json({ error: 'Sell order not found' });
+        }
+
+        // Check if the sell order is active
+        if (!sellOrder.active) {
+            return res.status(400).json({ error: 'Sell order is not active' });
+        }
+
+        // Check if the coin of the buy order matches the coin of the sell order
+        if (sellOrder.coin !== req.body.coin) {
+            return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
+        }
+
+        // Calculate the total price based on the buy amount and sell price
+        const totalPrice = sellOrder.exchange_currency * buyAmount;
+
+        // Check if the buyer has sufficient funds in their deposit_usdt balance
+        if (buyer.deposit_usdt < totalPrice) {
+            return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
+        }
+
+        // Find the admin record
+        let admin = await Admin.findOne();
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
+
+        // Deduct the amount from the admin's balance based on the coin type
+        let deductionAmount = buyAmount;
+
+        if (sellOrder.coin === 'yuva') {
+            // Deduct the total price from the buyer's deposit_usdt balance
+            buyer.deposit_usdt -= totalPrice;
+            if (admin.yuva < deductionAmount) {
+                return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
+            }
+            admin.yuva -= deductionAmount;
+            // Add the deducted amount to the buyer's coins
+            buyer.coins += deductionAmount;
+        } else if (sellOrder.coin === 'usdt') {
+            if (admin.usdt < totalPrice) {
+                return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${totalPrice}, Available: ${admin.usdt}` });
+            }
+            admin.usdt -= totalPrice;
+            // Deduct the total price from the buyer's deposit_usdt balance
+            buyer.deposit_usdt -= totalPrice;
+            // Add the total price to the seller's deposit_usdt balance
+            seller.deposit_usdt += totalPrice;
+        } else {
+            return res.status(400).json({ error: 'Invalid coin type' });
+        }
+        
+
+
+        // Create a new buy order instance
+        const buyOrder = new BuyOrder({
+            userId: buyerId,
+            sellerId: sellerId,
+            coin: sellOrder.coin,
+            amount: buyAmount,
+            purchasedCurrency: sellOrder.coin,
+            total: totalPrice,
+            transactionType: 'order_buy'
+        });
+
+        // // Update the remaining amount and total in the orderSchema
+        // sellOrder.amount -= buyAmount;
+        // sellOrder.total -= totalPrice;
+
+        // // Transfer the total amount from buyer to seller
+        // seller.deposit_usdt += totalPrice;
+
+        // await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save(), sellOrder.save()]);
+
+        // // Create a new TransactionHistory document for the buyer order
+        // const transactionHistoryBuyer = new TransactionHistory({
+        //     orderId: buyOrder._id,
+        //     userId: buyer.member_user_id,
+        //     adminId: admin.admin_user_id,
+        //     coin: sellOrder.coin,
+        //     amount: totalPrice, // The total amount bought
+        //     transactionType: 'order_buy'
+        // });
+
+        // // Save the transaction history for the buyer order
+        // await transactionHistoryBuyer.save();
+
+        // // Set the sellOrder as inactive if the buy amount equals the sell amount
+        // if (sellOrder.amount === 0) {
+        //     sellOrder.active = false;
+        //     await sellOrder.save();
+        // }
+
+        // res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+
+        // Set the remaining amount and total in the orderSchema
+        sellOrder.amount -= buyAmount;
+        sellOrder.total -= totalPrice;
+
+         // // Transfer the total amount from buyer to seller
+        seller.deposit_usdt += totalPrice;
+
+        // Set the sellOrder as inactive if the buy amount equals the sell amount
+        if (sellOrder.amount === 0 && sellOrder.total === 0) {
+            sellOrder.active = false;
+        }
+
+        await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save(), sellOrder.save()]);
+
+        // Create a new TransactionHistory document for the buyer order
+        const transactionHistoryBuyer = new TransactionHistory({
+            orderId: buyOrder._id,
+            userId: buyer.member_user_id,
+            adminId: admin.admin_user_id,
+            coin: sellOrder.coin,
+            amount: totalPrice, // The total amount bought
+            transactionType: 'order_buy'
+        });
+
+        // Save the transaction history for the buyer order
+        await transactionHistoryBuyer.save();
+
+        res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+
+    } catch (error) {
+        console.error('Error creating buy order:', error);
+        res.status(500).json({ error: error.message }); // Send the error message back to the client
+    }
+};
+
+
+const getAllBuyOrder = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+
+    try {
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+
+        // Fetch total count of orders
+        const totalBuyOrders = await BuyOrder.countDocuments();
+
+        // Fetch orders for the specified page with sorting and pagination
+        const orders = await BuyOrder.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No Buy order ",
+                totalOrders: totalBuyOrders,
+                order: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Buy Orders Found",
+            totalOrders: totalBuyOrders,
+            order: orders,
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
+
+const getAllBuyOrderForOneUSer = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const userId = req.user.member_user_id;
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+
+        const member = await Member.findOne({ member_user_id: userId });
+        if (!member) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+        const toalBuyOrders = await BuyOrder.find({ userId, transactionType: "order_buy" });
+        // Fetch tasks for the user with sorting and pagination
+        const order = await BuyOrder.find({ userId, transactionType: "order_buy" })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+        // Find all orders
+        // const orders = await Order.find({ userId, transactionType: "order_sell" });
+        if (!order || order.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No Buy order ",
+                toalBuyOrders:toalBuyOrders.length,
+                order: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Buy Orders Found",
+            totalOrders: toalBuyOrders.length,
+            order: order,
+
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
+
+const getBuyOrdersForAdminForOneUser = async (req, res) => {
+    const Schema = Joi.object({
+        userId: Joi.string().required(), // Expecting userId in the request params
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params); // Corrected: req.params
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+
+    try {
+        const { userId, page_number = 1, count = 10 } = value;
+        const offset = (page_number - 1) * count;
+
+        // Fetch total orders count for the user
+        const totalBuyOrders = await BuyOrder.find({ userId }).countDocuments();
+
+        // Fetch orders for the user with sorting and pagination
+        const orders = await BuyOrder.find({ userId })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No orders found for the user",
+                totalBuyOrders: 0,
+                orders: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Orders found for the user",
+            totalBuyOrders,
+            orders:orders,
+        });
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+}; 
+
 
 module.exports = {
-    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder
+    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder ,getAllBuyOrder,getAllBuyOrderForOneUSer,getBuyOrdersForAdminForOneUser
 };
