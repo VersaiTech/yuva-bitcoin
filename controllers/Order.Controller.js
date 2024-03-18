@@ -1,9 +1,10 @@
-const Order = require('../models/Order');
+const { Order, BuyOrder } = require('../models/Order');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const TransactionHistory = require('../models/Transaction');
-const BuyOrder = require('../models/Order');
+// const BuyOrder = require('../models/Order');
 const Joi = require('joi');
+
 
 
 
@@ -45,7 +46,8 @@ const createOrder = async (req, res) => {
         });
 
         // Calculate total
-        order.total = await order.calculateTotal(); // Make sure order.calculateTotal is properly defined
+        order.total = order.calculateTotal(); // Removed await since it's synchronous
+
 
         // Deduct the amount from the member's balance
         member[coinToDeductFrom] -= amount;
@@ -424,6 +426,11 @@ const getAllOrderForOneUSer = async (req, res) => {
         const page_number = value.page_number || 1;
         const count = value.count || 10;
         const offset = (page_number - 1) * count;
+
+        const member = await Member.findOne({ member_user_id: userId });
+        if (!member) {
+            return res.status(400).json({ error: 'User not found' });
+        }
         const toalOrders = await Order.find({ userId, transactionType: "order_sell" });
         // Fetch tasks for the user with sorting and pagination
         const order = await Order.find({ userId, transactionType: "order_sell" })
