@@ -7,7 +7,7 @@ import { PropertyList } from "../../../../components/property-list";
 import { PropertyListItem } from "../../../../components/property-list-item";
 import { SeverityPill } from "../../../../components/severity-pill";
 import axios from "axios";
-
+import { useSnackbar } from 'notistack';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const statusMap = {
@@ -32,6 +32,7 @@ export const OrderDetails = (props) => {
   }, []);
 
   const updateCountdown = () => {
+    
     const completionTime = new Date(order.completionTime);
     const currentTime = new Date();
     const timeDifference = completionTime - currentTime;
@@ -66,6 +67,8 @@ export const OrderDetails = (props) => {
   const handleApprove = async () => {
     if (!linkClicked) {
       window.alert("Please visit the link and complete the task.");
+    } else if (countdown === "Time's up!") {
+      window.alert("The task completion time has expired. You cannot submit the task.");
     } else {
       try {
         const token = localStorage.getItem("accessToken");
@@ -80,7 +83,6 @@ export const OrderDetails = (props) => {
           { headers: headers }
         );
 
-        console.log(response.data);
         // Check if the request was successful
         if (response.status === 200) {
           // Task submission was successful
@@ -176,7 +178,7 @@ export const OrderDetails = (props) => {
             onClick={handleApprove}
             size="small"
             variant="contained"
-            disabled={!linkClicked || taskCompleted}
+            disabled={!linkClicked || taskCompleted || countdown === "Time's up!"}
           >
             Submit Task
           </Button>
