@@ -32,13 +32,14 @@ const orderSchema = new mongoose.Schema({
         type: Number, // Assuming the total is a numeric value
         required: true,
     },
-    transactionType:{
-        type:String,
-        required:true,
-        ref:"TransactionHistory"
+    transactionType: {
+        type: String,
+        required: true,
+        ref: "TransactionHistory"
     }
-},{
-    timestamps: true});
+}, {
+    timestamps: true
+});
 
 orderSchema.methods.calculateTotal = async function () {
     return this.amount * this.exchange_currency;
@@ -47,3 +48,46 @@ orderSchema.methods.calculateTotal = async function () {
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;
+
+
+
+
+const buyOrderSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+        ref: 'Member'
+    },
+    coin: {
+        type: String,
+        required: true,
+    },
+    amount: {
+        type: Number,
+        required: true,
+    },
+    purchasedCurrency: {
+        type: String,
+        required: true,
+    },
+    total: {
+        type: Number,
+        required: true,
+    },
+    transactionType: {
+        type: String,
+        required: true,
+        enum: ['order_buy'], // Assuming 'order_buy' is the transaction type for buy orders
+    },
+    active: {
+        type: Boolean,
+        default: true,
+    }
+}, {
+    timestamps: true
+});
+
+const BuyOrder = mongoose.model('BuyOrder', buyOrderSchema);
+
+module.exports = BuyOrder;
+

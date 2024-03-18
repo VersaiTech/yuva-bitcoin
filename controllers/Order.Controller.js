@@ -2,6 +2,7 @@ const Order = require('../models/Order');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const TransactionHistory = require('../models/Transaction');
+const BuyOrder = require('../models/Order');
 const Joi = require('joi');
 
 
@@ -689,6 +690,93 @@ module.exports = deleteOrder;
 //===================================================================================================================================//
 
 //==================================================Buying Orders=============================================================//
+
+const createBuyOrder = async (req, res) => {
+    try {
+        const userId = req.user.member_user_id;
+
+        // Fetch user details
+        const member = await Member.findOne({ member_user_id: userId });
+
+        if (!member) {
+            console.log('Member not found for userId:', userId);
+            return res.status(404).json({ message: 'Member not found' });
+        }
+
+        const { orderId } = req.params;
+
+        // Check if the order exists
+        const sellOrder = await Order.findById(orderId);
+        if (!sellOrder) {
+            return res.status(400).json({ error: 'Sell order not found' });
+        }
+
+        // Check if the sell order is active
+        if (!sellOrder.active) {
+            return res.status(400).json({ error: 'Sell order is not active' });
+        }
+
+        // Check if the coin of the buy order matches the coin of the sell order
+        if (sellOrder.coin !== req.body.coin) {
+            return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
+        }
+
+        // Check if the buyer has sufficient funds in their deposit_usdt balance
+        if (member.deposit_usdt < sellOrder.total) {
+            return res.status(400).json({ error: 'Insufficient funds in deposit_usdt balance' });
+        }
+
+        // Find the admin record
+        let admin = await Admin.findOne();
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
+
+        // Create a new buy order instance
+        const buyOrder = new BuyOrder({
+            userId,
+            coin: sellOrder.coin,
+            amount: sellOrder.amount,
+            purchasedCurrency: sellOrder.coin,
+            total: sellOrder.total,
+            transactionType: 'order_buy'
+        });
+
+        // Save the buy order to the database
+        await buyOrder.save();
+
+        // Deduct the amount from the admin's balance
+        admin.coin -= sellOrder.total;
+        await admin.save();
+
+        // Add the purchased amount to the user's deposit_usdt balance
+        member.deposit_usdt -= sellOrder.total;
+        await member.save();
+
+        // Create a new TransactionHistory document for the buy order
+        const transactionHistory = new TransactionHistory({
+            orderId: buyOrder._id,
+            userId: member.member_user_id,
+            adminId: admin.admin_user_id,
+            coin: sellOrder.coin,
+            amount: sellOrder.amount,
+            purchasedCurrency: sellOrder.coin,
+            transactionType: 'order_buy'
+        });
+
+        // Save the transaction history
+        await transactionHistory.save();
+
+        res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+    } catch (error) {
+        console.error('Error creating buy order:', error);
+        res.status(500).json({ error: 'Failed to create buy order' });
+    }
+};
+
+
+
+
 module.exports = {
-    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder
+    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder
 };
