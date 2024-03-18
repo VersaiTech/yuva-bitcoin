@@ -7,7 +7,7 @@ import { PropertyList } from "../../../../components/property-list";
 import { PropertyListItem } from "../../../../components/property-list-item";
 import { SeverityPill } from "../../../../components/severity-pill";
 import axios from "axios";
-
+import { useSnackbar } from 'notistack';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const statusMap = {
@@ -23,6 +23,8 @@ export const OrderDetails = (props) => {
   const [linkClicked, setLinkClicked] = useState(false);
   const [taskCompleted, setTaskCompleted] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     const interval = setInterval(() => {
       updateCountdown();
@@ -32,6 +34,7 @@ export const OrderDetails = (props) => {
   }, []);
 
   const updateCountdown = () => {
+    
     const completionTime = new Date(order.completionTime);
     const currentTime = new Date();
     const timeDifference = completionTime - currentTime;
@@ -66,6 +69,8 @@ export const OrderDetails = (props) => {
   const handleApprove = async () => {
     if (!linkClicked) {
       window.alert("Please visit the link and complete the task.");
+    } else if (countdown === "Time's up!") {
+      window.alert("The task completion time has expired. You cannot submit the task.");
     } else {
       try {
         const token = localStorage.getItem("accessToken");
@@ -80,22 +85,24 @@ export const OrderDetails = (props) => {
           { headers: headers }
         );
 
-        console.log(response.data);
         // Check if the request was successful
         if (response.status === 200) {
           // Task submission was successful
           setTaskCompleted(true);
           onApprove();
+          enqueueSnackbar('Task submitted successfully', { variant: 'success' });
           console.log("Task submitted successfully");
           // Call any additional function or update state if needed
         } else {
           // Task submission failed, handle the error
+          enqueueSnackbar(response.data.message , { variant: 'error' });
           console.error("Task submission failed:", response.data.message);
           // Display an error message to the user or handle it as per your application flow
         }
       } catch (error) {
         // Handle any errors that occur during the request
-        console.error("Error submitting task:", error);
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        console.error("Error submitting task:", error.response.data.message);
         // Display an error message to the user or handle it as per your application flow
       }
     }
@@ -176,7 +183,7 @@ export const OrderDetails = (props) => {
             onClick={handleApprove}
             size="small"
             variant="contained"
-            disabled={!linkClicked || taskCompleted}
+            disabled={!linkClicked || taskCompleted || countdown === "Time's up!"}
           >
             Submit Task
           </Button>

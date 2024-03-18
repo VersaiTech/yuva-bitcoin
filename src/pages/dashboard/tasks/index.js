@@ -59,7 +59,7 @@ const useOrders = (search) => {
       const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth`, {
         headers: headers,
       });
-      console.log(response.data);
+      console.log(response.data.tasks);
       const completedTasks = await axios.get(
         `${BASEURL}/admin/getConfirmedTasksForUser`,
         { headers: headers }
@@ -70,14 +70,20 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getPendingTasksForUser`,
         { headers: headers }
       );
-      console.log(pendingTasks.data);
+      console.log(pendingTasks.data.tasks);
+
+      const rejectedTasks = await axios.get(
+        `${BASEURL}/admin/getRejectedTasksForUser`,
+        { headers: headers }
+      );
 
       if (isMounted()) {
         setState({
           orders: response.data.tasks,
           ordersCount: response.count,
-          pending: pendingTasks.data,
-          completed: completedTasks.data,
+          pending: pendingTasks.data.tasks,
+          completed: completedTasks.data.tasks,
+          rejected: rejectedTasks.data.tasks,
         });
       }
     } catch (err) {
@@ -99,7 +105,8 @@ const useOrders = (search) => {
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
-  const { orders, ordersCount, pending, completed } = useOrders(search);
+  const { orders, ordersCount, pending, completed, rejected } = useOrders(search);
+  const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined,
@@ -217,7 +224,7 @@ const Page = () => {
                 spacing={4}
               >
                 <div>
-                  <Typography variant="h4">All Taks</Typography>
+                  <Typography variant="h4">All Tasks</Typography>
                 </div>
                 <div>
                     {/* <Button
@@ -239,17 +246,18 @@ const Page = () => {
               onSortChange={handleSortChange}
               sortBy={search.sortBy}
               sortDir={search.sortDir}
-              // completed={completed}
-              //   pending={pending}
-              //   currentTab={currentTab}
-              //   setCurrentTab={setCurrentTab}
+              completed={completed}
+              pending={pending}
+              rejected={rejected}
+                currentTab={currentTab}
+                setCurrentTab={setCurrentTab}
             />
             <Divider />
             <TaskListTable
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              orders={orders}
+              orders={currentTab === "all" ? orders : currentTab === "pending" ? pending : currentTab === "complete" ? completed : currentTab === "rejected" ? rejected : []}
               ordersCount={ordersCount}
               page={search.page}
               rowsPerPage={search.rowsPerPage}

@@ -49,9 +49,9 @@ const sortOptions = [
 ];
 
 export const TaskListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
+  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc',  currentTab, setCurrentTab } = props;
   const queryRef = useRef(null);
-  const [currentTab, setCurrentTab] = useState('all');
+  // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({
     query: undefined,
     status: undefined
@@ -97,7 +97,7 @@ export const TaskListSearch = (props) => {
         scrollButtons="auto"
         sx={{ px: 3 }}
         textColor="primary"
-        value={currentTab}
+        value={filters.status || 'all'}
         variant="scrollable"
       >
         {tabOptions.map((tab) => (
@@ -162,5 +162,9 @@ TaskListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
-  sortDir: PropTypes.oneOf(['asc', 'desc'])
+  sortDir: PropTypes.oneOf(['asc', 'desc']),
+  pending: PropTypes.array,
+  completed: PropTypes.array,
+  rejected: PropTypes.array,
+  setCurrentTab: PropTypes.func.isRequired
 };
