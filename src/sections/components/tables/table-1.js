@@ -24,86 +24,143 @@ import { SeverityPill } from '../../../components/severity-pill';
 
 const now = new Date();
 
-const orders = [
+// const orders = [
+//   {
+//     id: '5eff2548979e396cb4b000ba',
+//     createdAt: subMinutes(subSeconds(now, 10), 7).getTime(),
+//     customer: {
+//       email: 'ekaterina@rock34x.io',
+//       name: 'Ekaterina Tankova'
+//     },
+//     currency: '$',
+//     items: 7,
+//     number: 'DEV-1042',
+//     status: 'pending',
+//     totalAmount: 524.00
+//   },
+//   {
+//     id: '5eff254e46b753a166e7d7af',
+//     createdAt: subHours(subMinutes(subSeconds(now, 50), 12), 2).getTime(),
+//     customer: {
+//       email: 'carson.darrin@rock34x.io',
+//       name: 'Carson Darrin'
+//     },
+//     currency: '$',
+//     items: 8,
+//     number: 'DEV-1041',
+//     status: 'complete',
+//     totalAmount: 693.00
+//   },
+//   {
+//     id: '5eff2553e1c551e2e28a9205',
+//     createdAt: subHours(subMinutes(subSeconds(now, 12), 39), 5).getTime(),
+//     customer: {
+//       email: 'fran.perez@rock34x.io',
+//       name: 'Fran Perez'
+//     },
+//     currency: '$',
+//     items: 4,
+//     number: 'DEV-1040',
+//     status: 'rejected',
+//     totalAmount: 215.00
+//   },
+//   {
+//     id: '5eff25590f3e28f013c39a0e',
+//     createdAt: subHours(subMinutes(subSeconds(now, 21), 46), 5).getTime(),
+//     customer: {
+//       email: 'anje.keiser@rock34x.io',
+//       name: 'Jie Yan Song'
+//     },
+//     currency: '$',
+//     items: 1,
+//     number: 'DEV-1039',
+//     status: 'pending',
+//     totalAmount: 25.00
+//   },
+//   {
+//     id: '5eff255f57499089243805d8',
+//     createdAt: subHours(subMinutes(subSeconds(now, 54), 19), 8).getTime(),
+//     customer: {
+//       name: 'Clarke Gillebert',
+//       email: 'clarke.gillebert@rock34x.io'
+//     },
+//     currency: '$',
+//     items: 5,
+//     number: 'DEV-1038',
+//     status: 'complete',
+//     totalAmount: 535.00
+//   },
+//   {
+//     id: '5eff25658d416fc5adb96a3a',
+//     createdAt: subDays(subMinutes(subSeconds(now, 12), 45), 1).getTime(),
+//     customer: {
+//       email: 'nasimiyu.danai@rock34x.io',
+//       name: 'Nasimiyu Danai'
+//     },
+//     currency: '$',
+//     items: 2,
+//     number: 'DEV-1037',
+//     status: 'complete',
+//     totalAmount: 56.00
+//   }
+// ];
+
+const ordersNew = [
   {
     id: '5eff2548979e396cb4b000ba',
-    createdAt: subMinutes(subSeconds(now, 10), 7).getTime(),
-    customer: {
-      email: 'ekaterina@rock34x.io',
-      name: 'Ekaterina Tankova'
-    },
-    currency: '$',
-    items: 7,
-    number: 'DEV-1042',
-    status: 'pending',
-    totalAmount: 524.00
+    Inscription: '5eff2548979e396cb4b000ba',
+    Event: 'Updated',
+    Quantity: 5500,
+    'Total Value': '608,000 sats\n$ 440.12',
+    From: 'YourAlphanumericID1',
+    To: '',
+    Time: '3/12/2024, 7:21:49 AM'
   },
   {
     id: '5eff254e46b753a166e7d7af',
-    createdAt: subHours(subMinutes(subSeconds(now, 50), 12), 2).getTime(),
-    customer: {
-      email: 'carson.darrin@rock34x.io',
-      name: 'Carson Darrin'
-    },
-    currency: '$',
-    items: 8,
-    number: 'DEV-1041',
-    status: 'complete',
-    totalAmount: 693.00
+    Inscription: '5eff254e46b753a166e7d7af',
+    Event: 'Listed',
+    Quantity: 2000,
+    'Total Value': '300,000 sats\n$ 220.00',
+    From: 'YourAlphanumericID2',
+    To: '',
+    Time: '3/12/2024, 8:45:32 AM'
   },
   {
     id: '5eff2553e1c551e2e28a9205',
-    createdAt: subHours(subMinutes(subSeconds(now, 12), 39), 5).getTime(),
-    customer: {
-      email: 'fran.perez@rock34x.io',
-      name: 'Fran Perez'
-    },
-    currency: '$',
-    items: 4,
-    number: 'DEV-1040',
-    status: 'rejected',
-    totalAmount: 215.00
+    Inscription: '5eff2553e1c551e2e28a9205',
+    Event: 'Unlisted',
+    Quantity: 4000,
+    'Total Value': '500,000 sats\n$ 330.00',
+    From: 'YourAlphanumericID3',
+    To: '',
+    Time: '3/12/2024, 10:15:57 AM'
   },
-  {
-    id: '5eff25590f3e28f013c39a0e',
-    createdAt: subHours(subMinutes(subSeconds(now, 21), 46), 5).getTime(),
-    customer: {
-      email: 'anje.keiser@rock34x.io',
-      name: 'Jie Yan Song'
-    },
-    currency: '$',
-    items: 1,
-    number: 'DEV-1039',
-    status: 'pending',
-    totalAmount: 25.00
-  },
+  // Add more orders similarly
   {
     id: '5eff255f57499089243805d8',
-    createdAt: subHours(subMinutes(subSeconds(now, 54), 19), 8).getTime(),
-    customer: {
-      name: 'Clarke Gillebert',
-      email: 'clarke.gillebert@rock34x.io'
-    },
-    currency: '$',
-    items: 5,
-    number: 'DEV-1038',
-    status: 'complete',
-    totalAmount: 535.00
+    Inscription: '5eff255f57499089243805d8',
+    Event: 'Updated',
+    Quantity: 6200,
+    'Total Value': '800,000 sats\n$ 550.00',
+    From: 'YourAlphanumericID4',
+    To: '',
+    Time: '3/12/2024, 1:30:22 PM'
   },
   {
     id: '5eff25658d416fc5adb96a3a',
-    createdAt: subDays(subMinutes(subSeconds(now, 12), 45), 1).getTime(),
-    customer: {
-      email: 'nasimiyu.danai@rock34x.io',
-      name: 'Nasimiyu Danai'
-    },
-    currency: '$',
-    items: 2,
-    number: 'DEV-1037',
-    status: 'complete',
-    totalAmount: 56.00
-  }
+    Inscription: '5eff25658d416fc5adb96a3a',
+    Event: 'Listed',
+    Quantity: 8500,
+    'Total Value': '1,200,000 sats\n$ 990.00',
+    From: 'YourAlphanumericID5',
+    To: '',
+    Time: '3/12/2024, 3:45:49 PM'
+  },
+  // Add more orders similarly
 ];
+
+
 
 const labelColors = {
   complete: 'success',
@@ -145,32 +202,35 @@ export const Table1 = () => (
                     active
                     direction="desc"
                   >
-                    Number
+                    Inscription
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
               <TableCell>
-                Customer
+                Event
               </TableCell>
               <TableCell>
-                Items
+                Quanity
               </TableCell>
               <TableCell>
-                Total
+                Total Value
               </TableCell>
               <TableCell>
-                Status
+                From
               </TableCell>
-              <TableCell align="right">
-                Date
+              <TableCell>
+                To
+              </TableCell>
+              <TableCell>
+                Time
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
-              const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
-              const statusColor = labelColors[order.status];
-              const createdAt = format(order.createdAt, 'dd MMM, yyyy HH:mm:ss');
+            {ordersNew.map((order) => {
+              // const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+              // const statusColor = labelColors[order.status];
+              // const createdAt = format(order.createdAt, 'dd MMM, yyyy HH:mm:ss');
 
               return (
                 <TableRow
@@ -179,25 +239,26 @@ export const Table1 = () => (
                 >
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {order.number}
+                      {order.Inscription}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    {order.customer.name}
+                    {order.Event}
                   </TableCell>
                   <TableCell>
-                    {order.items}
+                    {order.Quantity}
                   </TableCell>
                   <TableCell>
-                    {totalAmount}
+                    {order['Total Value']}
                   </TableCell>
                   <TableCell>
-                    <SeverityPill color={statusColor}>
-                      {order.status}
-                    </SeverityPill>
+                      {order.From}
                   </TableCell>
-                  <TableCell align="right">
-                    {createdAt}
+                  <TableCell >
+                    {order.To}
+                  </TableCell>
+                  <TableCell >
+                    {order.Time}
                   </TableCell>
                 </TableRow>
               );
