@@ -183,7 +183,7 @@ export const SideNav = (props) => {
           >
             <Box
               component={NextLink}
-              href={paths.index}
+              href={paths.dashboard.index}
               sx={{
                 borderColor: 'var(--nav-logo-border)',
                 borderRadius: 1,
