@@ -1,5 +1,6 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
@@ -7,7 +8,10 @@ import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
 
 const initialValues = {
   email: '',
@@ -15,14 +19,6 @@ const initialValues = {
   submit: null
 };
 
-
-const useParams = () => {
-  const searchParams = useSearchParams();
-  const returnTo = searchParams.get('returnTo') || undefined;
-  return {
-    returnTo
-  };
-};
 
 const validationSchema = Yup.object({
   email: Yup
@@ -39,31 +35,67 @@ const validationSchema = Yup.object({
 const Page = () => {
   const isMounted = useMounted();
   const { issuer, signIn } = useAuth();
-  const { returnTo } = useParams();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar(); // Snackbar notification
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues,
     validationSchema,
 
     onSubmit: async (values, helpers) => {
-      console.log(values);
-      try {
-        await signIn(values.email, values.password);
+  try {
+    setLoading(true);
+    const { submit, ...payload } = values;
+    const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const response = await axios.post(`${BASEURL}/api/Auth/login`, payload);
 
-        if (isMounted()) {
-          router.push(returnTo || paths.dashboard.index);
-        }
-      } catch (err) {
-        console.error(err);
-
-        if (isMounted()) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
+    if (!response.data.status) {
+      const { message } = response.data;
+      let errorMessage = '';
+      
+      // Check the backend error message and set the appropriate snackbar message
+      if (message.includes('Invalid email')) {
+        errorMessage = 'Invalid email. Please check your email address.';
+      } else if (message.includes('Invalid password')) {
+        errorMessage = 'Invalid password. Please check your password.';
+      } else {
+        errorMessage = 'An error occurred. Please try again later.';
       }
+      
+      console.log("Backend error message:", message);
+      console.log("Snackbar error message:", errorMessage);
+      
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+      helpers.setSubmitting(false);
+      setLoading(false);
+      return;
     }
+
+    const { token } = response.data;
+    localStorage.setItem('token', token);
+    console.log('Authentication token:', token);
+
+    if (response.data.status) {
+      enqueueSnackbar('User login successful', { variant: 'success' });
+      if (isMounted()) {
+        router.push(paths.dashboard.index);
+      }
+    } else {
+      console.error(response.data.message);
+      helpers.setStatus({ success: false });
+      helpers.setErrors({ submit: response.data.message });
+      helpers.setSubmitting(false);
+    }
+  } catch (error) {
+    console.error("An error occurred during login:", error);
+    enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error' });
+    helpers.setSubmitting(false);
+  } finally {
+    setLoading(false);
+  }
+}
+
   });
 
   return (

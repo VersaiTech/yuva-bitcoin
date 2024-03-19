@@ -252,23 +252,20 @@ import Page from "./dashboard/portfolio";
 const now = new Date();
 
 const MyPage = () => {
-  const settings = useSettings();
-  const theme = useTheme();
   const router = useRouter();
   const { isAuthenticated } = useAuth(); 
 
-  usePageView();
-
   useEffect(() => {
-    // Redirect the user to the dashboard if they are already authenticated
+    // Redirect the user based on their authentication status
     if (!isAuthenticated) {
-      router.push(paths.auth.login.modern); 
+      router.push(paths.auth.login.modern); // Redirect non-authenticated users to the login page
+    } else {
+      router.push(paths.dashboard.portfolio); // Redirect authenticated users to the portfolio page
     }
   }, [isAuthenticated, router]);
 
   return (
     <>
-      
       <Page />
     </>
   );

@@ -129,7 +129,7 @@ console.log('-------------------')
             </AuthConsumer>
           </AuthProvider>
           </SnackbarProvider>
-       </LocalizationProvider>
+        </LocalizationProvider>
       </ReduxProvider>
     </CacheProvider>
   );
