@@ -122,7 +122,7 @@ const Page = () => {
               <OverviewOpenTickets amount={5} />
             </Grid> */}
 
-            <Grid xs={12} md={8}>
+            <Grid xs={12} md={12}>
               <Stack
                 spacing={{
                   xs: 3,
@@ -133,34 +133,18 @@ const Page = () => {
                   chartSeries={[16213.2, 9626.8, 10076.81]}
                   labels={["Bitcoin", "Ethereum", "Deposit"]}
                 />
-                <CryptoTransactions
-                  transactions={[
-                    {
-                      id: "3cc450e88286fdd4e220c719",
-                      amount: 0.1337,
-                      balance: 4805,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 43), 5),
-                        3
-                      ).getTime(),
-                      operation: "add",
-                      title: "Buy BTC",
-                    },
-                    {
-                      id: "6442793e96a90d4e584a19f7",
-                      amount: 0.2105,
-                      balance: 2344,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 32), 54),
-                        6
-                      ).getTime(),
-                      operation: "sub",
-                      title: "Sell BTC",
-                    },
-                  ]}
+              </Stack>
+            </Grid>
+             <Grid xs={12} md={12}> 
+             <Stack 
+              //  display={"flex"}
+              //  justifyContent="space-between"
+             >
+               <CryptoTransactions
+                amount  = {overview.totalDepositAmount}
+                 
                 />
+              
               </Stack>
             </Grid>
             {/* <Grid xs={12} md={4}>

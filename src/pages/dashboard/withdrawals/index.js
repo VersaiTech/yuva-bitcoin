@@ -67,7 +67,7 @@ const useCustomers = (search) => {
         `${BASEURL}/api/Withdraw/getWithdrawPending`,
         { headers: headers }
       );
-
+        console.log(PendingWithdrawals.data);
       const rejectedWithdrawals = await axios.get(
         `${BASEURL}/api/Withdraw/getWithdrawRejected`,
         { headers: headers }
@@ -82,9 +82,9 @@ const useCustomers = (search) => {
         setState({
           customers: response.data.data,
           customersCount: response.count,
-          pending: PendingWithdrawals.data.data,
-          rejected: rejectedWithdrawals.data.data,
-          completed: completedWithdrawals.data.data,
+          pending: PendingWithdrawals.data.data || [],
+          rejected: rejectedWithdrawals.data.data || [],
+          completed: completedWithdrawals.data.data || [],
         });
       }
     } catch (err) {

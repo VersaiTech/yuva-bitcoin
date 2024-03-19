@@ -22,15 +22,34 @@ import Link from "next/link";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1); // Set to tomorrow
+tomorrow.setHours(0, 0, 0, 0); // Set time to 12 AM
+
+const dayAfterTomorrow = new Date();
+dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2); // Set to the day after tomorrow
+dayAfterTomorrow.setHours(0, 0, 0, 0); // Set time to 12 AM
+
 const initialValues = {
   name: "",
   description: "",
   oldPrice: 0,
   url: "",
-  openDateTime: new Date().toISOString().split("T")[0], // Combine start date and time
-  endDateTime: new Date().toISOString().split("T")[0], // Combine end date and time
+  openDateTime: tomorrow.toISOString().slice(0, -8), // Combine start date and time (ISO format expects 0-based month)
+  endDateTime: dayAfterTomorrow.toISOString().slice(0, -8), // Combine end date and time (ISO format expects 0-based month)
   submit: null,
 };
+
+
+// const initialValues = {
+//   name: "",
+//   description: "",
+//   oldPrice: 0,
+//   url: "",
+//   openDateTime: new Date().toISOString().split("T")[0], // Combine start date and time
+//   endDateTime: new Date().toISOString().split("T")[0], // Combine end date and time
+//   submit: null,
+// };
 
 const validationSchema = Yup.object({
   name: Yup.string().max(255).required(),

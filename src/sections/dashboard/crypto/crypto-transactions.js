@@ -16,75 +16,52 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   SvgIcon,
+  Stack,
+  Box,
   Typography
 } from '@mui/material';
 
 export const CryptoTransactions = (props) => {
-  const { transactions } = props;
+  const { amount } = props;
 
   return (
     <Card>
-      <CardHeader title="Transactions" />
-      <List disablePadding>
-        {transactions.map((transaction) => {
-          const icon = transaction.operation === 'add' ? <TrendUp02Icon /> : <TrendDown02Icon />;
-          const createdAt = format(transaction.createdAt, 'MM.dd.yyyy / HH:mm a');
-          const amount = (transaction.operation === 'add' ? '+' : '-')
-            + ' '
-            + transaction.amount
-            + ' '
-            + transaction.coin;
-          const amountColor = transaction.operation === 'add' ? 'success.main' : 'error.main';
-          const balance = numeral(transaction.balance).format('$0,0.00');
+      <CardHeader title="All Users Deposit" />
+      
+       <Stack
+          display={'flex'}
+          justifyContent="space-between" // Added this line to create space between the image icon and the amount
 
-          return (
-            <ListItem
-              key={transaction.id}
-              divider
-            >
-              <ListItemAvatar>
-                <Avatar
-                  sx={{
-                    backgroundColor: transaction.operation === 'add'
-                      ? 'success.alpha4'
-                      : 'error.alpha4',
-                    color: transaction.operation === 'add' ? 'success.main' : 'error.main'
-                  }}
-                >
-                  <SvgIcon>
-                    {icon}
-                  </SvgIcon>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                <Typography variant="subtitle2">
-                  {transaction.title}
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  {createdAt}
-                </Typography>
-              </ListItemText>
-              <ListItemSecondaryAction>
-                <Typography
-                  color={amountColor}
-                  variant="subtitle2"
-                >
-                  {amount}
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  {balance}
-                </Typography>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
-      </List>
+        // direction="row"
+        alignItems="center"
+        direction={{
+          xs: 'column',
+          sm: 'row'
+        }}
+        spacing={3}
+        sx={{
+          px:  4,
+          py: 3
+
+        }}
+      >
+        <div>
+          <img
+            src="/assets/iconly/icon-glass-deposit-coin.svg"
+            alt="User Icon"
+            width={48}
+          />
+        </div>
+        <Box sx={{ flexGrow: 1 }}>
+         
+          <Typography
+            color="text.primary"
+            variant="h4"
+          >
+            {amount}
+          </Typography>
+        </Box>
+      </Stack>
       <CardActions>
         <Button
           color="inherit"
