@@ -264,15 +264,206 @@
 //   getRegister,
 // };
 
-
-
+// pass: 'pvvw lqvk axxs kwha' // Your Gmail password or app password
+const nodemailer = require('nodemailer');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
+const OTP = require('../models/Otp');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+// Function to generate a random number
+function generateRandomNumber() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+
+///=========================================================================================================================
+
+// Function to send OTP to email
+async function sendOTP(email, otp) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: '191260107039setice@gmail.com', // Your Gmail email address
+        pass: 'pvvw lqvk axxs kwha' // Your Gmail password
+      }
+    });
+
+    const mailOptions = {
+      from: '191260107039setice@gmail.com',
+      to: email,
+      subject: 'OTP Verification',
+      text: `Your OTP for registration is: ${otp}`
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('OTP sent successfully.', email, otp);
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    throw new Error('Failed to send OTP.');
+  }
+}
+
+// Function to generate a random 6-digit OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+}
+
+///=========================================================================================================================
+
+
+// Function to verify OTP
+async function verifyOTP(email, otp) {
+  try {
+    const savedOTP = await getSavedOTP(email);
+    console.log(savedOTP);
+
+    if (savedOTP && savedOTP.toString() === otp) {
+      // OTP is verified, save member data
+      await saveMemberData(req.body);
+      return true;
+    } else {
+      return false; // OTP is incorrect
+    }
+  } catch (error) {
+    console.error('Error verifying OTP:');
+    throw new Error('Failed to verify OTP.');
+  }
+}
+
+// Function to retrieve OTP from the database
+async function getSavedOTP(email) {
+  try {
+    const otpData = await OTP.findOne({ email: email }).sort({ createdAt: -1 }).limit(1);
+    if (otpData) {
+      console.log('Latest OTP found:', otpData.otp);
+      return otpData.otp;
+    } else {
+      console.log('No OTP found for email:', email);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving OTP:');
+    throw new Error('Failed to retrieve OTP.');
+  }
+}
+
+
+
+// Function to save OTP in the database
+async function saveOTP(email, otp) {
+  try {
+    // Assuming you have a model called OTP and you want to save OTP data using it
+    const newOTP = new OTP({ email: email, otp: otp });
+    await newOTP.save();
+    console.log('OTP saved successfully.');
+  } catch (error) {
+    console.error('Error saving OTP:');
+    throw new Error('Failed to save OTP.');
+  }
+}
+
+// Function to save member data to the database
+async function saveMemberData(data) {
+  try {
+    // Assuming you have a model called Member and you want to save data using it
+    const newMember = new Member(data);
+    await newMember.save();
+    console.log('Member data saved successfully.');
+  } catch (error) {
+    console.error('Error saving member data');
+    throw new Error('Failed to save member data.');
+  }
+}
+
+async function register(req, res) {
+  const registerSchema = Joi.object({
+    contactNo: Joi.string().trim().min(10).max(10).required(),
+    member_name: Joi.string().trim().min(3).required(),
+    password: Joi.string().trim().min(6).required(),
+    email: Joi.string().trim().email().lowercase().required(),
+    twitterId: Joi.string().trim().required(),
+    wallet_address: Joi.string().trim().required(),
+  });
+
+  try {
+    // Validate request body parameters
+    const { error, value } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+    let { contactNo, member_name, password, email, twitterId, wallet_address } = value;
+
+    // Check if the email is already registered
+    const existingMember = await Member.findOne({ email: email });
+    if (existingMember) {
+      return res.status(400).send({
+        status: false,
+        message: "Email already registered",
+      });
+    }
+
+    // Check if the contact number is already registered
+    const existingMemberContact = await Member.findOne({ contactNo: contactNo });
+    if (existingMemberContact) {
+      return res.status(400).send({
+        status: false,
+        message: "Contact number already registered",
+      });
+    }
+
+    let reg_date = new Date();
+
+    if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
+      return res.status(400).send({
+        title: "Error",
+        message: "Invalid data provided",
+        status: "error",
+      });
+    }
+
+    // Generate unique member_user_id (for example, you can use UUID)
+    const member_user_id = generateRandomNumber();
+
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+
+    // Send OTP to email
+    await sendOTP(req.body.email, otp);
+
+    // Assuming you have a function to store OTP in the database
+    await saveOTP(req.body.email, otp);
+
+    // Assuming you have a function to handle OTP verification from user input
+    // Implement this function to verify OTP provided by the user
+
+    // Assuming you have a function to save member data to the database after OTP verification
+    // Implement this function to save member data only if OTP is verified
+
+    // Return success response
+    return res.status(200).send({
+      status: true,
+      message: "OTP sent to your email for verification",
+      userId: member_user_id,
+    });
+  } catch (err) {
+    console.log("Error in registration", err);
+    return res.status(400).send({
+      status: false,
+      message: "Registration failed",
+    });
+  }
+};
+
 
 
 function generateRandomNumber() {
@@ -300,7 +491,6 @@ function emailValidation(email) {
     return false;
   }
 }
-
 
 function testInput(data) {
   data = data.trim();
@@ -360,96 +550,106 @@ function htmlspecialchars(str) {
 //   }
 // }
 
-async function register(req, res) {
-  const registerSchema = Joi.object({
-    contactNo: Joi.string().trim().min(10).max(10).required(),
-    member_name: Joi.string().trim().min(3).required(),
-    password: Joi.string().trim().min(6).required(),
-    email: Joi.string().trim().email().lowercase().required(),
-    twitterId: Joi.string().trim(),
-    wallet_address: Joi.string().trim(),
-  });
+// Function to generate OTP
 
-  try {
-    // Validate request body parameters
-    const { error, value } = registerSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send({
-        status: false,
-        message: error.details[0].message,
-      });
-    }
-    let { contactNo, member_name, password, email, twitterId, wallet_address } = value;
+//==============================================================================================================================
+
+// async function register(req, res) {
+//   const registerSchema = Joi.object({
+//     contactNo: Joi.string().trim().min(10).max(10).required(),
+//     member_name: Joi.string().trim().min(3).required(),
+//     password: Joi.string().trim().min(6).required(),
+//     email: Joi.string().trim().email().lowercase().required(),
+//     twitterId: Joi.string().trim(),
+//     wallet_address: Joi.string().trim().required(),
+//   });
+
+//   try {
+//     // Validate request body parameters
+//     const { error, value } = registerSchema.validate(req.body);
+//     if (error) {
+//       return res.status(400).send({
+//         status: false,
+//         message: error.details[0].message,
+//       });
+//     }
+//     let { contactNo, member_name, password, email, twitterId, wallet_address } = value;
 
 
-    // Check if the email is already registered
-    const existingMember = await Member.findOne({ email: email });
-    if (existingMember) {
-      return res.status(400).send({
-        status: false,
-        message: "Email already registered",
-      });
-    }
+//     // Check if the email is already registered
+//     const existingMember = await Member.findOne({ email: email });
+//     if (existingMember) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Email already registered",
+//       });
+//     }
 
-    // Check if the contact number is already registered
-    const existingMemberContact = await Member.findOne({ contactNo: contactNo });
-    if (existingMemberContact) {
-      return res.status(400).send({
-        status: false,
-        message: "Contact number already registered",
-      });
-    }
-    let reg_date = new Date();
 
-    if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
-      return res.status(400).send({
-        title: "Error",
-        message: "Invalid data provided",
-        status: "error",
-      });
-    }
+//     // Check if the contact number is already registered
+//     const existingMemberContact = await Member.findOne({ contactNo: contactNo });
+//     if (existingMemberContact) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Contact number already registered",
+//       });
+//     }
 
-    member_user_id = generateRandomNumber();
 
-    let member = await Member.findOne({ member_user_id: member_user_id });
-    while (member) {
-      member_user_id = generateRandomNumber();
-      member = await Member.findOne({ member_user_id: member_user_id });
-    }
 
-    const salt = await bcrypt.genSalt(10);
-    password = await bcrypt.hash(password, salt);
 
-    // Create new member instance
-    const newMember = new Member({
-      member_user_id,
-      member_name,
-      contactNo: contactNo,
-      wallet_address,
-      email,
-      password,
-      registration_date: reg_date,
-      twitterId,
-      isActive: true,
-      // isBlocked: false,
-    });
+//     let reg_date = new Date();
 
-    // Save the member to the database
-    await newMember.save();
+//     if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
+//       return res.status(400).send({
+//         title: "Error",
+//         message: "Invalid data provided",
+//         status: "error",
+//       });
+//     }
 
-    return res.status(200).send({
-      status: true,
-      message: "Registration successfully",
-      userId: member_user_id,
-    });
-  } catch (err) {
-    console.log("Error in registration", err);
-    return res.status(400).send({
-      status: false,
-      message: "Registration failed",
-    });
-  }
-};
+//     member_user_id = generateRandomNumber();
+
+//     let member = await Member.findOne({ member_user_id: member_user_id });
+//     while (member) {
+//       member_user_id = generateRandomNumber();
+//       member = await Member.findOne({ member_user_id: member_user_id });
+//     }
+
+//     const salt = await bcrypt.genSalt(10);
+//     password = await bcrypt.hash(password, salt);
+
+//     // Create new member instance
+//     const newMember = new Member({
+//       member_user_id,
+//       member_name,
+//       contactNo: contactNo,
+//       wallet_address,
+//       email,
+//       password,
+//       registration_date: reg_date,
+//       twitterId,
+//       isActive: true,
+//       // isBlocked: false,
+//     });
+
+//     // Save the member to the database
+//     await newMember.save();
+
+//     return res.status(200).send({
+//       status: true,
+//       message: "Registration successfully",
+//       userId: member_user_id,
+//     });
+//   } catch (err) {
+//     console.log("Error in registration", err);
+//     return res.status(400).send({
+//       status: false,
+//       message: "Registration failed",
+//     });
+//   }
+// };
+
 
 async function login(req, res) {
   const schema = Joi.object({
@@ -619,9 +819,9 @@ async function adminLogin(req, res) {
         message: error.details[0].message,
       });
     }
-  
+
     const { email, password } = value;
-  
+
     // Find admin by email
     const admin = await Admin.findOne({ email });
 
@@ -668,5 +868,6 @@ module.exports = {
   login,
   getRegister,
   adminRegister,
-  adminLogin
+  adminLogin,
+  verifyOTP
 };

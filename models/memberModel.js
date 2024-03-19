@@ -8,7 +8,7 @@ const memberSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   registration_date: { type: Date, default: Date.now },
-  wallet_address: { type: String, unique: true },
+  wallet_address: { type: String, unique: true,required: true },
   coins: { type: Number, default: 0 },
   userType: { type: String, default: 'member' },
   twitterId: { type: String, unique: true, required: true },
