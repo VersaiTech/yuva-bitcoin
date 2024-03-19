@@ -27,12 +27,10 @@ export const CryptoTransactions = (props) => {
   return (
     <Card>
       <CardHeader title="All Users Deposit" />
-      
-       <Stack
-          display={'flex'}
-          justifyContent="space-between" // Added this line to create space between the image icon and the amount
 
-        // direction="row"
+      <Stack
+        display={'flex'}
+        justifyContent="space-between"
         alignItems="center"
         direction={{
           xs: 'column',
@@ -40,7 +38,7 @@ export const CryptoTransactions = (props) => {
         }}
         spacing={3}
         sx={{
-          px:  4,
+          px: 4,
           py: 3
 
         }}
@@ -53,7 +51,7 @@ export const CryptoTransactions = (props) => {
           />
         </div>
         <Box sx={{ flexGrow: 1 }}>
-         
+
           <Typography
             color="text.primary"
             variant="h4"

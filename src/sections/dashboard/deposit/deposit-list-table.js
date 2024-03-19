@@ -183,7 +183,7 @@ export const DepositListTable = (props) => {
                           width: 42,
                         }}
                       >
-                        {getInitials(customer.member_name)}
+                        {getInitials(customer.name)}
                       </Avatar>
                       <div>
                         <Link
@@ -192,7 +192,7 @@ export const DepositListTable = (props) => {
                           href={paths.dashboard.customers.details}
                           variant="subtitle2"
                         >
-                          {customer.member_name}
+                          {customer.name}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
                           {customer.email}
@@ -200,13 +200,13 @@ export const DepositListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{customer.transaction_id}</TableCell>
+                  <TableCell>{customer.transaction_hash}</TableCell>
                   <TableCell>{customer.amount}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2"> {customer.sys_date}</Typography>
                    
                   </TableCell>
-                  <TableCell>{customer.deposit_method}</TableCell>
+                  <TableCell>{customer.deposit_type}</TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}

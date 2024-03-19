@@ -58,37 +58,65 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(
+      let response = await axios.get(
         `${BASEURL}/api/Withdraw/getWithdrawRequests`,
         { headers: headers }
       );
 
-      const PendingWithdrawals = await axios.get(
-        `${BASEURL}/api/Withdraw/getWithdrawPending`,
-        { headers: headers }
-      );
-        console.log(PendingWithdrawals.data);
-      const rejectedWithdrawals = await axios.get(
+      console.log(response.data.data);
+
+      let rejectedWithdrawals = await axios.get(
         `${BASEURL}/api/Withdraw/getWithdrawRejected`,
         { headers: headers }
-      );
+      )
 
-      const completedWithdrawals = await axios.get(
+      console.log(rejectedWithdrawals.data.data);
+
+      let completedWithdrawals = await axios.get(
         `${BASEURL}/api/Withdraw/getWithdrawApproved`,
         { headers: headers }
-      );
+      )
+
+      console.log(completedWithdrawals.data.data);
+
+      // let PendingWithdrawals = await axios.get(
+      //   `${BASEURL}/api/Withdraw/getWithdrawPending`,
+      //   { headers: headers }
+      // )
+
+      // console.log(PendingWithdrawals.data.data);
+
+      if (!response) {
+        response = [];
+      }
+      // if (!PendingWithdrawals) {
+      //   PendingWithdrawals = [];
+      // }
+      if (!rejectedWithdrawals) {
+        rejectedWithdrawals = [];
+      }
+      if (!completedWithdrawals) {
+        completedWithdrawals = [];
+      }
 
       if (isMounted()) {
         setState({
           customers: response.data.data,
           customersCount: response.count,
-          pending: PendingWithdrawals.data.data || [],
-          rejected: rejectedWithdrawals.data.data || [],
-          completed: completedWithdrawals.data.data || [],
+          // pending: PendingWithdrawals.data.data,
+          rejected: rejectedWithdrawals.data.data,
+          completed: completedWithdrawals.data.data,
         });
       }
     } catch (err) {
-      console.error(err);
+      setState({
+        customers: [],
+        // pending: [],
+        rejected: [],
+        completed: [],
+      });
+
+      console.error(err.response.data.message);
     }
   }, [search, isMounted]);
 
@@ -105,8 +133,8 @@ const useCustomers = (search) => {
 
 const Page = () => {
   // get url status from query
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get("status");
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, completed, rejected, pending } =

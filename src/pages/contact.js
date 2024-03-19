@@ -52,7 +52,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.index}
+                  href={paths.dashboard.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'
@@ -63,7 +63,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Home
+                    Dashboard
                   </Typography>
                 </Link>
               </div>

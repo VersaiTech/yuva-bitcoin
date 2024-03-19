@@ -135,16 +135,25 @@ const Page = () => {
                 />
               </Stack>
             </Grid>
-             <Grid xs={12} md={12}> 
-             <Stack 
-              //  display={"flex"}
-              //  justifyContent="space-between"
-             >
+             <Grid xs={12} md={4}> 
+             <Stack>
                <CryptoTransactions
                 amount  = {overview.totalDepositAmount}
-                 
                 />
-              
+              </Stack>
+            </Grid>
+             <Grid xs={12} md={4}> 
+             <Stack>
+               <CryptoTransactions
+                amount  = {overview.totalMemberCoins}
+                />
+              </Stack>
+            </Grid>
+             <Grid xs={12} md={4}> 
+             <Stack>
+               <CryptoTransactions
+                amount  = {overview.totalStakesInvestment}
+                />
               </Stack>
             </Grid>
             {/* <Grid xs={12} md={4}>
