@@ -106,7 +106,7 @@
 const Member = require('../models/memberModel');
 const { v4: uuidv4 } = require('uuid');
 const Stake = require("../models/stake");
-
+const Joi = require('joi');
 
 
 const stakingSummaryForAdmin = async (req, res) => {
@@ -387,61 +387,115 @@ async function transferToStaking(req, res) {
 }
 
 //====================================================================================
+// async function transferToWallet(req, res) {
+//   // Define a schema for request body validation
+//   const schema = Joi.object({
+//     amount: Joi.number().positive().required()
+//   });
+//   try {
+//     const userId = req.user.member_user_id;
+//     // Validate the request body
+//     const { error, value } = schema.validate(req.body);
+
+//     if (error) {
+//       return res.status(400).json({ error: error.details[0].message });
+//     }
+
+//     const { amount } = value;
+
+//     // Check if the member exists
+//     const member = await Member.findOne({ member_user_id: userId });
+//     if (!member) {
+//       return res.status(404).json({ error: 'Member not found' });
+//     }
+
+//     // Find all stakings for the member
+//     const stakings = await Stake.find({ member_user_id: userId, stake_type: 'Wallet' });
+
+//     if (stakings.length === 0) {
+//       return res.status(400).json({ error: 'No staking found for the member' });
+//     }
+
+//     // Calculate the total staked amount
+//     const totalStakedAmount = stakings.reduce((sum, stake) => sum + stake.investment, 0);
+
+//     // Check if the staking has enough funds
+//     if (totalStakedAmount < amount) {
+//       return res.status(400).json({ error: 'Insufficient funds in the staking' });
+//     }
+
+//     // Add the total staked amount to the member's wallet
+//     member.coins += totalStakedAmount;
+//     await member.save();
+
+//     // Deduct the total staked amount from the stakings
+//     for (const stake of stakings) {
+//       stake.investment = 0;
+//       await stake.save();
+//     }
+//     const existingWhithdraw = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+
+//     res.status(200).json({ message: 'Withdrawal successful', existingWhithdraw });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
+//====================================================================================
 async function transferToWallet(req, res) {
-  // Define a schema for request body validation
-  const schema = Joi.object({
-    amount: Joi.number().positive().required()
-  });
   try {
-    const userId = req.user.member_user_id;
-    // Validate the request body
+    const schema = Joi.object({
+      amount: Joi.number().positive().required()
+    });
+
     const { error, value } = schema.validate(req.body);
 
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
 
+    const userId = req.user.member_user_id;
     const { amount } = value;
 
-    // Check if the member exists
     const member = await Member.findOne({ member_user_id: userId });
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
     }
 
-    // Find all stakings for the member
     const stakings = await Stake.find({ member_user_id: userId, stake_type: 'Wallet' });
 
     if (stakings.length === 0) {
       return res.status(400).json({ error: 'No staking found for the member' });
     }
 
-    // Calculate the total staked amount
-    const totalStakedAmount = stakings.reduce((sum, stake) => sum + stake.investment, 0);
+    let remainingAmount = amount;
 
-    // Check if the staking has enough funds
-    if (totalStakedAmount < amount) {
-      return res.status(400).json({ error: 'Insufficient funds in the staking' });
-    }
-
-    // Add the total staked amount to the member's wallet
-    member.coins += totalStakedAmount;
-    await member.save();
-
-    // Deduct the total staked amount from the stakings
     for (const stake of stakings) {
-      stake.investment = 0;
-      await stake.save();
-    }
-    const existingWhithdraw = await Stake.findOne({ member_user_id: userId, stake_type: 'Wallet' });
+      if (remainingAmount <= 0) break;
 
-    res.status(200).json({ message: 'Withdrawal successful', existingWhithdraw });
+      const withdrawnAmount = Math.min(stake.investment, remainingAmount);
+      stake.investment -= withdrawnAmount;
+      remainingAmount -= withdrawnAmount;
+
+      if (stake.investment > 0) {
+        await stake.save();
+      } else {
+        await stake.remove(); // Remove stake if investment becomes zero
+      }
+    }
+
+    const updatedMember = await Member.findOneAndUpdate(
+      { member_user_id: userId },
+      { $inc: { coins: amount - remainingAmount } }, // Increment coins by the withdrawn amount
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Withdrawal successful', member: updatedMember });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
 
 
 module.exports = {
