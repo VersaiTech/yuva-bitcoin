@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import numeral from 'numeral';
-import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import numeral from "numeral";
+import PropTypes from "prop-types";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Avatar,
   Box,
@@ -25,14 +25,14 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from '../../../components/scrollbar';
-import { paths } from '../../../paths';
-import { getInitials } from '../../../utils/get-initials';
-import { useSnackbar } from 'notistack';
-import axios from 'axios';
-import { useRouter } from 'next/router';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "../../../components/scrollbar";
+import { paths } from "../../../paths";
+import { getInitials } from "../../../utils/get-initials";
+import { useSnackbar } from "notistack";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -69,11 +69,11 @@ const useSelectionModel = (customers) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
-export const CustomerListTable = (props) => {
+export const CustomerListTable = (props) => { 
   const {
     customers,
     customersCount,
@@ -83,7 +83,8 @@ export const CustomerListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
+    useSelectionModel(customers);
 
   const router = useRouter();
 
@@ -98,7 +99,7 @@ export const CustomerListTable = (props) => {
       const headers = {
         Authorization: token,
       };
-  
+
       const response = await axios.delete(
         `${BASEURL}/admin/deleteUser/${customerId}`,
         { headers: headers }
@@ -130,41 +131,42 @@ export const CustomerListTable = (props) => {
     handleDeleteDialogClose();
   };
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected?.length === customers?.length;
-  const selectedSome = selected?.length > 0 && selected?.length < customers?.length;
+  const selectedSome =
+    selected?.length > 0 && selected?.length < customers?.length;
   const enableBulkActions = selected?.length > 0;
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <Checkbox
@@ -185,21 +187,12 @@ export const CustomerListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-                TwitterId
-              </TableCell>
-              <TableCell>
-                Coins
-              </TableCell>
-              <TableCell>
-                Contact No.
-              </TableCell>
-              <TableCell align="right">
-                Edit users
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>TwitterId</TableCell>
+              <TableCell>Coins</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Contact No.</TableCell>
+              <TableCell align="right">Edit users</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -228,37 +221,32 @@ export const CustomerListTable = (props) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
                       >
                         {getInitials(customer.member_name)}
                       </Avatar>
                       <div>
                         {customer.member_name}
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
+                        <Typography color="text.secondary" variant="body2">
                           {customer.email}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
+                  <TableCell>{customer.twitterId}</TableCell>
+                  <TableCell>{customer.coins}</TableCell>
                   <TableCell>
-                    {customer.twitterId}
+                  <Typography variant="subtitle2" style={{ color: customer.isActive ? 'green' : 'red' }}>
+                    {customer.isActive ? "Active" : "Blocked"}
+                  </Typography>
                   </TableCell>
-                  <TableCell>
-                    {customer.coins}
-                  </TableCell>
+
                   <TableCell>
                     <Typography variant="subtitle2">
                       {customer.contactNo}
@@ -273,7 +261,11 @@ export const CustomerListTable = (props) => {
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
-                    <IconButton onClick={() => handleDeleteDialogOpen(customer.member_user_id)}>
+                    <IconButton
+                      onClick={() =>
+                        handleDeleteDialogOpen(customer.member_user_id)
+                      }
+                    >
                       <SvgIcon>
                         <DeleteIcon />
                       </SvgIcon>
@@ -326,5 +318,5 @@ CustomerListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

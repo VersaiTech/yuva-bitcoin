@@ -34,6 +34,8 @@ import { TodayCompletedTask } from "../../sections/dashboard/overview/overview-t
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { TotalMemberCoins } from "../../sections/dashboard/crypto/totalMemberCoins";
+import { TotalStakesInvestment } from "../../sections/dashboard/crypto/totalStakesInvestment";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -112,6 +114,27 @@ const Page = () => {
             <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
+            <Grid xs={12} md={4}> 
+            <Stack>
+              <CryptoTransactions
+               amount  = {overview.totalDepositAmount}
+               />
+             </Stack>
+           </Grid>
+            <Grid xs={12} md={4}> 
+            <Stack>
+              <TotalMemberCoins
+               amount  = {overview.totalMemberCoins}
+               />
+             </Stack>
+           </Grid>
+            <Grid xs={12} md={4}> 
+            <Stack>
+              <TotalStakesInvestment
+               amount  = {overview.totalStakesInvestment}
+               />
+             </Stack>
+           </Grid>
             {/* <Grid xs={12} md={4}>
               <TodayTask amount={12} />
             </Grid>
@@ -132,27 +155,6 @@ const Page = () => {
                 <CryptoCurrentBalance
                   chartSeries={[16213.2, 9626.8, 10076.81]}
                   labels={["Bitcoin", "Ethereum", "Deposit"]}
-                />
-              </Stack>
-            </Grid>
-             <Grid xs={12} md={4}> 
-             <Stack>
-               <CryptoTransactions
-                amount  = {overview.totalDepositAmount}
-                />
-              </Stack>
-            </Grid>
-             <Grid xs={12} md={4}> 
-             <Stack>
-               <CryptoTransactions
-                amount  = {overview.totalMemberCoins}
-                />
-              </Stack>
-            </Grid>
-             <Grid xs={12} md={4}> 
-             <Stack>
-               <CryptoTransactions
-                amount  = {overview.totalStakesInvestment}
                 />
               </Stack>
             </Grid>

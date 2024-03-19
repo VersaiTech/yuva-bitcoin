@@ -16,20 +16,18 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   SvgIcon,
-  Divider,
   Stack,
+  Divider,
   Box,
   Typography
 } from '@mui/material';
-import Link from 'next/link'; // Import Next.js Link
 
-
-export const CryptoTransactions = (props) => {
+export const TotalMemberCoins = (props) => {
   const { amount } = props;
 
   return (
     <Card>
-      <CardHeader title="All Users Deposit" />
+      <CardHeader title="Total Member Coin" />
 
       <Stack
         display={'flex'}
@@ -66,7 +64,6 @@ export const CryptoTransactions = (props) => {
       <Divider />
 
       <CardActions>
-      <Link href="/dashboard/deposit">
         <Button
           color="inherit"
           endIcon={(
@@ -78,12 +75,11 @@ export const CryptoTransactions = (props) => {
         >
           See all
         </Button>
-      </Link>
       </CardActions>
     </Card>
   );
 };
 
-CryptoTransactions.propTypes = {
+TotalMemberCoins.propTypes = {
   transactions: PropTypes.array.isRequired
 };

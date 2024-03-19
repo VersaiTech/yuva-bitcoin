@@ -24,12 +24,12 @@ import {
 import Link from 'next/link'; // Import Next.js Link
 
 
-export const CryptoTransactions = (props) => {
+export const TotalStakesInvestment = (props) => {
   const { amount } = props;
 
   return (
     <Card>
-      <CardHeader title="All Users Deposit" />
+      <CardHeader title="Total Stake Investment" />
 
       <Stack
         display={'flex'}
@@ -64,9 +64,8 @@ export const CryptoTransactions = (props) => {
         </Box>
       </Stack>
       <Divider />
-
       <CardActions>
-      <Link href="/dashboard/deposit">
+        <Link  href="/dashboard/stake">
         <Button
           color="inherit"
           endIcon={(
@@ -78,12 +77,12 @@ export const CryptoTransactions = (props) => {
         >
           See all
         </Button>
-      </Link>
+        </Link>
       </CardActions>
     </Card>
   );
 };
 
-CryptoTransactions.propTypes = {
+TotalStakesInvestment.propTypes = {
   transactions: PropTypes.array.isRequired
 };
