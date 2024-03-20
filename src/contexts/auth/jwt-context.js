@@ -76,7 +76,7 @@ export const AuthProvider = (props) => {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = globalThis.localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
       console.log(accessToken);
       const headers = {
         Authorization: accessToken

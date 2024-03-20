@@ -1,5 +1,7 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useFormik } from 'formik';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
@@ -7,7 +9,10 @@ import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
+
+
 
 const initialValues = {
   email: '',
@@ -15,14 +20,15 @@ const initialValues = {
   submit: null
 };
 
-
 const useParams = () => {
   const searchParams = useSearchParams();
   const returnTo = searchParams.get('returnTo') || undefined;
+
   return {
     returnTo
   };
 };
+
 
 const validationSchema = Yup.object({
   email: Yup
@@ -39,31 +45,33 @@ const validationSchema = Yup.object({
 const Page = () => {
   const isMounted = useMounted();
   const { issuer, signIn } = useAuth();
-  const { returnTo } = useParams();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar(); // Snackbar notification
+  const [loading, setLoading] = useState(false);
+  const { returnTo } = useParams();
 
   const formik = useFormik({
     initialValues,
     validationSchema,
 
     onSubmit: async (values, helpers) => {
-      console.log(values);
       try {
+        setLoading(true);
+        const { submit, ...payload } = values;
+
         await signIn(values.email, values.password);
+        enqueueSnackbar('Login successful', { variant: 'success' });
+        router.push(returnTo || paths.dashboard.index);
 
-        if (isMounted()) {
-          router.push(returnTo || paths.dashboard.index);
-        }
-      } catch (err) {
-        console.error(err);
-
-        if (isMounted()) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
-          helpers.setSubmitting(false);
-        }
+      } catch (error) {
+        console.error("An error occurred during login:", error);
+        enqueueSnackbar('Invalid email or password.', { variant: 'error' });
+        helpers.setSubmitting(false);
+      } finally {
+        setLoading(false);
       }
     }
+
   });
 
   return (
@@ -150,7 +158,7 @@ const Page = () => {
         </Button>
         <Box sx={{ mt: 3 }}>
           <Link
-             component={NextLink}
+            component={NextLink}
             href={paths.auth.forgotPassword.modern}
             underline="hover"
             variant="subtitle2"

@@ -63,6 +63,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await signIn(values.email, values.password);
+        
 
         if (isMounted()) {
           router.push(returnTo || paths.dashboard.index);

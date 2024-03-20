@@ -23,6 +23,8 @@ import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
+import Axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const initialValues = {
   email: '',
@@ -68,23 +70,67 @@ const Page = () => {
   const router = useRouter(); // Initialize useRouter
   const { signUp } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  // const formik = useFormik({
+  //   initialValues,
+  //   validationSchema,
+  //   onSubmit: async (values, helpers) => {
+  //     try {
+  //       await signUp(values.name, values.email, values.password, values.confirmPassword);
+
+  //       if (isMounted()) {
+  //         router.push(paths.dashboard.index);
+  //       }
+  //     } catch (err) {
+  //       console.error(err.response.data.message);
+
+  //       if (isMounted()) {
+  //         helpers.setStatus({ success: false });
+  //         helpers.setErrors({ submit: err.message });
+  //         helpers.setSubmitting(false);
+  //       }
+  //     }
+  //   }
+  // });
+
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        await signUp(values.name, values.email, values.password, values.confirmPassword);
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        // Send registration data to backend API
+        const response = await Axios.post(`${BASEURL}/api/Auth/register`, {
+          contactNo: values.contactNumber,
+          member_name: values.name,
+          password: values.password,
+          email: values.email,
+          twitterId: values.twitterId,
+          // Additional fields if necessary
+        });
 
-        if (isMounted()) {
-          router.push(paths.dashboard.index);
+        if (response.data.status) {
+          enqueueSnackbar('User Registered successfully', { variant: 'success' });
+          if (isMounted()) {
+            router.push(paths.dashboard.index);
+          }
+        } else {
+          console.error(response.data.message);
+
+          if (isMounted()) {
+            helpers.setStatus({ success: false });
+            helpers.setErrors({ submit: response.data.message });
+            helpers.setSubmitting(false);
+          }
         }
       } catch (err) {
-        console.error(err.response.data.message);
+        console.error('Error:', err);
 
         if (isMounted()) {
           helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
+          helpers.setErrors({ submit: 'Registration failed' });
           helpers.setSubmitting(false);
         }
       }

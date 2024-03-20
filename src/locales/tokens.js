@@ -4,6 +4,7 @@ export const tokens = {
   },
   nav: {
     academy: 'nav.academy',
+    news:'nav.news',
     marketplace: 'nav.marketplace',
     cryptos: 'nav.cryptos',
     account: 'nav.account',
