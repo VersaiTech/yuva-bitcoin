@@ -390,63 +390,86 @@ async function register(req, res) {
 }
 
 async function verifyOTP(req, res) {
-  const { email, otp } = req.body;
+  const { otp: otpFromBody } = req.body; // Extract OTP from request body
 
   try {
-    // Find temporary registration data by email
-    const temporaryRegistration = await TemporaryRegistration.findOne({ email });
-
-    if (!temporaryRegistration) {
-      return res.status(400).send({
+    if (!otpFromBody) { // Check if OTP is missing in the request body
+      return res.status(400).json({
         status: false,
-        message: "No registration found for the provided email",
+        message: "OTP is required"
       });
     }
 
-    // Check if the OTP matches
-    if (temporaryRegistration.otp !== otp) {
+    // Find temporary registration data by OTP from request body
+    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody });
+
+    if (!temporaryRegistrationFromBody) {
       return res.status(400).send({
         status: false,
-        message: "Invalid OTP",
+        message: "Invalid OTP"
       });
     }
 
-    // Create new member instance using registration data
-    const { contactNo, member_name, password, email, twitterId, wallet_address } = temporaryRegistration.registrationData;
-    const reg_date = new Date();
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Extract email from temporary registration data
+    const { email } = temporaryRegistrationFromBody;
 
-    const newMember = new Member({
-      member_user_id: generateRandomNumber(),
-      member_name,
-      contactNo,
-      wallet_address,
-      email,
-      password: hashedPassword,
-      registration_date: reg_date,
-      twitterId,
-      isActive: true,
-    });
+    // Find member by email
+    let existingMember = await Member.findOne({ email });
 
-    // Save the member to the database
-    await newMember.save();
+    // If member exists, update the data, otherwise create a new member
+    if (existingMember) {
+      // Update existing member data
+      const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      existingMember.member_name = member_name;
+      existingMember.contactNo = contactNo;
+      existingMember.wallet_address = wallet_address;
+      existingMember.password = hashedPassword;
+      existingMember.twitterId = twitterId;
+      existingMember.isActive = true;
+
+      await existingMember.save();
+    } else {
+      // Create new member instance using registration data
+      const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
+      const reg_date = new Date();
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const newMember = new Member({
+        member_user_id: generateRandomNumber(),
+        member_name,
+        contactNo,
+        wallet_address,
+        email,
+        password: hashedPassword,
+        registration_date: reg_date,
+        twitterId,
+        isActive: true,
+      });
+
+      // Save the member to the database
+      await newMember.save();
+    }
 
     // Delete temporary registration data
-    await temporaryRegistration.remove();
+    await temporaryRegistrationFromBody.deleteOne();
 
     return res.status(200).send({
       status: true,
-      message: "Registration successful",
+      message: "Registration successful"
     });
   } catch (err) {
     console.log("Error in OTP verification", err);
     return res.status(400).send({
       status: false,
-      message: "OTP verification failed",
+      message: "OTP verification failed"
     });
   }
 }
+
 
 
 
