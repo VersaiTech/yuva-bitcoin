@@ -268,7 +268,7 @@
 const nodemailer = require('nodemailer');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
-const OTP = require('../models/Otp');
+const TemporaryRegistration = require('../models/TemporaryRegistration');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
@@ -309,85 +309,19 @@ async function sendOTP(email, otp) {
   }
 }
 
-// Function to generate a random 6-digit OTP
+// Function to generate a random 6-digit OTP 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
 }
 
 ///=========================================================================================================================
-
-
-// Function to verify OTP
-async function verifyOTP(email, otp) {
-  try {
-    const savedOTP = await getSavedOTP(email);
-    console.log(savedOTP);
-
-    if (savedOTP && savedOTP.toString() === otp) {
-      // OTP is verified, save member data
-      await saveMemberData(req.body);
-      return true;
-    } else {
-      return false; // OTP is incorrect
-    }
-  } catch (error) {
-    console.error('Error verifying OTP:');
-    throw new Error('Failed to verify OTP.');
-  }
-}
-
-// Function to retrieve OTP from the database
-async function getSavedOTP(email) {
-  try {
-    const otpData = await OTP.findOne({ email: email }).sort({ createdAt: -1 }).limit(1);
-    if (otpData) {
-      console.log('Latest OTP found:', otpData.otp);
-      return otpData.otp;
-    } else {
-      console.log('No OTP found for email:', email);
-      return null;
-    }
-  } catch (error) {
-    console.error('Error retrieving OTP:');
-    throw new Error('Failed to retrieve OTP.');
-  }
-}
-
-
-
-// Function to save OTP in the database
-async function saveOTP(email, otp) {
-  try {
-    // Assuming you have a model called OTP and you want to save OTP data using it
-    const newOTP = new OTP({ email: email, otp: otp });
-    await newOTP.save();
-    console.log('OTP saved successfully.');
-  } catch (error) {
-    console.error('Error saving OTP:');
-    throw new Error('Failed to save OTP.');
-  }
-}
-
-// Function to save member data to the database
-async function saveMemberData(data) {
-  try {
-    // Assuming you have a model called Member and you want to save data using it
-    const newMember = new Member(data);
-    await newMember.save();
-    console.log('Member data saved successfully.');
-  } catch (error) {
-    console.error('Error saving member data');
-    throw new Error('Failed to save member data.');
-  }
-}
-
 async function register(req, res) {
   const registerSchema = Joi.object({
     contactNo: Joi.string().trim().min(10).max(10).required(),
     member_name: Joi.string().trim().min(3).required(),
     password: Joi.string().trim().min(6).required(),
     email: Joi.string().trim().email().lowercase().required(),
-    twitterId: Joi.string().trim().required(),
+    twitterId: Joi.string().trim(),
     wallet_address: Joi.string().trim().required(),
   });
 
@@ -420,40 +354,31 @@ async function register(req, res) {
       });
     }
 
-    let reg_date = new Date();
-
-    if (member_name.length < 3 || contactNo.length !== 10 || !phoneValidation(contactNo) || !emailValidation(email) || password.length < 6) {
-      return res.status(400).send({
-        title: "Error",
-        message: "Invalid data provided",
-        status: "error",
-      });
-    }
-
-    // Generate unique member_user_id (for example, you can use UUID)
-    const member_user_id = generateRandomNumber();
-
-
     // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    const otp = generateOTP();
 
-    // Send OTP to email
-    await sendOTP(req.body.email, otp);
+    // Save registration data to temporary storage
+    const temporaryRegistration = new TemporaryRegistration({
+      email,
+      otp,
+      registrationData: {
+        contactNo,
+        member_name,
+        password,
+        email,
+        twitterId,
+        wallet_address,
+      }
+    });
+    await temporaryRegistration.save();
 
-    // Assuming you have a function to store OTP in the database
-    await saveOTP(req.body.email, otp);
+    // Send OTP via email
+    await sendOTP(email, otp);
 
-    // Assuming you have a function to handle OTP verification from user input
-    // Implement this function to verify OTP provided by the user
-
-    // Assuming you have a function to save member data to the database after OTP verification
-    // Implement this function to save member data only if OTP is verified
-
-    // Return success response
     return res.status(200).send({
       status: true,
       message: "OTP sent to your email for verification",
-      userId: member_user_id,
+      email: email,
     });
   } catch (err) {
     console.log("Error in registration", err);
@@ -462,10 +387,72 @@ async function register(req, res) {
       message: "Registration failed",
     });
   }
-};
+}
+
+async function verifyOTP(req, res) {
+  const { email, otp } = req.body;
+
+  try {
+    // Find temporary registration data by email
+    const temporaryRegistration = await TemporaryRegistration.findOne({ email });
+
+    if (!temporaryRegistration) {
+      return res.status(400).send({
+        status: false,
+        message: "No registration found for the provided email",
+      });
+    }
+
+    // Check if the OTP matches
+    if (temporaryRegistration.otp !== otp) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    // Create new member instance using registration data
+    const { contactNo, member_name, password, email, twitterId, wallet_address } = temporaryRegistration.registrationData;
+    const reg_date = new Date();
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newMember = new Member({
+      member_user_id: generateRandomNumber(),
+      member_name,
+      contactNo,
+      wallet_address,
+      email,
+      password: hashedPassword,
+      registration_date: reg_date,
+      twitterId,
+      isActive: true,
+    });
+
+    // Save the member to the database
+    await newMember.save();
+
+    // Delete temporary registration data
+    await temporaryRegistration.remove();
+
+    return res.status(200).send({
+      status: true,
+      message: "Registration successful",
+    });
+  } catch (err) {
+    console.log("Error in OTP verification", err);
+    return res.status(400).send({
+      status: false,
+      message: "OTP verification failed",
+    });
+  }
+}
 
 
 
+
+
+//==========================================================================================================================
 function generateRandomNumber() {
   const min = 1000000; // Minimum 7-digit number (inclusive)
   const max = 9999999; // Maximum 7-digit number (inclusive)

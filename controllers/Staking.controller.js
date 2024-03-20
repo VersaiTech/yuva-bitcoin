@@ -480,7 +480,7 @@ async function transferToWallet(req, res) {
       if (stake.investment > 0) {
         await stake.save();
       } else {
-        await stake.remove(); // Remove stake if investment becomes zero
+        await stake.deleteOne({ _id: stake._id }); // Remove stake if investment becomes zero
       }
     }
 

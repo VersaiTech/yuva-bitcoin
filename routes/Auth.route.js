@@ -6,7 +6,7 @@ const { register, login, getRegister, adminRegister, adminLogin, verifyOTP } = r
 
 // User LOGIN and Register
 router.post('/register', register).get('/register', getRegister); //
-router.post('/verifyOTP', verifyOTP) //
+router.post('/verifyOTP', verifyOTP);
 router.post('/login', login);//
 
 //Admin Login adn Register
