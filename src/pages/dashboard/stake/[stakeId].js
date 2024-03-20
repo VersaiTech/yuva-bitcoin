@@ -9,6 +9,7 @@ import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { paths } from '../../../paths';
 import { CustomerEditForm } from '../../../sections/dashboard/stake/stake-add-form';
+import { CustomerWithdrawForm } from '../../../sections/dashboard/stake/stake-withdraw-form';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -137,6 +138,7 @@ const Page = () => {
             
             </Stack>
             <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
+            <CustomerWithdrawForm />
           </Stack>
         </Container>
       </Box>
