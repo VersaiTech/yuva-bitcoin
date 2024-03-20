@@ -58,7 +58,7 @@ export const DetailList8 = () => (
                     href="#"
                     variant="subtitle2"
                   >
-                    Rock34x
+                    YuvaBitcoin
                   </Link>
                 </Typography>
               )}
@@ -155,7 +155,7 @@ export const DetailList8 = () => (
             <ListItemText
               primary={(
                 <Typography variant="subtitle2">
-                  katarina.smith@rock34x.io
+                  katarina.smith@YuvaBitcoin.io
                 </Typography>
               )}
             />

@@ -131,7 +131,7 @@ const Page = () => {
     <Box>
       <Head>
         <title>
-          Components | Rock34x 
+          Components | YuvaBitcoin 
         </title>
       </Head>
       <Box

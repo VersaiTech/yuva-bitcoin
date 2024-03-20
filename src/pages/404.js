@@ -15,7 +15,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Error: Not Found | Rock34x 
+          Error: Not Found | YuvaBitcoin 
         </title>
       </Head>
       <Box

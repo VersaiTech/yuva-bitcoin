@@ -144,7 +144,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Kanban | Rock34x 
+          Dashboard: Kanban | YuvaBitcoin 
         </title>
       </Head>
       <Box

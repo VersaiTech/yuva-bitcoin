@@ -214,13 +214,6 @@ const Page = () => {
             />
           </DepositsListContainer> */}
 
-
-          <OrderDrawer
-            container={rootRef.current}
-            onClose={handleOrderClose}
-            open={drawer.isOpen}
-            order={currentOrder}
-          />
         </Box>
       </Box>
     </>

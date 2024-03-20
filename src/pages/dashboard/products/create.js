@@ -14,7 +14,7 @@ const ProductCreate = () => {
     <>
       <Head>
         <title>
-          Dashboard: Product Create | Rock34x 
+          Dashboard: Product Create | YuvaBitcoin 
         </title>
       </Head>
       <Box

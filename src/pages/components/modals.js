@@ -65,7 +65,7 @@ export const Page = () => {
     <>
       <Head>
         <title>
-          Components: Modals | Rock34x 
+          Components: Modals | YuvaBitcoin 
         </title>
       </Head>
       <Box

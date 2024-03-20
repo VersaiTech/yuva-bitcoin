@@ -130,7 +130,7 @@ export const TopNav = (props) => {
                     }
                   }}
                 >
-                  Rock34x Kit <span>PRO</span>
+                  Yuva <span>Bitcoin </span>
                 </Box>
               )}
             </Stack>
@@ -195,7 +195,7 @@ export const TopNav = (props) => {
             <Button
               component="a"
               size={mdUp ? 'medium' : 'small'}
-              href="https://mui.com/store/items/rock34x-kit-pro"
+              href="https://mui.com/store/items/YuvaBitcoin-kit-pro"
               target="_blank"
               variant="contained"
             >

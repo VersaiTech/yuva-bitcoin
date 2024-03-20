@@ -55,7 +55,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Job Browse | Rock34x 
+          Dashboard: Job Browse | YuvaBitcoin 
         </title>
       </Head>
       <Box

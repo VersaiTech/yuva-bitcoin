@@ -22,7 +22,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Pricing | Rock34x 
+          Pricing | YuvaBitcoin 
         </title>
       </Head>
       <Box
@@ -55,7 +55,7 @@ const Page = () => {
                 sx={{ my: 2 }}
                 variant="body1"
               >
-                Join 6,000+ developers &amp; designers using Rock34x to
+                Join 6,000+ developers &amp; designers using YuvaBitcoin to
                 power modern web projects.
               </Typography>
               <Stack

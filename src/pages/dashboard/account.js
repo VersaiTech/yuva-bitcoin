@@ -35,7 +35,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Account | Rock34x 
+          Dashboard: Account | YuvaBitcoin 
         </title>
       </Head>
       <Box
@@ -107,13 +107,13 @@ const Page = () => {
               members={[
                 {
                   avatar: '/assets/avatars/avatar-cao-yu.png',
-                  email: 'cao.yu@rock34x.io',
+                  email: 'cao.yu@YuvaBitcoin.io',
                   name: 'Cao Yu',
                   role: 'Owner'
                 },
                 {
                   avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
-                  email: 'siegbert.gottfried@rock34x.io',
+                  email: 'siegbert.gottfried@YuvaBitcoin.io',
                   name: 'Siegbert Gottfried',
                   role: 'Standard'
                 }

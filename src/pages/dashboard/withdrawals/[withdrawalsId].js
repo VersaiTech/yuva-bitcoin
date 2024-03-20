@@ -56,7 +56,7 @@
 //     <>
 //       <Head>
 //         <title>
-//           Dashboard: Order Details | Rock34x 
+//           Dashboard: Order Details | YuvaBitcoin 
 //         </title>
 //       </Head>
 //       <Box

@@ -90,7 +90,7 @@ export const companies = [
       }
     ],
     logo: '/assets/companies/company-logo-4.svg',
-    name: 'Rock34x IO SRL',
+    name: 'YuvaBitcoin IO SRL',
     shortDescription: 'Impact-ready developer tools and templates'
   }
 ];

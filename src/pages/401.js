@@ -15,7 +15,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Error: Authorization Required | Rock34x 
+          Error: Authorization Required | YuvaBitcoin 
         </title>
       </Head>
       <Box

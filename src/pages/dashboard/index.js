@@ -35,7 +35,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Overview | Rock34x
+          Dashboard: Overview | YuvaBitcoin
         </title>
       </Head>
       <Box
@@ -145,7 +145,7 @@ const Page = () => {
                     amount: 25000,
                     createdAt: now.getTime(),
                     currency: 'usd',
-                    sender: 'Rock34x',
+                    sender: 'YuvaBitcoin',
                     status: 'on_hold',
                     type: 'receive'
                   },
@@ -172,7 +172,7 @@ const Page = () => {
                     amount: 49550,
                     createdAt: subDays(now, 3).getTime(),
                     currency: 'usd',
-                    sender: 'Rock34x',
+                    sender: 'YuvaBitcoin',
                     status: 'confirmed',
                     type: 'receive'
                   }

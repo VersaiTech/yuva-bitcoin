@@ -15,7 +15,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Error: Server Error | Rock34x 
+          Error: Server Error | YuvaBitcoin 
         </title>
       </Head>
       <Box

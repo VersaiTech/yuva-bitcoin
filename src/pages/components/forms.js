@@ -95,7 +95,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Forms | Rock34x 
+          Components: Forms | YuvaBitcoin 
         </title>
       </Head>
       <Box

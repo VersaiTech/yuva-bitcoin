@@ -49,7 +49,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Stake Add | Rock34x
+          Dashboard: Stake Add | YuvaBitcoin
         </title>
       </Head>
       <Box

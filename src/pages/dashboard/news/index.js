@@ -72,7 +72,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-        Crypto News | Rock34x
+        Crypto News | YuvaBitcoin
         </title>
       </Head>
       <Box

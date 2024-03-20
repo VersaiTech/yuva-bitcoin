@@ -28,7 +28,7 @@ const order = {
     address2: 'House #25',
     city: 'San Diego',
     country: 'USA',
-    email: 'miron.vitold@rock34x.io',
+    email: 'miron.vitold@YuvaBitcoin.io',
     name: 'Miron Vitold'
   },
   items: [

@@ -203,7 +203,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Calendar | Rock34x 
+          Dashboard: Calendar | YuvaBitcoin 
         </title>
       </Head>
       <Box

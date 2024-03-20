@@ -37,7 +37,7 @@ export const HomeCta = () => (
       >
         <Button
           component="a"
-          href="https://mui.com/store/items/rock34x-kit-pro"
+          href="https://mui.com/store/items/YuvaBitcoin-kit-pro"
           target="_blank"
           variant="contained"
         >

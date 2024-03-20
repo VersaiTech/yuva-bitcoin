@@ -70,7 +70,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Grouped Lists | Rock34x 
+          Components: Grouped Lists | YuvaBitcoin 
         </title>
       </Head>
       <Box

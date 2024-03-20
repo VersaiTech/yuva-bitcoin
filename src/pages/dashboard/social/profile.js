@@ -143,7 +143,7 @@ export const SocialProfile = () => {
     <>
       <Head>
         <title>
-          Dashboard: Social Profile | Rock34x 
+          Dashboard: Social Profile | YuvaBitcoin 
         </title>
       </Head>
       <Box

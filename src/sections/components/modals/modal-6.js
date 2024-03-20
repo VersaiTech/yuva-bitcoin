@@ -30,13 +30,13 @@ export const Modal6 = () => (
     >
       <Box sx={{ p: 2 }}>
         <Typography variant="subtitle2">
-          demo@rock34x.io
+          demo@YuvaBitcoin.io
         </Typography>
         <Typography
           color="text.secondary"
           variant="subtitle2"
         >
-          Rock34x
+          YuvaBitcoin
         </Typography>
       </Box>
       <Divider />

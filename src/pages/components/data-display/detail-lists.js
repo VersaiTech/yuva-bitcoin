@@ -55,7 +55,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Detail Lists | Rock34x 
+          Components: Detail Lists | YuvaBitcoin 
         </title>
       </Head>
       <Box

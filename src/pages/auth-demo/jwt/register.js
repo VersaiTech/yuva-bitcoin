@@ -96,7 +96,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Rock34x 
+          Register | YuvaBitcoin 
         </title>
       </Head>
       <div>

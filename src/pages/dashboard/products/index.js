@@ -102,7 +102,7 @@ const ProductList = () => {
     <>
       <Head>
         <title>
-          Dashboard: Product List | Rock34x 
+          Dashboard: Product List | YuvaBitcoin 
         </title>
       </Head>
       <Box

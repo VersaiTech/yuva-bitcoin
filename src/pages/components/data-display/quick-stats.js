@@ -60,7 +60,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Quick Stats | Rock34x 
+          Components: Quick Stats | YuvaBitcoin 
         </title>
       </Head>
       <Box

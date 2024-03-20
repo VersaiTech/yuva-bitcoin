@@ -471,7 +471,7 @@ export const items = [
     extension: 'pkg',
     isFavorite: true,
     isPublic: false,
-    name: 'rock34x-kit.fig',
+    name: 'YuvaBitcoin-kit.fig',
     shared: [
       {
         avatar: '/assets/avatars/avatar-neha-punita.png',

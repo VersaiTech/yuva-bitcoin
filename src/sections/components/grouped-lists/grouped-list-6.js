@@ -20,7 +20,7 @@ const transactions = [
     amount: 25000,
     currency: 'usd',
     createdAt: now.getTime(),
-    sender: 'Rock34x',
+    sender: 'YuvaBitcoin',
     type: 'receive'
   },
   {
@@ -44,7 +44,7 @@ const transactions = [
     amount: 49550,
     currency: 'usd',
     createdAt: subDays(now, 3).getTime(),
-    sender: 'Rock34x',
+    sender: 'YuvaBitcoin',
     type: 'receive'
   }
 ];

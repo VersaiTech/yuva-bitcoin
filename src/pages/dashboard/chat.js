@@ -110,7 +110,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Chat | Rock34x 
+          Dashboard: Chat | YuvaBitcoin 
         </title>
       </Head>
       <Divider />

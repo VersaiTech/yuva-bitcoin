@@ -25,7 +25,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Colors | Rock34x 
+          Components: Colors | YuvaBitcoin 
         </title>
       </Head>
       <Box

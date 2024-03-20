@@ -121,14 +121,14 @@ export const Footer = (props) => (
                   }
                 }}
               >
-                Rock34x Kit <span>PRO</span>
+                Yuva <span>Bitcoin </span>
               </Box>
             </Stack>
             <Typography
               color="text.secondary"
               variant="caption"
             >
-              © 2022 Rock34x IO
+              © 2022 YuvaBitcoin IO
             </Typography>
           </Stack>
         </Grid>

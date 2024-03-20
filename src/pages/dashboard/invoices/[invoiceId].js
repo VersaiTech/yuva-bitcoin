@@ -63,7 +63,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Invoice Details | Rock34x 
+          Dashboard: Invoice Details | YuvaBitcoin 
         </title>
       </Head>
       <Box

@@ -83,7 +83,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Academy Course | Rock34x 
+          Dashboard: Academy Course | YuvaBitcoin 
         </title>
       </Head>
       <Box

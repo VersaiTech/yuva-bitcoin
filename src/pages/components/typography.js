@@ -13,7 +13,7 @@ export const Page = () => {
     <>
       <Head>
         <title>
-          Components: Typography | Rock34x 
+          Components: Typography | YuvaBitcoin 
         </title>
       </Head>
       <Box

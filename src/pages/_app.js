@@ -45,7 +45,7 @@ console.log('-------------------')
     <CacheProvider value={emotionCache}>
       <Head>
         {/* <title>
-          Rock34x 
+          YuvaBitcoin 
         </title>
         <meta
           name="viewport"

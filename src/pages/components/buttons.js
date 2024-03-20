@@ -30,7 +30,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Buttons | Rock34x 
+          Components: Buttons | YuvaBitcoin 
         </title>
       </Head>
       <Box

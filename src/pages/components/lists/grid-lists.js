@@ -45,7 +45,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Components: Grid Lists | Rock34x 
+          Components: Grid Lists | YuvaBitcoin 
         </title>
       </Head>
       <Box

@@ -52,7 +52,7 @@ const Page = (props) => {
     <>
       <Head>
         <title>
-          {`Docs: ${article.title} | Rock34x `}
+          {`Docs: ${article.title} | YuvaBitcoin `}
         </title>
       </Head>
       <Container

@@ -188,7 +188,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: File Manager | Rock34x 
+          Dashboard: File Manager | YuvaBitcoin 
         </title>
       </Head>
       <Box

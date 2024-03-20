@@ -14,7 +14,7 @@
 //     <>
 //       <Head>
 //         <title>
-//           Rock34x 
+//           YuvaBitcoin 
 //         </title>
 //       </Head>
 //       <main>

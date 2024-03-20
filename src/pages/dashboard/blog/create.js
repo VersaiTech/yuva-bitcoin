@@ -45,7 +45,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Blog: Post Create | Rock34x 
+          Blog: Post Create | YuvaBitcoin 
         </title>
       </Head>
       <Box

@@ -158,7 +158,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Order List | Rock34x</title>
+        <title>Dashboard: Order List | YuvaBitcoin</title>
       </Head>
       <Divider />
       <Box

@@ -42,7 +42,7 @@ const SocialFeed = () => {
     <>
       <Head>
         <title>
-          Dashboard: Social Feed | Rock34x 
+          Dashboard: Social Feed | YuvaBitcoin 
         </title>
       </Head>
       <Box

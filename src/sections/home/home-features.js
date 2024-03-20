@@ -152,7 +152,7 @@ export const HomeFeatures = () => {
                               <LinkExternal01Icon />
                             </SvgIcon>
                           )}
-                          href="https://www.figma.com/file/xrx6uDljzsWuDZiuz3ITCp/Rock34x-Kit-Pro-UI-6.0-Master"
+                          href="https://www.figma.com/file/xrx6uDljzsWuDZiuz3ITCp/YuvaBitcoin-Kit-Pro-UI-6.0-Master"
                           size="small"
                           target="_blank"
                           variant="contained"

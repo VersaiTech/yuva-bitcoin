@@ -64,7 +64,7 @@ export const AuthProvider = (props) => {
           user: {
             id: user.uid,
             avatar: user.photoURL || undefined,
-            email: user.email || 'anika.visser@rock34x.io',
+            email: user.email || 'anika.visser@YuvaBitcoin.io',
             name: 'Anika Visser',
             plan: 'Premium'
           }

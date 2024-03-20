@@ -14,7 +14,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Blank | Rock34x 
+          Dashboard: Blank | YuvaBitcoin 
         </title>
       </Head>
       <Box
