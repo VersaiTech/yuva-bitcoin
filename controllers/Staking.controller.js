@@ -475,6 +475,7 @@ async function transferToWallet(req, res) {
 
     let remainingAmount = amount;
     let totalWithdrawnAmount = 0;
+    const deleteOperations = []; // Array to collect delete operations
 
     // Withdraw from existing stakes
     for (const stake of stakings) {
@@ -486,8 +487,16 @@ async function transferToWallet(req, res) {
       stake.investment -= withdrawnAmount;
       remainingAmount -= withdrawnAmount;
 
-      await stake.save();
+      if (stake.investment <= 0) {
+        // Collect delete operation for stake with zero investment
+        deleteOperations.push(stake.deleteOne({ _id: stake._id }));
+      } else {
+        await stake.save();
+      }
     }
+
+    // Wait for all delete operations to complete
+    await Promise.all(deleteOperations);
 
     // Update member's coins
     await Member.findOneAndUpdate(
@@ -501,6 +510,69 @@ async function transferToWallet(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+
+
+// below code does not delete the entry of  0 investment after withdraw 
+// async function transferToWallet(req, res) {
+//   try {
+//     const schema = Joi.object({
+//       amount: Joi.number().positive().required()
+//     });
+
+//     const { error, value } = schema.validate(req.body);
+
+//     if (error) {
+//       return res.status(400).json({ error: error.details[0].message });
+//     }
+
+//     const userId = req.user.member_user_id;
+//     const { amount } = value;
+
+//     const member = await Member.findOne({ member_user_id: userId });
+//     if (!member) {
+//       return res.status(404).json({ error: 'Member not found' });
+//     }
+
+//     const stakings = await Stake.find({ member_user_id: userId, stake_type: 'Wallet' });
+
+//     let totalStackAmount = 0;
+//     for (const stake of stakings) {
+//       totalStackAmount += stake.investment;
+//     }
+
+//     if (totalStackAmount < amount) {
+//       return res.status(400).json({ error: 'Insufficient stack amount' });
+//     }
+
+//     let remainingAmount = amount;
+//     let totalWithdrawnAmount = 0;
+
+//     // Withdraw from existing stakes
+//     for (const stake of stakings) {
+//       if (remainingAmount <= 0) break;
+
+//       const withdrawnAmount = Math.min(stake.investment, remainingAmount);
+//       totalWithdrawnAmount += withdrawnAmount;
+
+//       stake.investment -= withdrawnAmount;
+//       remainingAmount -= withdrawnAmount;
+
+//       await stake.save();
+//     }
+
+//     // Update member's coins
+//     await Member.findOneAndUpdate(
+//       { member_user_id: userId },
+//       { $inc: { coins: totalWithdrawnAmount } }, // Increment coins by the withdrawn amount
+//     );
+
+//     res.status(200).json({ message: 'Withdrawal successful', withdrawnAmount: totalWithdrawnAmount });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// }
 
 
 
