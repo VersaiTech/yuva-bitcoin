@@ -229,7 +229,7 @@ const Page = () => {
                           color="text.secondary"
                           variant="overline"
                         >
-                          Total balance
+                          Total balance 
                         </Typography>
                       )}
                     />

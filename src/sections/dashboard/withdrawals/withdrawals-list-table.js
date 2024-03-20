@@ -414,7 +414,7 @@ import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import { SeverityPill } from "../../../components/severity-pill";
 import TrendUp02Icon from "@untitled-ui/icons-react/build/esm/TrendUp02";
-
+import { format } from 'date-fns';
 import {
   Avatar,
   Box,
@@ -605,7 +605,7 @@ export const WithdrawalsListTable = (props) => {
                       {customer.status}
                     </SeverityPill>
                   </TableCell>
-                      <TableCell>{customer.with_date}</TableCell>
+                  <TableCell>{format(new Date(customer.with_date), 'MMMM dd, yyyy hh:mm a')}</TableCell>
                 </TableRow>
               );
             })}

@@ -281,6 +281,7 @@ const useCustomers = (search) => {
     customers: [],
     customersCount: 0,
   });
+  const { page, rowsPerPage } = search;
 
   const getCustomers = useCallback(async () => {
     try {
@@ -292,7 +293,7 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/api/Withdraw/getUserWithdraws`,
+        `${BASEURL}/api/Withdraw/getUserWithdraws/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
@@ -308,7 +309,7 @@ const useCustomers = (search) => {
         });
       }
     } catch (err) {
-      console.error(err);
+      console.error(err.response.data);
     }
   }, [search, isMounted]);
 
