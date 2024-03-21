@@ -102,9 +102,11 @@ const CryptoMarketplacePage = () => {
           </Select>
           <Divider sx={{ my: 3 }} /> {/* Increased spacing */}
           {status === "Listed" ? (
-            <GridList2 projects={listings} /> // Render GridList2 component when status is 'Listed'
+            <GridList2 projects={listings}
+              key={listings} />
           ) : (
-            <GridList2 projects={listings} />
+            <GridList2 projects={listings}
+              key={listings} />
           )}
         </Container>
       </Box>
