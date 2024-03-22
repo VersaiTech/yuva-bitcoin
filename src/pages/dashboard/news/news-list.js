@@ -129,14 +129,14 @@ const Page = () => {
             }}
           >
             <Typography variant="subtitle1">
-              Hello, User
+              Hello, YuvaBitcoin Admin
             </Typography>
             <Button
               component={Link} // Changed to 'Link'
               href={paths.dashboard.news.create} // Changed to 'href'
               variant="contained"
             >
-              New Article
+            Add  New Article
             </Button>
           </Card>
           <Typography variant="h4">
@@ -147,14 +147,13 @@ const Page = () => {
             sx={{ mt: 2 }}
             variant="body1"
           >
-            Discover the latest news, tips and user research insights from Acme.
+           Add New Article for Yuva Bitcoin User 
           </Typography>
           <Typography
             color="text.secondary"
             variant="body1"
           >
-            You will learn about web infrastructure, design systems and devops APIs best
-            practices.
+            Admins can now seamlessly add news and articles for user consumption, enhancing the platform's information dissemination capabilities.
           </Typography>
           <Divider sx={{ my: 4 }} />
           <Grid
@@ -183,7 +182,7 @@ const Page = () => {
               </Grid>
             ))}
           </Grid>
-          <Stack
+          {/* <Stack
             alignItems="center"
             direction="row"
             justifyContent="center"
@@ -201,9 +200,9 @@ const Page = () => {
             <Button>
               Older news
             </Button>
-          </Stack>
+          </Stack> */}
           <Box sx={{ mt: 8 }}>
-            <PostNewsletter />
+            {/* <PostNewsletter /> */}
           </Box>
         </Container>
       </Box>

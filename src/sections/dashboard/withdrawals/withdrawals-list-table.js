@@ -277,14 +277,11 @@
 //   rowsPerPage: PropTypes.number.isRequired
 // };
 
-
-
-
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
   Avatar,
   Box,
@@ -300,11 +297,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from '../../../components/scrollbar';
-import { paths } from '../../../paths';
-import { getInitials } from '../../../utils/get-initials';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "../../../components/scrollbar";
+import { paths } from "../../../paths";
+import { getInitials } from "../../../utils/get-initials";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -339,7 +336,7 @@ const useSelectionModel = (customers) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
@@ -353,45 +350,47 @@ export const WithdrawalsListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } =
+    useSelectionModel(customers);
 
-  console.log(customers)
+  console.log(customers);
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected.length === customers.length;
-  const selectedSome = selected.length > 0 && selected.length < customers.length;
+  const selectedSome =
+    selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           <Checkbox
@@ -399,16 +398,10 @@ export const WithdrawalsListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Delete
           </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -424,21 +417,11 @@ export const WithdrawalsListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-               Date
-              </TableCell>
-              <TableCell>
-              Amount
-              </TableCell>
-              <TableCell>
-              Status
-              </TableCell>
-              <TableCell align="right">
-                Actions
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -467,16 +450,12 @@ export const WithdrawalsListTable = (props) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
                       >
                         {getInitials(customer.member_name)}
@@ -490,21 +469,14 @@ export const WithdrawalsListTable = (props) => {
                         >
                           {customer.member_name}
                         </Link>
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
+                        <Typography color="text.secondary" variant="body2">
                           {customer.email}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>
-                    {customer.with_date}
-                  </TableCell>
-                  <TableCell>
-                    {customer.with_amt}
-                  </TableCell>
+                  <TableCell>{customer.with_date}</TableCell>
+                  <TableCell>{customer.with_amt}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
                       {customer.status}
@@ -553,5 +525,5 @@ WithdrawalsListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

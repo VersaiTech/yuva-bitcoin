@@ -15,6 +15,7 @@ import {
 import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
+// import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
@@ -48,6 +49,8 @@ const useCustomers = (search) => {
     customers: [],
     customersCount: 0,
   });
+  const { page, rowsPerPage } = search;
+  console.log(search);
 
   const getCustomers = useCallback(async () => {
     try {
@@ -59,7 +62,7 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      let response = await axios.get(`${BASEURL}/admin/getAllMembers`, {
+      let response = await axios.get(`${BASEURL}/admin/getAllMembers/${page + 1}/${rowsPerPage}`, {
         headers: headers,
       });
 

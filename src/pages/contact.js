@@ -13,6 +13,9 @@ import { LogoAws } from '../components/companies-logos/logo-aws';
 import { LogoAccenture } from '../components/companies-logos/logo-accenture';
 import { LogoAtt } from '../components/companies-logos/logo-att';
 import SupportList from './dashboard/support/supportList';
+// import { Layout as DashboardLayout } from "../../../layouts/dashboard";4
+import { Layout as DashboardLayout } from '../layouts/dashboard';
+
 
 const Page = () => {
   usePageView();
@@ -167,5 +170,6 @@ const Page = () => {
     </>
   );
 };
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
 
 export default Page;

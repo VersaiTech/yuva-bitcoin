@@ -71,7 +71,6 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      
       console.log(response.data);
 
       // console.log(setState(response.data));
@@ -80,27 +79,20 @@ const useCustomers = (search) => {
         setState({
           customers: response.data.tasks,
           customersCount: 10,
-         
         });
       }
       console.log(customers.data.tasks);
     } catch (err) {
       // console.error(err.response.datax);
     }
-
   }, [search, isMounted]);
 
-  
-  useEffect(
-    () => {
-      getCustomers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-    );
-    
-    return state;
-  };
+  useEffect(() => {
+    getCustomers();
+  }, [search]);
+
+  return state;
+};
 
 const Page = () => {
   // get url status from query
@@ -157,6 +149,7 @@ const Page = () => {
 
   const handleRowsPerPageChange = useCallback(
     (event) => {
+      console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
@@ -182,9 +175,7 @@ const Page = () => {
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">All Task</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}>
-                 
-                </Stack>
+                <Stack alignItems="center" direction="row" spacing={1}></Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
@@ -232,10 +223,7 @@ const Page = () => {
               <NewtaskListTable
                 // customers={customers}
                 customersCount={customersCount}
-              
                 customers={currentTab === "all" ? customers : []}
-
-              
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

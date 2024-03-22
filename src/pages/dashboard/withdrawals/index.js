@@ -20,6 +20,7 @@ import { CustomerListSearch } from "../../../sections/dashboard/customer/custome
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
 import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
 import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
+
 import axios from "axios";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
@@ -43,90 +44,119 @@ const useSearch = () => {
 };
 
 const useCustomers = (search) => {
+  // console.log(search);
   const isMounted = useMounted();
   const [state, setState] = useState({
     customers: [],
+    rejected: [],
+    completed: [],
+    pending: [],
     customersCount: 0,
   });
+  const { page, rowsPerPage } = search;
+  console.log(search);
 
   const getCustomers = useCallback(async () => {
+    // const response = await customersApi.getCustomers(search);
+    const token = localStorage.getItem("accessToken");
+
+    const headers = {
+      Authorization: token,
+    };
+    console.log(search);
+
     try {
-      // const response = await customersApi.getCustomers(search);
-      const token = localStorage.getItem("accessToken");
-
-      const headers = {
-        Authorization: token,
-      };
-
       let response = await axios.get(
-        `${BASEURL}/api/Withdraw/getWithdrawRequests`,
+        `${BASEURL}/api/Withdraw/getWithdrawRequests/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
       console.log(response.data.data);
 
-      let rejectedWithdrawals = await axios.get(
-        `${BASEURL}/api/Withdraw/getWithdrawRejected`,
-        { headers: headers }
-      )
-
-      console.log(rejectedWithdrawals.data.data);
-
-      let completedWithdrawals = await axios.get(
-        `${BASEURL}/api/Withdraw/getWithdrawApproved`,
-        { headers: headers }
-      )
-
-      console.log(completedWithdrawals.data.data);
-
-      // let PendingWithdrawals = await axios.get(
-      //   `${BASEURL}/api/Withdraw/getWithdrawPending`,
-      //   { headers: headers }
-      // )
-
-      // console.log(PendingWithdrawals.data.data);
-
-      if (!response) {
-        response = [];
-      }
-      // if (!PendingWithdrawals) {
-      //   PendingWithdrawals = [];
-      // }
-      if (!rejectedWithdrawals) {
-        rejectedWithdrawals = [];
-      }
-      if (!completedWithdrawals) {
-        completedWithdrawals = [];
-      }
-
       if (isMounted()) {
-        setState({
+        setState((prevState) => ({
+          ...prevState,
           customers: response.data.data,
           customersCount: response.count,
-          // pending: PendingWithdrawals.data.data,
-          rejected: rejectedWithdrawals.data.data,
-          completed: completedWithdrawals.data.data,
-        });
+        }));
       }
     } catch (err) {
-      setState({
+      setState((prevState) => ({
+        ...prevState,
         customers: [],
-        // pending: [],
-        rejected: [],
-        completed: [],
-      });
-
-      console.error(err.response.data.message);
+      }));
     }
+    try {
+      let rejectedWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawRejected/${page + 1}/${rowsPerPage}`,
+        { headers: headers }
+      );
+
+      if (isMounted()) {
+        setState((prevState) => ({
+          ...prevState,
+          rejected: rejectedWithdrawals.data.data,
+        }));
+      }
+    } catch (error) {
+      setState((prevState) => ({
+        ...prevState,
+        rejected: [],
+      }));
+    }
+
+    try {
+      let completedWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawApproved/${page + 1}/${rowsPerPage}`,
+        { headers: headers }
+      );
+
+      if (isMounted()) {
+        setState((prevState) => ({
+          ...prevState,
+          completed: completedWithdrawals.data.data,
+        }));
+      }
+
+      console.log(completedWithdrawals.data.data);
+    } catch (error) {
+      setState((prevState) => ({
+        ...prevState,
+        completed: [],
+      }));
+    }
+
+    try {
+      let PendingWithdrawals = await axios.get(
+        `${BASEURL}/api/Withdraw/getWithdrawPending/${page + 1}/${rowsPerPage}`,
+        { headers: headers }
+      );
+      console.log(PendingWithdrawals.data.data);
+
+      if (isMounted()) {
+        setState((prevState) => ({
+          ...prevState,
+          // customersCount: response.count,
+          pending: PendingWithdrawals.data.data || [],
+        }));
+      }
+    } catch (error) {
+      setState({
+        ...prevState,
+        pending: [],
+      });
+    }
+    // setState({
+    //   pending: [],
+    //   completed: [],
+    //   rejected: [],
+    //   customers: [],
+    // });
   }, [search, isMounted]);
 
-  useEffect(
-    () => {
-      getCustomers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]
-  );
+  useEffect(() => {
+    getCustomers();
+  }, [search]);
 
   return state;
 };

@@ -1,5 +1,3 @@
-// 
-
 
 
 
@@ -75,10 +73,23 @@ const CreateNewsPage = () => {
           onChange={(value) => setFormData({ ...formData, content: value })}
         />
         <Box sx={{ mt: 3 }}>
-          <Button type="submit" variant="contained" color="primary">
-            Create News
-          </Button>
-        </Box>
+  <Button type="submit" variant="contained" color="primary">
+    Create News
+  </Button>
+  
+  <Button 
+    variant="outlined" 
+    color="primary" 
+    sx={{ ml: 2 }} 
+    
+
+    
+  >
+    Cancel
+    
+  </Button>
+</Box>
+
       </form>
     </Box>
   );
