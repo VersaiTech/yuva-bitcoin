@@ -193,158 +193,7 @@ const withdrawRequest = async (req, res) => {
   }
 };
 
-
-
-// async function verifyOTP(req, res) {
-//   const { otp: otpFromBody } = req.body; // Extract OTP from request body
-
-//   try {
-//     if (!otpFromBody) { // Check if OTP is missing in the request body
-//       return res.status(400).json({
-//         status: false,
-//         message: "OTP is required"
-//       });
-//     }
-
-//     // Find temporary registration data by OTP from request body
-//     const temporaryWithdrawFromBody = await TemporaryWithdraw.findOne({ otp: otpFromBody });
-
-//     if (!temporaryWithdrawFromBody || !temporaryWithdrawFromBody.withdrawData) {
-//       return res.status(400).send({
-//         status: false,
-//         message: "Invalid OTP"
-//       });
-//     }
-
-//     // Extract amount from temporary registration data
-//     const { amount } = temporaryWithdrawFromBody.withdrawData;
-
-//     // Find member by email
-//     let existingWithdraw = await Withdraw.findOne({ amount });
-
-//     // If member exists, update the data, otherwise create a new member
-//     if (existingWithdraw) {
-//       // Update existing member data
-//       // const { contactNo, member_name, password, twitterId, wallet_address } = temporaryWithdrawFromBody.TemporaryWithdraw;
-//       const { amount } = temporaryWithdrawFromBody.TemporaryWithdraw;
-//       // const salt = await bcrypt.genSalt(10);
-//       // const hashedPassword = await bcrypt.hash(password, salt);
-//       existingWithdraw.amount = amount;
-//       // existingMember.member_name = member_name;
-//       // existingMember.contactNo = contactNo;
-//       // existingMember.wallet_address = wallet_address;
-//       // existingMember.password = hashedPassword;
-//       // existingMember.twitterId = twitterId;
-//       // existingMember.isActive = true;
-
-//       await existingWithdraw.save();
-//     } else {
-//       // Create new member instance using registration data
-//       // const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
-//       const { amount } = temporaryWithdrawFromBody.TemporaryWithdraw;
-//       // const reg_date = new Date();
-//       // const salt = await bcrypt.genSalt(10);
-//       // const hashedPassword = await bcrypt.hash(password, salt);
-
-//       const newWithdraw = new Member({
-//         amount,
-//         // member_user_id: generateRandomNumber(),
-//         // member_name,
-//         // contactNo,
-//         // wallet_address,
-//         // email,
-//         // password: hashedPassword,
-//         // registration_date: reg_date,
-//         // twitterId,
-//         // isActive: true,
-//       });
-
-//       // Save the member to the database
-//       await newWithdraw.save();
-//     }
-
-//     // Delete temporary registration data
-//     await temporaryWithdrawFromBody.deleteOne();
-
-//     return res.status(200).send({
-//       status: true,
-//       message: "Withdrawal Request successful"
-//     });
-//   } catch (err) {
-//     console.log("Error in OTP verification", err);
-//     return res.status(400).send({
-//       status: false,
-//       message: "OTP verification failed"
-//     });
-//   }
-// }
-
-//===================================================================================================
-
-// const withdrawRequest = async (req, res) => {
-//   // Define a schema for request body validation
-//   const schema = Joi.object({
-//     amount: Joi.number().positive().required()
-//   });
-
-
-//   try {
-//     const { member_user_id } = req.user;
-//     // Validate the request body
-//     const { error, value } = schema.validate(req.body);
-
-//     if (error) {
-//       return res.status(400).json({ status: false, message: error.details[0].message });
-//     }
-
-//     const { amount } = value;
-//     // Check if the member exists
-//     const member = await Member.findOne({ member_user_id });
-//     if (!member) {
-//       return res.status(400).json({
-//         status: false,
-//         message: 'No user found',
-//       });
-//     }
-
-//     // Check if the withdrawal amount is greater than the available amount in the member's schema
-//     if (amount > member.coins) {
-//       return res.status(400).json({
-//         status: false,
-//         message: 'Withdrawal amount exceeds available balance',
-//       });
-//     }
-
-//     // Generate a unique reference ID
-//     const ref_id = generateReferenceID();
-
-//     // Create a new withdrawal request
-//     const withdrawal = new Withdraw({
-//       member_user_id,
-//       member_name: member.member_name,
-//       wallet_address: member.wallet_address,
-//       with_amt: amount,
-//       with_referrance: ref_id,
-//       status: 'Pending', // Set the initial status to 'Pending'
-//     });
-
-//     // Save the withdrawal request
-//     await withdrawal.save();
-
-//     return res.status(200).json({
-//       status: true,
-//       message: 'Withdrawal request sent',
-//       data: withdrawal,
-//     });
-//   } catch (err) {
-//     console.error('Error:', err);
-//     return res.status(500).json({
-//       status: false,
-//       message: 'Internal Server Error',
-//     });
-//   }
-// };
-
+//Working OTP verification
 async function verifyOTP(req, res) {
   const { otp: otpFromBody } = req.body; // Extract OTP from request body
   const { member_user_id } = req.user;
@@ -416,6 +265,8 @@ async function verifyOTP(req, res) {
     });
   }
 }
+
+
 
 
 
