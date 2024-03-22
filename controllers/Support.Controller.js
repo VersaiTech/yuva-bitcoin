@@ -249,7 +249,37 @@ const getSupportForOneUser = async (req, res) => {
     }
 };
 
+const getUserSupport = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params);
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const { page_number, count } = value;
+        const pageNumber = page_number || 1;
+        const itemCount = count || 10;
+        const offset = (pageNumber - 1) * itemCount;
+        const userId = req.user.member_user_id;
+
+        const totalSupport = await Support.countDocuments({ userId: userId });
+        const supportMessages = await Support.find({ userId }).sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(itemCount);
+        if (!supportMessages || supportMessages.length === 0) {
+            return res.status(200).json({
+                status: false, message: 'No support messages found', supportMessages: [], totalSupport
+            });
+        }
+        res.status(200).json({ status: true, message: 'Support messages fetched successfully', totalSupport, supportMessages });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 module.exports = {
-    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser
+    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser,getUserSupport
 }
