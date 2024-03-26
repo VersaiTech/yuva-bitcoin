@@ -5,6 +5,8 @@ import Mail01Icon from '@untitled-ui/icons-react/build/esm/Mail01';
 import { Avatar, Box, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
 import { usePageView } from '../hooks/use-page-view';
 import { paths } from '../paths';
+
+import { Layout as DashboardLayout } from '../layouts/dashboard';
 import { ContactForm } from '../sections/contact/contact-form';
 import { LogoSamsung } from '../components/companies-logos/logo-samsung';
 import { LogoVisma } from '../components/companies-logos/logo-visma';
@@ -12,6 +14,7 @@ import { LogoBolt } from '../components/companies-logos/logo-bolt';
 import { LogoAws } from '../components/companies-logos/logo-aws';
 import { LogoAccenture } from '../components/companies-logos/logo-accenture';
 import { LogoAtt } from '../components/companies-logos/logo-att';
+import { layouts } from 'chart.js';
 
 const Page = () => {
   usePageView();
@@ -162,5 +165,7 @@ const Page = () => {
     </>
   );
 };
+
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
