@@ -43,12 +43,12 @@ const handlers = {
     };
   },
   SIGN_UP: (state, action) => {
-    const { user } = action.payload;
+    // const { user } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      user
+      // user
     };
   },
   SIGN_OUT: (state) => ({
@@ -144,13 +144,13 @@ export const AuthProvider = (props) => {
     });
   }, [dispatch]);
 
-  const signUp = useCallback(async (email, member_name, password,contactNo,twitterId,wallet_address) => {
+  const signUp = useCallback(async ( member_name,email, password,contactNo,twitterId,wallet_address) => {
     // const { accessToken } = await authApi.signUp({ email, name, password });
     // const user = await authApi.me({ accessToken });
 
     const response = await axios.post(`${BASEURL}/api/Auth/register`,{
-      member_name,
       email,
+      member_name,
       password,
       contactNo,
       twitterId, // Provide default or handle these fields accordingly
@@ -158,15 +158,13 @@ export const AuthProvider = (props) => {
     })
 
     console.log(response.data)
-    const {token,user} = response.data;
+    // const {token,user} = response.data;
 
-    localStorage.setItem(STORAGE_KEY, accessToken);
+    // localStorage.setItem(STORAGE_KEY, accessToken);
 
     dispatch({
       type: ActionType.SIGN_UP,
-      payload: {
-        user
-      }
+     
     });
   }, [dispatch]);
 
