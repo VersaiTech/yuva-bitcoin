@@ -144,28 +144,30 @@ export const AuthProvider = (props) => {
     });
   }, [dispatch]);
 
-  const signUp = useCallback(async (email, name, password, confirmPassword) => {
+  const signUp = useCallback(async (email, member_name, password,contactNo,twitterId,wallet_address) => {
     // const { accessToken } = await authApi.signUp({ email, name, password });
     // const user = await authApi.me({ accessToken });
 
     const response = await axios.post(`${BASEURL}/api/Auth/register`,{
+      member_name,
       email,
-      name,
       password,
-      confirmPassword
+      contactNo,
+      twitterId, // Provide default or handle these fields accordingly
+      wallet_address
     })
 
     console.log(response.data)
     const {token,user} = response.data;
 
-    // localStorage.setItem(STORAGE_KEY, accessToken);
+    localStorage.setItem(STORAGE_KEY, accessToken);
 
-    // dispatch({
-    //   type: ActionType.SIGN_UP,
-    //   payload: {
-    //     user
-    //   }
-    // });
+    dispatch({
+      type: ActionType.SIGN_UP,
+      payload: {
+        user
+      }
+    });
   }, [dispatch]);
 
   const signOut = useCallback(async () => {

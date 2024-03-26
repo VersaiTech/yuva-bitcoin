@@ -5,7 +5,7 @@ import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { RTL } from '../components/rtl';
 import { SplashScreen } from '../components/splash-screen';
 import { Toaster } from '../components/toaster';
@@ -53,7 +53,7 @@ console.log('-------------------')
         /> */}
       </Head>
       <ReduxProvider store={store}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
         <SnackbarProvider>
           <AuthProvider>
             <AuthConsumer>
@@ -129,7 +129,7 @@ console.log('-------------------')
             </AuthConsumer>
           </AuthProvider>
           </SnackbarProvider>
-        </LocalizationProvider>
+        {/*</LocalizationProvider>*/}
       </ReduxProvider>
     </CacheProvider>
   );
