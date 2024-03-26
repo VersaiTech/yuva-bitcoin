@@ -3,10 +3,10 @@ import Web3 from 'web3';
 import PropTypes from "prop-types";
 import { BrowserProvider, ethers } from 'ethers'
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
-import { CONTRACT, CONTRACT_ADDRESS } from './wallet';
+import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from './wallet';
 import { useSnackbar } from 'notistack';
 const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
-
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
 
 import {
@@ -63,13 +63,7 @@ export const DepositOperations = (props) => {
   const web3 = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/3840775933b94a0ca2cc13fa742a2b43");
 
 
-  async function checkAllowance(useradd, CONTRACT_ADDRESS) {
-    // const Allowance = await GUSD_CONTRACT.methods.allowance(useradd, CONTRACT_ADDRESS).call();
-    return 100;
-  }
-
   async function getBalance(useradd) {
-    //need to check bnb testnet balance
 
     try {
       const bnb = await web3.eth.getBalance(useradd);
@@ -146,13 +140,11 @@ export const DepositOperations = (props) => {
         }));
         try {
           await getBalance(address[0]);
-          // const allowance = checkAllowance(address[0], CONTRACT_ADDRESS);
-          // console.log(allowance);
-          // setValues((prevState) => ({
-          //   ...prevState,
-          //   allowance
-          // }));
-          // return address[0];
+          setWeb3Wallet((prevState) => ({
+            ...prevState,
+            walletAddress: address[0]
+          }));
+
         } catch (error) {
           console.log(error);
         }
@@ -176,47 +168,69 @@ export const DepositOperations = (props) => {
     }
   }
 
+  const ADMIN_WALLET_ADDRESS = '0x8Ec246487834f6C4CAAf2fd67cB1731Cc5C9eB57';
+
+  // Minimal ABI to interact with ERC20's transfer function
+
+
   async function buyCoin() {
+    if (!web3Wallet || !web3Wallet.walletConnect) {
+      enqueueSnackbar('Please connect your wallet', { variant: 'error' });
+      return;
+    }
+
     try {
 
-      if (web3Wallet.walletConnect) {
+      const provider = new Web3(window.ethereum);
 
-        const web3Provider = new Web3.providers.HttpProvider(window.ethereum);
-
-        const web3Contract = new Web3.eth.Contract(CONTRACT.abi, CONTRACT_ADDRESS, {
-          from: window.ethereum.selectedAddress,
-          gasPrice: '20000000000',
-          gas: '2000000',
-        });
-
-        const recipientAddress = ADMIN_WALLET_ADDRESS; 
-
-        const amount = Web3.utils.toWei(values.amount.toString(), 'ether');
-
-        const transactionResponse = await contract.transfer(recipientAddress, amount);
-        
-        await transactionResponse.wait();
-
-        enqueueSnackbar('Transaction successful!', { variant: 'success' });
+      if (!provider) {
+        enqueueSnackbar('Web3 Provider not found', { variant: 'error' });
+        return;
       }
 
+      const contract = new provider.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
+      const amountToSend = provider.utils.toWei(values.amount, 'ether');
 
+      const gasEstimate = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).estimateGas({ from: web3Wallet.walletAddress });
+
+      const tx = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).send({
+        from: web3Wallet.walletAddress,
+        gas: gasEstimate,
+      });
+
+      console.log(tx);
+      enqueueSnackbar('Transaction successful!', { variant: 'success' });
+      // const tx = await CONTRACT.methods.transfer(BUSD_TESTNET_CONTRACT_ADDRESS, amountToSend).send({ from: web3Wallet.walletAddress });
+
+      // const receipt = await tx.wait();
+
+      if (receipt.status === 1) {
+        enqueueSnackbar('Transaction successful!', { variant: 'success' });
+      } else {
+        enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
+      }
     } catch (error) {
-      enqueueSnackbar('Failed to connect Please try again', { variant: 'error' });
-      console.log(error);
+      console.error(error);
+      enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
     }
+  }
+
+  function fetchPrice() {
+    const response = axios.get(`${BASEURL}/api/Price/getPrice`);
+
   }
 
 
 
 
-  // useEffect(() => {
-  //   if (window.ethereum === undefined) {
-  //     console.log("Wallet not installed");
-  //   } else {
-  //     fetchData();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (window.ethereum === undefined) {
+      console.log("Wallet not installed");
+    } else {
+      fetchData();
+      fetchPrice();
+    }
+  }, []);
 
 
 
