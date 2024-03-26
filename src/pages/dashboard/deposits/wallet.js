@@ -2,7 +2,7 @@ import Web3 from 'web3';
 
 const web3 = new Web3(Web3.givenProvider);
 
-export const CONTRACT_ADDRESS = '0xB771E3A42d77c6B979AC936bF4052fB5660DFf48';
+export const CONTRACT_ADDRESS = '0x557b97Bb2121e41939554144AD63424831320e0D';
 const MLMAbi = [
   {
     type: 'constructor',
