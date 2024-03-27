@@ -12,16 +12,15 @@ async function sendOTP(email, otp) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
+        // user: '191260107039setice@gmail.com', // Your Gmail email address
         user: '191260107039setice@gmail.com', // Your Gmail email address
         pass: 'pvvw lqvk axxs kwha' // Your Gmail password
       }
     });
 
     const mailOptions = {
-      // from: '191260107039setice@gmail.com',
-      // to: email,
-      from: email,
-      to: '191260107039setice@gmail.com',
+      from: '191260107039setice@gmail.com',
+      to: member.email,
       subject: 'OTP Verification',
       text: `Your OTP for Withdrawal Request is: ${otp}`
     };
@@ -178,6 +177,7 @@ const withdrawRequest = async (req, res) => {
     await temporaryWithdraw.save();
 
     // Send OTP to the member's email
+    console.log('Sending OTP to:', member.email);
     await sendOTP(member.email, otp);
 
     return res.status(200).json({
