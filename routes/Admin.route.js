@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage: storage });
-const { getOverview } = require('../controllers/Overview.controller');
+const { getOverview, getUserOverview } = require('../controllers/Overview.controller');
 const { getuserbalance, getAllStakes, getAllStake, addTask, editTask, getOneTaskforAdminConfirmationTask, updateMemberDetails, getMemberDetails, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser } = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
@@ -57,6 +57,7 @@ router.route("/getAllStakes/:page_number?/:count?").get(isAdmin, getAllStakes);
 router.route("/getAllStake/:page_number?/:count?").get(ValidMember, getAllStake);
 
 router.route("/getOverview").get(isAdmin, getOverview);
+router.route("/getUserOverview").get(ValidMember, getUserOverview);
 
 router.route("/getuserbalance").get(ValidMember, getuserbalance);
 

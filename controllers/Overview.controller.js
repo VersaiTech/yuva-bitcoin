@@ -49,6 +49,36 @@ async function getOverview(req, res) {
   }
 }
 
+
+
+async function getUserOverview(req, res) {
+  try {
+    const userId = req.user.member_user_id;
+
+    // Retrieve data specific to the user
+    const userTasks = await Task.find({ assignedTo: userId });
+    const completedTasksCount = await CompletedTask.countDocuments({ userId, status: 'confirmed' });
+    const pendingTasksCount = await CompletedTask.countDocuments({ userId, status: 'pending' });
+
+    return res.status(200).json({
+      status: true,
+      message: "Overview for user",
+      overview: {
+        userTasks: userTasks.length,
+        completedTasks: completedTasksCount,
+        pendingTasks: pendingTasksCount,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching user overview data:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
 module.exports = {
-  getOverview
+  getOverview, getUserOverview
 }
