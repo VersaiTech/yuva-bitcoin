@@ -325,6 +325,8 @@ import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useFormik } from "formik";
+// const { enqueueSnackbar } = useSnackbar(); // Snackbar notification
+
 import { useRouter } from "next/router"; // Import useRouter for navigation
 
 import {
@@ -344,6 +346,7 @@ import { paths } from "../../../paths";
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from "../../../hooks/use-mounted";
 import Axios from "axios";
+
 import { useSnackbar } from "notistack";
 
 const initialValues = {
@@ -391,7 +394,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await signUp(
-          values.member_name,
+      values.member_name,
       values.email,
       values.password,
       values.contactNo,
@@ -400,12 +403,15 @@ const Page = () => {
       values.wallet_address
         );
         console.log(values);
-
+        
         if (isMounted()) {
-          router.push(paths.dashboard.index);
+          enqueueSnackbar(values, { variant: 'success' });
+          router.push(paths.auth.verifyCode.modern);
         }
       } catch (err) {
         console.error(err.response.data.message);
+        enqueueSnackbar(err.response.data.message, { variant: 'error' });
+        helpers.setSubmitting(false);
 
         if (isMounted()) {
           helpers.setStatus({ success: false });
