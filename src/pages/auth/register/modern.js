@@ -392,6 +392,7 @@ const Page = () => {
     initialValues,
     validationSchema,
     onSubmit: async (values, helpers) => {
+      localStorage.setItem("email", values.email);
       try {
         await signUp(
       values.member_name,
@@ -403,9 +404,9 @@ const Page = () => {
       values.wallet_address
         );
         console.log(values);
-        
+
         if (isMounted()) {
-          enqueueSnackbar(values, { variant: 'success' });
+          enqueueSnackbar("Registration successful Please Verify", { variant: 'success' });
           router.push(paths.auth.verifyCode.modern);
         }
       } catch (err) {
