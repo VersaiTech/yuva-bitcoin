@@ -18,8 +18,10 @@ async function sendOTP(email, otp) {
     });
 
     const mailOptions = {
-      from: '191260107039setice@gmail.com',
-      to: email,
+      // from: '191260107039setice@gmail.com',
+      // to: email,
+      from: email,
+      to: '191260107039setice@gmail.com',
       subject: 'OTP Verification',
       text: `Your OTP for Withdrawal Request is: ${otp}`
     };
