@@ -106,12 +106,12 @@ const createSupport = async (req, res) => {
         });
 
         const mailOptions = {
-            from: email,
+            from: req.body.email,
             to: '191260107039setice@gmail.com',
             subject: 'New Support Message',
             text: `Name: ${name}\nTwitter ID: ${twitterId}\nEmail: ${email}\nMessage: ${message}`
         };
-
+        console.log(mailOptions.from)
         // Send email to admin
         await transporter.sendMail(mailOptions);
 
@@ -281,5 +281,5 @@ const getUserSupport = async (req, res) => {
 }
 
 module.exports = {
-    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser,getUserSupport
+    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser, getUserSupport
 }
