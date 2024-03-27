@@ -1,7 +1,10 @@
-import Attachment01Icon from '@untitled-ui/icons-react/build/esm/Attachment01';
-import Expand01Icon from '@untitled-ui/icons-react/build/esm/Expand01';
-import Image01Icon from '@untitled-ui/icons-react/build/esm/Image01';
-import XIcon from '@untitled-ui/icons-react/build/esm/X';
+import Attachment01Icon from "@untitled-ui/icons-react/build/esm/Attachment01";
+import Expand01Icon from "@untitled-ui/icons-react/build/esm/Expand01";
+import * as Yup from 'yup';
+import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
+import XIcon from "@untitled-ui/icons-react/build/esm/X";
+import { useFormik } from 'formik';
+import axios from 'axios';
 import {
   Box,
   Button,
@@ -12,121 +15,232 @@ import {
   Stack,
   SvgIcon,
   Tooltip,
-  Typography
-} from '@mui/material';
-import { QuillEditor } from '../../../components/quill-editor';
+  Typography,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TextField,
+} from "@mui/material";
+import { QuillEditor } from "../../../components/quill-editor";
+import {useRef,useEffect} from "react";
+import { TextFields } from "@mui/icons-material";
+import {useState} from "react"
 
-export const Modal1 = () => (
-  <Box
-    sx={{
-      backgroundColor: (theme) => theme.palette.mode === 'dark'
-        ? 'neutral.800'
-        : 'neutral.100',
-      p: 3
-    }}
-  >
-    <Paper
-      elevation={12}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        margin: 3,
-        maxWidth: '100%',
-        minHeight: 500,
-        mx: 'auto',
-        outline: 'none',
-        width: 600
-      }}
-    >
-      <Stack
-        alignItems="center"
-        direction="row"
-        spacing={1}
-        sx={{
-          px: 2,
-          py: 1
-        }}
-      >
-        <Typography
-          sx={{ flexGrow: 1 }}
-          variant="h6"
-        >
-          New Message
-        </Typography>
-        <IconButton>
-          <SvgIcon>
-            <Expand01Icon />
-          </SvgIcon>
-        </IconButton>
-        <IconButton>
-          <SvgIcon>
-            <XIcon />
-          </SvgIcon>
-        </IconButton>
-      </Stack>
-      <Input
-        disableUnderline
-        fullWidth
-        placeholder="To"
-        sx={{
-          p: 1,
-          borderBottom: 1,
-          borderBottomColor: 'divider',
-          borderBottomStyle: 'solid'
-        }}
-      />
-      <Input
-        disableUnderline
-        fullWidth
-        placeholder="Subject"
-        sx={{
-          p: 1,
-          borderBottom: 1,
-          borderBottomColor: 'divider',
-          borderBottomStyle: 'solid'
-        }}
-      />
-      <QuillEditor
-        placeholder="Leave a message"
-        sx={{
-          border: 'none',
-          flexGrow: 1
-        }}
-      />
-      <Divider />
-      <Stack
-        alignItems="center"
-        direction="row"
-        justifyContent="space-between"
-        spacing={3}
-        sx={{ p: 2 }}
-      >
-        <Stack
-          alignItems="center"
-          direction="row"
-          spacing={1}
-        >
-          <Tooltip title="Attach image">
-            <IconButton size="small">
-              <SvgIcon>
-                <Image01Icon />
-              </SvgIcon>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Attach file">
-            <IconButton size="small">
-              <SvgIcon>
-                <Attachment01Icon />
-              </SvgIcon>
-            </IconButton>
-          </Tooltip>
-        </Stack>
-        <div>
-          <Button variant="contained">
-            Send
+const validationSchema = Yup.object({
+  member_name: Yup.string().max(255).required("Name is required"),
+  email: Yup.string()
+    .email("Must be a valid email")
+    .max(255)
+    .required("Email is required"),
+  contactNo: Yup.string()
+     .matches(/^\d{10}$/, "Invalid phone number")
+     .required("Contact Number is required"),
+    wallet_address:  Yup.string()
+    .required("Wallet Address is required"),
+});
+
+
+const ModalContent = ({ handleCloseModal,memberData }) => {
+  const [submitting,setSubmitting]= useState(false);
+  const [isMounted, setIsMounted] = useState(false); // State to track component mounting
+
+  useEffect(() => {
+    setIsMounted(true); // Set isMounted to true when component mounts
+    return () => {
+      setIsMounted(false); // Set isMounted to false when component unmounts
+    };
+  }, []);
+
+  const initialValues = memberData
+  ? {
+      member_name: memberData.member_name ,
+      email: memberData.email ,
+      contactNo: memberData.contactNo,
+      wallet_address: memberData.wallet_address,
+    }
+  : {
+      member_name: "",
+      email: "",
+      contactNo: "",
+      wallet_address: "",
+    };
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: async(values) => {
+      try {
+        setSubmitting(true);
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          throw new Error('Authorization token not found');
+        }
+
+        const headers = {
+          Authorization: token,
+        };
+
+        // Prepare request body for posting new review
+        const requestBody = {
+          member_name: values.member_name, 
+          email: values.email,
+          contactNo: values.contactNo,
+          wallet_address:values.wallet_address,
+        };
+        // Make POST request using Axios
+        const response = await axios.post(`${BASEURL}/admin/updateMemberDetails`, requestBody, {
+          headers: headers
+        });
+        console.log('Form values:', response.data); // Log response data
+        handleCloseModal(); // Close modal on successful submission
+        if (isMounted) {
+          window.location.href = "/dashboard/social/profile";
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      } finally {
+        setSubmitting(false);
+      }
+    }
+  });
+  return (
+    <Box>
+      <Typography variant="h5" align="center" sx={{ marginBottom: 4 }}>
+        Edit Details
+      </Typography>
+      <form onSubmit={formik.handleSubmit}>
+        <Stack spacing={2}>
+          <TextField
+            fullWidth
+            id="name"
+            name="member_name"
+            label="Name"
+            variant="outlined"
+            value={formik.values.member_name}
+            onChange={formik.handleChange}
+            error={formik.touched.member_name && Boolean(formik.errors.member_name)}
+            helperText={formik.touched.member_name && formik.errors.member_name}
+          />
+          <TextField
+            fullWidth
+            id="email"
+            name="email"
+            label="Email"
+            variant="outlined"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            type="email"
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            fullWidth
+            id="contactNo"
+            name="contactNo"
+            label="Contact"
+            variant="outlined"
+            value={formik.values.contactNo}
+            onChange={formik.handleChange}
+            error={formik.touched.contactNo && Boolean(formik.errors.contactNo)}
+            helperText={formik.touched.contactNo && formik.errors.contactNo}
+          />
+          <TextField
+            fullWidth
+            id="wallet_address"
+            name="wallet_address"
+            label="Wallet Address"
+            variant="outlined"
+            value={formik.values.wallet_address}
+            onChange={formik.handleChange}
+            error={formik.touched.wallet_address && Boolean(formik.errors.wallet_address)}
+            helperText={formik.touched.wallet_address && formik.errors.wallet_address}
+          />
+          <Button type="submit" variant="contained" fullWidth>
+            Submit
           </Button>
-        </div>
-      </Stack>
-    </Paper>
-  </Box>
-);
+        </Stack>
+      </form>
+    </Box>
+  );
+};
+
+export default ModalContent;
+
+
+
+
+
+
+
+
+export const Modal1 = ({ open, handleCloseModal }) => {
+  const modalRef = useRef();
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
+  //       handleCloseModal();
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [handleCloseModal]);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        handleCloseModal();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleCloseModal]);
+
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
+      }}
+      ref={modalRef}
+    >
+      <Paper
+        elevation={12}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center", // Vertically center the content
+          alignItems: "center", // Horizontally center the content
+          margin: 3,
+          maxWidth: "100%",
+          minHeight: 500,
+          mx: "auto",
+          outline: "none",
+          width: 600,
+          position: "fixed",
+          top: "50%", // Align the top to the vertical center
+          left: "50%", // Align the left to the horizontal center
+          transform: "translate(-40%, -50%)", // Center the modal
+          backgroundColor: "white", // Semi-transparent backdrop
+          zIndex: 9999,
+          boxShadow: "0px 4px 22px rgba(0, 0, 0, 0.1)",
+          padding: 3, // Add padding for better appearance
+        }}
+      >
+        <ModalContent handleCloseModal={handleCloseModal} />
+      </Paper>
+    </Box>
+  );
+};

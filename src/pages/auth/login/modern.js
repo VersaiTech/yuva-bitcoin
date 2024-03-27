@@ -2,7 +2,6 @@ import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useFormik } from 'formik';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
@@ -10,6 +9,7 @@ import { paths } from '../../../paths';
 import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
 import { useSnackbar } from 'notistack';
+import { useFormik } from 'formik';
 import axios from 'axios';
 
 

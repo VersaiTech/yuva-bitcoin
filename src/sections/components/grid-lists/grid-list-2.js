@@ -286,7 +286,7 @@ export const GridList2 = ({ projects }) => {
   </Grid>
 </Box>
 {/* Modal */}
-{isModalOpen && (
+{isModalOpen && ( 
   <Modal4
     wallets={wallets}
     isOpen={isModalOpen}
