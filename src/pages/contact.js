@@ -6,6 +6,7 @@ import { Avatar, Box, Container, Link, Stack, SvgIcon, Typography } from '@mui/m
 import { usePageView } from '../hooks/use-page-view';
 import { paths } from '../paths';
 import { ContactForm } from '../sections/contact/contact-form';
+import { useState } from 'react';
 import { LogoSamsung } from '../components/companies-logos/logo-samsung';
 import { LogoVisma } from '../components/companies-logos/logo-visma';
 import { LogoBolt } from '../components/companies-logos/logo-bolt';

@@ -170,7 +170,7 @@
 // );
 
 
-import { Box, Paper, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
+import { Box, Paper,Table Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Presence } from "../../../components/presence";
 import CloseIcon from '@mui/icons-material/Close';
@@ -190,6 +190,24 @@ export const Modal4 = ({isOpen, handleCloseModal, wallets }) => (
       justifyContent: "center",
     }}
   >
+   
+    <Paper
+    elevation={12}
+    sx={{
+      display: "flex",
+      margin: 3,
+      maxWidth: "100%",
+      mx: "auto",
+      outline: "none",
+      width: 600,
+      position: "fixed",
+      top: 60,
+      left: "35vw",
+      backgroundColor: "rgba(0, 0, 0, 0.1)", // Semi-transparent backdrop
+      zIndex: 9999,
+      alignItems: "center",
+      justifyContent: "center",
+    }}>
     <Paper
       elevation={12}
       sx={{
@@ -229,5 +247,6 @@ export const Modal4 = ({isOpen, handleCloseModal, wallets }) => (
         </List>
       </Box>
     </Paper>
+  </Paper>
   </Box>
 );
