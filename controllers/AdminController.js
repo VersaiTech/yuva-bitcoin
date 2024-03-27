@@ -940,6 +940,82 @@ const getAllStake = async (req, res) => {
   }
 };
 
+
+async function updateMemberDetails(req, res) {
+  try {
+    const { contactNo, member_name, email, wallet_address } = req.body;
+    const userId = req.user.member_user_id; // Assuming user id is stored in the request object after authentication
+
+    // Check if the user exists
+    const existingMember = await Member.findOne({ member_user_id: userId });
+    if (!existingMember) {
+      return res.status(404).json({
+        status: false,
+        message: "Member not found",
+      });
+    }
+
+    // Update member details
+    if (contactNo) existingMember.contactNo = contactNo;
+    if (member_name) existingMember.member_name = member_name;
+    // if (password) {
+    //   const salt = await bcrypt.genSalt(10);
+    //   existingMember.password = await bcrypt.hash(password, salt);
+    // }
+    if (email) existingMember.email = email;
+    // if (twitterId) existingMember.twitterId = twitterId;
+    if (wallet_address) existingMember.wallet_address = wallet_address;
+
+    // Save updated member details
+    await existingMember.save();
+
+    return res.status(200).json({
+      status: true,
+      message: "Member details updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating member details:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
+async function getMemberDetails(req, res) {
+  try {
+    // Extract user_id from the request object
+    const userId = req.user.member_user_id; // Assuming you have user data stored in the request object
+
+    // Fetch the member from the database based on user_id
+    const member = await Member.findOne({ member_user_id: userId });
+
+    // If the member is not found, return a 404 response
+    if (!member) {
+      return res.status(200).json({
+        status: false,
+        message: `Member details not found for the current user`,
+        member: null,
+      });
+    }
+
+    // Return the found member details
+    return res.status(200).json({
+      status: true,
+      message: `Member details found for the current user`,
+      member: member,
+    });
+  } catch (error) {
+    console.error("Error fetching member details:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
 async function getMemberByUserId(req, res) {
   try {
     // Extract member_user_id from request parameters
@@ -1254,4 +1330,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails,updateMemberDetails };
