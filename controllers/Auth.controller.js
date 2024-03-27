@@ -354,6 +354,21 @@ async function register(req, res) {
       });
     }
 
+    const existingMemberTwitter = await Member.findOne({ twitterId: twitterId });
+    if (existingMemberTwitter) {
+      return res.status(400).send({
+        status: false,
+        message: "Twitter id already registered",
+      });
+    }
+
+    const existingMemberWallet = await Member.findOne({ wallet_address: wallet_address });
+    if (existingMemberWallet) {
+      return res.status(400).send({
+        status: false,
+        message: "Wallet address already registered",
+      })
+    }
     // Generate OTP
     const otp = generateOTP();
 
