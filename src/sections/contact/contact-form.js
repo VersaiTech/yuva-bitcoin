@@ -149,8 +149,10 @@
 //   );
 // };
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useFormik } from 'formik';
+import { useSnackbar } from 'notistack'; // Import useSnackbar hook
+import axios from 'axios';
 import * as Yup from 'yup';
 import {
   Box,
@@ -162,7 +164,8 @@ import {
   Link,
   OutlinedInput,
   Typography,
-  Unstable_Grid2 as Grid
+  Unstable_Grid2 as Grid,
+  TextField
 } from '@mui/material';
 
 const validationSchema = Yup.object({
@@ -171,27 +174,62 @@ const validationSchema = Yup.object({
   twitterId: Yup.string().required('Twitter ID is required'),
   message: Yup.string().required('Message/Query is required')
 });
+const initialValues =
+{
+    name: '' ,
+    email: '',
+    twitterId: '',
+    message: '',
+}
 
 export const ContactForm = () => {
   const [submitting, setSubmitting] = useState(false);
+  const { enqueueSnackbar } = useSnackbar(); // Destructure enqueueSnackbar function
+  const [isMounted, setIsMounted] = useState(false); // State to track component mounting
+
+  useEffect(() => {
+    setIsMounted(true); // Set isMounted to true when component mounts
+    return () => {
+      setIsMounted(false); // Set isMounted to false when component unmounts
+    };
+  }, []);
 
   const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      twitterId: '',
-      message: ''
-    },
+    initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async(values) => {
       try {
         setSubmitting(true);
-        // Here you can make your POST request using Axios or fetch
-        console.log('Form values:', values);
-        // Reset the form after successful submission
-        resetForm();
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          throw new Error('Authorization token not found');
+        }
+
+        const headers = {
+          Authorization: token,
+        };
+
+        // Prepare request body for posting new review
+        const requestBody = {
+          name: values.name, 
+          email: values.email,
+          twitterId: values.twitterId,
+          message:values.message,
+        };
+        // Make POST request using Axios
+        const response = await axios.post(`${BASEURL}/api/Support/createSupport`, requestBody, {
+          headers: headers
+        });
+        console.log('Form values:', response.data);
+        // Show success message using enqueueSnackbar
+        enqueueSnackbar('Form submitted successfully', { variant: 'success' });
+        if (isMounted) {
+          window.location.href = "/";
+        }
       } catch (error) {
         console.error('Error submitting form:', error);
+        enqueueSnackbar('Error submitting form', { variant: 'error' });
       } finally {
         setSubmitting(false);
       }
@@ -200,75 +238,79 @@ export const ContactForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container spacing={3}>
-        <Grid xs={12} sm={6}>
-          <FormControl fullWidth>
-            <FormLabel>Full Name *</FormLabel>
-            <OutlinedInput
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-            />
-            {formik.touched.name && <FormHelperText error>{formik.errors.name}</FormHelperText>}
-          </FormControl>
-        </Grid>
-        <Grid xs={12} sm={6}>
-          <FormControl fullWidth>
-            <FormLabel>Twitter ID *</FormLabel>
-            <OutlinedInput
-              name="twitterId"
-              value={formik.values.twitterId}
-              onChange={formik.handleChange}
-              error={formik.touched.twitterId && Boolean(formik.errors.twitterId)}
-            />
-            {formik.touched.twitterId && <FormHelperText error>{formik.errors.twitterId}</FormHelperText>}
-          </FormControl>
-        </Grid>
-        <Grid xs={12} sm={12}>
-          <FormControl fullWidth>
-            <FormLabel>Email *</FormLabel>
-            <OutlinedInput
-              name="email"
-              type="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-            />
-            {formik.touched.email && <FormHelperText error>{formik.errors.email}</FormHelperText>}
-          </FormControl>
-        </Grid>
-        <Grid xs={12}>
-          <FormControl fullWidth>
-            <FormLabel>Message/Query *</FormLabel>
-            <OutlinedInput
-              name="message"
-              value={formik.values.message}
-              onChange={formik.handleChange}
-              multiline
-              rows={6}
-              error={formik.touched.message && Boolean(formik.errors.message)}
-            />
-            {formik.touched.message && <FormHelperText error>{formik.errors.message}</FormHelperText>}
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Button
+    <Grid container spacing={3}>
+      <Grid item xs={12} sm={6}>
+        <TextField
           fullWidth
-          size="large"
-          variant="contained"
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting ? 'Submitting...' : 'Let\'s Talk'}
-        </Button>
-      </Box>
-      <Typography color="text.secondary" sx={{ mt: 3 }} variant="body2">
-        By submitting this, you agree to the{' '}
-        <Link href="#" underline="always">Privacy Policy</Link> and{' '}
-        <Link href="#" underline="always">Cookie Policy</Link>.
-      </Typography>
-    </form>
+          id="name"
+          name="name"
+          label="Full Name *"
+          variant="outlined"
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          error={formik.touched.name && Boolean(formik.errors.name)}
+          helperText={formik.touched.name && formik.errors.name}
+          color="primary" 
+        />
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <TextField
+          fullWidth
+          id="twitterId"
+          name="twitterId"
+          label="Twitter ID *"
+          variant="outlined"
+          value={formik.values.twitterId}
+          onChange={formik.handleChange}
+          error={formik.touched.twitterId && Boolean(formik.errors.twitterId)}
+          helperText={formik.touched.twitterId && formik.errors.twitterId}
+        />
+      </Grid>
+      <Grid item xs={12} sm={12}>
+        <TextField
+          fullWidth
+          id="email"
+          name="email"
+          label="Email *"
+          variant="outlined"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          id="message"
+          name="message"
+          label="Message/Query *"
+          variant="outlined"
+          multiline
+          rows={6}
+          value={formik.values.message}
+          onChange={formik.handleChange}
+          error={formik.touched.message && Boolean(formik.errors.message)}
+          helperText={formik.touched.message && formik.errors.message}
+        />
+      </Grid>
+    </Grid>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Button
+        fullWidth
+        size="large"
+        variant="contained"
+        type="submit"
+        disabled={submitting}
+      >
+        {submitting ? 'Submitting...' : 'Let\'s Talk'}
+      </Button>
+    </Box>
+    <Typography color="text.secondary" sx={{ mt: 3 }} variant="body2">
+      By submitting this, you agree to the{' '}
+      <Link href="#" underline="always">Privacy Policy</Link> and{' '}
+      <Link href="#" underline="always">Cookie Policy</Link>.
+    </Typography>
+  </form>
   );
 };
