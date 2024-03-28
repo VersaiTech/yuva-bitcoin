@@ -24,17 +24,7 @@ const createSupport = async (req, res) => {
 
         // Additional checks for other fields can be added here if needed
 
-        // Create support message
-        const supportMessage = new Support({
-            name: name, // Use the provided name
-            twitterId: twitterId, // Use the provided Twitter ID
-            email: email,
-            userId: userId, // Use the user's ID from authentication
-            message: message
-        });
-
-        // Save support message
-        await supportMessage.save();
+      
 
         // Send email to admin
         const transporter = nodemailer.createTransport({
@@ -46,7 +36,7 @@ const createSupport = async (req, res) => {
         });
 
         const mailOptions = {
-            from: member.email, // Use the user-provided email as sender
+            from: email, // Use the user-provided email as sender
             to: '191260107039setice@gmail.com',
             subject: 'New Support Message',
             text: `Name: ${name}\nTwitter ID: ${twitterId}\nEmail: ${email}\nMessage: ${message}`
@@ -56,6 +46,19 @@ const createSupport = async (req, res) => {
 
         // Send email to admin
         await transporter.sendMail(mailOptions);
+
+
+          // Create support message
+          const supportMessage = new Support({
+            name: name, // Use the provided name
+            twitterId: twitterId, // Use the provided Twitter ID
+            email: email,
+            userId: userId, // Use the user's ID from authentication
+            message: message
+        });
+
+        // Save support message
+        await supportMessage.save();
 
         return res.status(201).json({ message: 'Support message sent successfully.', supportMessage });
     } catch (error) {
