@@ -36,7 +36,7 @@ const createSupport = async (req, res) => {
         });
 
         const mailOptions = {
-            from: email, // Use the user-provided email as sender
+            from: member.email, // Use the user-provided email as sender
             to: '191260107039setice@gmail.com',
             subject: 'New Support Message',
             text: `Name: ${name}\nTwitter ID: ${twitterId}\nEmail: ${email}\nMessage: ${message}`
