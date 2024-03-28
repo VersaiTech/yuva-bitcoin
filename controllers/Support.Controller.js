@@ -52,7 +52,7 @@ const createSupport = async (req, res) => {
             text: `Name: ${name}\nTwitter ID: ${twitterId}\nEmail: ${email}\nMessage: ${message}`
         };
 
-        console.log("from mail:", supportMessage.from)
+        console.log("from mail:", mailOptions.from)
 
         // Send email to admin
         await transporter.sendMail(mailOptions);
