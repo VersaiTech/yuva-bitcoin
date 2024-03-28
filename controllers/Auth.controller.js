@@ -277,25 +277,34 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Function to generate a random number
 function generateRandomNumber() {
-  return Math.floor(100000 + Math.random() * 900000);
+  const prefix = "YBM";
+  const randomNumber = Math.floor(100000 + Math.random() * 900000); // Generate random 4-digit number
+  return `${prefix}${randomNumber}`;
 }
 
 
+function generateRandomNumberAdmin() {
+  const prefix = "YBSA";
+  const randomNumber = Math.floor(1000 + Math.random() * 9000); // Generate random 4-digit number
+  return `${prefix}${randomNumber}`;
+}
 ///=========================================================================================================================
 
 // Function to send OTP to email
 async function sendOTP(email, otp) {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // Set to true for a secure connection
       auth: {
-        user: '191260107039setice@gmail.com', // Your Gmail email address
-        pass: 'pvvw lqvk axxs kwha' // Your Gmail password
+        user: 'noreply@yuvabitcoin.com', // Your Gmail email address
+        pass: 'Noreply@123@YB' // Your Gmail password
       }
     });
 
     const mailOptions = {
-      from: '191260107039setice@gmail.com',
+      from: 'noreply@yuvabitcoin.com',
       to: email,
       subject: 'OTP Verification',
       text: `Your OTP for registration is: ${otp}`
@@ -579,12 +588,12 @@ async function verifyOTP(req, res) {
 }
 
 
-function generateRandomNumber() {
-  const min = 1000000; // Minimum 7-digit number (inclusive)
-  const max = 9999999; // Maximum 7-digit number (inclusive)
+// function generateRandomNumber() {
+//   const min = 1000000; // Minimum 7-digit number (inclusive)
+//   const max = 9999999; // Maximum 7-digit number (inclusive)
 
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
 
 function phoneValidation(phone) {
   phone = testInput(phone);
@@ -889,7 +898,7 @@ async function adminRegister(req, res) {
     // Hash the password
     // const hashedPassword = await bcrypt.hash(password, 10);
 
-    const admin_user_id = generateRandomNumber();
+    const admin_user_id = generateRandomNumberAdmin();
 
     // Create new admin instance
     const newAdmin = new Admin({

@@ -10,15 +10,17 @@ const Joi = require('joi');
 async function sendOTP(email, otp) {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // Set to true for a secure connection
       auth: {
-        user: '191260107039setice@gmail.com', // Your Gmail email address
-        pass: 'pvvw lqvk axxs kwha' // Your Gmail password
+        user: 'noreply@yuvabitcoin.com', // Your Gmail email address
+        pass: 'Noreply@123@YB' // Your Gmail password
       }
     });
 
     const mailOptions = {
-      from: '191260107039setice@gmail.com',
+      from: 'noreply@yuvabitcoin.com',
       to: email,
       subject: 'OTP Verification',
       text: `Your OTP for Withdrawal Request is: ${otp}`

@@ -236,13 +236,34 @@ const getAllTasks = async (req, res) => {
     }
 
 
-    const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id, status: 'completed' });
-    const completedTaskIds = allUsersTask.map(task => task.taskId);
-    console.log(completedTaskIds);
+    // const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id, status: 'completed' });
+    // const completedTaskIds = allUsersTask.map(task => task.taskId);
+    // console.log(completedTaskIds);
+    // const updatedTasks = [];
+
+    // tasks.forEach(task => {
+    //   const status = completedTaskIds.includes(task.taskId) ? 'completed' : 'pending';
+    //   updatedTasks.push({ ...task.toObject(), status });
+    // });
+
+
+    const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id });
     const updatedTasks = [];
 
     tasks.forEach(task => {
-      const status = completedTaskIds.includes(task.taskId) ? 'completed' : 'pending';
+      const completedTask = allUsersTask.find(completedTask => completedTask.taskId.toString() === task._id.toString());
+      let status = 'pending';
+
+      if (completedTask) {
+        if (completedTask.status === 'confirmed') {
+          status = 'confirmed';
+        } else if (completedTask.status === 'rejected') {
+          status = 'rejected';
+        } else {
+          status = 'completed';
+        }
+      }
+
       updatedTasks.push({ ...task.toObject(), status });
     });
 
@@ -258,6 +279,63 @@ const getAllTasks = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// below code is for admin 
+const getAllTasksforAdminWithoutStatus = async (req, res) => {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+  try {
+    // Set default values if not provided
+    const page_number = value.page_number || 1;
+    const count = value.count || 10; // You can adjust the default count as needed
+    const offset = (page_number - 1) * count;
+    const allTasks = await Task.find();
+    const tasks = await Task.find()
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!tasks || tasks.length === 0) {
+      return res.status(200).json({
+        status: false,
+        message: "No tasks found",
+        allTasks: allTasks.length,
+        tasks: [],
+      });
+    }
+
+
+    // const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id, status: 'completed' });
+    // const completedTaskIds = allUsersTask.map(task => task.taskId);
+    // console.log(completedTaskIds);
+    // const updatedTasks = [];
+
+    // tasks.forEach(task => {
+    //   const status = completedTaskIds.includes(task.taskId) ? 'completed' : 'pending';
+    //   updatedTasks.push({ ...task.toObject(), status });
+    // });
+
+
+    // const tasks = await Task.find();
+    return res.status(200).json({
+      status: true,
+      message: "Tasks found",
+      allTasks: allTasks.length,
+      tasks: tasks,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 const getConfirmedTasksForUser = async (req, res) => {
   const Schema = Joi.object({
@@ -1330,4 +1408,4 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails,updateMemberDetails };
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus };

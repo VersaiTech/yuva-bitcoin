@@ -3,6 +3,15 @@ const Member = require('../models/memberModel');
 const nodemailer = require('nodemailer');
 const Joi = require('joi')
 
+
+// Function to generate a unique ticket ID starting with "#YB" and followed by 7 random numbers 
+function generateTicketId() {
+    const prefix = "YB";
+    const randomNumber = Math.floor(1000000 + Math.random() * 9000000); // Generate random 7-digit number
+    return `${prefix}${randomNumber}`;
+}
+
+
 const createSupport = async (req, res) => {
     try {
         const userId = req.user.member_user_id;
@@ -23,21 +32,39 @@ const createSupport = async (req, res) => {
         }
 
         // Additional checks for other fields can be added here if needed
+        // Generate support ticket ID
+        const supportTicketId = generateTicketId();
 
-      
+        // Create support message
+        const supportMessage = new Support({
+            name: name, // Use the provided name
+            supportTicketId: supportTicketId,
+            twitterId: twitterId, // Use the provided Twitter ID
+            email: email,
+            userId: userId, // Use the user's ID from authentication
+            message: message
+        });
+
+        // Save support message
+        await supportMessage.save();
+
 
         // Send email to admin
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.hostinger.com',
+            port: 465,
+            secure: true, // Set to true for a secure connection
             auth: {
-                user: '191260107039setice@gmail.com',
-                pass: 'pvvw lqvk axxs kwha'
+                user: 'support2@yuvabitcoin.com',
+                pass: 'Support@123@YB'
             }
         });
 
         const mailOptions = {
-            from: member.email, // Use the user-provided email as sender
-            to: '191260107039setice@gmail.com',
+            // from: email, // Use the user-provided email as sender
+            // to: 'testing@yuvabitcoin.com',
+            from: "support2@yuvabitcoin.com",
+            to: "admin@yuvabitcoin.com",
             subject: 'New Support Message',
             text: `Name: ${name}\nTwitter ID: ${twitterId}\nEmail: ${email}\nMessage: ${message}`
         };
@@ -47,18 +74,6 @@ const createSupport = async (req, res) => {
         // Send email to admin
         await transporter.sendMail(mailOptions);
 
-
-          // Create support message
-          const supportMessage = new Support({
-            name: name, // Use the provided name
-            twitterId: twitterId, // Use the provided Twitter ID
-            email: email,
-            userId: userId, // Use the user's ID from authentication
-            message: message
-        });
-
-        // Save support message
-        await supportMessage.save();
 
         return res.status(201).json({ message: 'Support message sent successfully.', supportMessage });
     } catch (error) {
@@ -131,11 +146,12 @@ const createSupport = async (req, res) => {
 // Function to reply to a support message
 const adminReplyToUser = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { supportTicketId } = req.params;
         const { message } = req.body;
 
         // Fetch the latest support message from the user
-        const latestMessage = await Support.findOne({ userId }).sort({ createdAt: -1 });
+        const latestMessage = await Support.findOne({ supportTicketId })
+        // .sort({ createdAt: -1 });
 
         if (!latestMessage) {
             return res.status(404).json({ error: 'No message found for the user.' });
@@ -143,15 +159,17 @@ const adminReplyToUser = async (req, res) => {
 
         // Send reply email to the user
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.hostinger.com',
+            port: 465,
+            secure: false, // Set to true for a secure connection
             auth: {
-                user: '191260107039setice@gmail.com',
-                pass: 'pvvw lqvk axxs kwha'
+                user: 'support2@yuvabitcoin.com',
+                pass: 'Support@123@YB'
             }
         });
 
         const mailOptions = {
-            from: '191260107039setice@gmail.com',
+            from: 'support2@yuvabitcoin.com',
             to: latestMessage.email, // User's email
             subject: 'Reply to Your Support Message',
             text: message
@@ -164,6 +182,7 @@ const adminReplyToUser = async (req, res) => {
         const reply = new Reply({
             name: latestMessage.name,
             twitterId: latestMessage.twitterId,
+            supportTicketId: latestMessage.supportTicketId,
             email: latestMessage.email,
             userId: latestMessage.userId,
             user_message: latestMessage.message,

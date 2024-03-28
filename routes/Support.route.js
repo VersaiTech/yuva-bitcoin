@@ -6,7 +6,7 @@ const { createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser,get
 
 
 router.route('/createSupport').post(ValidMember, createSupport);
-router.route('/adminReplyToUser/:userId').post(isAdmin, adminReplyToUser);
+router.route('/adminReplyToUser/:supportTicketId').post(isAdmin, adminReplyToUser);
 router.route('/getAllSupport/:page_number?/:count?').get(isAdmin, getAllSupport);
 router.route('/getSupportForOneUser/:userId/:page_number?/:count?').get(isAdmin, getSupportForOneUser);
 router.route('/getUserSupport/:page_number?/:count?').get(ValidMember, getUserSupport);

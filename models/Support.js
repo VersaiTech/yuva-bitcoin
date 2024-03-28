@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const supportSchema = new mongoose.Schema({
     name: { type: String, required: true, ref: 'Member' },
+    supportTicketId: { type: String, required: true, unique: true },
     twitterId: { type: String, required: true, ref: 'Member' },
     email: { type: String, required: true },
     userId: { type: String, required: true, ref: 'Member' },
@@ -15,6 +16,7 @@ const Support = mongoose.model('Support', supportSchema);
 
 const replySchema = new mongoose.Schema({
     name: { type: String, required: true, ref: 'Support' },
+    supportTicketId: { type: String, required: true, unique: true, ref: 'Support' },
     twitterId: { type: String, required: true, ref: 'Support' },
     email: { type: String, required: true },
     userId: { type: String, required: true, ref: 'Support' },
