@@ -5,6 +5,7 @@ const Joi = require('joi');
 
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
+const { log } = require('util');
 
 const azurecontainer = process.env.AZURE_CONTAINER;
 const azureconnectionString = process.env.AZURE_STRING;
@@ -112,52 +113,112 @@ const completeTask = async (req, res) => {
 
 
 
+// working but on click it is  confirmed 
+// const confirmTaskCompletion = async (req, res) => {
+//   const confirmTaskCompletionSchema = Joi.object({
+//     taskId: Joi.string().required(),
+//     userId: Joi.string().required(),
+//   });
+//   try {
+//     // Validate request body
+//     const { error, value } = confirmTaskCompletionSchema.validate(req.body);
+//     if (error) {
+//       return res.status(400).json({ error: error.details[0].message });
+//     }
+//     const { taskId, userId } = value;
+
+//     const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId, status: 'pending' });
+
+//     console.log(completedTask);
+//     if (!completedTask) {
+//       return res.status(404).json({ message: 'Pending task completion not found' });
+//     }
+
+//     // Fetch task details to get the reward amount
+//     const task = await Task.findOne({ taskId });
+//     if (!task) {
+//       return res.status(404).json({ message: 'Task not found' });
+//     }
+
+//     // Reward the user
+//     const user = await Member.findOne({ member_user_id: userId });
+//     if (!user) {
+//       return res.status(404).json({ message: 'User not found' });
+//     }
+
+//     completedTask.status = 'confirmed';
+//     await completedTask.save();
+
+//     // Update user's coins balance with the reward from the task
+//     user.coins += task.coins; // Assuming task.reward contains the reward amount
+//     await user.save();
+
+//     res.status(200).json({ message: 'Task completion confirmed. User rewarded.' });
+//   } catch (error) {
+//     console.error('Error confirming task completion:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
 const confirmTaskCompletion = async (req, res) => {
   const confirmTaskCompletionSchema = Joi.object({
     taskId: Joi.string().required(),
     userId: Joi.string().required(),
+    status: Joi.string().valid('confirmed', 'rejected').required()
   });
+
   try {
     // Validate request body
     const { error, value } = confirmTaskCompletionSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    const { taskId, userId } = value;
+    const { taskId, userId, status } = value;
 
-    const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId, status: 'pending' });
-
-    console.log(completedTask);
+    const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId });
     if (!completedTask) {
       return res.status(404).json({ message: 'Pending task completion not found' });
     }
 
-    // Fetch task details to get the reward amount
-    const task = await Task.findOne({ taskId });
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
+    // Check if the status is already confirmed or rejected
+    if (completedTask.status === 'confirmed' || completedTask.status === 'rejected') {
+      return res.status(400).json({ message: `Task completion is already ${completedTask.status}` });
     }
 
-    // Reward the user
-    const user = await Member.findOne({ member_user_id: userId });
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    completedTask.status = 'confirmed';
+    // Update status
+    completedTask.status = status;
     await completedTask.save();
 
-    // Update user's coins balance with the reward from the task
-    user.coins += task.coins; // Assuming task.reward contains the reward amount
-    await user.save();
+    if (status === 'confirmed') {
+      // Fetch task details to get the reward amount
+      const task = await Task.findOne({ taskId });
+      if (!task) {
+        q
+        return res.status(404).json({ message: 'Task not found' });
+      }
 
-    res.status(200).json({ message: 'Task completion confirmed. User rewarded.' });
+      // Reward the user
+      const user = await Member.findOne({ member_user_id: userId });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Update user's coins balance with the reward from the task
+      user.coins += task.coins; // Assuming task.reward contains the reward amount
+      await user.save();
+
+      return res.status(200).json({ message: 'Task completion confirmed. User rewarded.' });
+    } else if (status === 'rejected') {
+      return res.status(400).json({ message: 'Task completion rejected. User not rewarded.' });
+    } else {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
   } catch (error) {
     console.error('Error confirming task completion:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 const getAllTasksUser = async (req, res) => {
   const Schema = Joi.object({
@@ -220,6 +281,7 @@ const getAllTasks = async (req, res) => {
     const page_number = value.page_number || 1;
     const count = value.count || 10; // You can adjust the default count as needed
     const offset = (page_number - 1) * count;
+    const currentTime = new Date(); // Define currentTime here
     const allTasks = await Task.find();
     const tasks = await Task.find()
       .sort({ createdAt: -1 })
@@ -246,29 +308,30 @@ const getAllTasks = async (req, res) => {
     //   updatedTasks.push({ ...task.toObject(), status });
     // });
 
-
     const allUsersTask = await CompletedTask.find({ userId: req.user.member_user_id });
-    const updatedTasks = [];
+    const completedTaskStatus = allUsersTask.reduce((acc, task) => {
+      acc[task.taskId] = task.status;
+      return acc;
+    }, {});
 
-    tasks.forEach(task => {
-      const completedTask = allUsersTask.find(completedTask => completedTask.taskId.toString() === task._id.toString());
-      let status = 'pending';
+    const updatedTasks = tasks.map(task => {
+      let status = completedTaskStatus[task.taskId] || 'OPEN';
 
-      if (completedTask) {
-        if (completedTask.status === 'confirmed') {
-          status = 'confirmed';
-        } else if (completedTask.status === 'rejected') {
-          status = 'rejected';
-        } else {
-          status = 'completed';
+
+      // Check if the task's scheduled time is in the past
+      if (task.scheduledTime <= currentTime) {
+        // Check if the task's completion time is in the past
+        if (task.completionTime <= currentTime) {
+          status = 'CLOSE'; // Set status to CLOSE if completion time has passed
         }
       }
 
-      updatedTasks.push({ ...task.toObject(), status });
+
+
+      return { ...task.toObject(), status };
     });
 
 
-    // const tasks = await Task.find();
     return res.status(200).json({
       status: true,
       message: "Tasks found",
