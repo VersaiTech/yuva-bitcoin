@@ -31,10 +31,8 @@ const validationSchema = Yup.object({
   coins: Yup.number().min(0).required("Coins is required"),
   taskName: Yup.string().max(255).required("Task Name is required"),
   link: Yup.string().url().required("Link is required"),
-  openDate: Yup.date().required("Open Date is required"),
-  startTime: Yup.string().required("Start Time is required"),
-  endDate: Yup.date().min(Yup.ref("openDate")).required("End Date is required"),
-  endTime: Yup.string().required("End Time is required"),
+  openDateTime: Yup.date().required("Open Date and Time are required"),
+  endDateTime: Yup.date().min(Yup.ref("openDateTime")).required("End Date and Time are required"),
 });
 
 export const NewTaskEditForm = ({ customer, ...other }) => {
@@ -49,18 +47,8 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
       coins: customer.coins || "",
       taskName: customer.taskName || "",
       link: customer.link || "",
-      openDate: customer.scheduledTime
-        ? customer.scheduledTime.split("T")[0]
-        : "", // Extracting date from scheduledTime
-      startTime: customer.scheduledTime
-        ? customer.scheduledTime.split("T")[1]
-        : "", // Extracting time from scheduledTime
-      endDate: customer.completionDateTime
-        ? customer.completionDateTime.split("T")[0]
-        : "", // Extracting date from completionDateTime
-      endTime: customer.completionDateTime
-        ? customer.completionDateTime.split("T")[1]
-        : "", // Extracting time from completionDateTime
+      openDateTime: customer.scheduledTime || "", // Combine open date and time
+      endDateTime: customer.completionDateTime || "", // Combine end date and time
       submit: null,
     },
     validationSchema: validationSchema,
@@ -77,8 +65,8 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
           coins: values.coins,
           taskName: values.taskName,
           link: values.link,
-          scheduledTime: `${values.openDate}T${values.startTime}`,
-          completionDateTime: `${values.endDate}T${values.endTime}`,
+          scheduledTime: values.openDateTime,
+          completionDateTime: values.endDateTime,
         };
 
         const response = await axios.post(
@@ -163,9 +151,11 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.taskId}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <TextField
-                error={!!(formik.touched.link && formik.errors.link)}
+                error={
+                  !!(formik.touched.link && formik.errors.link)
+                }
                 fullWidth
                 helperText={formik.touched.link && formik.errors.link}
                 label="Link"
@@ -175,7 +165,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.link}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <TextField
                 error={
                   !!(formik.touched.description && formik.errors.description)
@@ -191,6 +181,40 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.description}
               />
             </Grid>
+            
+            {/* Date and Time Fields */}
+            <Grid item xs={12} md={6}>
+              <TextField
+                error={!!(formik.touched.openDateTime && formik.errors.openDateTime)}
+                fullWidth
+                helperText={formik.touched.openDateTime && formik.errors.openDateTime}
+                label="Open Date and Time"
+                name="openDateTime"
+                type="datetime-local"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.openDateTime}
+                inputProps={{
+                  min: new Date().toISOString().split("T")[0], // Set min value to today
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                error={!!(formik.touched.endDateTime && formik.errors.endDateTime)}
+                fullWidth
+                helperText={formik.touched.endDateTime && formik.errors.endDateTime}
+                label="End Date and Time"
+                name="endDateTime"
+                type="datetime-local"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.endDateTime}
+                inputProps={{
+                  min: new Date().toISOString().split("T")[0], // Set min value to today
+                }}
+              />
+            </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 error={!!(formik.touched.coins && formik.errors.coins)}
@@ -203,63 +227,7 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.coins}
               />
             </Grid>
-            {/* Date and Time Fields */}
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.openDate && formik.errors.openDate)}
-                fullWidth
-                helperText={formik.touched.openDate && formik.errors.openDate}
-                label="Open Date"
-                name="openDate"
-                type="date"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.openDate}
-                inputProps={{
-                  min: new Date().toISOString().split("T")[0], // Set min value to today
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.startTime && formik.errors.startTime)}
-                fullWidth
-                helperText={formik.touched.startTime && formik.errors.startTime}
-                label="Start Time"
-                name="startTime"
-                type="time"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.startTime}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.endDate && formik.errors.endDate)}
-                fullWidth
-                helperText={formik.touched.endDate && formik.errors.endDate}
-                label="End Date"
-                name="endDate"
-                type="date"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.endDate}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.endTime && formik.errors.endTime)}
-                fullWidth
-                helperText={formik.touched.endTime && formik.errors.endTime}
-                label="End Time"
-                name="endTime"
-                type="time"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.endTime}
-              />
-            </Grid>
-          </Grid> 
+          </Grid>
         </CardContent>
         <Stack
           direction={{

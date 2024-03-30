@@ -24,7 +24,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Contact | Rock34x 
+          Contact | Yuva Bitcoin 
         </title>
       </Head>
       <Box

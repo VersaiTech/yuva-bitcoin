@@ -241,7 +241,7 @@ export const WorkListTable = (props) => {
                         {customer.name}
                         {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
-                          {"id:"+customer.userId}
+                          {"id:" + customer.userId}
                         </Typography>
                         <Typography color="text.secondary" variant="body2">
                           {customer.userId}
@@ -251,16 +251,14 @@ export const WorkListTable = (props) => {
                   </TableCell>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                    
                       <div>
-                       
                         {customer.taskName}
                         {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
                           {"taskId:" + customer.taskId}
                         </Typography>
                         <Typography color="text.secondary" variant="body2">
-                          {"coin:"+customer.coins}
+                          {"coin:" + customer.coins}
                         </Typography>
                       </div>
                     </Stack>{" "}

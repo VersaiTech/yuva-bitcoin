@@ -39,8 +39,8 @@ export const PostCard = (props) => {
   return (
     <Card {...other}>
       <CardMedia
-        component={NextLink}
-        href={paths.dashboard.blog.postDetails}
+        // component={NextLink}
+        // href={paths.dashboard.blog.postDetails}
         image={cover}
         sx={{ height: 280 }}
       />
@@ -51,7 +51,7 @@ export const PostCard = (props) => {
         <Link
           color="text.primary"
           component={NextLink}
-          href={paths.dashboard.blog.postDetails}
+          href={paths.dashboard.news.newsDetails}
           variant="h5"
         >
           {title}

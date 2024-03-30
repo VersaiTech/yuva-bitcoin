@@ -61,7 +61,7 @@ export const paths = {
     blank: "/dashboard/blank",
     blog: {
       index: "/dashboard/blog",
-      postDetails: "/dashboard/blog/:postId",
+      blogDetails: "/dashboard/blog/:postId",
       postCreate: "/dashboard/blog/create",
     },
     calendar: "/dashboard/calendar",
@@ -103,6 +103,7 @@ export const paths = {
       details: "/dashboard/orders/:orderId",
     },
     newtask: {
+      
       index: "/dashboard/newtask",
       details: "/dashboard/newtask/:taskId",
       create: "/dashboard/newtask/create",
@@ -118,6 +119,8 @@ export const paths = {
       edit: "/dashboard/task-work/",
     },
     news: {
+      newsDetails: "/dashboard/news/:postId",
+
       index: "/dashboard/news",
       list: "/dashboard/news/news-list",
       create: "/dashboard/news/create",

@@ -93,6 +93,18 @@ export const DepositListTable = (props) => {
     selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { 
+      day: '2-digit', 
+      month: 'long', 
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+    return date.toLocaleDateString('en-US', options);
+  };
+
   return (
     <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
@@ -142,7 +154,7 @@ export const DepositListTable = (props) => {
               <TableCell>Amount</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Deposit Method</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              {/* <TableCell align="right">Actions</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -203,11 +215,12 @@ export const DepositListTable = (props) => {
                   <TableCell>{customer.transaction_hash}</TableCell>
                   <TableCell>{customer.amount}</TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2"> {customer.sys_date}</Typography>
-                   
+                    <Typography variant="subtitle2">
+                      {formatDate(customer.sys_date)}
+                    </Typography>
                   </TableCell>
                   <TableCell>{customer.deposit_type}</TableCell>
-                  <TableCell align="right">
+                  {/* <TableCell align="right">
                     <IconButton
                       component={NextLink}
                       href={paths.dashboard.customers.edit}
@@ -224,7 +237,7 @@ export const DepositListTable = (props) => {
                         <ArrowRightIcon />
                       </SvgIcon>
                     </IconButton>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               );
             })}

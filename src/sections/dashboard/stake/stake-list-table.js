@@ -371,6 +371,18 @@ export const StakeListTable = (props) => {
   const selectedSome = selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { 
+      day: '2-digit', 
+      month: 'long', 
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+    return date.toLocaleDateString('en-US', options);
+  };
+
   return (
     <Box
       sx={{ position: 'relative' }}
@@ -517,7 +529,7 @@ export const StakeListTable = (props) => {
                   
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {customer.sys_date}
+                      {formatDate(customer.sys_date)}
                     </Typography>
                   </TableCell>
                   <TableCell>

@@ -17,11 +17,13 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 const tabs = [
   {
     label: 'Pending Task',
-    value: 'pending'
+    value: 'pending',
+    key: 1
   },
   {
     label: 'Completed Task',
-    value: 'completed'
+    value: 'completed',
+    key: 2
   }
   // ,
   // {
@@ -40,31 +42,26 @@ const sortOptions = [
     label: 'Last update (oldest)',
     value: 'updatedAt|asc'
   },
-  // {
-  //   label: 'Total orders (highest)',
-  //   value: 'totalOrders|desc'
-  // },
-  // {
-  //   label: 'Total orders (lowest)',
-  //   value: 'totalOrders|asc'
-  // }
 ];
 
 export const WorkTaskSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
+  console.log(currentTab)
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
+
   const [filters, setFilters] = useState({});
 
   // const [activeUsers, setActiveUsers] = useState([]);
-  const urlParams = new URLSearchParams(window.location.search);
-  const sturl = urlParams.get('status');
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const sturl = urlParams.get('status');
 
-  useEffect(() => {
-    if(sturl){
-      setCurrentTab(sturl);
-    }
-  }, [sturl]);
+  // useEffect(() => {
+  //   console.log(sturl);
+  //   if(sturl !== undefined) {
+  //     setCurrentTab(sturl);
+  //   }
+  // }, [sturl]);
 
   useEffect(() => {
     console.log(currentTab);

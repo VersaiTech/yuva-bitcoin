@@ -50,14 +50,7 @@ const sortOptions = [
     label: 'Last update (oldest)',
     value: 'updatedAt|asc'
   },
-  {
-    label: 'Total orders (highest)',
-    value: 'totalOrders|desc'
-  },
-  {
-    label: 'Total orders (lowest)',
-    value: 'totalOrders|asc'
-  }
+ 
 ];
 
 export const StakeListSearch = (props) => {

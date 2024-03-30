@@ -464,14 +464,14 @@ export const getSections = (t) => [
             title: t(tokens.nav.alldeposit),
             path: paths.dashboard.deposit.index,
           },
-          {
-            title: t(tokens.nav.pendingDeposit),
-            path: paths.dashboard.deposit.pending,
-          },
-          {
-            title: t(tokens.nav.completedDeposit),
-            path: paths.dashboard.deposit.completed,
-          },
+          // {
+          //   title: t(tokens.nav.pendingDeposit),
+          //   path: paths.dashboard.deposit.pending,
+          // },
+          // {
+          //   title: t(tokens.nav.completedDeposit),
+          //   path: paths.dashboard.deposit.completed,
+          // },
         ],
       },
       {

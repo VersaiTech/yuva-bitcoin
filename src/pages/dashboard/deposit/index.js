@@ -99,7 +99,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, activeUsers, blockedUsers } =
+  const { customers, customersCount,  activeUsers, blockedUsers } =
     useCustomers(search);
 
   console.log(customers);
@@ -196,7 +196,7 @@ const Page = () => {
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                <Button
+                {/* <Button
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />
@@ -205,7 +205,7 @@ const Page = () => {
                   variant="contained"
                 >
                   Add
-                </Button>
+                </Button> */}
               </Stack>
             </Stack>
             <Card>

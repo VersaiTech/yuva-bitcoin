@@ -86,47 +86,36 @@ const useCustomers = (search) => {
 };
 
 const Page = () => {
-  // get url status from query
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get("status");
 
-  const {   search, updateSearch } = useSearch();
+  const { search, updateSearch } = useSearch();
   const { completed, rejected, pending } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState("pending");
-  
+  const [currentTab, setCurrentTab] = useState('pending');
+
   const [customersCount, setCustomersCount] = useState(5);
 
-  const [currentData, setCurrentData] = useState(pending);
+  const [currentData, setCurrentData] = useState([]);
 
   usePageView();
 
   useEffect(() => {
-    console.log(search?.filters?.query);
 
     if (search?.filters?.query) {
       setCurrentData(
-        currentData.filter((customer) => {
-          return (
-            customer.taskName.toLowerCase().includes(search.filters.query)
-          )
-        }
-
-      ))
+        currentData?.filter((customer) => {
+          return customer.taskName.toLowerCase().includes(search.filters.query);
+        })
+      );
     }
 
     // Set current tab with sorted and filtered data
-    setCurrentTab(currentData);
+    // setCurrentTab(currentData);
   }, [search]);
 
   useEffect(() => {
-    console.log(currentTab);
-    if (currentTab === "pending") {
-      setCurrentData(pending);
-    } else if (currentTab === "completed") {
-      setCurrentData(completed);
-    }
-  }, [currentTab]);
+    const data = currentTab === "pending" ? pending : completed;
+    setCurrentData(data);
+  }, [currentTab, completed, pending]);
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -138,6 +127,7 @@ const Page = () => {
     [updateSearch]
   );
 
+  
   const handleSortChange = useCallback(
     (sort) => {
       console.log(sort.sortBy);
@@ -186,10 +176,8 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Approve   Task</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}>
-               
-                </Stack>
+                <Typography variant="h4">Approve Task</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}></Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
@@ -228,7 +216,7 @@ const Page = () => {
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
-                sortDir={search.sortDir}  
+                sortDir={search.sortDir}
                 completed={completed}
                 pending={pending}
                 currentTab={currentTab}

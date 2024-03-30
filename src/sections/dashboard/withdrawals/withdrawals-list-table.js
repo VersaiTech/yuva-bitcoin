@@ -302,6 +302,15 @@ import {
 import { Scrollbar } from "../../../components/scrollbar";
 import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
+import { SeverityPill } from "../../../components/severity-pill";
+
+const statusMap = {
+  complete: "Approved",
+  pending: "info",
+  canceled: "warning",
+  rejected: "error",
+};
+
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -477,11 +486,11 @@ export const WithdrawalsListTable = (props) => {
                   </TableCell>
                   <TableCell>{customer.with_date}</TableCell>
                   <TableCell>{customer.with_amt}</TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">
-                      {customer.status}
-                    </Typography>
-                  </TableCell>
+                 <TableCell >
+                  <SeverityPill color={statusMap[customer.status] || 'warning'}>
+                    {customer.status}
+                  </SeverityPill>
+                </TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}

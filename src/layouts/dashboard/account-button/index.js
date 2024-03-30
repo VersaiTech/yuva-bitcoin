@@ -70,11 +70,11 @@ export const AccountButton = () => {
             height: 32,
             width: 32
           }}
-          src={user.avatar}
+        // src={user.avatar}
         >
-          <SvgIcon>
+          {/* <SvgIcon>
             <User01Icon />
-          </SvgIcon>
+          </SvgIcon> */}
         </Avatar>
       </Box>
       <AccountPopover
