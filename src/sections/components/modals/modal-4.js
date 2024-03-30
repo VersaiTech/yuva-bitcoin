@@ -170,12 +170,12 @@
 // );
 
 
-import { Box, Paper,Table, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
+import { Box, Paper, Table, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Presence } from "../../../components/presence";
 import CloseIcon from '@mui/icons-material/Close';
 
-export const Modal4 = ({isOpen, handleCloseModal, wallets }) => (
+export const Modal4 = ({ isOpen, handleCloseModal, wallets }) => (
   <Box
     sx={{
       position: "fixed",
@@ -190,63 +190,63 @@ export const Modal4 = ({isOpen, handleCloseModal, wallets }) => (
       justifyContent: "center",
     }}
   >
-   
-    <Paper
-    elevation={12}
-    sx={{
-      display: "flex",
-      margin: 3,
-      maxWidth: "100%",
-      mx: "auto",
-      outline: "none",
-      width: 600,
-      position: "fixed",
-      top: 60,
-      left: "35vw",
-      backgroundColor: "rgba(0, 0, 0, 0.1)", // Semi-transparent backdrop
-      zIndex: 9999,
-      alignItems: "center",
-      justifyContent: "center",
-    }}>
+
     <Paper
       elevation={12}
       sx={{
-        maxWidth: 820,
-        p: 2,
-        backgroundColor: (theme) =>
-          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-      }}
-    >
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6">Wallets</Typography>
-        <IconButton onClick={handleCloseModal} aria-label="close">
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Box sx={{ mt: 2 }}>
-        <List disablePadding>
-          {wallets.map((wallet) => (
-            <ListItem disableGutters key={wallet.id}>
-              <ListItemAvatar>
-                <Avatar src={wallet.logo} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Link
-                    color="text.primary"
-                    noWrap
-                    underline="none"
-                    variant="subtitle2"
-                  >
-                    {wallet.name}
-                  </Link>
-                }
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+        display: "flex",
+        margin: 3,
+        maxWidth: "100%",
+        mx: "auto",
+        outline: "none",
+        width: 600,
+        position: "fixed",
+        top: 60,
+        left: "35vw",
+        backgroundColor: "rgba(0, 0, 0, 0.1)", // Semi-transparent backdrop
+        zIndex: 9999,
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+      <Paper
+        elevation={12}
+        sx={{
+          maxWidth: 820,
+          p: 2,
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h6">Wallets</Typography>
+          <IconButton onClick={handleCloseModal} aria-label="close">
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <List disablePadding>
+            {wallets.map((wallet) => (
+              <ListItem disableGutters key={wallet.id}>
+                <ListItemAvatar>
+                  <Avatar src={wallet.logo} />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <Link
+                      color="text.primary"
+                      noWrap
+                      underline="none"
+                      variant="subtitle2"
+                    >
+                      {wallet.name}
+                    </Link>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Paper>
     </Paper>
-  </Paper>
   </Box>
 );
