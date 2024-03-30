@@ -197,12 +197,12 @@ const Page = () => {
               rowsPerPage={search.rowsPerPage}
             />
           </EarningListContainer>
-          {/* <OrderDrawer
+          <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}
             open={drawer.isOpen}
             order={orders.find(order => order.id === drawer.data)}
-          /> */}
+          />
         </Box>
       </Box>
     </>
