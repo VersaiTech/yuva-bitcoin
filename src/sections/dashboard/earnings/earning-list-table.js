@@ -191,7 +191,7 @@ const statusMap = {
 
 const useSelectionModel = (orders) => {
   const customerIds = useMemo(() => {
-    return orders.map((customer) => customer.member_user_id);
+    return  orders.map((customer) => customer.member_user_id);
   }, [orders]);
   const [selected, setSelected] = useState([]);
 

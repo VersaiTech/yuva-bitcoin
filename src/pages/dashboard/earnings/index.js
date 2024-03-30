@@ -4,9 +4,6 @@ import { Box, Divider, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-// import { EarningListSearch } from '../../../sections/dashboard/earnings/earning-list-search';
-// import { EarningListTable } from '../../../sections/dashboard/earnings/earning-list-table';
-// import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
 import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
@@ -51,14 +48,22 @@ const useOrders = (search) => {
 
       const response = await axios.get(`${BASEURL}/admin/getAllTasksUser`, { headers: headers });
 
+      console.log(response.data);
+
       if (isMounted()) {
         setState({
-          orders: response.data,
-          ordersCount: response.data.length
+          //check the response data is array or not
+
+          orders: response.data.tasks,
+          ordersCount: response.data.totalUserTasks
         });
       }
     } catch (err) {
       console.error(err);
+      setState({
+        orders: [],
+        ordersCount: 0
+      });
     }
   }, [search, isMounted]);
 
@@ -192,12 +197,12 @@ const Page = () => {
               rowsPerPage={search.rowsPerPage}
             />
           </EarningListContainer>
-          <OrderDrawer
+          {/* <OrderDrawer
             container={rootRef.current}
             onClose={handleOrderClose}
             open={drawer.isOpen}
             order={orders.find(order => order.id === drawer.data)}
-          />
+          /> */}
         </Box>
       </Box>
     </>
