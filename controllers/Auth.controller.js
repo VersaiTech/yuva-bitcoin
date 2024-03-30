@@ -269,6 +269,7 @@ const nodemailer = require('nodemailer');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const TemporaryRegistration = require('../models/TemporaryRegistration');
+const TemporaryPasswordReset = require('../models/TemporaryPasswordReset');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
@@ -779,8 +780,6 @@ async function login(req, res) {
     password: Joi.string().min(6).required(),
   });
 
-
-
   try {
     const { error, value } = schema.validate(req.body);
 
@@ -985,11 +984,126 @@ async function adminLogin(req, res) {
   }
 }
 
+const OTP_EXPIRY_TIME = 5 * 60 * 1000;
+async function resetPassword(req, res) {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+    // newPassword: Joi.string().min(6).required(),
+  });
+
+  try {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+
+    const { email, newPassword } = value;
+
+    // Check if the user exists
+    const user = await Member.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid email!",
+      });
+    }
+
+    // Generate OTP
+    const otp = generateOTP();
+
+    // Save OTP and email in temporary storage
+    const temporaryData = new TemporaryPasswordReset({
+      email,
+      otp,
+      expiry: new Date(Date.now() + OTP_EXPIRY_TIME), // Define OTP_EXPIRY_TIME
+    });
+    await temporaryData.save();
+
+    // Send OTP to user via email or SMS (not implemented in this example)
+
+    return res.status(200).send({
+      status: true,
+      message: "OTP sent successfully",
+    });
+
+  } catch (error) {
+    console.error("Error during password reset:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+async function verifyOTPForResetPassword(req, res) {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({
+        status: false,
+        message: "Email, OTP, and new password are required"
+      });
+    }
+
+    // Find temporary password reset data by email and OTP
+    const temporaryPasswordResetData = await TemporaryPasswordReset.findOne({ email, otp });
+
+    if (!temporaryPasswordResetData) {
+      return res.status(400).json({
+        status: false,
+        message: "Invalid email or OTP"
+      });
+    }
+
+    // Check if the OTP has expired
+    const currentTime = new Date();
+    if (currentTime > temporaryPasswordResetData.expiry) {
+      // If expired, remove the temporary data and inform the user
+      await temporaryPasswordResetData.deleteOne();
+      return res.status(400).json({
+        status: false,
+        message: "OTP has expired. Please request a new one."
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password
+    await Member.updateOne({ email }, { password: hashedPassword });
+
+    // Delete temporary data
+    await temporaryPasswordResetData.deleteOne();
+
+    return res.status(200).json({
+      status: true,
+      message: "Password reset successfully"
+    });
+  } catch (error) {
+    console.error("Error during OTP verification for password reset:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Internal server error"
+    });
+  }
+}
+
+
+
 module.exports = {
   register,
   login,
   getRegister,
   adminRegister,
   adminLogin,
-  verifyOTP
+  verifyOTP,
+
+  resetPassword,
+  verifyOTPForResetPassword
 };
