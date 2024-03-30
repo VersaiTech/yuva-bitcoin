@@ -1096,6 +1096,92 @@ async function verifyOTPForResetPassword(req, res) {
 
 
 
+
+async function changePassword(req, res) {
+  const schema = Joi.object({
+    currentPassword: Joi.string().required(),
+    newPassword: Joi.string().min(6).required(),
+    confirmNewPassword: Joi.string().min(6).required(),
+  });
+
+  try {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: false,
+        message: error.details[0].message,
+      });
+    }
+
+    const { currentPassword, newPassword, confirmNewPassword } = value;
+
+    // Check if new password and confirm new password are the same
+    if (newPassword === currentPassword) {
+      return res.status(400).send({
+        status: false,
+        message: "New password cannot be the same as the current password",
+      });
+    }
+
+    // Check if new password matches confirm new password
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).send({
+        status: false,
+        message: "New password and confirm new password do not match",
+      });
+    }
+
+    const userId = req.user.member_user_id;
+
+    if (!userId) {
+      return res.status(400).send({
+        status: false,
+        message: "User not found"
+      });
+    }
+
+    // Find user by userId
+    const user = await Member.findOne({ member_user_id: userId });
+
+    if (!user) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid User !",
+      });
+    }
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).send({
+        status: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).send({
+      status: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.error("Error during password change:", error);
+    return res.status(500).send({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
 module.exports = {
   register,
   login,
@@ -1105,5 +1191,7 @@ module.exports = {
   verifyOTP,
 
   resetPassword,
-  verifyOTPForResetPassword
+  verifyOTPForResetPassword,
+
+  changePassword
 };
