@@ -1017,11 +1017,26 @@ async function forgotPassword(req, res) {
     const otp = generateOTP();
 
     // Save OTP and email in temporary storage
-    const temporaryData = new TemporaryPasswordReset({
-      email,
-      otp,
-      expiry: new Date(Date.now() + OTP_EXPIRY_TIME), // Define OTP_EXPIRY_TIME
-    });
+    // const temporaryData = new TemporaryPasswordReset({
+    //   email,
+    //   otp,
+    //   expiry: new Date(Date.now() + OTP_EXPIRY_TIME), // Define OTP_EXPIRY_TIME
+    // });
+    // Check if there's existing temporary password reset data for the email
+    let temporaryData = await TemporaryPasswordReset.findOne({ email });
+
+    if (temporaryData) {
+      // Update existing temporary data with new OTP and reset expiry time
+      temporaryData.otp = otp;
+      temporaryData.expiry = new Date(Date.now() + OTP_EXPIRY_TIME);
+    } else {
+      // Save OTP and email in temporary storage
+      temporaryData = new TemporaryPasswordReset({
+        email,
+        otp,
+        expiry: new Date(Date.now() + OTP_EXPIRY_TIME),
+      });
+    }
     await temporaryData.save();
 
     // Send OTP to user via email or SMS (not implemented in this example)
