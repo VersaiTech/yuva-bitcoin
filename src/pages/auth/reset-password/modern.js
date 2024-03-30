@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
@@ -8,6 +9,12 @@ import { paths } from '../../../paths';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
+//import IconButton, VisibilityOffIcon, VisibilityIcon
+// import { IconButton, VisibilityOffIcon, VisibilityIcon } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 
 const initialValues = {
   otp: '',
@@ -33,7 +40,17 @@ const validationSchema = Yup.object({
 
 const Page = () => {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+  const togglePasswordConfirmVisibility = () => {
+    setShowPassword(!showPassword);
+  }
+
+  const togglePasswordConfirmVisibility2 = () => {
+    setShowPassword2(!showPassword2);
+  }
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -125,8 +142,15 @@ const Page = () => {
             name="password"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type="password"
             value={formik.values.password}
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={togglePasswordConfirmVisibility} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
           />
           <TextField
             error={!!(formik.touched.passwordConfirm && formik.errors.passwordConfirm)}
@@ -136,8 +160,15 @@ const Page = () => {
             name="passwordConfirm"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type="password"
+            type={showPassword2 ? "text" : "password"}
             value={formik.values.passwordConfirm}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={togglePasswordConfirmVisibility2} edge="end">
+                  {showPassword2 ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              ),
+            }}
           />
         </Stack>
         <Button
@@ -161,3 +192,4 @@ Page.getLayout = (page) => (
 );
 
 export default Page;
+

@@ -15,9 +15,6 @@ import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { OrderDrawer, TaskDrawer } from "../../../sections/dashboard/order/order-drawer";
 import { OrderListContainer } from "../../../sections/dashboard/order/order-list-container";
-// import { OrderListSearch } from "../../../sections/dashboard/order/order-list-search";
-// import { OrderListTable } from '../../../sections/dashboard/order/order-list-table';
-// import { OrderListTable } from "../../../sections/dashboard/order/order-list-table";
 import { TaskListSearch } from "../../../sections/dashboard/tasks/order-list-search";
 import { TaskListTable } from "../../../sections/dashboard/tasks/order-list-table";
 import axios from "axios";
@@ -49,47 +46,59 @@ const useOrders = (search) => {
   });
 
   const getOrders = useCallback(async () => {
+    const token = localStorage.getItem("accessToken");
+    const headers = { Authorization: token };
+
+    // Initialize an object to hold the API responses
+    const tasks = {
+      orders: [],
+      ordersCount: 0,
+      pending: [],
+      completed: [],
+      rejected: [],
+    };
+
     try {
-      // const response = await ordersApi.getOrders(search);
-      const token = localStorage.getItem("accessToken");
-
-      const headers = {
-        Authorization: token,
-      };
-      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth`, {
-        headers: headers,
-      });
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth`, { headers });
       console.log(response.data.tasks);
-      const completedTasks = await axios.get(
-        `${BASEURL}/admin/getConfirmedTasksForUser`,
-        { headers: headers }
-      );
-      console.log(completedTasks.data.tasks);
-
-      const pendingTasks = await axios.get(
-        `${BASEURL}/admin/getPendingTasksForUser`,
-        { headers: headers }
-      );
-      console.log(pendingTasks.data.tasks);
-
-      const rejectedTasks = await axios.get(
-        `${BASEURL}/admin/getRejectedTasksForUser`,
-        { headers: headers }
-      );
-
-      if (isMounted()) {
-        setState({
-          orders: response.data.tasks,
-          ordersCount: response.count,
-          pending: pendingTasks.data.tasks,
-          completed: completedTasks.data.tasks,
-          rejected: rejectedTasks.data.tasks,
-        });
-      }
+      tasks.orders = response.data.tasks;
+      tasks.ordersCount = response.data.count; // Assuming 'count' is directly on 'data'
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching all tasks:", err);
+    }
+
+    try {
+      const completedTasks = await axios.get(`${BASEURL}/admin/getConfirmedTasksForUser`, { headers });
+      console.log(completedTasks.data.tasks);
+      tasks.completed = completedTasks.data.tasks;
+    } catch (err) {
+      console.error("Error fetching completed tasks:", err);
+    }
+
+    try {
+      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasksForUser`, { headers });
+      console.log(pendingTasks.data.tasks);
+      tasks.pending = pendingTasks.data.tasks;
+    } catch (err) {
+      console.error("Error fetching pending tasks:", err);
+    }
+
+    try {
+      const rejectedTasks = await axios.get(`${BASEURL}/admin/getRejectedTasksForUser`, { headers });
+      console.log(rejectedTasks.data.tasks);
+      tasks.rejected = rejectedTasks.data.tasks;
+    } catch (err) {
+      console.error("Error fetching rejected tasks:", err);
+    }
+
+    // Update state if component is still mounted
+    if (isMounted()) {
+      setState({
+        ...tasks
+      });
     }
   }, [search, isMounted]);
+
 
   useEffect(
     () => {
@@ -227,7 +236,7 @@ const Page = () => {
                   <Typography variant="h4">All Tasks</Typography>
                 </div>
                 <div>
-                    {/* <Button
+                  {/* <Button
                       startIcon={
                         <SvgIcon>
                           <PlusIcon />
@@ -249,8 +258,8 @@ const Page = () => {
               completed={completed}
               pending={pending}
               rejected={rejected}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
             />
             <Divider />
             <TaskListTable
@@ -261,15 +270,15 @@ const Page = () => {
               ordersCount={ordersCount}
               page={search.page}
               rowsPerPage={search.rowsPerPage}
-              // customers={
-              //   currentTab === "all"
-              //     ? orders
-              //     : currentTab === "hasAcceptedMarketing"
-              //     ? pending
-              //     : currentTab === "isProspect"
-              //     ? completed
-              //     : []
-              // }
+            // customers={
+            //   currentTab === "all"
+            //     ? orders
+            //     : currentTab === "hasAcceptedMarketing"
+            //     ? pending
+            //     : currentTab === "isProspect"
+            //     ? completed
+            //     : []
+            // }
             />
           </OrderListContainer>
           <TaskDrawer
