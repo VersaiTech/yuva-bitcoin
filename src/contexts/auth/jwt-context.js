@@ -168,6 +168,7 @@ export const AuthProvider = (props) => {
     });
   }, [dispatch]);
 
+
   const signOut = useCallback(async () => {
     localStorage.removeItem(STORAGE_KEY);
     dispatch({ type: ActionType.SIGN_OUT });

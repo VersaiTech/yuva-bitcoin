@@ -5,21 +5,13 @@ import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useSnackbar } from 'notistack';
 
 const initialValues = {
-  otp: '',
   password: '',
   passwordConfirm: ''
 };
 
 const validationSchema = Yup.object({
-  otp: Yup
-    .string()
-    .length(6, 'Must be exactly 6 digits')
-    .required('Required'),
   password: Yup
     .string()
     .min(7, 'Must be at least 7 characters')
@@ -32,44 +24,10 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => {
-      const email = new URLSearchParams(window.location.search).get('email');
-      console.log(email);
-      const otp = formik.values.otp;
-      const password = formik.values.password;
-      const passwordConfirm = formik.values.passwordConfirm;
-      if (password !== passwordConfirm) {
-        formik.setFieldError('passwordConfirm', 'Passwords must match');
-        return;
-      }
-
-      axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/Auth/verifyOTPForResetPassword`, {
-          email: email,
-          otp: otp,
-          newPassword: password,
-          passwordConfirm: passwordConfirm
-        })
-        .then((response) => {
-          console.log(response);
-          router.push(paths.auth.login.modern);
-          enqueueSnackbar('Password reset successful', {
-            variant: 'success'
-          })
-        })
-        .catch((error) => {
-          console.error(error);
-          formik.setFieldError('otp', 'Invalid OTP');
-          enqueueSnackbar('Invalid OTP', {
-            variant: 'error'
-          })
-        });
-    }
+    onSubmit: () => { }
   });
 
   return (
@@ -106,17 +64,6 @@ const Page = () => {
         onSubmit={formik.handleSubmit}
       >
         <Stack spacing={3}>
-          <TextField
-            error={!!(formik.touched.otp && formik.errors.otp)}
-            fullWidth
-            helperText={formik.touched.otp && formik.errors.otp}
-            label="OTP"
-            name="otp"
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            type="text"
-            value={formik.values.otp}
-          />
           <TextField
             error={!!(formik.touched.password && formik.errors.password)}
             fullWidth

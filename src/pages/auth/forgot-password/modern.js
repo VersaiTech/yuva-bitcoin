@@ -5,6 +5,9 @@ import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
 import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
 import { paths } from '../../../paths';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useSnackbar } from 'notistack';
 
 const initialValues = {
   email: ''
@@ -19,10 +22,29 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: async () => {
+      try {
+        const email = formik.values.email;
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/Auth/forgotPassword`, {
+          email: email
+        })
+        console.log(response);
+        enqueueSnackbar('Password reset email sent!', {
+          variant: 'success'
+        });
+        router.push(`${paths.auth.resetPassword.modern}?email=${email}`);
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar('Error sending password reset email', {
+          variant: 'error'
+        });
+      }
+    }
   });
 
   return (
