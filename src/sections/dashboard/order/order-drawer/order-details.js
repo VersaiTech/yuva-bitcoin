@@ -7,7 +7,7 @@ import { PropertyList } from "../../../../components/property-list";
 import { PropertyListItem } from "../../../../components/property-list-item";
 import { SeverityPill } from "../../../../components/severity-pill";
 import axios from "axios";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const statusMap = {
@@ -15,6 +15,7 @@ const statusMap = {
   complete: "success",
   pending: "info",
   rejected: "error",
+  expired: "error",
 };
 
 export const OrderDetails = (props) => {
@@ -34,7 +35,6 @@ export const OrderDetails = (props) => {
   }, []);
 
   const updateCountdown = () => {
-    
     const completionTime = new Date(order.completionTime);
     const currentTime = new Date();
     const timeDifference = completionTime - currentTime;
@@ -58,7 +58,7 @@ export const OrderDetails = (props) => {
         setCountdown(`${hours} hours ${minutes} minutes ${seconds} seconds`);
       }
     } else {
-      setCountdown("Time's up!");
+      setCountdown("Task Expired");
     }
   };
 
@@ -69,8 +69,10 @@ export const OrderDetails = (props) => {
   const handleApprove = async () => {
     if (!linkClicked) {
       window.alert("Please visit the link and complete the task.");
-    } else if (countdown === "Time's up!") {
-      window.alert("The task completion time has expired. You cannot submit the task.");
+    } else if (countdown === "Task Expired") {
+      window.alert(
+        "The task completion time has expired. You cannot submit the task."
+      );
     } else {
       try {
         const token = localStorage.getItem("accessToken");
@@ -90,18 +92,20 @@ export const OrderDetails = (props) => {
           // Task submission was successful
           setTaskCompleted(true);
           onApprove();
-          enqueueSnackbar('Task submitted successfully', { variant: 'success' });
+          enqueueSnackbar("Task submitted successfully", {
+            variant: "success",
+          });
           console.log("Task submitted successfully");
           // Call any additional function or update state if needed
         } else {
           // Task submission failed, handle the error
-          enqueueSnackbar(response.data.message , { variant: 'error' });
+          enqueueSnackbar(response.data.message, { variant: "error" });
           console.error("Task submission failed:", response.data.message);
           // Display an error message to the user or handle it as per your application flow
         }
       } catch (error) {
         // Handle any errors that occur during the request
-        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        enqueueSnackbar(error.response.data.message, { variant: "error" });
         console.error("Error submitting task:", error.response.data.message);
         // Display an error message to the user or handle it as per your application flow
       }
@@ -111,7 +115,10 @@ export const OrderDetails = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const align = lgUp ? "horizontal" : "vertical";
   const items = order.items || [];
-  const statusColor = statusMap[order.status];
+  // const statusColor = statusMap[order.status];
+  const statusColor =
+    countdown === "Task Expired" ? statusMap.expired : statusMap[order.status];
+
   const totalAmount = numeral(order.totalAmount).format(
     `${order.currency}0,0.00`
   );
@@ -164,8 +171,13 @@ export const OrderDetails = (props) => {
             label="Task End Date"
             value={countdown}
           />
-          <PropertyListItem align={align} disableGutters divider label="Status">
+          {/* <PropertyListItem align={align} disableGutters divider label="Status">
             <SeverityPill color={statusColor}>{order.status}</SeverityPill>
+          </PropertyListItem> */}
+          <PropertyListItem align={align} disableGutters divider label="Status">
+            <SeverityPill color={statusColor}>
+              {countdown === "Task Expired" ? "Expired" : order.status}
+            </SeverityPill>
           </PropertyListItem>
         </PropertyList>
         <Stack
@@ -183,7 +195,9 @@ export const OrderDetails = (props) => {
             onClick={handleApprove}
             size="small"
             variant="contained"
-            disabled={!linkClicked || taskCompleted || countdown === "Time's up!"}
+            disabled={
+              !linkClicked || taskCompleted || countdown === "Task Expired"
+            }
           >
             Submit Task
           </Button>

@@ -224,9 +224,9 @@ export const ContactForm = () => {
         console.log('Form values:', response.data);
         // Show success message using enqueueSnackbar
         enqueueSnackbar('Form submitted successfully', { variant: 'success' });
-        if (isMounted) {
-          window.location.href = "/";
-        }
+        // if (isMounted) {
+        //   window.location.href = "/";
+        // }
       } catch (error) {
         console.error('Error submitting form:', error);
         enqueueSnackbar('Error submitting form', { variant: 'error' });

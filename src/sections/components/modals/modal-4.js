@@ -170,7 +170,7 @@
 // );
 
 
-import { Box, Paper,Table Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
+import { Box, Paper,Table, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Link, IconButton } from "@mui/material";
 import { formatDistanceToNowStrict } from "date-fns";
 import { Presence } from "../../../components/presence";
 import CloseIcon from '@mui/icons-material/Close';
