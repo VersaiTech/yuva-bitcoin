@@ -322,7 +322,7 @@ const getAllTasks = async (req, res) => {
       if (task.scheduledTime <= currentTime) {
         // Check if the task's completion time is in the past
         if (task.completionTime <= currentTime) {
-          status = 'CLOSE'; // Set status to CLOSE if completion time has passed
+          status = 'EXPIRED'; // Set status to CLOSE if completion time has passed
         }
       }
 
