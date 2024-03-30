@@ -21,15 +21,16 @@
 
 const mongoose = require('mongoose');
 const Connection = (username, password) => {
-    
-    const URL = `mongodb+srv://${username}:${password}@cluster0.wp4chqh.mongodb.net/yuvabitcoin`
 
-    try{
+    // const URL = `mongodb+srv://${username}:${password}@cluster0.wp4chqh.mongodb.net/yuvabitcoin`
+    const URL = `mongodb+srv://${username}:${password}@yuvabitcoin.x9wljy5.mongodb.net/?retryWrites=true&w=majority&appName=yuvabitcoin`
+
+    try {
         mongoose.connect(URL);
         console.log("=== Database Connected Successfully ===");
-    } catch (error){
+    } catch (error) {
         console.log("Error in Database Connection", error);
     };
 };
 
-module.exports = {Connection};
+module.exports = { Connection };
