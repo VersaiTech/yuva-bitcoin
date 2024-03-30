@@ -77,7 +77,7 @@ const password = process.env.DB_PASSWORD;
 Connection(username, password);
 
 //listening
-app.listen(5000, (req, res) => {
-  console.log("=== Server is Listening on " + 5000 + " Port ===");
+app.listen(5001, (req, res) => {
+  console.log("=== Server is Listening on " + 5001 + " Port ===");
 });
 

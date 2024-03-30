@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { ValidMember, isAdmin } = require("../middleware/Auth.middleware");
-const { register, login, getRegister, adminRegister, adminLogin, verifyOTP, resetPassword, verifyOTPForResetPassword, changePassword } = require('../controllers/Auth.controller');
+const { register, login, getRegister, adminRegister, adminLogin, verifyOTP, forgotPassword, verifyOTPForResetPassword, changePassword } = require('../controllers/Auth.controller');
 
 
 // User LOGIN and Register
@@ -14,7 +14,7 @@ router.post('/admin-register', adminRegister) //
 router.post('/admin-login', adminLogin) //
 
 
-router.post('/resetPassword', resetPassword);
+router.post('/forgotPassword', forgotPassword);
 router.post('/verifyOTPForResetPassword', verifyOTPForResetPassword);
 router.post('/changePassword', ValidMember, changePassword);
 

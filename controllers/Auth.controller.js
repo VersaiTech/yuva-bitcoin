@@ -985,7 +985,7 @@ async function adminLogin(req, res) {
 }
 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000;
-async function resetPassword(req, res) {
+async function forgotPassword(req, res) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
     // newPassword: Joi.string().min(6).required(),
@@ -1189,9 +1189,7 @@ module.exports = {
   adminRegister,
   adminLogin,
   verifyOTP,
-
-  resetPassword,
+  forgotPassword,
   verifyOTPForResetPassword,
-
   changePassword
 };
