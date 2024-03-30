@@ -14,10 +14,11 @@ import {
 import { SeverityPill } from "../../../components/severity-pill";
 
 const statusMap = {
-  complete: "success",
+  confirmed: "success",
   pending: "info",
   canceled: "warning",
   rejected: "error",
+  EXPIRED: "error",
 };
 
 export const TaskListTable = (props) => {

@@ -26,6 +26,9 @@ import { OverviewPendingIssues } from '../../sections/dashboard/overview/overvie
 // import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { useTotalInvestment } from "./stake/[stakeId]";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
 const now = new Date();
@@ -33,11 +36,32 @@ const now = new Date();
 const Page = () => {
   const settings = useSettings();
   const theme = useTheme();
+  const [overview, setOverview] = useState([]);
   const totalInvestment = useTotalInvestment();
   const chartSeries = [
      totalInvestment
   ];
   usePageView();
+  const OverviewData = async () => {
+    try{
+    const token = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization: token,
+    }
+
+    const response = await axios.get(`${BASEURL}/admin/getUserOverview`, { headers: headers });
+
+    console.log(response.data.overview)
+    setOverview(response.data.overview)
+  
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+  useEffect(() => {
+    OverviewData();
+  }, []) 
 
   return (
     <>
@@ -72,19 +96,19 @@ const Page = () => {
               xs={12}
               md={4}
             >
-              <OverviewOpenTickets amount={5} />
+              <OverviewOpenTickets amount={overview.userTasks} />
             </Grid>
             <Grid
               xs={12}
               md={4}
             >
-              <OverviewDoneTasks amount={31} />
+              <OverviewDoneTasks amount={overview.completedTasks} />
             </Grid>
             <Grid
               xs={12}
               md={4}
             >
-              <OverviewPendingIssues amount={12} />
+              <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
 
 
