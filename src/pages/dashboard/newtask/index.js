@@ -67,7 +67,7 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/admin/getAllTasks/${page + 1}/${rowsPerPage}`,
+        `${BASEURL}/admin/getAllTasksforAdminWithoutStatus/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 

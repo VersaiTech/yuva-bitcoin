@@ -29,6 +29,7 @@ export const PostCard = (props) => {
     readTime,
     shortDescription,
     title,
+    href,
     ...other
   } = props;
 
@@ -51,7 +52,7 @@ export const PostCard = (props) => {
         <Link
           color="text.primary"
           component={NextLink}
-          href={paths.dashboard.news.newsDetails}
+          href={href}
           variant="h5"
         >
           {title}

@@ -119,7 +119,7 @@ export const paths = {
       edit: "/dashboard/task-work/",
     },
     news: {
-      newsDetails: "/dashboard/news/:postId",
+      newsDetails: "/dashboard/news/",
 
       index: "/dashboard/news",
       list: "/dashboard/news/news-list",
