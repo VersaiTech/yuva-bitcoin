@@ -26,13 +26,14 @@ import { useState } from "react";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const validationSchema = Yup.object({
-  taskId: Yup.string().required("Task ID is required"),
   description: Yup.string().max(5000).required("Description is required"),
   coins: Yup.number().min(0).required("Coins is required"),
   taskName: Yup.string().max(255).required("Task Name is required"),
   link: Yup.string().url().required("Link is required"),
   openDateTime: Yup.date().required("Open Date and Time are required"),
-  endDateTime: Yup.date().min(Yup.ref("openDateTime")).required("End Date and Time are required"),
+  endDateTime: Yup.date()
+    .min(Yup.ref("openDateTime"))
+    .required("End Date and Time are required"),
 });
 
 export const NewTaskEditForm = ({ customer, ...other }) => {
@@ -40,6 +41,18 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [openDialog, setOpenDialog] = useState(false);
 
+  const convertUtcToLocal = (utcString) => {
+    const date = new Date(utcString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+  
+  
   const formik = useFormik({
     initialValues: {
       taskId: customer.taskId || "",
@@ -47,8 +60,8 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
       coins: customer.coins || "",
       taskName: customer.taskName || "",
       link: customer.link || "",
-      openDateTime: customer.scheduledTime || "", // Combine open date and time
-      endDateTime: customer.completionDateTime || "", // Combine end date and time
+      openDateTime: convertUtcToLocal(customer.scheduledTime) || "", // Convert UTC to local
+      endDateTime: convertUtcToLocal(customer.completionTime) || "", // Convert UTC to local
       submit: null,
     },
     validationSchema: validationSchema,
@@ -60,13 +73,12 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
         };
 
         const data = {
-          taskId: values.taskId,
           description: values.description,
           coins: values.coins,
           taskName: values.taskName,
           link: values.link,
           scheduledTime: values.openDateTime,
-          completionDateTime: values.endDateTime,
+          completionTime: values.endDateTime,
         };
 
         const response = await axios.post(
@@ -87,6 +99,9 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
       }
     },
   });
+  console.log('Scheduled Time:', customer.scheduledTime);
+console.log('Completion Date Time:', customer.completionTime);
+
 
   const handleDeleteTask = async () => {
     try {
@@ -125,8 +140,16 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
         <CardHeader title="Edit Task" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={2}>
-            {/* Existing form fields */}
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
+              <TextField
+                fullWidth
+                disabled // Disable editing
+                label="Task ID"
+                name="taskId"
+                value={formik.values.taskId}
+              />
+            </Grid>
+            <Grid item xs={12} md={4}>
               <TextField
                 error={!!(formik.touched.taskName && formik.errors.taskName)}
                 fullWidth
@@ -139,23 +162,21 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 value={formik.values.taskName}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <TextField
-                error={!!(formik.touched.taskId && formik.errors.taskId)}
+                error={!!(formik.touched.coins && formik.errors.coins)}
                 fullWidth
-                helperText={formik.touched.taskId && formik.errors.taskId}
-                label="Task ID"
-                name="taskId"
+                helperText={formik.touched.coins && formik.errors.coins}
+                label="Coins"
+                name="coins"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.taskId}
+                value={formik.values.coins}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={
-                  !!(formik.touched.link && formik.errors.link)
-                }
+                error={!!(formik.touched.link && formik.errors.link)}
                 fullWidth
                 helperText={formik.touched.link && formik.errors.link}
                 label="Link"
@@ -176,57 +197,64 @@ export const NewTaskEditForm = ({ customer, ...other }) => {
                 }
                 label="Description"
                 name="description"
+                multiline // Allow multiline input
+                rows={4} // Adjust the number of rows to fit your design
+                variant="outlined" // Use outlined variant for multiline
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
             </Grid>
-            
-            {/* Date and Time Fields */}
+
             <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.openDateTime && formik.errors.openDateTime)}
-                fullWidth
-                helperText={formik.touched.openDateTime && formik.errors.openDateTime}
-                label="Open Date and Time"
-                name="openDateTime"
-                type="datetime-local"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.openDateTime}
-                inputProps={{
-                  min: new Date().toISOString().split("T")[0], // Set min value to today
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.endDateTime && formik.errors.endDateTime)}
-                fullWidth
-                helperText={formik.touched.endDateTime && formik.errors.endDateTime}
-                label="End Date and Time"
-                name="endDateTime"
-                type="datetime-local"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.endDateTime}
-                inputProps={{
-                  min: new Date().toISOString().split("T")[0], // Set min value to today
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                error={!!(formik.touched.coins && formik.errors.coins)}
-                fullWidth
-                helperText={formik.touched.coins && formik.errors.coins}
-                label="Coins"
-                name="coins"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.coins}
-              />
-            </Grid>
+  <TextField
+    error={
+      !!(
+        formik.touched.openDateTime &&
+        formik.errors.openDateTime
+      )
+    }
+    fullWidth
+    helperText={
+      formik.touched.openDateTime &&
+      formik.errors.openDateTime
+    }
+    label="Open Date and Time"
+    name="openDateTime"
+    type="datetime-local"
+    onBlur={formik.handleBlur}
+    onChange={formik.handleChange}
+    value={formik.values.openDateTime}
+    inputProps={{
+      min: new Date().toISOString().split("T")[0], // Set min value to today
+    }}
+  />
+</Grid>
+<Grid item xs={12} md={6}>
+  <TextField
+    error={
+      !!(
+        formik.touched.endDateTime &&
+        formik.errors.endDateTime
+      )
+    }
+    fullWidth
+    helperText={
+      formik.touched.endDateTime &&
+      formik.errors.endDateTime
+    }
+    label="End Date and Time"
+    name="endDateTime"
+    type="datetime-local"
+    onBlur={formik.handleBlur}
+    onChange={formik.handleChange}
+    value={formik.values.endDateTime}
+    inputProps={{
+      min: new Date().toISOString().split("T")[0], // Set min value to today
+    }}
+  />
+</Grid>
+
           </Grid>
         </CardContent>
         <Stack
