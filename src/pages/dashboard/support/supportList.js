@@ -14,6 +14,8 @@ import {
   Typography
 } from '@mui/material';
 import { customLocale } from '../../../utils/date-locale';
+import { useMounted } from '../../../hooks/use-mounted';
+import { useCallback, useEffect, useState } from 'react';
 
 const now = new Date();
 
@@ -60,103 +62,53 @@ const messages = [
   }
 ];
 
-export const SupportList = () => (
-  <Box
-    sx={{
-      backgroundColor: (theme) => theme.palette.mode === 'dark'
-        ? 'neutral.800'
-        : 'neutral.100',
-      display: 'flex',
-      justifyContent: 'center',
-      p: 3
-    }}
-  >
-    <Card sx={{ maxWidth: 363 }}>
-      <CardHeader title="Inbox" />
-      <List disablePadding>
-        {messages.map((message) => {
-          const ago = formatDistanceStrict(message.createdAt, new Date(), {
-            addSuffix: true,
-            locale: customLocale
-          });
+const useSupport = () => {
+  const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const isMounted = useMounted();
+  const [support, setSupport] = useState([]);
+  console.log("Support :", support);
 
-          return (
-            <ListItem
-              key={message.id}
-              sx={{
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                  cursor: 'pointer'
-                }
-              }}
-            >
-              <ListItemAvatar>
-                {message.senderOnline
-                  ? (
-                    <Badge
-                      anchorOrigin={{
-                        horizontal: 'right',
-                        vertical: 'bottom'
-                      }}
-                      color="success"
-                      variant="dot"
-                    >
-                      <Avatar src={message.senderAvatar} />
-                    </Badge>
-                  )
-                  : (
-                    <Avatar src={message.senderAvatar} />
-                  )}
-              </ListItemAvatar>
-              <ListItemText
-                disableTypography
-                primary={(
-                  <Typography
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}
-                    variant="subtitle2"
-                  >
-                    {message.senderName}
-                  </Typography>
-                )}
-                secondary={(
-                  <Typography
-                    color="text.secondary"
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}
-                    variant="body2"
-                  >
-                    {message.content}
-                  </Typography>
-                )}
-                sx={{ pr: 2 }}
-              />
-              <Typography
-                color="text.secondary"
-                sx={{ whiteSpace: 'nowrap' }}
-                variant="caption"
-              >
-                {ago}
-              </Typography>
-            </ListItem>
-          );
-        })}
-      </List>
-      <CardActions>
-        <Button
-          color="inherit"
-          size="small"
-        >
-          Go to chat
-        </Button>
-      </CardActions>
-    </Card>
-  </Box>
-);
+const getSupport = useCallback(async () => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+    const headers = {
+      Authorization: token,
+    };
+    
+    console.log("Token:", token);
+    console.log("Headers:", headers);
+
+    const response = await axios.get(`${BASEURL}/api/Support/getAllSupport/:page_number?/:count?`, { 
+      headers: headers,
+    });
+    
+    console.log("Response from API:", response.data);
+
+    if (isMounted()) {
+      // Assuming the response data is an array of blog posts
+      setSupport(response.data); // Adjust based on actual data structure
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}, [isMounted]);
+
+
+useEffect(() => {
+  getSupport();
+}, [getSupport]);
+
+return support;
+};
+
+export const SupportList = () => {
+  const support = useSupport();
+  return (
+    <>
+    <h1>{support}</h1>
+  <h1>Hello</h1>
+  </>
+  )
+};
 export default SupportList;

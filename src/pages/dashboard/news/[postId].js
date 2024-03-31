@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { PostContent } from "../../../sections/dashboard/blog/post-content";
 import axios from "axios";
 import Image from "next/image";
 
@@ -11,7 +10,6 @@ const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useNewsDetail = () => {
   const router = useRouter();
-  console.log(router.query.postId);
   const [newsDetail, setNewsDetail] = useState(null);
 
   useEffect(() => {
@@ -36,7 +34,6 @@ const useNewsDetail = () => {
 
         setNewsDetail(foundArticle);
       } catch (error) {
-        // Inside the catch block of useNewsDetail hook
         console.error("Error fetching news detail:", error);
       }
     };
@@ -50,7 +47,27 @@ const useNewsDetail = () => {
 };
 
 const NewsDetailPage = () => {
+  const router = useRouter();
   const newsDetail = useNewsDetail();
+
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const { postId } = router.query;
+
+      const headers = {
+        Authorization: token,
+      };
+
+      await axios.delete(`${BASEURL}/api/Blog/deleteBlog/${postId}`, {
+        headers: headers,
+      });
+
+      router.push("/dashboard"); // Redirect to dashboard after successful deletion
+    } catch (error) {
+      console.error("Error deleting news article:", error);
+    }
+  };
 
   if (!newsDetail) {
     return null; // Add loading indicator or error handling
@@ -84,6 +101,14 @@ const NewsDetailPage = () => {
               alt={newsDetail.title}
             />
           </Stack>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDelete}
+            sx={{ mt: 2 }} // Add margin top to create space between the button and the content above
+          >
+            Delete
+          </Button>
         </Container>
       </Box>
     </>
