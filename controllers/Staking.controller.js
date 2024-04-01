@@ -576,6 +576,41 @@ const getUnstaked = async (req, res) => {
 }
 
 
+
+// =================================CALCULATOR========================================================================================
+function calculateInterest(amount, months) {
+  let interestRate;
+  if (months === 3) {
+    interestRate = 0.05; // 5% per annum
+  } else if (months === 6) {
+    interestRate = 0.07; // 7% per annum
+  } else if (months === 12) {
+    interestRate = 0.10; // 10% per annum
+  } else {
+    return 'Invalid number of months';
+  }
+
+  const monthlyInterestRate = interestRate / 12;
+  const totalInterest = amount * monthlyInterestRate * months;
+  return totalInterest.toFixed(2); // return total interest rounded to 2 decimal places
+}
+
+
+const calculate = async (req, res) => {
+  try {
+    const { amount, months } = req.body;
+
+    const totalInterest = parseFloat(calculateInterest(amount, months)); // Convert totalInterest to a number
+
+    const total = amount + totalInterest;
+    return res.status(200).json({ total });
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: 'Internal Server Error', error });
+  }
+}
+
+
 module.exports = {
   stakingSummary,
   transferToStaking,
@@ -587,7 +622,9 @@ module.exports = {
   get12MonthsStake,
   get3MonthsUser, get6MonthsUser, get12MonthsUser,
 
-  getStaked, getUnstaked
+  getStaked, getUnstaked,
+
+  calculate
 };
 
 
