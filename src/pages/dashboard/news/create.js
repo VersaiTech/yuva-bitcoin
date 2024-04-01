@@ -1,19 +1,23 @@
-
-
-
+import { useRouter } from "next/navigation";
+import { paths } from "../../../paths";
 import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { QuillEditor } from '../../../components/quill-editor';
 import Head from 'next/head';
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import axios from "axios";
+import toast from "react-hot-toast";
+
+
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const CreateNewsPage = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     title: '',
     content: '',
   });
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -34,7 +38,10 @@ const CreateNewsPage = () => {
       const response = await axios.post(`${BASEURL}/api/Blog/createBlog`, { ...formData, content: plainTextContent }, {
         headers: headers
       });
-  
+      toast.success("News created");
+
+      router.push(paths.dashboard.news.list);
+      
       console.log('News created:', response.data);
       // Reset form data after successful submission if needed
       setFormData({

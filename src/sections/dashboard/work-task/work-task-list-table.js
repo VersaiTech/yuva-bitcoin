@@ -81,6 +81,7 @@ export const WorkListTable = (props) => {
     customers,
     customersCount,
     onPageChange,
+    currentTab, //import form task-list-table
     onRowsPerPageChange,
     page,
     rowsPerPage,
@@ -195,7 +196,9 @@ export const WorkListTable = (props) => {
               {/* <TableCell>Coins</TableCell> */}
               <TableCell> Description</TableCell>
               <TableCell>Link</TableCell>
-              <TableCell align="right">Edit Task</TableCell>
+              {currentTab !== 'completed' && (
+            <TableCell align="right">Edit Task</TableCell>
+          )}
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -279,16 +282,18 @@ export const WorkListTable = (props) => {
                       </Link>
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      component={NextLink}
-                      href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit?userId=${customer.userId}`}
-                    >
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    </IconButton>
-                  </TableCell>
+                  {currentTab !== 'completed' && (
+                <TableCell align="right">
+                  <IconButton
+                    component={NextLink}
+                    href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit?userId=${customer.userId}`}
+                  >
+                    <SvgIcon>
+                      <Edit02Icon />
+                    </SvgIcon>
+                  </IconButton>
+                </TableCell>
+              )}
                   <TableCell>
                     <SeverityPill
                       color={statusMap[customer.status] || "warning"}

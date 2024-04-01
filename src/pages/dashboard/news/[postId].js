@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Container, Stack, Button, Chip, Typography, Paper } from "@mui/material";
+import { Box, Container, Stack, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useRouter } from "next/router";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import axios from "axios";
 import Image from "next/image";
-import { format } from "date-fns";
+import { paths } from "../../../paths";
+import toast from "react-hot-toast";
+
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -46,9 +48,23 @@ const useNewsDetail = () => {
   return newsDetail;
 };
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+  return date.toLocaleString(undefined, options); // Adjust locale as per requirement
+};
+
+
 const NewsDetailPage = () => {
   const router = useRouter();
   const newsDetail = useNewsDetail();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -62,11 +78,18 @@ const NewsDetailPage = () => {
       await axios.delete(`${BASEURL}/api/Blog/deleteBlog/${postId}`, {
         headers: headers,
       });
+      toast.success("News Deleted");
 
-      router.push("/dashboard");
+
+      router.push(paths.dashboard.news.list); // Redirect to dashboard after successful deletion
     } catch (error) {
       console.error("Error deleting news article:", error);
     }
+  };
+
+  const handleConfirmDelete = () => {
+    setOpenDialog(false);
+    handleDelete();
   };
 
   if (!newsDetail) {
@@ -88,41 +111,39 @@ const NewsDetailPage = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Typography variant="h2" align="center" gutterBottom>
-            News Details
-          </Typography>
-          <Paper elevation={3} sx={{ p: 3 }}>
-            <Stack spacing={3}>
-              <Image
-                src={
-                  newsDetail.imageUrls && newsDetail.imageUrls.length > 0
-                    ? newsDetail.imageUrls[0]
-                    : "/assets/covers/abstract-1-4x3-large.png"
-                }
-                width={800}
-                height={400}
-                alt={newsDetail.title}
-              />
-              <Typography variant="h3">{newsDetail.title}</Typography>
-              <Typography variant="body1">{newsDetail.content}</Typography>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="subtitle2">
-                  By YuvaBitCoin • {formattedDate}
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
-              </Stack>
-            </Stack>
-          </Paper>
+          <Stack spacing={3}>
+            <Typography variant="h3">{newsDetail.title}</Typography>
+            <Typography variant="subtitle1">{formatDate(newsDetail.createdAt)}</Typography>
+            <Typography variant="body1">{newsDetail.content}</Typography>
+            <Image
+              src={
+                newsDetail.imageUrls[0]
+                  ? newsDetail.imageUrls[0]
+                  : "/assets/covers/abstract-1-4x3-large.png"
+              }
+              width={600}
+              height={300}
+              alt={newsDetail.title}
+            />
+          </Stack>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setOpenDialog(true)}
+            sx={{ mt: 2 }} // Add margin top to create space between the button and the content above
+          >
+            Delete
+          </Button>
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle>Confirmation</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to delete this news?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+              <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       </Box>
     </>

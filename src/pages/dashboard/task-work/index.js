@@ -223,6 +223,7 @@ const Page = () => {
                 setCurrentTab={setCurrentTab}
               />
               <WorkListTable
+                currentTab = {currentTab}
                 customers={currentData ? currentData : []}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
