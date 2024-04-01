@@ -273,6 +273,9 @@ const TemporaryPasswordReset = require('../models/TemporaryPasswordReset');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
+const fs = require('fs');
+const path = require('path');
+// const __dirname = require('../template/emailTemplate')
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
@@ -292,8 +295,25 @@ function generateRandomNumberAdmin() {
 ///=========================================================================================================================
 
 // Function to send OTP to email
-async function sendOTP(email, otp) {
+async function sendOTP(email, otp, member_name) {
   try {
+
+    // Path to your HTML file
+    const templatePath = path.resolve(__dirname, '../template/emailTemplate/index.html');
+    // Read the template file
+    let html = fs.readFileSync(templatePath, 'utf8');
+    // Replace placeholders with actual values
+    html = html.replace('[OTP_Code]', otp);
+
+
+    const memberName = await TemporaryRegistration.findOne(member_name);
+    console.log(memberName)
+    // Replace 'edgar' with  if memberName is defined
+    if (memberName) {
+      html = html.replace('[edgar]', memberName.registrationData.member_name);
+    }
+
+
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
       port: 465,
@@ -308,7 +328,8 @@ async function sendOTP(email, otp) {
       from: 'noreply@yuvabitcoin.com',
       to: email,
       subject: 'OTP Verification',
-      text: `Your OTP for registration is: ${otp}`
+      // text: `Your OTP for registration is: ${otp}`
+      html: html
     };
 
     await transporter.sendMail(mailOptions);
@@ -566,6 +587,7 @@ async function verifyOTP(req, res) {
         registration_date: reg_date,
         twitterId,
         isActive: true,
+        coins: 2 // Give 2 coins as bonus
       });
 
       // Save the member to the database

@@ -27,6 +27,9 @@ const completedTaskSchema = new mongoose.Schema({
         type: String,   
         enum: ['pending', 'confirmed', 'rejected'],
         default: 'pending'
+    },
+    reason:{
+        type: String
     }
 }, { timestamps: true });
 

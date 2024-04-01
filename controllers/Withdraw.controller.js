@@ -153,13 +153,20 @@ const withdrawRequest = async (req, res) => {
       });
     }
 
-    // Check if the withdrawal amount is greater than the available amount in the member's schema
-    if (amount > member.coins) {
+    if (amount < 10){
       return res.status(400).json({
         status: false,
-        message: 'Withdrawal amount exceeds available balance',
+        message: 'Minimum withdrawal amount is 10',
       });
     }
+
+      // Check if the withdrawal amount is greater than the available amount in the member's schema
+      if (amount > member.coins) {
+        return res.status(400).json({
+          status: false,
+          message: 'Withdrawal amount exceeds available balance',
+        });
+      }
 
     // Generate a unique reference ID
     const ref_id = generateReferenceID();

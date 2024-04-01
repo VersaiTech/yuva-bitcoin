@@ -164,7 +164,8 @@ const confirmTaskCompletion = async (req, res) => {
   const confirmTaskCompletionSchema = Joi.object({
     taskId: Joi.string().required(),
     userId: Joi.string().required(),
-    status: Joi.string().valid('confirmed', 'rejected').required()
+    status: Joi.string().valid('confirmed', 'rejected').required(),
+    reason: Joi.string().required(),
   });
 
   try {
@@ -173,7 +174,7 @@ const confirmTaskCompletion = async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-    const { taskId, userId, status } = value;
+    const { taskId, userId, status, reason } = value;
 
     const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId });
     if (!completedTask) {
@@ -209,6 +210,8 @@ const confirmTaskCompletion = async (req, res) => {
 
       return res.status(200).json({ message: 'Task completion confirmed. User rewarded.' });
     } else if (status === 'rejected') {
+      completedTask.reason = reason; // Save the reason for rejection
+      await completedTask.save();
       return res.status(400).json({ message: 'Task completion rejected. User not rewarded.' });
     } else {
       return res.status(400).json({ message: 'Invalid status' });
