@@ -400,6 +400,35 @@ async function register(req, res) {
         message: "Wallet address already registered",
       })
     }
+
+
+    // Check if there's an existing temporary registration for the same email
+    const existingTemporaryRegistration = await TemporaryRegistration.findOne({ email });
+    if (existingTemporaryRegistration) {
+      // Generate new OTP
+      const otp = generateOTP();
+
+      // Update existing temporary registration data
+      existingTemporaryRegistration.otp = otp;
+      existingTemporaryRegistration.registrationData = {
+        contactNo,
+        member_name,
+        password,
+        email,
+        twitterId,
+        wallet_address,
+      };
+      await existingTemporaryRegistration.save();
+
+      // Send OTP via email
+      await sendOTP(email, otp);
+
+      return res.status(200).send({
+        status: true,
+        message: "OTP sent to your email for verification",
+        email: email,
+      });
+    }
     // Generate OTP
     const otp = generateOTP();
 
@@ -535,7 +564,7 @@ async function verifyOTP(req, res) {
     }
 
     // Find temporary registration data by OTP and email
-    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email });
+    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });;
 
     if (!temporaryRegistrationFromBody) {
       return res.status(400).send({
