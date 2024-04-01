@@ -337,7 +337,7 @@ const Page = () => {
             {news.map((newsArticle) => (
               <Grid key={newsArticle.blogId} item xs={12} md={6}>
                 <PostCard
-                  href={`/dashboard/news/${newsArticle.blogId}`}
+                  href={`/dashboard/news/${newsArticle.blogId}`} 
                   authorAvatar="/assets/avatars/avatar-alcides-antonio.png"
                   authorName="Yuva Bitcoin"
                   category="Crypto"
