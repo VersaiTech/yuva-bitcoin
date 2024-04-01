@@ -56,6 +56,7 @@ async function getUserOverview(req, res) {
     const userId = req.user.member_user_id;
 
     // Retrieve data specific to the user
+    const memberData = await Member.findOne({ member_user_id: userId });
     const userTasks = await Task.find({ assignedTo: userId });
     const completedTasksCount = await CompletedTask.countDocuments({ userId, status: 'confirmed' });
     const pendingTasksCount = await CompletedTask.countDocuments({ userId, status: 'pending' });
@@ -67,7 +68,9 @@ async function getUserOverview(req, res) {
         userTasks: userTasks.length,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
-      },
+        coins: memberData ? memberData.coins : 0,
+        deposit_usdt: memberData ? memberData.deposit_usdt : 0,
+      }
     });
   } catch (error) {
     console.error("Error fetching user overview data:", error);
