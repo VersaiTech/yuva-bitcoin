@@ -25,6 +25,41 @@ export const AccountPopover = (props) => {
   const { profile,anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
+  const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+  console.log(profile)
+
+  const handleDeleteAccount = useCallback(async () => {
+    try {
+      onClose?.();
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      // Check if the user making the request is an admin
+      if (!auth.isAdmin) {
+        throw new Error('Permission denied. Only admin can delete a user.');
+      }
+
+      const { member_user_id } = profile;
+
+      // const response = await axios.delete(`/api/deleteUser/${member_user_id}`);
+      const response = await axios.delete(`${BASEURL}/admin/deleteUser/${member_user_id}`, {
+        headers: headers,
+      });
+
+
+      if (response.status === 200) {
+        toast.success('Account deleted successfully.');
+        router.push(paths.index);
+      } else {
+        throw new Error('Failed to delete account.');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to delete account. Please try again later.');
+    }
+  }, [auth.isAdmin, profile, router, onClose]);
 
   const handleLogout = useCallback(async () => {
     try {
