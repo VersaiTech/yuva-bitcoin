@@ -81,7 +81,7 @@ export const WorkListTable = (props) => {
     customers,
     customersCount,
     onPageChange,
-    currentTab,
+    currentTab, //import form task-list-table
     onRowsPerPageChange,
     page,
     rowsPerPage,

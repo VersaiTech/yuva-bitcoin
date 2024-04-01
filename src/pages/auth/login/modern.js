@@ -99,7 +99,7 @@ const Page = () => {
         <Typography variant="h5">
          Admin Log in
         </Typography>
-        <Typography
+        {/* <Typography
           color="text.secondary"
           variant="body2"
         >
@@ -112,7 +112,7 @@ const Page = () => {
           >
             Register
           </Link>
-        </Typography>
+        </Typography> */}
       </Stack>
       <form
         noValidate
@@ -153,13 +153,13 @@ const Page = () => {
           Continue
         </Button>
         <Box sx={{ mt: 3 }}>
-          <Link
+          {/* <Link
             href="#"
             underline="hover"
             variant="subtitle2"
           >
             Forgot password?
-          </Link>
+          </Link> */}
         </Box>
       </form>
     </div>

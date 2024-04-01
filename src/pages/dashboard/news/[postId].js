@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Container, Stack, Typography, Button } from "@mui/material";
+import { Box, Container, Stack, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useRouter } from "next/router";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import axios from "axios";
 import Image from "next/image";
+import { paths } from "../../../paths";
+import toast from "react-hot-toast";
+
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -46,9 +49,23 @@ const useNewsDetail = () => {
   return newsDetail;
 };
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+  };
+  return date.toLocaleString(undefined, options); // Adjust locale as per requirement
+};
+
+
 const NewsDetailPage = () => {
   const router = useRouter();
   const newsDetail = useNewsDetail();
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -62,11 +79,18 @@ const NewsDetailPage = () => {
       await axios.delete(`${BASEURL}/api/Blog/deleteBlog/${postId}`, {
         headers: headers,
       });
+      toast.success("News Deleted");
 
-      router.push("/dashboard"); // Redirect to dashboard after successful deletion
+
+      router.push(paths.dashboard.news.list); // Redirect to dashboard after successful deletion
     } catch (error) {
       console.error("Error deleting news article:", error);
     }
+  };
+
+  const handleConfirmDelete = () => {
+    setOpenDialog(false);
+    handleDelete();
   };
 
   if (!newsDetail) {
@@ -88,7 +112,7 @@ const NewsDetailPage = () => {
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Typography variant="h3">{newsDetail.title}</Typography>
-            <Typography variant="subtitle1">{newsDetail.createdAt}</Typography>
+            <Typography variant="subtitle1">{formatDate(newsDetail.createdAt)}</Typography>
             <Typography variant="body1">{newsDetail.content}</Typography>
             <Image
               src={
@@ -104,11 +128,21 @@ const NewsDetailPage = () => {
           <Button
             variant="contained"
             color="error"
-            onClick={handleDelete}
+            onClick={() => setOpenDialog(true)}
             sx={{ mt: 2 }} // Add margin top to create space between the button and the content above
           >
             Delete
           </Button>
+          <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+            <DialogTitle>Confirmation</DialogTitle>
+            <DialogContent>
+              <Typography>Are you sure you want to delete this news?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+              <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+            </DialogActions>
+          </Dialog>
         </Container>
       </Box>
     </>
