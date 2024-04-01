@@ -107,6 +107,7 @@ const Member = require('../models/memberModel');
 const { v4: uuidv4 } = require('uuid');
 const Stake = require("../models/stake");
 const Joi = require('joi');
+const StakeHistory = require('../models/stakingHistory');
 
 
 const stakingSummaryForAdmin = async (req, res) => {
@@ -162,7 +163,7 @@ const getTotalInvestmentByUserId = async (req, res) => {
 const get3MonthsStake = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ stakingDuration: 3 });
+    const stakes = await StakeHistory.find({ stakingDuration: 3 });
 
 
     res.status(200).json({ userId: userId, stakes: stakes });
@@ -175,7 +176,7 @@ const get3MonthsStake = async (req, res) => {
 const get6MonthsStake = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ stakingDuration: 6 });
+    const stakes = await StakeHistory.find({ stakingDuration: 6 });
 
 
     res.status(200).json({ userId: userId, stakes: stakes });
@@ -188,7 +189,7 @@ const get6MonthsStake = async (req, res) => {
 const get12MonthsStake = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ stakingDuration: 12 });
+    const stakes = await StakeHistory.find({ stakingDuration: 12 });
 
 
     res.status(200).json({ userId: userId, stakes: stakes });
@@ -203,7 +204,7 @@ const get12MonthsStake = async (req, res) => {
 const get3MonthsUser = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 3 });
+    const stakes = await StakeHistory.find({ member_user_id: userId, stakingDuration: 3 });
 
 
     res.status(200).json({ stakes });
@@ -216,7 +217,7 @@ const get3MonthsUser = async (req, res) => {
 const get6MonthsUser = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 6 });
+    const stakes = await StakeHistory.find({ member_user_id: userId, stakingDuration: 6 });
 
 
     res.status(200).json({ stakes });
@@ -229,7 +230,7 @@ const get6MonthsUser = async (req, res) => {
 const get12MonthsUser = async (req, res) => {
   const userId = req.user.member_user_id;
   try {
-    const stakes = await Stake.find({ member_user_id: userId, stakingDuration: 12 });
+    const stakes = await StakeHistory.find({ member_user_id: userId, stakingDuration: 12 });
 
 
     res.status(200).json({ stakes });
@@ -351,6 +352,19 @@ async function transferToStaking(req, res) {
     // Save the new Stake
     const savedStake = await newStake.save();
 
+    // Save stake details to StakeHistory
+    const newStakeHistory = new StakeHistory({
+      member_user_id: member.member_user_id,
+      member_name: member.member_name,
+      investment,
+      transaction_id: newStake.transaction_id,
+      stake_type: 'Wallet',
+      stakingDuration,
+      type: 'staked', // Indicates the stake type
+    });
+
+    await newStakeHistory.save();
+
     res.status(200).json(savedStake);
   } catch (error) {
     console.error(error);
@@ -380,10 +394,17 @@ async function transferToWallet(req, res) {
 
     const stakings = await Stake.find({ member_user_id: userId, stake_type: 'Wallet' });
 
+    // Check if any stake has interest not credited
+    const hasUncreditedInterest = stakings.some(stake => !stake.interestCredited);
+    if (hasUncreditedInterest) {
+      return res.status(400).json({ error: 'Interest has not been credited for all stakes. Withdrawal not allowed.' });
+    }
+
     let totalStackAmount = 0;
     for (const stake of stakings) {
       totalStackAmount += stake.investment;
     }
+
 
     if (totalStackAmount < amount) {
       return res.status(400).json({ error: 'Insufficient stack amount' });
@@ -411,8 +432,24 @@ async function transferToWallet(req, res) {
       }
     }
 
+
     // Wait for all delete operations to complete
     await Promise.all(deleteOperations);
+
+    // Save stake withdrawal details to StakeHistory
+    const newStakeHistory = new StakeHistory({
+      member_user_id: userId,
+      member_name: member.member_name,
+      investment: totalWithdrawnAmount,
+      transaction_id: generateTransactionId(), // assuming you have this function
+      stake_type: 'Wallet',
+      stakingDuration: 0, // Set staking duration to 0 for withdrawal
+      interestCredited: false, // Assuming no interest credited for withdrawal
+      type: 'unstaked', // Indicates the withdrawal type
+    });
+
+    await newStakeHistory.save();
+
 
     // Update member's coins
     await Member.findOneAndUpdate(
@@ -498,7 +535,45 @@ async function transferToWallet(req, res) {
 //   }
 // }
 
+const getStaked = async (req, res) => {
+  try {
+    const userId = req.user.member_user_id;
+    if (!userId) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
+    const staked = await StakeHistory.find({ member_user_id: userId, type: 'staked' });
+    if (!staked) {
+      return res.status(404).json({ message: 'Staked not found' });
+    }
+
+    res.status(200).json({ 'staked found': staked });
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error', error });
+  }
+}
+
+const getUnstaked = async (req, res) => {
+  try {
+    const userId = req.user.member_user_id;
+    if (!userId) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const staked = await StakeHistory.find({ member_user_id: userId, type: 'unstaked' });
+    if (!staked) {
+      return res.status(404).json({ message: 'Unstaked not found' });
+    }
+
+    res.status(200).json({ 'unstaked found': staked });
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error', error });
+  }
+}
 
 
 module.exports = {
@@ -509,7 +584,10 @@ module.exports = {
   getTotalInvestmentByUserId,
   get3MonthsStake,
   get6MonthsStake,
-  get12MonthsStake, get3MonthsUser, get6MonthsUser, get12MonthsUser
+  get12MonthsStake,
+  get3MonthsUser, get6MonthsUser, get12MonthsUser,
+
+  getStaked, getUnstaked
 };
 
 
