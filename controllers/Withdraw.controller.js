@@ -5,10 +5,27 @@ const Withdraw = require('../models/withdrawModel');
 const Member = require('../models/memberModel');
 const Coin = require('../models/Coin');
 const Joi = require('joi');
+const fs = require('fs');
+const path = require('path');
 
 //===================================================================================================
 async function sendOTP(email, otp) {
   try {
+
+    // Path to your HTML file
+    const templatePath = path.resolve(__dirname, '../template/emailTemplate/withdraw.html');
+    // Read the template file
+    let html = fs.readFileSync(templatePath, 'utf8');
+    // Replace placeholders with actual values
+    html = html.replace('[OTP_Code]', otp);
+
+
+    // const memberName = await TemporaryWithdraw.findOne({ email });
+    // console.log(memberName)
+    // // Replace 'edgar' with  if memberName is defined
+    // if (memberName) {
+    //   html = html.replace('[edgar]', memberName.email);
+    // }
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
       port: 465,
@@ -23,7 +40,8 @@ async function sendOTP(email, otp) {
       from: 'noreply@yuvabitcoin.com',
       to: email,
       subject: 'OTP Verification',
-      text: `Your OTP for Withdrawal Request is: ${otp}`
+      // text: `Your OTP for Withdrawal Request is: ${otp}`
+      html: html
     };
 
     await transporter.sendMail(mailOptions);
@@ -153,20 +171,52 @@ const withdrawRequest = async (req, res) => {
       });
     }
 
-    if (amount < 10){
+    if (amount < 10) {
       return res.status(400).json({
         status: false,
         message: 'Minimum withdrawal amount is 10',
       });
     }
 
-      // Check if the withdrawal amount is greater than the available amount in the member's schema
-      if (amount > member.coins) {
-        return res.status(400).json({
-          status: false,
-          message: 'Withdrawal amount exceeds available balance',
-        });
-      }
+    // Check if the withdrawal amount is greater than the available amount in the member's schema
+    if (amount > member.coins) {
+      return res.status(400).json({
+        status: false,
+        message: 'Withdrawal amount exceeds available balance',
+      });
+    }
+
+
+    // Check if there's an existing temporary registration for the same email
+    const existingTemporaryWithdrawal = await TemporaryWithdraw.findOne({ email: member.email });
+    if (existingTemporaryWithdrawal) {
+      // Generate new OTP
+      const otp = generateOTP();
+      // Generate a unique reference ID
+      const ref_id = generateReferenceID();
+
+      // Update existing temporary registration data
+      existingTemporaryWithdrawal.ref_id = ref_id;
+      existingTemporaryWithdrawal.otp = otp;
+      existingTemporaryWithdrawal.temporaryWithdraw = {
+        email: member.email,
+        otp,
+        withdrawData: {
+          amount,
+          ref_id
+        }
+      };
+      await existingTemporaryWithdrawal.save();
+
+      // Send OTP via email
+      await sendOTP(member.email, otp);
+
+      return res.status(200).send({
+        status: true,
+        message: "OTP sent to your email for verification",
+        email: member.email,
+      });
+    }
 
     // Generate a unique reference ID
     const ref_id = generateReferenceID();
