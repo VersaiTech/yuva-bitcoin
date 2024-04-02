@@ -547,7 +547,7 @@ export const StakeListTable = (props) => {
 
 StakeListTable.propTypes = {
   customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
+  customersCount: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

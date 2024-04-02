@@ -90,7 +90,7 @@ const useOrders = (search) => {
     } catch (err) {
       console.error("Error fetching rejected tasks:", err);
     }
-
+    
     // Update state if component is still mounted
     if (isMounted()) {
       setState({

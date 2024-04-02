@@ -218,7 +218,7 @@ export const SideNav = (props) => {
           </Stack>
           <Box sx={{ p: 3 }}>
             <Typography variant="subtitle1">
-              Need help?
+              Check White Paper
             </Typography>
             <Typography
               color="neutral.400"

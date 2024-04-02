@@ -117,12 +117,12 @@ export const CryptoCurrentBalance = (props) => {
               width: 200
             }}
           >
-            {/* <Chart
+            <Chart
               height={200}
               options={chartOptions}
               series={chartSeries}
               type="donut"
-            /> */}
+            />
           </Box>
           <Stack
             spacing={4}
@@ -206,10 +206,10 @@ export const CryptoCurrentBalance = (props) => {
           )}
           size="small"
         >
-          Add funds
+          Add Investment
         </Button>
       </Link>
-        <Button
+        {/* <Button
           color="inherit"
           endIcon={(
             <SvgIcon fontSize="small">
@@ -219,7 +219,7 @@ export const CryptoCurrentBalance = (props) => {
           size="small"
         >
           Transfer funds
-        </Button>
+        </Button> */}
       </CardActions>
     </Card>
   );
