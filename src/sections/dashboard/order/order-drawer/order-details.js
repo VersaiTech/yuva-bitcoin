@@ -174,7 +174,10 @@ export const OrderDetails = (props) => {
           {/* <PropertyListItem align={align} disableGutters divider label="Status">
             <SeverityPill color={statusColor}>{order.status}</SeverityPill>
           </PropertyListItem> */}
-          <PropertyListItem align={align} disableGutters divider label="Status">
+          <PropertyListItem align={align}
+disableGutters
+divider
+label="Status">
             <SeverityPill color={statusColor}>
               {countdown === "Task Expired" ? "Expired" : order.status}
             </SeverityPill>
@@ -209,9 +212,11 @@ export const OrderDetails = (props) => {
           >
             Cancel
           </Button>
-          <Typography variant="subtitle2" color="warning" sx={{ pt: 5 }}>
+          <Typography variant="subtitle2"
+color="warning"
+sx={{ pt: 5 }}>
             Please go to the link and complete the task. If you submit without
-            visiting the link, you won't receive the reward.
+            visiting the link, you won&apos;t receive the reward.
           </Typography>
         </Stack>
       </Stack>

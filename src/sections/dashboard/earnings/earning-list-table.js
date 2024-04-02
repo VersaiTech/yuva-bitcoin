@@ -262,7 +262,8 @@ export const EarningListTable = (props) => {
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box sx={{ position: "relative" }} {...other}>
+    <Box sx={{ position: "relative" }}
+{...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -286,10 +287,12 @@ export const EarningListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Delete
           </Button>
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Edit
           </Button>
         </Stack>
@@ -339,7 +342,9 @@ export const EarningListTable = (props) => {
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={2}>
+                    <Stack alignItems="center"
+direction="row"
+spacing={2}>
                       <Avatar
                         src={customer.avatar}
                         sx={{
@@ -348,7 +353,8 @@ export const EarningListTable = (props) => {
                         }}
                       >
                         {/* {getInitials(customer.name)} */}
-                        <img src="/yuvalogo2 - copy.png" alt="Yuva Logo" />
+                        <img src="/yuvalogo2 - copy.png"
+alt="Yuva Logo" />
                       </Avatar>
                       <div>
                         {/* <Link
@@ -359,7 +365,8 @@ export const EarningListTable = (props) => {
                         >
                           {customer.name}
                         </Link> */}
-                        <Typography color="text.primary" variant="body2">
+                        <Typography color="text.primary"
+variant="body2">
                           <h2>{customer.coins}</h2>
                         </Typography>
                       </div>

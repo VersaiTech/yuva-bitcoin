@@ -106,7 +106,9 @@ const ModalContent = ({ handleCloseModal,memberData }) => {
   });
   return (
     <Box>
-      <Typography variant="h5" align="center" sx={{ marginBottom: 4 }}>
+      <Typography variant="h5"
+align="center"
+sx={{ marginBottom: 4 }}>
         Edit Details
       </Typography>
       <form onSubmit={formik.handleSubmit}>
@@ -156,7 +158,9 @@ const ModalContent = ({ handleCloseModal,memberData }) => {
             error={formik.touched.wallet_address && Boolean(formik.errors.wallet_address)}
             helperText={formik.touched.wallet_address && formik.errors.wallet_address}
           />
-          <Button type="submit" variant="contained" fullWidth>
+          <Button type="submit"
+variant="contained"
+fullWidth>
             Submit
           </Button>
         </Stack>

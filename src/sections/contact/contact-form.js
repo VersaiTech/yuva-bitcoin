@@ -238,8 +238,11 @@ export const ContactForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-    <Grid container spacing={3}>
-      <Grid item xs={12} sm={6}>
+    <Grid container
+spacing={3}>
+      <Grid item
+xs={12}
+sm={6}>
         <TextField
           fullWidth
           id="name"
@@ -253,7 +256,9 @@ export const ContactForm = () => {
           color="primary" 
         />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item
+xs={12}
+sm={6}>
         <TextField
           fullWidth
           id="twitterId"
@@ -266,7 +271,9 @@ export const ContactForm = () => {
           helperText={formik.touched.twitterId && formik.errors.twitterId}
         />
       </Grid>
-      <Grid item xs={12} sm={12}>
+      <Grid item
+xs={12}
+sm={12}>
         <TextField
           fullWidth
           id="email"
@@ -279,7 +286,8 @@ export const ContactForm = () => {
           helperText={formik.touched.email && formik.errors.email}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item
+xs={12}>
         <TextField
           fullWidth
           id="message"
@@ -306,10 +314,14 @@ export const ContactForm = () => {
         {submitting ? 'Submitting...' : 'Let\'s Talk'}
       </Button>
     </Box>
-    <Typography color="text.secondary" sx={{ mt: 3 }} variant="body2">
+    <Typography color="text.secondary"
+sx={{ mt: 3 }}
+variant="body2">
       By submitting this, you agree to the{' '}
-      <Link href="#" underline="always">Privacy Policy</Link> and{' '}
-      <Link href="#" underline="always">Cookie Policy</Link>.
+      <Link href="#"
+underline="always">Privacy Policy</Link> and{' '}
+      <Link href="#"
+underline="always">Cookie Policy</Link>.
     </Typography>
   </form>
   );

@@ -141,7 +141,8 @@ export const ReferralPage = () => {
                   </Stack>
                 </Box>
               </Stack>
-           <img src="/referral.png" alt="photo not showing"
+           <img src="/referral.png"
+alt="photo not showing"
            style={{width:'100%'}} />
  
             </CardContent>
@@ -195,7 +196,8 @@ export const ReferralPage = () => {
               // Center align the button horizontally
             }}
             >
-              <Button variant="outlined" onClick={handleSharePoster}>Share Referral Poster</Button>
+              <Button variant="outlined"
+onClick={handleSharePoster}>Share Referral Poster</Button>
             </CardActions>
           </Card>
         </Grid>

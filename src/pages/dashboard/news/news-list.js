@@ -305,9 +305,13 @@ const Page = () => {
           </Card>
           <Typography variant="h4">Recent Articles</Typography>
           <Divider sx={{ my: 2 }} />
-          <Grid container spacing={4}>
+          <Grid container
+spacing={4}>
             {news.map((newsArticle) => (
-              <Grid key={newsArticle.blogId} item xs={12} md={6}>
+              <Grid key={newsArticle.blogId}
+item
+xs={12}
+md={6}>
                 <PostCard
                   href={`/dashboard/news/${newsArticle.blogId}`}
                   authorAvatar="/assets/avatars/avatar-alcides-antonio.png"

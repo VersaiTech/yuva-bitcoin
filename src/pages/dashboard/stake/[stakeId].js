@@ -82,11 +82,13 @@ const Page = () => {
                 </Link>
               </div>
               <div>
-                <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+                <Container maxWidth="sm"
+sx={{ textAlign: 'center' }}>
                   <Card>
                     <CardHeader
                       subheader={(
-                        <Typography variant="h4" color="green">
+                        <Typography variant="h4"
+color="green">
                           {"₿ " + totalInvestment}
                         </Typography>
                       )}

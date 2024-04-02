@@ -104,11 +104,15 @@ const Page = () => {
               py: 8,
             }}
           >
-            <Grid xs={12} sm={7}>
-              <Typography color="inherit" variant="h3">
+            <Grid xs={12}
+sm={7}>
+              <Typography color="inherit"
+variant="h3">
                 Universal Project
               </Typography>
-              <Typography color="neutral.500" sx={{ mt: 2 }} variant="body1">
+              <Typography color="neutral.500"
+sx={{ mt: 2 }}
+variant="body1">
                 Post your job today for free. Promotions start at $99.
               </Typography>
               <Button
@@ -135,14 +139,20 @@ const Page = () => {
               <img src="/assets/iconly/iconly-glass-shield.svg" />
             </Grid>
           </Grid>
-          <Grid container spacing={4} sx={{ mt: 2 }}>
-            <Grid xs={12} lg={8}>
+          <Grid container
+spacing={4}
+sx={{ mt: 2 }}>
+            <Grid xs={12}
+lg={8}>
               <Card>
                 <CardHeader
                   disableTypography
                   title={
-                    <Stack alignItems="flex-start" direction="row" spacing={2}>
-                      <Avatar src={company.logo} variant="rounded">
+                    <Stack alignItems="flex-start"
+direction="row"
+spacing={2}>
+                      <Avatar src={company.logo}
+variant="rounded">
                         {getInitials(company.name)}
                       </Avatar>
                       <Stack spacing={1}>
@@ -165,7 +175,9 @@ const Page = () => {
                   variant="scrollable"
                 >
                   {tabs.map((tab) => (
-                    <Tab key={tab.value} label={tab.label} value={tab.value} />
+                    <Tab key={tab.value}
+label={tab.label}
+value={tab.value} />
                   ))}
                 </Tabs>
                 <Divider />
@@ -191,7 +203,8 @@ const Page = () => {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid xs={12} lg={4}>
+            <Grid xs={12}
+lg={4}>
               <CompanySummary company={company} />
             </Grid>
           </Grid>

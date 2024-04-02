@@ -105,12 +105,15 @@ export const CustomerWithdrawForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit}
+{...other}>
       <Card>
         <CardHeader title="Withdraw Stake Amount" />
         <CardContent sx={{ pt: 0 }}>
-          <Grid container spacing={3}>
-            <Grid xs={12} md={6}>
+          <Grid container
+spacing={3}>
+            <Grid xs={12}
+md={6}>
               <TextField
                 error={
                   !!(formik.touched.amount && formik.errors.amount)

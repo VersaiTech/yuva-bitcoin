@@ -91,7 +91,8 @@ export const GridList2 = ({ projects }) => {
     p: 3,
   }}
 >
-  <Grid container spacing={3}>
+  <Grid container
+spacing={3}>
   {projects.map((project) => {
   const {
     _id,
@@ -107,8 +108,12 @@ export const GridList2 = ({ projects }) => {
   const formattedUpdatedAt = new Date(updatedAt).toLocaleString();
 
       return (
-        <Grid key={project.id} item xs={12} md={4}>
-          <Box mt={2} mb={2}>
+        <Grid key={project.id}
+item
+xs={12}
+md={4}>
+          <Box mt={2}
+mb={2}>
             {/* Add margin top and bottom */}
             <Card
               sx={{
@@ -128,7 +133,9 @@ export const GridList2 = ({ projects }) => {
                 overflow: "visible",
               }}
             >
-            <Box mt={2} mb={2} sx={{ position: "absolute", top: 0, left: 0, }}>
+            <Box mt={2}
+mb={2}
+sx={{ position: "absolute", top: 0, left: 0, }}>
             {/* Logo */}
             <img
               src={`/assets/logos/${coin === "yuva" ? "yuvalogo2.png" : coin === "usdt" ? "yuvalogo2.png" : ""}`}
@@ -177,8 +184,10 @@ export const GridList2 = ({ projects }) => {
                 >
                   {/*<Avatar src={project.currency.avatar} />*/}
                   <Box sx={{ mt: 2 }}>
-                    <Typography color="text.secondary" variant="body2">
-                      <Link color="text.primary" variant="h4">
+                    <Typography color="text.secondary"
+variant="body2">
+                      <Link color="text.primary"
+variant="h4">
                       {coin === "usdt" ? "$" : coin === "yuva" ? "YB" : ""} {amount}
                       </Link>
                     </Typography>
@@ -186,10 +195,12 @@ export const GridList2 = ({ projects }) => {
                 </Box>
               </Box>
               <Box sx={{ pb: 1, px: 5, textAlign: "center" }}>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                   {exchange_currency} Sats/USDT
                 </Typography>
-                <Typography color="text.secondary" variant="body1">
+                <Typography color="text.secondary"
+variant="body1">
                   {total}
                 </Typography>
               </Box>
@@ -204,7 +215,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {formattedCreatedAt}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Created At
       </Typography>
     </div>
@@ -212,7 +224,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {payment_method}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Method
       </Typography>
     </div>
@@ -220,7 +233,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {formattedUpdatedAt}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Updated At
       </Typography>
     </div>
@@ -271,7 +285,8 @@ export const GridList2 = ({ projects }) => {
                     onClick={handleBuyButtonClick}
                   >
                     <SvgIcon>
-                      <path d="M0 0h24v24H0z" fill="none" />
+                      <path d="M0 0h24v24H0z"
+fill="none" />
                       <path d="M21.82 14.47l-2.6-10.39C19.03 3.18 18.34 3 17.65 3H5.94L5.01 1.56C4.71.96 3.97.83 3.51 1.26L1.35 3.12c-.38.34-.45.94-.16 1.34L5.08 8h-.1c-.58 0-1.13.29-1.45.77L.22 13.3c-.28.45-.3 1.01-.05 1.47l3.55 6.18c.22.37.62.6 1.06.6h12.62l.77 1.44c.3.56.91.77 1.44.47l2.15-.91c.38-.16.63-.52.63-.92V15c.01-.41-.24-.78-.62-.99zM12.7 5h5.13l1.71 6.99H13.08L12.7 5zM7.5 15c-1.38 0-2.5-1.12-2.5-2.5S6.12 10 7.5 10s2.5 1.12 2.5 2.5S8.88 15 7.5 15zm9.99 4.78l-1.5-2.78H7.77l-1.52-2.64L4.16 13H1.41l3.18-5.54h11.18l1.06 4.24H9.75c-.31 0-.61.16-.78.43l-1.69 2.94-.5.88h10.4l1.22 2.12z" />
                     </SvgIcon>
                     Buy

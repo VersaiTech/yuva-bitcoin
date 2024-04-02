@@ -23,7 +23,8 @@ export const CustomerInvoices = (props) => {
   const { invoices = [], ...other } = props;
 
   return (
-    <Card {...other} sx={{ mt:1 }}>
+    <Card {...other}
+sx={{ mt:1 }}>
       <CardHeader
         action={<MoreMenu />}
         title="Recent Invoices"

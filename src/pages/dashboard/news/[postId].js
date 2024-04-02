@@ -88,10 +88,13 @@ const NewsDetailPage = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Typography variant="h2" align="center" gutterBottom>
+          <Typography variant="h2"
+align="center"
+gutterBottom>
             News Details
           </Typography>
-          <Paper elevation={3} sx={{ p: 3 }}>
+          <Paper elevation={3}
+sx={{ p: 3 }}>
             <Stack spacing={3}>
               <Image
                 src={

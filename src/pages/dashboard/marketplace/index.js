@@ -63,20 +63,23 @@ const CryptoMarketplacePage = () => {
       <Head>
         <title>Crypto Marketplace | Your Crypto Hub</title>
       </Head>
-      <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
+      <Box component="main"
+sx={{ flexGrow: 1, py: 4 }}>
         <Container maxWidth="xl">
           <Stack spacing={2}>
             {" "}
             {/* Increased spacing */}
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-              <Link href={paths.dashboard.index} passHref>
+              <Link href={paths.dashboard.index}
+passHref>
                 <Typography color="inherit">Dashboard</Typography>
               </Link>
               <Typography color="text.primary">Crypto Marketplace</Typography>
             </Breadcrumbs>
           </Stack>
-          <Typography variant="h4" sx={{ mt: 4 }}>
+          <Typography variant="h4"
+sx={{ mt: 4 }}>
             {" "}
             {/* Added margin top */}
             Featured Listings
@@ -88,7 +91,8 @@ const CryptoMarketplacePage = () => {
             fullWidth
             sx={{ mt: 2, width: "50%" }} // Adjust the width as needed
             renderValue={(selected) => (
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+              <Typography variant="body1"
+sx={{ fontWeight: "bold" }}>
                 {selected === "Listed" ? "Listed" : "Ordered"}
               </Typography>
             )}

@@ -215,11 +215,13 @@ const Page = () => {
                 </Link>
               </div>
               <div>
-                <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
+                <Container maxWidth="sm"
+sx={{ textAlign: 'center' }}>
                   <Card>
                     <CardHeader
                       subheader={(
-                        <Typography variant="h4" color="green">
+                        <Typography variant="h4"
+color="green">
                           {"₿" + customer}
                         </Typography>
                       )}
@@ -247,7 +249,8 @@ const Page = () => {
                         spacing={1}
                         sx={{ mt: 2 }}
                       >
-                        <Link component={NextLink} href={paths.dashboard.deposits.index}>
+                        <Link component={NextLink}
+href={paths.dashboard.deposits.index}>
                           <Button
                             color="inherit"
                             endIcon={(
@@ -259,7 +262,8 @@ const Page = () => {
                             Add money
                           </Button>
                         </Link>
-                        <Link component={NextLink} href={paths.dashboard.withdraw.create}>
+                        <Link component={NextLink}
+href={paths.dashboard.withdraw.create}>
                           <Button
                             color="inherit"
                             endIcon={(

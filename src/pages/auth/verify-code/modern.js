@@ -197,10 +197,12 @@ const Page = () => {
           <Typography variant="subtitle2">Dashboard</Typography>
         </Link>
       </Box>
-      <Stack sx={{ mb: 4 }} spacing={1}>
+      <Stack sx={{ mb: 4 }}
+spacing={1}>
         <Typography variant="h5">Verify code</Typography>
       </Stack>
-      <form noValidate onSubmit={formik.handleSubmit}>
+      <form noValidate
+onSubmit={formik.handleSubmit}>
         <FormControl error={!!(formik.touched.code && formik.errors.code)}>
           <FormLabel
             sx={{

@@ -20,7 +20,8 @@ export const CustomerLogs = (props) => {
 
   return (
     <Card {...other}>
-      <CardHeader action={<MoreMenu />} title="Recent Logs" />
+      <CardHeader action={<MoreMenu />}
+title="Recent Logs" />
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
@@ -42,7 +43,8 @@ export const CustomerLogs = (props) => {
               return (
                 <TableRow key={log.id}>
                   <TableCell width="100">
-                    <Typography color="text.secondary" variant="caption">
+                    <Typography color="text.secondary"
+variant="caption">
                       {log.method}
                     </Typography>
                   </TableCell>
