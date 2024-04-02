@@ -64,5 +64,5 @@ export const OverviewOpenTickets = (props) => {
 };
 
 OverviewOpenTickets.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };

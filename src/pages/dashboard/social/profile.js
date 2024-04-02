@@ -448,10 +448,31 @@ export const SocialProfile = () => {
                 </Typography>
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography variant="subtitle2">Yuva Bitcoin</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography color="text.secondary" variant="body2">
+                {memberData.coins +" YB"}
+                </Typography>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Typography variant="subtitle2">User Id</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography color="text.secondary" variant="body2">
+                {memberData.member_user_id
+}
+                </Typography>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
         <Stack alignItems="flex-start" spacing={1} sx={{ p: 1 }}>
-          <Button
+          {/* <Button
             color="inherit"
             startIcon={
               <SvgIcon>
@@ -460,7 +481,7 @@ export const SocialProfile = () => {
             }
           >
             Delete Account
-          </Button>
+          </Button> */}
           <Button
             color="inherit"
             startIcon={

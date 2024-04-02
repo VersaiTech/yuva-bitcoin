@@ -105,7 +105,12 @@ const ModalContent = ({ handleCloseModal,memberData }) => {
     }
   });
   return (
-    <Box>
+    <Box sx={{
+      backgroundColor: (theme) =>
+        theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+      p: 3,
+    }}
+    >
       <Typography variant="h5" align="center" sx={{ marginBottom: 4 }}>
         Edit Details
       </Typography>
@@ -233,7 +238,9 @@ export const Modal1 = ({ open, handleCloseModal }) => {
           top: "50%", // Align the top to the vertical center
           left: "50%", // Align the left to the horizontal center
           transform: "translate(-40%, -50%)", // Center the modal
-          backgroundColor: "white", // Semi-transparent backdrop
+          // backgroundColor: "white", // Semi-transparent backdrop
+          backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
           zIndex: 9999,
           boxShadow: "0px 4px 22px rgba(0, 0, 0, 0.1)",
           padding: 3, // Add padding for better appearance

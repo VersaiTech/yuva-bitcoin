@@ -1,3 +1,5 @@
+// CryptoMarketplacePage.js
+
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -10,24 +12,22 @@ import {
   Typography,
   Select,
   MenuItem,
+  Button,
 } from "@mui/material";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard"; // Importing the Layout component
+import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
-import { Table1 } from "../../../sections/components/tables/table-1";
-import { paths } from "../../../paths"; // Importing the paths
+import { paths } from "../../../paths";
 import axios from "axios";
-
-// Placeholder data for demonstration purposes
-
+import OrderForm from "./Orderform";
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
-  const [status, setStatus] = useState("Listed"); // Initial status is 'Listed'
+  const [status, setStatus] = useState("Listed");
+  const [openForm, setOpenForm] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [status]); // Refetch data when status changes
-
+  }, [status]);
 
   const fetchData = async () => {
     try {
@@ -41,7 +41,7 @@ const CryptoMarketplacePage = () => {
       if (status === "Listed") {
         url = `${BASEURL}/api/Order/getAllOrderForAll`;
       } else if (status === "Ordered") {
-        url = `${BASEURL}/api/Order/getAllOrderForOneUSer`; // Adjust endpoint
+        url = `${BASEURL}/api/Order/getAllOrderForOneUSer`;
       }
 
       const response = await axios.get(url, { headers });
@@ -53,9 +53,28 @@ const CryptoMarketplacePage = () => {
     }
   };
 
-  // Function to handle status change
   const handleStatusChange = (event) => {
     setStatus(event.target.value);
+  };
+
+  const handleCreateOrder = () => {
+    setOpenForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
+
+  const handlePlaceOrder = async () => {
+    try {
+     
+      // Your logic to fetch form data and post it to the backend API
+      // Use axios or any preferred method for making HTTP requests
+      console.log("Posting order data...");
+      handleCloseForm();
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
   };
 
   return (
@@ -66,8 +85,6 @@ const CryptoMarketplacePage = () => {
       <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
         <Container maxWidth="xl">
           <Stack spacing={2}>
-            {" "}
-            {/* Increased spacing */}
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
               <Link href={paths.dashboard.index} passHref>
@@ -77,44 +94,49 @@ const CryptoMarketplacePage = () => {
             </Breadcrumbs>
           </Stack>
           <Typography variant="h4" sx={{ mt: 4 }}>
-            {" "}
-            {/* Added margin top */}
             Featured Listings
           </Typography>
-          <Select
-            value={status}
-            onChange={handleStatusChange}
-            displayEmpty
-            fullWidth
-            sx={{ mt: 2, width: "50%" }} // Adjust the width as needed
-            renderValue={(selected) => (
-              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                {selected === "Listed" ? "Listed" : "Ordered"}
-              </Typography>
-            )}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              mt: 2,
+            }}
           >
-            <MenuItem value="Listed">
-              <Typography variant="body1">Listed</Typography>
-            </MenuItem>
-            <MenuItem value="Ordered">
-              <Typography variant="body1">Ordered</Typography>
-            </MenuItem>
-          </Select>
-          <Divider sx={{ my: 3 }} /> {/* Increased spacing */}
-          {status === "Listed" ? (
-            <GridList2 projects={listings}
-              key={listings} />
-          ) : (
-            <GridList2 projects={listings}
-              key={listings} />
-          )}
+            <Select
+              value={status}
+              onChange={handleStatusChange}
+              displayEmpty
+              fullWidth
+              sx={{ mr: 1, width: "50%" }}
+              renderValue={(selected) => (
+                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                  {selected === "Listed" ? "Listed" : "Ordered"}
+                </Typography>
+              )}
+            >
+              <MenuItem value="Listed">
+                <Typography variant="body1">Listed</Typography>
+              </MenuItem>
+              <MenuItem value="Ordered">
+                <Typography variant="body1">Ordered</Typography>
+              </MenuItem>
+            </Select>
+            <Button variant="contained" size="medium" onClick={handleCreateOrder}>
+              Create Order
+            </Button>
+          </Box>
+          <Divider sx={{ my: 3 }} />
+          <GridList2 projects={listings} key={listings} />
         </Container>
       </Box>
+
+      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
     </>
   );
 };
 
-// Providing the layout for the page
 CryptoMarketplacePage.getLayout = (page) => (
   <DashboardLayout>{page}</DashboardLayout>
 );
