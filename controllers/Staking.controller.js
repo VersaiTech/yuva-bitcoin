@@ -547,7 +547,7 @@ const getStaked = async (req, res) => {
       return res.status(404).json({ message: 'Staked not found' });
     }
 
-    res.status(200).json({ 'staked found': staked });
+    res.status(200).json({ message: 'staked found', staked });
   }
   catch (error) {
     console.log(error);
@@ -567,7 +567,7 @@ const getUnstaked = async (req, res) => {
       return res.status(404).json({ message: 'Unstaked not found' });
     }
 
-    res.status(200).json({ 'unstaked found': staked });
+    res.status(200).json({ message: 'unstaked found', staked });
   }
   catch (error) {
     console.log(error);
