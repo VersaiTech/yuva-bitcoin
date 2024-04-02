@@ -22,7 +22,6 @@
 // import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator';
 // import axios from "axios";
 
-
 // const useNews = () => {
 //   const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 //   const isMounted = useMounted();
@@ -35,7 +34,7 @@
 //     const headers = {
 //       Authorization: token,
 //     };
-    
+
 //     console.log("Token:", token);
 //     console.log("Headers:", headers);
 //     console.log("URL:", `${BASEURL}/api/Blog/getAllBlogs`);
@@ -43,7 +42,7 @@
 //     const response = await axios.get(`${BASEURL}/api/Blog/getAllBlogs`, {
 //       headers: headers,
 //     });
-    
+
 //     console.log("Response from API:", response.data.blogs);
 
 //     if (isMounted()) {
@@ -54,7 +53,6 @@
 //     console.error(err);
 //   }
 // }, [isMounted]);
-
 
 // useEffect(() => {
 //   getNews();
@@ -112,7 +110,7 @@
 //               </Typography>
 //             </Breadcrumbs>
 //           </Stack>
-         
+
 //           <Typography variant="h4">
 //             Recent Articles
 //           </Typography>
@@ -193,22 +191,29 @@
 
 // export default Page;
 
-
-
-
-
 //================================
-import { BreadcrumbsSeparator } from '../../../components/breadcrumbs-separator';
-import { paths } from '../../../paths';
+import { BreadcrumbsSeparator } from "../../../components/breadcrumbs-separator";
+import { paths } from "../../../paths";
 
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { Box, Breadcrumbs, Button, Card, Container, Divider, Link, Stack, Typography, Grid } from '@mui/material';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Card,
+  Container,
+  Divider,
+  Link,
+  Stack,
+  Typography,
+  Grid,
+} from "@mui/material";
 import axios from "axios";
-import { PostCard } from '../../../sections/dashboard/blog/post-card';
-import { usePageView } from '../../../hooks/use-page-view';
-import { Layout as DashboardLayout } from '../../../layouts/dashboard';
+import { PostCard } from "../../../sections/dashboard/blog/post-card";
+import { usePageView } from "../../../hooks/use-page-view";
+import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useNews = () => {
@@ -251,16 +256,14 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 4
+          py: 4,
         }}
       >
         <Container maxWidth="xl">
           {/* Breadcrumbs */}
           {/* Card with greeting and button */}
           <Stack spacing={1}>
-            <Typography variant="h3">
-              Crypto News
-            </Typography>
+            <Typography variant="h3">Crypto News</Typography>
             <Breadcrumbs separator={<BreadcrumbsSeparator />}>
               <Link
                 color="inherit" // Changed to 'inherit'
@@ -278,10 +281,7 @@ const Page = () => {
               >
                 News
               </Link> */}
-              <Typography
-                color="text.secondary"
-                variant="subtitle2"
-              >
+              <Typography color="text.secondary" variant="subtitle2">
                 News
               </Typography>
             </Breadcrumbs>
@@ -289,29 +289,23 @@ const Page = () => {
           <Card
             elevation={16}
             sx={{
-              alignItems: 'center',
+              alignItems: "center",
               borderRadius: 1,
-              display: 'flex',
-              justifyContent: 'space-between',
+              display: "flex",
+              justifyContent: "space-between",
               mb: 8,
               mt: 6,
               px: 3,
-              py: 2
+              py: 2,
             }}
           >
-            <Typography variant="subtitle1">
-              Hello, User
-            </Typography>
+            <Typography variant="subtitle1">Hello, User</Typography>
           </Card>
           <Typography variant="h4">Recent Articles</Typography>
           <Divider sx={{ my: 2 }} />
-          <Grid container
-spacing={4}>
+          <Grid container spacing={4}>
             {news.map((newsArticle) => (
-              <Grid key={newsArticle.blogId}
-item
-xs={12}
-md={6}>
+              <Grid key={newsArticle.blogId} item xs={12} md={6}>
                 <PostCard
                   href={`/dashboard/news/${newsArticle.blogId}`}
                   authorAvatar="/assets/avatars/avatar-alcides-antonio.png"
@@ -322,7 +316,7 @@ md={6}>
                   readTime="5 min"
                   shortDescription={newsArticle.content}
                   title={newsArticle.title}
-                  sx={{ height: '100%' }}
+                  sx={{ height: "100%" }}
                 />
               </Grid>
             ))}
@@ -335,11 +329,6 @@ md={6}>
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-

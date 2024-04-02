@@ -164,14 +164,10 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack direction="row"
-justifyContent="space-between"
-spacing={4}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">All Stakes</Typography>
-                <Stack alignItems="center"
-direction="row"
-spacing={1}>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
                     size="small"
@@ -221,13 +217,18 @@ spacing={1}>
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                history = {history}
+                history={history}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
               <StakeListTable
-                customers={currentTab === "all" ? customers: currentTab === "history" ? history : []}
-               
+                customers={
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "history"
+                    ? history
+                    : []
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
