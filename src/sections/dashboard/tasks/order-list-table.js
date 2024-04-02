@@ -125,10 +125,12 @@ export const TaskListTable = (props) => {
                         p: 1,
                       }}
                     >
-                      <Typography align="center" variant="subtitle2">
+                      <Typography align="center"
+variant="subtitle2">
                         {createdAtMonth}
                       </Typography>
-                      <Typography align="center" variant="h6">
+                      <Typography align="center"
+variant="h6">
                         {createdAtDay}
                       </Typography>
                     </Box>
@@ -136,7 +138,8 @@ export const TaskListTable = (props) => {
                       <Typography variant="subtitle2">
                         {order.taskName}
                       </Typography>
-                      <Typography color="text.secondary" variant="body2">
+                      <Typography color="text.secondary"
+variant="body2">
                         Reward <b>{order.coins} </b> Coins
                       </Typography>
                     </Box>

@@ -446,9 +446,11 @@ const Page = () => {
           <Typography variant="subtitle2">Dashboard</Typography>
         </Link>
       </Box>
-      <Stack sx={{ mb: 4 }} spacing={1}>
+      <Stack sx={{ mb: 4 }}
+spacing={1}>
         <Typography variant="h5">Register</Typography>
-        <Typography color="text.secondary" variant="body2">
+        <Typography color="text.secondary"
+variant="body2">
           Already have an account?{" "}
           <Link
             component={NextLink}
@@ -460,7 +462,8 @@ const Page = () => {
           </Link>
         </Typography>
       </Stack>
-      <form noValidate onSubmit={formik.handleSubmit}>
+      <form noValidate
+onSubmit={formik.handleSubmit}>
         <Stack spacing={3}>
           <TextField
             error={formik.touched.member_name && !!formik.errors.member_name}
@@ -495,7 +498,8 @@ const Page = () => {
             value={formik.values.password}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordVisibility} edge="end">
+                <IconButton onClick={togglePasswordVisibility}
+edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),
@@ -517,7 +521,8 @@ const Page = () => {
             value={formik.values.confirmPassword}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordVisibility} edge="end">
+                <IconButton onClick={togglePasswordVisibility}
+edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),
@@ -564,9 +569,11 @@ const Page = () => {
             name="policy"
             onChange={formik.handleChange}
           />
-          <Typography color="text.secondary" variant="body2">
+          <Typography color="text.secondary"
+variant="body2">
             I have read the{" "}
-            <Link component="a" href="#">
+            <Link component="a"
+href="#">
               Terms and Conditions
             </Link>
           </Typography>

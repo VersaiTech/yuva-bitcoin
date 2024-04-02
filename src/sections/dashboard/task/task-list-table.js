@@ -97,7 +97,8 @@ export const NewtaskListTable = (props) => {
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box sx={{ position: "relative" }} {...other}>
+    <Box sx={{ position: "relative" }}
+{...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -121,10 +122,12 @@ export const NewtaskListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Delete
           </Button>
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Edit
           </Button>
         </Stack>
@@ -156,7 +159,9 @@ export const NewtaskListTable = (props) => {
               // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
 
               return (
-                <TableRow hover key={customer.taskId + 1} selected={isSelected}>
+                <TableRow hover
+key={customer.taskId + 1}
+selected={isSelected}>
                   {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
@@ -182,14 +187,18 @@ export const NewtaskListTable = (props) => {
                     >
                       {/* {getInitials(customer.taskName)} */}
                       {/* <YuvaLogo/> */}
-                      <img src="/yuvalogo2 - copy.png" alt="Yuva Logo" />
+                      <img src="/yuvalogo2 - copy.png"
+alt="Yuva Logo" />
                     </Avatar>
                   </TableCell>
                   <TableCell >
-                    <Stack alignItems="center" direction="row" spacing={1} >
+                    <Stack alignItems="center"
+direction="row"
+spacing={1} >
                       {customer.coins}
 
-                      <Typography color="text.secondary" variant="body2">
+                      <Typography color="text.secondary"
+variant="body2">
                         {customer.email}
                       </Typography>
                     </Stack>

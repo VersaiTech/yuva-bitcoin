@@ -242,7 +242,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {formattedCreatedAt}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Created At
       </Typography>
     </div> */}
@@ -250,7 +251,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {payment_method}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Method
       </Typography>
     </div> */}
@@ -258,7 +260,8 @@ export const GridList2 = ({ projects }) => {
       <Typography variant="subtitle2">
         {formattedUpdatedAt}
       </Typography>
-      <Typography color="text.secondary" variant="body2">
+      <Typography color="text.secondary"
+variant="body2">
         Updated At
       </Typography>
     </div> */}

@@ -146,7 +146,8 @@ const Page = () => {
             type={showPassword ? "text" : "password"}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordConfirmVisibility} edge="end">
+                <IconButton onClick={togglePasswordConfirmVisibility}
+edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),
@@ -164,7 +165,8 @@ const Page = () => {
             value={formik.values.passwordConfirm}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordConfirmVisibility2} edge="end">
+                <IconButton onClick={togglePasswordConfirmVisibility2}
+edge="end">
                   {showPassword2 ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),

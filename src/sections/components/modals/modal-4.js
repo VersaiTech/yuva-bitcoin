@@ -219,14 +219,16 @@ export const Modal4 = ({ isOpen, handleCloseModal, wallets }) => (
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h6">Wallets</Typography>
-          <IconButton onClick={handleCloseModal} aria-label="close">
+          <IconButton onClick={handleCloseModal}
+aria-label="close">
             <CloseIcon />
           </IconButton>
         </Box>
         <Box sx={{ mt: 2 }}>
           <List disablePadding>
             {wallets.map((wallet) => (
-              <ListItem disableGutters key={wallet.id}>
+              <ListItem disableGutters
+key={wallet.id}>
                 <ListItemAvatar>
                   <Avatar src={wallet.logo} />
                 </ListItemAvatar>

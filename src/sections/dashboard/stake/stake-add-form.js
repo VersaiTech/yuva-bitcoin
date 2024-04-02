@@ -105,12 +105,15 @@ export const CustomerEditForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit}
+{...other}>
       <Card>
         <CardHeader title="Add Stake" />
         <CardContent sx={{ pt: 0 }}>
-          <Grid container spacing={3}>
-            <Grid xs={12} md={6}>
+          <Grid container
+spacing={3}>
+            <Grid xs={12}
+md={6}>
               <TextField
                 error={
                   !!(formik.touched.investment && formik.errors.investment)
@@ -127,7 +130,8 @@ export const CustomerEditForm = (props) => {
                 value={formik.values.investment}
               />
             </Grid>
-            <Grid xs={12} md={6}>
+            <Grid xs={12}
+md={6}>
               {/* <InputLabel id="staking-duration-label">
                 Staking Duration
               </InputLabel> */}

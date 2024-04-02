@@ -6,13 +6,18 @@ import { Typography, Button } from '@mui/material'; // Importing Typography and 
 const CryptoCard = ({ name, description, onClick }) => {
   return (
     <MainCard boxShadow>
-      <Typography variant="h6" sx={{ marginBottom: '0.5rem' }}>
+      <Typography variant="h6"
+sx={{ marginBottom: '0.5rem' }}>
         {name}
       </Typography>
-      <Typography variant="body2" sx={{ color: 'text.secondary', marginBottom: '1rem' }}>
+      <Typography variant="body2"
+sx={{ color: 'text.secondary', marginBottom: '1rem' }}>
         {description}
       </Typography>
-      <Button onClick={onClick} variant="contained" color="primary" fullWidth>
+      <Button onClick={onClick}
+variant="contained"
+color="primary"
+fullWidth>
         View Listing
       </Button>
     </MainCard>

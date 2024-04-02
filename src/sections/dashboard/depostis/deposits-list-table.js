@@ -97,7 +97,8 @@ export const DepositListTable = (props) => {
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box sx={{ position: "relative" }} {...other}>
+    <Box sx={{ position: "relative" }}
+{...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -121,10 +122,12 @@ export const DepositListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Delete
           </Button>
-          <Button color="inherit" size="small">
+          <Button color="inherit"
+size="small">
             Edit
           </Button>
         </Stack>
@@ -176,7 +179,9 @@ export const DepositListTable = (props) => {
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={1}>
+                    <Stack alignItems="center"
+direction="row"
+spacing={1}>
                       <Avatar
                         src={customer.member_name}
                         sx={{

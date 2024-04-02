@@ -86,7 +86,9 @@ export const SocialProfile = () => {
           avatar={<Avatar src="/assets/avatars/avatar-omar-darboe.png" />}
           disableTypography
           subheader={
-            <Link color="text.primary" underline="none" variant="subtitle2">
+            <Link color="text.primary"
+underline="none"
+variant="subtitle2">
               {memberData.member_name}
             </Link>
           }
@@ -109,7 +111,8 @@ export const SocialProfile = () => {
                 <Typography variant="subtitle2">Email</Typography>
               </TableCell>
               <TableCell>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                 {memberData.email}
                 </Typography>
                 <SeverityPill color="success">Email verified</SeverityPill>
@@ -120,7 +123,8 @@ export const SocialProfile = () => {
                 <Typography variant="subtitle2">Password</Typography>
               </TableCell>
               <TableCell>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                 **************
                 </Typography>
               </TableCell>
@@ -130,7 +134,8 @@ export const SocialProfile = () => {
                 <Typography variant="subtitle2">Phone</Typography>
               </TableCell>
               <TableCell>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                 {memberData.contactNo}
                 </Typography>
               </TableCell>
@@ -140,7 +145,8 @@ export const SocialProfile = () => {
                 <Typography variant="subtitle2">Wallet Address</Typography>
               </TableCell>
               <TableCell>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                   {memberData.wallet_address}
                 </Typography>
               </TableCell>
@@ -150,7 +156,8 @@ export const SocialProfile = () => {
                 <Typography variant="subtitle2">Twitter Id</Typography>
               </TableCell>
               <TableCell>
-                <Typography color="text.secondary" variant="body2">
+                <Typography color="text.secondary"
+variant="body2">
                 {memberData.twitterId}
                 </Typography>
               </TableCell>

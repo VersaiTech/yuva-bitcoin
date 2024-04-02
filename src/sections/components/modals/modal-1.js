@@ -161,7 +161,9 @@ const ModalContent = ({ handleCloseModal,memberData }) => {
             error={formik.touched.wallet_address && Boolean(formik.errors.wallet_address)}
             helperText={formik.touched.wallet_address && formik.errors.wallet_address}
           />
-          <Button type="submit" variant="contained" fullWidth>
+          <Button type="submit"
+variant="contained"
+fullWidth>
             Submit
           </Button>
         </Stack>
