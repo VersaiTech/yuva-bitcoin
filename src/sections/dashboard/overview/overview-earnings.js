@@ -258,7 +258,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {amount}
+                      {amount+ ' ' + 'USDT' || 0} 
                     </Typography>
                     <Typography variant="h6">
                       Total Deposit
@@ -269,7 +269,7 @@ export const OverviewEarnings = (props) => {
             </CardContent>
             <Divider />
             <CardActions>
-              <Link href={paths.dashboard.earnings.index}>
+              <Link href={paths.dashboard.deposits.index}>
                 <Button
                   color="inherit"
                   endIcon={(
@@ -278,7 +278,7 @@ export const OverviewEarnings = (props) => {
                     </SvgIcon>
                   )}
                 >
-                  See all earnings
+                  Add Money
                 </Button>
               </Link>
             </CardActions>

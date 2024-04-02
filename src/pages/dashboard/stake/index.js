@@ -48,34 +48,36 @@ const useSearch = () => {
 
 const useCustomers = (search) => {
   const isMounted = useMounted();
-  const [state, setState] = useState({  
+  const [state, setState] = useState({
+    // history: [],
     customers: [],
     customersCount: 0,
   });
 
   const getCustomers = useCallback(async () => {
     try {
-      // const response = await customersApi.getCustomers(search);
+      // First API call
       const token = localStorage.getItem("accessToken");
-
       const headers = {
         Authorization: token,
       };
+      const response = await axios.get(`${BASEURL}/api/Staking/getStaked`, {
+        headers: headers,
+      });
+      console.log(response.data.staked);
 
-      const response = await axios.get(
-        `${BASEURL}/admin/getAllStake`,
-        { headers: headers }
-      );
-
-      console.log(response.data.data);
+      // Second API call
+      const history = await axios.get(`${BASEURL}/api/Staking/getUnstaked`, {
+        headers: headers,
+      });
+      console.log(history.data.staked);
 
       if (isMounted()) {
         setState({
-          customers: response.data.data,
+          customers: response.data.staked,
           customersCount: response.count,
-          // pending: PendingWithdrawals.data.data,
-          // rejected: rejectedWithdrawals.data.data,
-          // completed: completedWithdrawals.data.data,
+          history: history.data.staked,
+          // Add state for other data from the second API call if needed
         });
       }
     } catch (err) {
@@ -100,7 +102,7 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } =
+  const { customers, customersCount, completed, rejected, pending, history } =
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
@@ -191,7 +193,11 @@ const Page = () => {
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                <Link component={NextLink} color="inherit" href={paths.dashboard.stake.create}>
+                <Link
+                  component={NextLink}
+                  color="inherit"
+                  href={paths.dashboard.stake.create}
+                >
                   <Button
                     startIcon={
                       <SvgIcon>
@@ -211,28 +217,13 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                // completed={completed}
-                // pending={pending}
-                // rejected={rejected}
+                history = {history}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
               <StakeListTable
-                customers={customers}
-                // customersCount={customersCount}
-                // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                // customers={
-                //   currentTab === "all"
-                //     ? customers
-                // }
-                // customersCount={
-                //   currentTab === 'all' ? customersCount :
-                //     currentTab === 'pending' ? pending.length :
-                //       currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                //         currentTab === 'isProspect' ? completed.length :
-                //           0
-                // }
+                customers={currentTab === "all" ? customers: currentTab === "history" ? history : []}
+               
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

@@ -16,13 +16,13 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabOptions = [
   {
-    label: 'All',
+    label: 'Current Stake',
     value: 'all'
   },
-  // {
-  //   label: 'Canceled',
-  //   value: 'canceled'
-  // },
+  {
+    label: 'Stake History',
+    value: 'history'
+  },
   // {
   //   label: 'Completed',
   //   value: 'complete'
@@ -49,10 +49,11 @@ const sortOptions = [
 ];
 
 export const StakeListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
+  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' , currentTab, setCurrentTab } = props;
   const queryRef = useRef(null);
-  const [currentTab, setCurrentTab] = useState('all');
+  // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({
+
     query: undefined,
     status: undefined
   });
