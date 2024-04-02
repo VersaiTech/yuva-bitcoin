@@ -24,6 +24,7 @@ import Truck01Icon from "../../icons/untitled-ui/duocolor/truck-01";
 import Upload04Icon from "../../icons/untitled-ui/duocolor/upload-04";
 import Users03Icon from "../../icons/untitled-ui/duocolor/users-03";
 import XSquareIcon from "../../icons/untitled-ui/duocolor/x-square";
+import NewsIcon from "../../icons/untitled-ui/duocolor/news";
 import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
 
@@ -182,11 +183,12 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.news),
-        path: paths.dashboard.news.index,
+        path: paths.dashboard.news.list,
         icon: (
           <SvgIcon fontSize="small">
-            <Mail04Icon />
-          </SvgIcon>
+          {/* <Mail04Icon /> */}
+          <NewsIcon />
+        </SvgIcon>
         ),
       },
       // {
