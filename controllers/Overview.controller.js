@@ -1,6 +1,7 @@
 const Member = require("../models/memberModel");
 const Stake = require("../models/stake");
 const Deposit = require("../models/deposit");
+const Admin = require("../models/AdminModel");
 const { Task, CompletedTask } = require("../models/Task");
 
 
@@ -14,6 +15,8 @@ async function getOverview(req, res) {
     const allCoin = await Member.find();
     const allDeposits = await Deposit.find();
 
+    const adminData = await Admin.findOne()
+
     // Count completed tasks separately
     const completedTasksCount = await CompletedTask.countDocuments({ status: 'confirmed' });
     const pendingTasksCount = await CompletedTask.countDocuments({ status: 'pending' });
@@ -25,6 +28,7 @@ async function getOverview(req, res) {
     const totalMemberCoins = allCoin.reduce((total, member) => total + member.coins, 0);
     const totalDepositAmount = allDeposits.reduce((total, deposit) => total + deposit.amount, 0);
 
+    console.log(adminData.yuva)
     return res.status(200).json({
       status: true,
       message: "Overview for admin panel",
@@ -38,6 +42,8 @@ async function getOverview(req, res) {
         totalStakesInvestment,
         totalMemberCoins,
         totalDepositAmount,
+        yuva: adminData.yuva,
+        usdt: adminData.usdt
       },
     });
   } catch (error) {
