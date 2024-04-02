@@ -82,136 +82,163 @@ export const GridList2 = ({ projects }) => {
   }, [isModalOpen]);
 
   return (
-   
-<>
-<Box
-  sx={{
-    backgroundColor: (theme) =>
-      theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
-    p: 3,
-  }}
->
-  <Grid container
-spacing={3}>
-  {projects.map((project) => {
-  const {
-    _id,
-    coin,
-    amount,
-    exchange_currency,
-    payment_method,
-    createdAt,
-    updatedAt,
-    total
-  } = project;
-  const formattedCreatedAt = new Date(createdAt).toLocaleString();
-  const formattedUpdatedAt = new Date(updatedAt).toLocaleString();
+    <>
+      <Box
+        sx={{
+          backgroundColor: (theme) =>
+            theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+          p: 3,
+        }}
+      >
+        <Grid container spacing={3}>
+          {projects.map((project) => {
+            const {
+              _id,
+              coin,
+              amount,
+              exchange_currency,
+              payment_method,
+              createdAt,
+              updatedAt,
+              total,
+            } = project;
+            const formattedCreatedAt = new Date(createdAt).toLocaleString();
+            const formattedUpdatedAt = new Date(updatedAt).toLocaleString();
 
-      return (
-        <Grid key={project.id}
-item
-xs={12}
-md={4}>
-          <Box mt={2}
-mb={2}>
-            {/* Add margin top and bottom */}
-            <Card
-              sx={{
-                p: 2,
-                borderRadius: 3,
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                transition: "transform 0.2s ease-in-out",
-                "&:hover": {
-                  transform: "scale(1.02)",
-                },
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                position: "relative",
-                overflow: "visible",
-              }}
-            >
-            <Box mt={2}
-mb={2}
-sx={{ position: "absolute", top: 0, left: 0, }}>
-            {/* Logo */}
-            <img
-              src={`/assets/logos/${coin === "yuva" ? "yuvalogo2.png" : coin === "usdt" ? "yuvalogo2.png" : ""}`}
-              alt="Logo"
-              style={{ position: "absolute", top: 0, left: 0, width: "30px", height: "30px", zIndex: 1 }}
-            />
-            
-            {/* Typography for UTDC */}
-            <Typography
-              color="text.primary"
-              variant="body2"
-              sx={{
-                position: "absolute",
-                top: 5,
-                left: 48, // Adjust left position to create space for the logo
-                zIndex: 1,
-                fontName: "Montserrat, sans-serif", // Change font family
-                fontWeight: "bold", // Make the text bold
-              }}
-            >
-              {coin}
-            </Typography>
-          </Box>
+            return (
+              <Grid key={project.id} item xs={12} md={4}>
+                <Box mt={2} mb={2}>
+                  {/* Add margin top and bottom */}
+                  <Card
+                    sx={{
+                      p: 2,
+                      borderRadius: 3,
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                      transition: "transform 0.2s ease-in-out",
+                      "&:hover": {
+                        transform: "scale(1.02)",
+                      },
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      position: "relative",
+                      overflow: "visible",
+                    }}
+                  >
+                    <Box
+                      mt={2}
+                      mb={2}
+                      sx={{ position: "absolute", top: 0, left: 0 }}
+                    >
+                      {/* Logo */}
+                      <img
+                        src={`/assets/logos/${
+                          coin === "yuva"
+                            ? "yuvalogo2.png"
+                            : coin === "usdt"
+                            ? "yuvalogo2.png"
+                            : ""
+                        }`}
+                        alt="Logo"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "30px",
+                          height: "30px",
+                          zIndex: 1,
+                        }}
+                      />
 
-              {/* MUI Badge for Transfer */}
+                      {/* Typography for UTDC */}
+                      <Typography
+                        color="text.primary"
+                        variant="body2"
+                        sx={{
+                          position: "absolute",
+                          top: 5,
+                          left: 48, // Adjust left position to create space for the logo
+                          zIndex: 1,
+                          fontName: "Montserrat, sans-serif", // Change font family
+                          fontWeight: "bold", // Make the text bold
+                        }}
+                      >
+                        {coin}
+                      </Typography>
+                    </Box>
 
-              {/* MUI Badge for Transfer */}
-              <Badge
-                badgeContent="Listed"
-                color="success"
-                sx={{
-                  position: "absolute",
-                  top: 15,
-                  right: 14,
-                  zIndex: 1,
-                }}
-              />
-              <Box sx={{ p: 2 }}>
-                <Box
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    textAlign: "center",
-                  }}
-                >
-                  {/*<Avatar src={project.currency.avatar} />*/}
-                  <Box sx={{ mt: 2 }}>
-                    <Typography color="text.secondary"
-variant="body2">
-                      <Link color="text.primary"
-variant="h4">
-                      {coin === "usdt" ? "$" : coin === "yuva" ? "YB" : ""} {amount}
-                      </Link>
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-              <Box sx={{ pb: 1, px: 5, textAlign: "center" }}>
-                <Typography color="text.secondary"
-variant="body2">
-                  {exchange_currency} Sats/USDT
-                </Typography>
-                <Typography color="text.secondary"
-variant="body1">
-                  {total}
-                </Typography>
-              </Box>
-              <Divider />
-              <Box sx={{ px: 3, py: 1, textAlign: "center" }}>
-  <Stack
-    direction="column"
-    alignItems="center"
-    spacing={1} // Adjust spacing as needed
-  >
-    <div>
+                    {/* MUI Badge for Transfer */}
+
+                    {/* MUI Badge for Transfer */}
+                    <Badge
+                      badgeContent="Listed"
+                      color="success"
+                      sx={{
+                        position: "absolute",
+                        top: 15,
+                        right: 14,
+                        zIndex: 1,
+                      }}
+                    />
+                    <Box sx={{ p: 2 }}>
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          display: "flex",
+                          flexDirection: "column",
+                          textAlign: "center",
+                        }}
+                      >
+                        {/*<Avatar src={project.currency.avatar} />*/}
+                        <Box
+                          sx={{ mt: 2, display: "flex", alignItems: "center" }}
+                        >
+                          <img
+                            alt="Logo"
+                            src={`/assets/logos/${
+                              coin === "yuva"
+                                ? "yuvalogo2.png"
+                                : coin === "usdt"
+                                ? "yuvalogo2.png"
+                                : ""
+                            }`}
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              marginRight: "8px",
+                            }}
+                          />
+                          <Typography color="text.secondary" variant="body2">
+                            <Link color="text.primary" variant="h4">
+                              {coin === "usdt"
+                                ? "$"
+                                : coin === "yuva"
+                                ? ""
+                                : ""}{" "}
+                              {amount}
+                            </Link>
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box sx={{ pb: 1, px: 5, textAlign: "center" }}>
+                      <Typography color="text.secondary" variant="body2">
+                        {exchange_currency} USDT/YB
+                      </Typography>
+                      <Typography color="text.secondary" variant="body1">
+                        {total}USDT
+                      </Typography>
+                    </Box>
+                    <Divider />
+                    <Box sx={{ px: 3, py: 1, textAlign: "center" }}>
+                      <Stack
+                        direction="column"
+                        alignItems="center"
+                        spacing={1} // Adjust spacing as needed
+                      >
+                        {/* <div>
       <Typography variant="subtitle2">
         {formattedCreatedAt}
       </Typography>
@@ -219,8 +246,8 @@ variant="body1">
 variant="body2">
         Created At
       </Typography>
-    </div>
-    <div>
+    </div> */}
+                        {/* <div>
       <Typography variant="subtitle2">
         {payment_method}
       </Typography>
@@ -228,8 +255,8 @@ variant="body2">
 variant="body2">
         Method
       </Typography>
-    </div>
-    <div>
+    </div> */}
+                        {/* <div>
       <Typography variant="subtitle2">
         {formattedUpdatedAt}
       </Typography>
@@ -237,78 +264,76 @@ variant="body2">
 variant="body2">
         Updated At
       </Typography>
-    </div>
-  </Stack>
-</Box>
+    </div> */}
+                      </Stack>
+                    </Box>
 
+                    <Divider />
 
-              <Divider />
-
-              <Box sx={{ p: 2, textAlign: "center" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  {/*<Tooltip title="Unlike">
+                    <Box sx={{ p: 2, textAlign: "center" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {/* <Tooltip title="Unlike">
                     <IconButton>
                       <Avatar src={project.currency.avatar} />
                     </IconButton>
                   </Tooltip>
                   <Typography color="text.secondary" variant="subtitle2">
                     {project.allTimeHigh}
-                </Typography>*/}
+                </Typography> */}
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          mt: 1,
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{
+                            ml: 1,
+                            width: "15vw",
+                            boxShadow:
+                              "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
+                            "&:hover": {
+                              boxShadow:
+                                "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
+                            },
+                          }}
+                          onClick={handleBuyButtonClick}
+                        >
+                          <SvgIcon>
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path d="M21.82 14.47l-2.6-10.39C19.03 3.18 18.34 3 17.65 3H5.94L5.01 1.56C4.71.96 3.97.83 3.51 1.26L1.35 3.12c-.38.34-.45.94-.16 1.34L5.08 8h-.1c-.58 0-1.13.29-1.45.77L.22 13.3c-.28.45-.3 1.01-.05 1.47l3.55 6.18c.22.37.62.6 1.06.6h12.62l.77 1.44c.3.56.91.77 1.44.47l2.15-.91c.38-.16.63-.52.63-.92V15c.01-.41-.24-.78-.62-.99zM12.7 5h5.13l1.71 6.99H13.08L12.7 5zM7.5 15c-1.38 0-2.5-1.12-2.5-2.5S6.12 10 7.5 10s2.5 1.12 2.5 2.5S8.88 15 7.5 15zm9.99 4.78l-1.5-2.78H7.77l-1.52-2.64L4.16 13H1.41l3.18-5.54h11.18l1.06 4.24H9.75c-.31 0-.61.16-.78.43l-1.69 2.94-.5.88h10.4l1.22 2.12z" />
+                          </SvgIcon>
+                          Buy
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Card>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    mt: 1,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      ml: 1,
-                      width: "15vw",
-                      boxShadow:
-                        "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
-                      "&:hover": {
-                        boxShadow:
-                          "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
-                      },
-                    }}
-                    onClick={handleBuyButtonClick}
-                  >
-                    <SvgIcon>
-                      <path d="M0 0h24v24H0z"
-fill="none" />
-                      <path d="M21.82 14.47l-2.6-10.39C19.03 3.18 18.34 3 17.65 3H5.94L5.01 1.56C4.71.96 3.97.83 3.51 1.26L1.35 3.12c-.38.34-.45.94-.16 1.34L5.08 8h-.1c-.58 0-1.13.29-1.45.77L.22 13.3c-.28.45-.3 1.01-.05 1.47l3.55 6.18c.22.37.62.6 1.06.6h12.62l.77 1.44c.3.56.91.77 1.44.47l2.15-.91c.38-.16.63-.52.63-.92V15c.01-.41-.24-.78-.62-.99zM12.7 5h5.13l1.71 6.99H13.08L12.7 5zM7.5 15c-1.38 0-2.5-1.12-2.5-2.5S6.12 10 7.5 10s2.5 1.12 2.5 2.5S8.88 15 7.5 15zm9.99 4.78l-1.5-2.78H7.77l-1.52-2.64L4.16 13H1.41l3.18-5.54h11.18l1.06 4.24H9.75c-.31 0-.61.16-.78.43l-1.69 2.94-.5.88h10.4l1.22 2.12z" />
-                    </SvgIcon>
-                    Buy
-                  </Button>
-                </Box>
-              </Box>
-            </Card>
-          </Box>
+              </Grid>
+            );
+          })}
         </Grid>
-      );
-    })}
-  </Grid>
-</Box>
-{/* Modal */}
-{isModalOpen && ( 
-  <Modal4
-    wallets={wallets}
-    isOpen={isModalOpen}
-    handleCloseModal={handleCloseModal}
-  />
-)}
-</>
+      </Box>
+      {/* Modal */}
+      {isModalOpen && (
+        <Modal4
+          wallets={wallets}
+          isOpen={isModalOpen}
+          handleCloseModal={handleCloseModal}
+        />
+      )}
+    </>
   );
 };
 

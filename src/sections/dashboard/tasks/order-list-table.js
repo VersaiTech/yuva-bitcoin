@@ -80,8 +80,8 @@ export const TaskListTable = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell >Details</TableCell>
-            <TableCell>End Date</TableCell>
+            {/* <TableCell >Details</TableCell> */}
+            {/* <TableCell>End Date</TableCell> */}
             <TableCell>Status</TableCell>
           </TableRow>
         </TableHead>
@@ -145,8 +145,8 @@ variant="body2">
                     </Box>
                   </Box>
                 </TableCell>
-                <TableCell >{description}</TableCell>
-                <TableCell >{countdowns[index]}</TableCell>
+                {/* <TableCell >{description}</TableCell> */}
+                {/* <TableCell >{countdowns[index]}</TableCell> */}
                 <TableCell >
                   <SeverityPill color={statusMap[order.status] || 'warning'}>
                     {order.status}

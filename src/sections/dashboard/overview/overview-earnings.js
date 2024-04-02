@@ -137,7 +137,7 @@
 
 // export default OverviewEarnings;
 
-
+import PropTypes from 'prop-types';
 
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
@@ -212,7 +212,9 @@ const useChartOptions = () => {
   };
 };
 
-export const OverviewEarnings = () => {
+export const OverviewEarnings = (props) => {
+  const { amount } = props;
+
   const chartOptions = useChartOptions();
   const customer = useCustomer();
 
@@ -243,23 +245,23 @@ export const OverviewEarnings = () => {
                 spacing={2}
               >
                 <img
-                  src="/yuvalogo2.png " // Replace with the path to your image
+                  src="/usdt.png" // Replace with the path to your image
                   alt="Your Image"
                   style={{
                     width: 100, // Adjust the width of the image as needed
                     height: 100, // Adjust the height of the image as needed
-                    objectFit: 'cover', // Ensure the image covers the entire container
-                    borderRadius: '50%', // Apply border radius to make it circular
+                    objectFit: 'contain', // Ensure the image covers the entire container
+                    borderRadius: '10%', // Apply border radius to make it circular
                     zIndex: 1 // Ensure the image is above other content
                   }}
                 />
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      132 YB
+                      {amount}
                     </Typography>
                     <Typography variant="h6">
-                      Total Earnings
+                      Total Deposit
                     </Typography>
                   </Stack>
                 </Box>
@@ -343,6 +345,9 @@ export const OverviewEarnings = () => {
       </Grid>
     </Box>
   );
+};
+OverviewEarnings.propTypes = {
+  amount: PropTypes.number
 };
 
 //   return (

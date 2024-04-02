@@ -80,13 +80,13 @@ export const TopNav = (props) => {
                 }
               }}
             >
-              Yuva <span>Bitcoin </span>
+              Yuva <span>Bitcoin WhitePaper  </span>
             </Box>
           </Stack>
-          <Chip
+          {/* <Chip
             label="v6.0.0"
             size="small"
-          />
+          /> */}
         </Stack>
         <Stack
           alignItems="center"

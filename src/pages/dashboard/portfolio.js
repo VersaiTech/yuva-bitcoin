@@ -1,4 +1,5 @@
 import Head from "next/head";
+
 import { subDays, subHours, subMinutes } from "date-fns";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {
@@ -123,7 +124,7 @@ md={12}>
                   lg: 4,
                 }}
               >
-            <OverviewEarnings />
+            <OverviewEarnings amount={overview.deposit_usdt} />
 
                 <CryptoCurrentBalance
                   chartSeries={chartSeries}

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
+
 import { Box, Divider, Stack, Typography } from '@mui/material';
+
 import axios from 'axios';
 
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { OrderDrawer } from '../../../sections/dashboard/order/order-drawer';
+import { TaskDrawer } from '../../../sections/dashboard/order/order-drawer';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
 import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
@@ -188,7 +190,7 @@ const Page = () => {
             />
             <Divider />
             <EarningListTable
-              onOrderSelect={handleOrderOpen}
+              // onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
               orders={orders}
@@ -197,7 +199,7 @@ const Page = () => {
               rowsPerPage={search.rowsPerPage}
             />
           </EarningListContainer>
-          <OrderDrawer
+          <TaskDrawer
             container={rootRef.current}
             onClose={handleOrderClose}
             open={drawer.isOpen}
