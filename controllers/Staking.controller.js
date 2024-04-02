@@ -544,7 +544,7 @@ const getStaked = async (req, res) => {
 
     const staked = await StakeHistory.find({ member_user_id: userId, type: 'staked' });
     if (!staked) {
-      return res.status(404).json({ message: 'Staked not found' });
+      return res.status(404).json({ message: 'Staked not found', staked: [] });
     }
 
     res.status(200).json({ message: 'staked found', staked });
@@ -564,7 +564,7 @@ const getUnstaked = async (req, res) => {
 
     const staked = await StakeHistory.find({ member_user_id: userId, type: 'unstaked' });
     if (!staked) {
-      return res.status(404).json({ message: 'Unstaked not found' });
+      return res.status(404).json({ message: 'Unstaked not found', staked: [] });
     }
 
     res.status(200).json({ message: 'unstaked found', staked });
