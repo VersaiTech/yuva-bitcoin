@@ -185,10 +185,10 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                       </Box>
                     </Box>
                     <Box sx={{ pb: 1, px: 5, textAlign: "center" }}>
-                      <Typography color="text.secondary" variant="body2">
+                      <Typography color="text.primary" variant="body2">
                         {exchange_currency} USDT/YB
                       </Typography>
-                      <Typography color="text.secondary" variant="body1">
+                      <Typography color="text.primary" variant="body1">
                         {total}USDT
                       </Typography>
                     </Box>

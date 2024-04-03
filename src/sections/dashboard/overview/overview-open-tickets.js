@@ -46,7 +46,7 @@ export const OverviewOpenTickets = (props) => {
       <CardActions>
         {/* Use Link component from Next.js to navigate to the desired route */}
         <Link  href={paths.dashboard.tasks.index}> 
-          {/* <Button
+          <Button
             color="inherit"
             endIcon={(
               <SvgIcon>
@@ -56,12 +56,8 @@ export const OverviewOpenTickets = (props) => {
             size="small"
           >
             See all tasks
-          </Button> */}
-           <Chip
-            label="See All"
-            size="small"
-          />
-
+          </Button>
+          
         </Link>
       </CardActions>
     </Card>

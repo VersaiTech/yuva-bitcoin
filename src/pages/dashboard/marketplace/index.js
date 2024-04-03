@@ -104,9 +104,13 @@ const CryptoMarketplacePage = () => {
           <Stack spacing={2}>
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-              <Link href={paths.dashboard.index}
-                passHref>
-                <Typography color="inherit">Dashboard</Typography>
+              <Link href={paths.dashboard.index} passHref  style={{textDecoration: "none"}}>
+                <Typography
+                  color="text.primary"
+                  style={{ cursor: "pointer", textDecoration: "none" }}
+                >
+                  Dashboard
+                </Typography>
               </Link>
               <Typography color="text.primary">Crypto Marketplace</Typography>
             </Breadcrumbs>
@@ -141,7 +145,11 @@ const CryptoMarketplacePage = () => {
                 <Typography variant="body1">Ordered</Typography>
               </MenuItem>
             </Select>
-            <Button variant="contained" size="medium" onClick={handleCreateOrder}>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={handleCreateOrder}
+            >
               Create Order
             </Button>
           </Box>

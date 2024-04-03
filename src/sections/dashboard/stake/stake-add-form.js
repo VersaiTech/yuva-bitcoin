@@ -1,6 +1,7 @@
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
+import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
@@ -10,12 +11,17 @@ import {
   CardHeader,
   Divider,
   Stack,
-  Switch,
+  Chip,
   TextField,
   Typography,
   MenuItem,
   Select,
   Unstable_Grid2 as Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
 import { paths } from "../../../paths";
 import { wait } from "../../../utils/wait";
@@ -29,36 +35,29 @@ export const CustomerEditForm = (props) => {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { ...other } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleConfirmStake = () => {
+    setOpen(false);
+    formik.submitForm();
+  };
+
   const formik = useFormik({
     initialValues: {
-      // address1: customer.address1 || '',
-      // address2: customer.address2 || '',
-      // member_name: '', // Set empty string for all fields
-      // email: '',
-      // coins: '',
-      // contactNo: '',
-      // twitterId: '',
-      // isActive: false,
       investment: "",
       stakingDuration: "",
     },
     validationSchema: Yup.object({
-      // address1: Yup.string().max(255),
-      // address2: Yup.string().max(255),
-      // country: Yup.string().max(255),
-      // email: Yup
-      //   .string()
-      //   .email('Must be a valid email')
-      //   .max(255)
-      //   .required('Email is required'),
-      // hasDiscount: Yup.bool(),
-      // isVerified: Yup.bool(),
-      // name: Yup
-      //   .string()
-      //   .max(255)
-      //   .required('Name is required'),
-      // phone: Yup.string().max(15),
-      // twitterId: Yup.string().max(255)
+      investment: Yup.string().required("Investment is required"),
+      stakingDuration: Yup.string().required("Staking Duration is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -67,9 +66,6 @@ export const CustomerEditForm = (props) => {
           Authorization: token,
         };
 
-        // const valuesData = {
-        //   isActive: values.isActive
-        // }
         const response = await axios.post(
           `${BASEURL}/api/Staking/transferToStaking`,
           values,
@@ -87,33 +83,16 @@ export const CustomerEditForm = (props) => {
         enqueueSnackbar(err.response.data.error, { variant: "error" });
         console.log(err.response.data.error);
       }
-
-      // try {
-      //   // NOTE: Make API request
-      //   await wait(500);
-      //   helpers.setStatus({ success: true });
-      //   helpers.setSubmitting(false);
-      //   toast.success('Customer updated');
-      // } catch (err) {
-      //   console.error(err);
-      //   toast.error('Something went wrong!');
-      //   helpers.setStatus({ success: false });
-      //   helpers.setErrors({ submit: err.message });
-      //   helpers.setSubmitting(false);
-      // }
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}
-{...other}>
+    <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
         <CardHeader title="Add Stake" />
         <CardContent sx={{ pt: 0 }}>
-          <Grid container
-spacing={3}>
-            <Grid xs={12}
-md={6}>
+          <Grid container spacing={3}>
+            <Grid xs={12} md={6}>
               <TextField
                 error={
                   !!(formik.touched.investment && formik.errors.investment)
@@ -130,14 +109,8 @@ md={6}>
                 value={formik.values.investment}
               />
             </Grid>
-            <Grid xs={12}
-md={6}>
-              {/* <InputLabel id="staking-duration-label">
-                Staking Duration
-              </InputLabel> */}
-
+            <Grid xs={12} md={6}>
               <Select
-                labelId="staking-duration-label"
                 error={
                   !!(
                     formik.touched.stakingDuration &&
@@ -151,26 +124,17 @@ md={6}>
                 }
                 label="Staking Duration"
                 name="stakingDuration"
-                // placeholder="Staking Duration"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
                 value={formik.values.stakingDuration}
               >
-                <MenuItem value="3">3</MenuItem>
-                <MenuItem value="6">6</MenuItem>
-                <MenuItem value="12">12</MenuItem>
+                <MenuItem value="3">3 Month</MenuItem>
+                <MenuItem value="6">6 Month</MenuItem>
+                <MenuItem value="12">12 Month</MenuItem>
               </Select>
             </Grid>
-            {/* 
-           
-
-          
-            
-           
-             */}
           </Grid>
-        
         </CardContent>
         <Stack
           direction={{
@@ -181,23 +145,43 @@ md={6}>
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button
-            // disabled={formik.isSubmitting}
-            type="submit"
-            variant="contained"
-          >
-            Add
+          <Button type="button" variant="contained" onClick={handleOpen}>
+            Add Stake
           </Button>
           <Button
             color="inherit"
             component={NextLink}
-            disabled={formik.isSubmitting}
             href={paths.dashboard.stake.index}
+            variant="outlined"
           >
             Cancel
           </Button>
+          
         </Stack>
+        <Typography variant="body2" color="error" sx={{ p: 3 }}>
+           Warning: Please stake coins carefully. Once you stake coins, you cannot
+            withdraw them until the staking duration ends.
+          </Typography>
       </Card>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Confirm Stake</DialogTitle>
+        <DialogContent> 
+          <DialogContentText style={{ color: "red" }}>
+            Please stake coins carefully. Once you stake coins, you cannot
+            withdraw them until the staking duration ends.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="error" variant="outlined" >
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmStake} color="primary" autoFocus variant="contained">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+      
+
     </form>
   );
 };
