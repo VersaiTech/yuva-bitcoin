@@ -40,29 +40,29 @@ const Page = () => {
   const [overview, setOverview] = useState([]);
   const totalInvestment = useTotalInvestment();
   const chartSeries = [
-     totalInvestment
+    totalInvestment
   ];
   usePageView();
   const OverviewData = async () => {
-    try{
-    const token = localStorage.getItem("accessToken");
-    const headers = {
-      Authorization: token,
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      }
+
+      const response = await axios.get(`${BASEURL}/admin/getUserOverview`, { headers: headers });
+
+      console.log(response.data.overview)
+      setOverview(response.data.overview)
+
+    } catch (error) {
+      console.error(error);
     }
-
-    const response = await axios.get(`${BASEURL}/admin/getUserOverview`, { headers: headers });
-
-    console.log(response.data.overview)
-    setOverview(response.data.overview)
-  
-  } catch (error) {
-    console.error(error);
   }
-}
 
   useEffect(() => {
     OverviewData();
-  }, []) 
+  }, [])
 
   return (
     <>
@@ -87,8 +87,8 @@ const Page = () => {
           >
             <Grid xs={12}>
               <Stack direction="row"
-justifyContent="space-between"
-spacing={4}>
+                justifyContent="space-between"
+                spacing={4}>
                 <div>
                   <Typography variant="h4">Overview</Typography>
                 </div>
@@ -115,16 +115,16 @@ spacing={4}>
             </Grid>
 
 
-            
+
             <Grid xs={12}
-md={12}>
+              md={12}>
               <Stack
                 spacing={{
                   xs: 3,
                   lg: 4,
                 }}
               >
-            <OverviewEarnings amount={overview.deposit_usdt} />
+                <OverviewEarnings amount={overview.deposit_usdt} />
 
                 <CryptoCurrentBalance
                   chartSeries={chartSeries}
