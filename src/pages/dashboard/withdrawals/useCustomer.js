@@ -9,6 +9,11 @@ export const useCustomer = () => {
   const getCustomer = useCallback(async () => {
     try {
       const token = localStorage.getItem('accessToken');
+      if (!token) {
+        // If token is not available, redirect to login page
+        window.location.href = "/auth/login/modern"; // Assuming login page route is "/login"
+        return;
+      }
       const headers = {
         'Authorization': token
       }

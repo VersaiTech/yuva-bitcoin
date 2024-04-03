@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import File04Icon from '@untitled-ui/icons-react/build/esm/File04';
-import { Box, Button, Drawer, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Drawer, Stack, SvgIcon, Typography,Image } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Logo } from '../../../components/logo';
 import { Scrollbar } from '../../../components/scrollbar';
@@ -185,17 +185,18 @@ export const SideNav = (props) => {
               component={NextLink}
               href={paths.index}
               sx={{
-                borderColor: 'var(--nav-logo-border)',
-                borderRadius: 1,
-                borderStyle: 'solid',
-                borderWidth: 1,
                 display: 'flex',
                 height: 40,
-                p: '4px',
+                p: '1px',
                 width: 40
               }}
             >
-              <Logo />
+              <img
+              src="/assets/logos/yuvalogo (1).png" // Adjust the path to your logo image
+              alt="Logo"
+              width={45} // Adjust the width as needed
+              height={45} // Adjust the height as needed
+            />
             </Box>
             <TenantSwitch sx={{ flexGrow: 1 }} />
           </Stack>

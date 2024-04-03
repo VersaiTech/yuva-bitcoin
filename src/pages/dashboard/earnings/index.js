@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState,useMemo } from 'react';
 import Head from 'next/head';
 
 import { Box, Divider, Stack, Typography } from '@mui/material';
@@ -80,10 +80,18 @@ const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
   const { orders, ordersCount } = useOrders(search);
+  const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined
   });
+
+  const currentEarning = useMemo(() => {
+    if (!drawer.data) {
+      return undefined;
+    }
+    return orders.find((earning) => earning.id === drawer.data);
+  }, [drawer, orders]);
 
   usePageView();
 
@@ -115,8 +123,31 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
-  const handleOrderOpen = useCallback((orderId) => {
-    if (drawer.isOpen && drawer.data === orderId) {
+  // const handleOrderOpen = useCallback((orderId) => {
+  //   if (drawer.isOpen && drawer.data === orderId) {
+  //     setDrawer({
+  //       isOpen: false,
+  //       data: undefined
+  //     });
+  //     return;
+  //   }
+
+  //   setDrawer({
+  //     isOpen: true,
+  //     data: orderId
+  //   });
+  // }, [drawer]);
+
+  // const handleOrderClose = useCallback(() => {
+  //   setDrawer({
+  //     isOpen: false,
+  //     data: undefined
+  //   });
+  // }, []);
+
+
+  const handleOrderOpen = useCallback((earningId) => {
+    if (drawer.isOpen && drawer.data === earningId) {
       setDrawer({
         isOpen: false,
         data: undefined
@@ -126,7 +157,7 @@ const Page = () => {
 
     setDrawer({
       isOpen: true,
-      data: orderId
+      data: earningId
     });
   }, [drawer]);
 
@@ -187,9 +218,11 @@ const Page = () => {
               onSortChange={handleSortChange}
               sortBy={search.sortBy}
               sortDir={search.sortDir}
+              currentTab={currentTab}
+              setCurrentTab={setCurrentTab}
             />
             <Divider />
-            <EarningListTable
+          {/*  <EarningListTable
               // onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
@@ -197,14 +230,23 @@ const Page = () => {
               ordersCount={ordersCount}
               page={search.page}
               rowsPerPage={search.rowsPerPage}
-            />
+        />*/}
+            <EarningListTable
+            onOrderSelect={handleOrderOpen} // Pass the function to handle opening drawer
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            orders={currentTab === "all" ? orders : currentTab === "pending" ? pending : currentTab === "complete" ? completed : currentTab === "rejected" ? rejected : []}
+            ordersCount={ordersCount}
+            page={search.page}
+            rowsPerPage={search.rowsPerPage}
+          />
           </EarningListContainer>
           <TaskDrawer
-            container={rootRef.current}
-            onClose={handleOrderClose}
-            open={drawer.isOpen}
-            order={orders.find(order => order.id === drawer.data)}
-          />
+          container={rootRef.current}
+          onClose={handleOrderClose}
+          open={drawer.isOpen}
+          order={currentEarning} // Retrieve the earning using its ID
+        />
         </Box>
       </Box>
     </>
