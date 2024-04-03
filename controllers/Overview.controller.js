@@ -4,7 +4,6 @@ const Deposit = require("../models/deposit");
 const Admin = require("../models/AdminModel");
 const { Task, CompletedTask } = require("../models/Task");
 
-
 async function getOverview(req, res) {
   try {
     const allMembers = await Member.find();
@@ -63,15 +62,18 @@ async function getUserOverview(req, res) {
 
     // Retrieve data specific to the user
     const memberData = await Member.findOne({ member_user_id: userId });
-    const userTasks = await Task.find({ assignedTo: userId });
+
     const completedTasksCount = await CompletedTask.countDocuments({ userId, status: 'confirmed' });
     const pendingTasksCount = await CompletedTask.countDocuments({ userId, status: 'pending' });
+
+    // Count total tasks (tasks without status)
+    const totalTasksCount = await Task.countDocuments();
 
     return res.status(200).json({
       status: true,
       message: "Overview for user",
       overview: {
-        userTasks: userTasks.length,
+        totalTasks: totalTasksCount,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
         coins: memberData ? memberData.coins : 0,
@@ -91,3 +93,8 @@ async function getUserOverview(req, res) {
 module.exports = {
   getOverview, getUserOverview
 }
+
+
+// Count the tasks added by the user
+// const userTasksCount = await Task.countDocuments({ userId });
+// userTasks: userTasksCount,

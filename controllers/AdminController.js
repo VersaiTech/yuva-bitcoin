@@ -51,7 +51,6 @@ const completeTask = async (req, res) => {
 
     // Fetch task details
     const task = await Task.findOne({ taskId });
-
     if (!task) {
       console.log('Task not found for taskId:', taskId);
       return res.status(404).json({ message: 'Task not found' });
@@ -80,12 +79,13 @@ const completeTask = async (req, res) => {
     }
 
     // Check if the user has already completed this task
-    const existingCompletedTask = await CompletedTask.findOne({ userId, taskId });
+    const existingCompletedTask = await CompletedTask.findOne({ userId, taskId, taskId });
     if (existingCompletedTask) {
       console.log('Task already completed by this user.');
       return res.status(400).json({ message: 'Task already Submitted by this user; Admin will review and reward to your task' });
     }
 
+    console.log(member.twitterId);
     // Create a new completed task record
     const completedTask = new CompletedTask({
       userId,
@@ -95,9 +95,10 @@ const completeTask = async (req, res) => {
       name: member.member_name,
       description: task.description,
       link: task.link,
+      twitterId: member.twitterId,
       status: 'pending'
     });
-
+    console.log(completeTask.twitterId)
     await completedTask.save();
 
     // Reward the user (Update user's coins balance, etc.)
@@ -328,9 +329,6 @@ const getAllTasks = async (req, res) => {
           status = 'EXPIRED'; // Set status to CLOSE if completion time has passed
         }
       }
-
-
-
       return { ...task.toObject(), status };
     });
 
