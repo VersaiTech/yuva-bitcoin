@@ -343,7 +343,7 @@ import {
 } from "@mui/material";
 import { Layout as AuthLayout } from "../../../layouts/auth/modern-layout";
 import { paths } from "../../../paths";
-import { useAuth } from '../../../hooks/use-auth';
+import { useAuth } from "../../../hooks/use-auth";
 import { useMounted } from "../../../hooks/use-mounted";
 import Axios from "axios";
 
@@ -355,7 +355,7 @@ const initialValues = {
   password: "",
   contactNo: "", // New field
   confirmPassword: "",
-  twitterId: "", // New field
+  twitterId: "https://twitter.com/", // New field
   wallet_address: "",
   policy: false,
 };
@@ -368,16 +368,15 @@ const validationSchema = Yup.object({
     .required("Email is required"),
   password: Yup.string().min(7).max(255).required("Password is required"),
   contactNo: Yup.string()
-     .matches(/^\d{10}$/, "Invalid phone number")
-     .required("Contact Number is required"),
+    .matches(/^\d{10}$/, "Invalid phone number")
+    .required("Contact Number is required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
   twitterId: Yup.string()
-    .max(15, "Must be at most 15 characters")
+    .max(35, "Must be at most 15 characters")
     .required("Twitter ID is required"),
-    wallet_address:  Yup.string()
-    .required("Wallet Address is required"),
+  wallet_address: Yup.string().required("Wallet Address is required"),
 });
 
 const Page = () => {
@@ -395,23 +394,25 @@ const Page = () => {
       localStorage.setItem("email", values.email);
       try {
         await signUp(
-      values.member_name,
-      values.email,
-      values.password,
-      values.contactNo,
-      // values.confirmPassword,
-      values.twitterId,
-      values.wallet_address
+          values.member_name,
+          values.email,
+          values.password,
+          values.contactNo,
+          // values.confirmPassword,
+          values.twitterId,
+          values.wallet_address
         );
         console.log(values);
 
         if (isMounted()) {
-          enqueueSnackbar("Registration successful Please Verify", { variant: 'success' });
+          enqueueSnackbar("Registration successful Please Verify", {
+            variant: "success",
+          });
           router.push(paths.auth.verifyCode.modern);
         }
       } catch (err) {
         console.error(err.response.data.message);
-        enqueueSnackbar(err.response.data.message, { variant: 'error' });
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
         helpers.setSubmitting(false);
 
         if (isMounted()) {
@@ -446,11 +447,9 @@ const Page = () => {
           <Typography variant="subtitle2">Dashboard</Typography>
         </Link>
       </Box>
-      <Stack sx={{ mb: 4 }}
-spacing={1}>
+      <Stack sx={{ mb: 4 }} spacing={1}>
         <Typography variant="h5">Register</Typography>
-        <Typography color="text.secondary"
-variant="body2">
+        <Typography color="text.secondary" variant="body2">
           Already have an account?{" "}
           <Link
             component={NextLink}
@@ -462,8 +461,7 @@ variant="body2">
           </Link>
         </Typography>
       </Stack>
-      <form noValidate
-onSubmit={formik.handleSubmit}>
+      <form noValidate onSubmit={formik.handleSubmit}>
         <Stack spacing={3}>
           <TextField
             error={formik.touched.member_name && !!formik.errors.member_name}
@@ -498,8 +496,7 @@ onSubmit={formik.handleSubmit}>
             value={formik.values.password}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordVisibility}
-edge="end">
+                <IconButton onClick={togglePasswordVisibility} edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),
@@ -521,21 +518,16 @@ edge="end">
             value={formik.values.confirmPassword}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={togglePasswordVisibility}
-edge="end">
+                <IconButton onClick={togglePasswordVisibility} edge="end">
                   {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                 </IconButton>
               ),
             }}
           />
           <TextField
-            error={
-              formik.touched.contactNo && !!formik.errors.contactNo
-            }
+            error={formik.touched.contactNo && !!formik.errors.contactNo}
             fullWidth
-            helperText={
-              formik.touched.contactNo && formik.errors.contactNo
-            }
+            helperText={formik.touched.contactNo && formik.errors.contactNo}
             label="Contact Number"
             name="contactNo"
             onBlur={formik.handleBlur}
@@ -548,14 +540,19 @@ edge="end">
             helperText={formik.touched.twitterId && formik.errors.twitterId}
             label="Twitter ID"
             name="twitterId"
+            placeholder="@username or add profile url"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.twitterId}
           />
           <TextField
-            error={formik.touched.wallet_address && !!formik.errors.wallet_address}
+            error={
+              formik.touched.wallet_address && !!formik.errors.wallet_address
+            }
             fullWidth
-            helperText={formik.touched.wallet_address && formik.errors.wallet_address}
+            helperText={
+              formik.touched.wallet_address && formik.errors.wallet_address
+            }
             label="Wallet Address"
             name="wallet_address"
             onBlur={formik.handleBlur}
@@ -569,11 +566,9 @@ edge="end">
             name="policy"
             onChange={formik.handleChange}
           />
-          <Typography color="text.secondary"
-variant="body2">
+          <Typography color="text.secondary" variant="body2">
             I have read the{" "}
-            <Link component="a"
-href="#">
+            <Link component="a" href="#">
               Terms and Conditions
             </Link>
           </Typography>
