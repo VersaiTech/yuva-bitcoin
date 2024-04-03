@@ -1223,6 +1223,10 @@ const createBuyOrder = async (req, res) => {
             return res.status(400).json({ error: 'Coins of buy and sell orders do not match' });
         }
 
+        if (sellOrder.amount < buyAmount) {
+            return res.status(400).json({ error: 'Buy amount exceeds sell amount' });
+        }
+
         // Calculate the total price based on the buy amount and sell price
         const totalPrice = sellOrder.exchange_currency * buyAmount;
 
@@ -1261,7 +1265,7 @@ const createBuyOrder = async (req, res) => {
         } else {
             return res.status(400).json({ error: 'Invalid coin type' });
         }
-        
+
 
 
         // Create a new buy order instance
@@ -1309,7 +1313,7 @@ const createBuyOrder = async (req, res) => {
         sellOrder.amount -= buyAmount;
         sellOrder.total -= totalPrice;
 
-         // // Transfer the total amount from buyer to seller
+        // // Transfer the total amount from buyer to seller
         seller.deposit_usdt += totalPrice;
 
         // Set the sellOrder as inactive if the buy amount equals the sell amount
@@ -1421,7 +1425,7 @@ const getAllBuyOrderForOneUSer = async (req, res) => {
             return res.status(200).json({
                 status: false,
                 message: "No Buy order ",
-                toalBuyOrders:toalBuyOrders.length,
+                toalBuyOrders: toalBuyOrders.length,
                 order: [],
             });
         }
@@ -1478,15 +1482,15 @@ const getBuyOrdersForAdminForOneUser = async (req, res) => {
             status: true,
             message: "Orders found for the user",
             totalBuyOrders,
-            orders:orders,
+            orders: orders,
         });
     } catch (error) {
         console.error('Error fetching orders:', error);
         res.status(500).json({ error: 'Failed to fetch orders' });
     }
-}; 
+};
 
 
 module.exports = {
-    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder ,getAllBuyOrder,getAllBuyOrderForOneUSer,getBuyOrdersForAdminForOneUser
+    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder, getAllBuyOrder, getAllBuyOrderForOneUSer, getBuyOrdersForAdminForOneUser
 };
