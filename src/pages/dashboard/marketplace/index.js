@@ -19,11 +19,13 @@ import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
 import { paths } from "../../../paths";
 import axios from "axios";
 import OrderForm from "./Orderform";
+import BuyForm from "./buyform";
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
   const [status, setStatus] = useState("Listed");
   const [openForm, setOpenForm] = useState(false);
+  const [buyForm, setBuyForm] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -65,10 +67,12 @@ const CryptoMarketplacePage = () => {
     setOpenForm(false);
   };
 
+  const handleCloseBuyForm = () => {
+    setBuyForm(false);
+  };
+
   const handlePlaceOrder = async () => {
     try {
-      // Your logic to fetch form data and post it to the backend API
-      // Use axios or any preferred method for making HTTP requests
       console.log("Posting order data...");
       handleCloseForm();
     } catch (error) {
@@ -76,17 +80,39 @@ const CryptoMarketplacePage = () => {
     }
   };
 
+  const handleBuyOrder = async (orderId, amount) => {
+    try {
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+      const response = await axios.get(`${BASEURL}/api/Order/createBuyOrder/${orderId}`, { headers }, { sellerId: 1, buyerId: 1, amount: amount });
+      const data = response.data;
+      console.log(data);
+      setListings(data.order);
+      handleCloseBuyForm();
+    } catch (error) {
+      console.error("Error placing order:", error);
+    }
+  };
+
+  const handleBuyButtonClick = () => {
+    setBuyForm(true);
+  };
+
   return (
     <>
       <Head>
         <title>Crypto Marketplace | Your Crypto Hub</title>
       </Head>
-      <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
+      <Box component="main"
+        sx={{ flexGrow: 1, py: 4 }}>
         <Container maxWidth="xl">
           <Stack spacing={2}>
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-              <Link href={paths.dashboard.index} passHref  style={{textDecoration: "none"}}>
+              <Link href={paths.dashboard.index} passHref style={{ textDecoration: "none" }}>
                 <Typography
                   color="text.primary"
                   style={{ cursor: "pointer", textDecoration: "none" }}
@@ -136,15 +162,12 @@ const CryptoMarketplacePage = () => {
             </Button>
           </Box>
           <Divider sx={{ my: 3 }} />
-          <GridList2 projects={listings} key={listings} />
+          <GridList2 projects={listings} key={listings} handleBuyButtonClick={handleBuyButtonClick} />
         </Container>
       </Box>
 
-      <OrderForm
-        open={openForm}
-        handleClose={handleCloseForm}
-        handlePlaceOrder={handlePlaceOrder}
-      />
+      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
+      <BuyForm open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
     </>
   );
 };
