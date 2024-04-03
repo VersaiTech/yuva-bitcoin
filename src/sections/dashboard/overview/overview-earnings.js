@@ -309,7 +309,6 @@ export const OverviewEarnings = (props) => {
                     width: 100, // Adjust the width of the image as needed
                     height: 100, // Adjust the height of the image as needed
                     objectFit: 'contain', // Ensure the image covers the entire container
-                    // borderRadius: '50%', // Apply border radius to make it circular
                     zIndex: 1 // Ensure the image is above other content
                   }}
                 />
@@ -347,7 +346,7 @@ export const OverviewEarnings = (props) => {
   );
 };
 OverviewEarnings.propTypes = {
-  amount: PropTypes.number
+  amount: PropTypes.string
 };
 
 //   return (
