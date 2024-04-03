@@ -19,7 +19,7 @@ import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
 import { paths } from "../../../paths";
 import axios from "axios";
 import OrderForm from "./Orderform";
-import BuyForm from "./Buyform";
+import BuyForm from "./buyform";
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
@@ -80,9 +80,17 @@ const CryptoMarketplacePage = () => {
     }
   };
 
-  const handleBuyPlaceOrder = async () => {
+  const handleBuyOrder = async (orderId, amount) => {
     try {
-      console.log("Posting order data...");
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+      const response = await axios.get(`${BASEURL}/api/Order/createBuyOrder/${orderId}`, { headers }, { sellerId: 1, buyerId: 1, amount: amount });
+      const data = response.data;
+      console.log(data);
+      setListings(data.order);
       handleCloseBuyForm();
     } catch (error) {
       console.error("Error placing order:", error);
@@ -104,7 +112,7 @@ const CryptoMarketplacePage = () => {
           <Stack spacing={2}>
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-              <Link href={paths.dashboard.index} passHref  style={{textDecoration: "none"}}>
+              <Link href={paths.dashboard.index} passHref style={{ textDecoration: "none" }}>
                 <Typography
                   color="text.primary"
                   style={{ cursor: "pointer", textDecoration: "none" }}
@@ -159,7 +167,7 @@ const CryptoMarketplacePage = () => {
       </Box>
 
       <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
-      <BuyForm open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handlePlaceOrder={handleBuyPlaceOrder} />
+      <BuyForm open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
     </>
   );
 };

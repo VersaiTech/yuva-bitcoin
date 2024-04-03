@@ -1,5 +1,3 @@
-// OrderForm.js
-
 import React from "react";
 import {
   Dialog,
@@ -11,15 +9,14 @@ import {
   Button,
 } from "@mui/material";
 
-const Buyform = ({ open, handleCloseBuyForm, handlePlaceOrder }) => {
+const Buyform = ({ open, handleCloseBuyForm, handleBuyOrder }) => {
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Create Order</DialogTitle>
+    <Dialog open={open} onClose={handleCloseBuyForm}>
+      <DialogTitle>Buy Order</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Fill in the details to create a new order.
+          Fill in the details to Buy this order.
         </DialogContentText>
-        {/* Form fields */}
         <TextField
           autoFocus
           margin="dense"
@@ -28,33 +25,12 @@ const Buyform = ({ open, handleCloseBuyForm, handlePlaceOrder }) => {
           type="text"
           fullWidth
         />
-        <TextField
-          margin="dense"
-          id="amount"
-          label="Amount"
-          type="number"
-          fullWidth
-        />
-        <TextField
-          margin="dense"
-          id="exchange_currency"
-          label="Exchange Currency"
-          type="text"
-          fullWidth
-        />
-        <TextField
-          margin="dense"
-          id="payment_method"
-          label="Payment Method"
-          type="text"
-          fullWidth
-        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCloseBuyForm} color="primary">
           Cancel
         </Button>
-        <Button onClick={handlePlaceOrder} color="primary">
+        <Button onClick={handleBuyOrder} color="primary">
           Place Order
         </Button>
       </DialogActions>
