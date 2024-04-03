@@ -56,7 +56,7 @@
 //     <>
 //       <Head>
 //         <title>
-//           Dashboard: Order Details | YuvaBitcoin 
+//           Dashboard: Order Details | YuvaBitcoin
 //         </title>
 //       </Head>
 //       <Box
@@ -165,17 +165,28 @@
 
 // export default Page;
 
-import { NextLink, Typography, Box, Container, Stack, SvgIcon, Card, CardHeader, CardContent, Divider, Button, } from '@mui/material';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { paths } from '../../../paths';
-import Link from 'next/link';
+import {
+  NextLink,
+  Typography,
+  Box,
+  Container,
+  Stack,
+  SvgIcon,
+  Card,
+  CardHeader,
+  CardContent,
+  Divider,
+  Button,
+} from "@mui/material";
+import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import { Layout as DashboardLayout } from "../../../layouts/dashboard";
+import { paths } from "../../../paths";
+import Link from "next/link";
 // import Nextlink from 'next/link';
-import { WithdrawalsCreateForm } from '../../../sections/dashboard/withdrawals/withdrawals-create-form';
-import { useCustomer } from './useCustomer'; // Import the useCustomer hook from the new file
-import Head from 'next/head';
-
+import { WithdrawalsCreateForm } from "../../../sections/dashboard/withdrawals/withdrawals-create-form";
+import { useCustomer } from "./useCustomer"; // Import the useCustomer hook from the new file
+import Head from "next/head";
 
 const Page = () => {
   const customer = useCustomer();
@@ -189,88 +200,78 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 4
+          py: 4,
         }}
       >
         <Container maxWidth="lg">
           <Stack spacing={4}>
             <Stack spacing={4}>
-              <div>
+              <div  
+              >
                 <Link
-                  color="text.primary"
+                  style={{ display: "flex", alignItems: "center" , textDecoration: "none", }
+                  }
+                  
                   component={NextLink}
                   href={paths.dashboard.withdraw.index}
-                  sx={{
-                    alignItems: 'center',
-                    display: 'inline-flex'
-                  }}
-                  underline="hover"
+                 
+                  // underline="hover"
                 >
-                  <SvgIcon sx={{ mr: 1 }}>
+                  <SvgIcon sx={{ mr: 1 , color: "text.primary"}}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">
-                    Withdrawals
-                  </Typography>
+                  <Typography variant="subtitle2" color={"text.primary"}>Withdrawals</Typography>
                 </Link>
               </div>
               <div>
-                <Container maxWidth="sm"
-sx={{ textAlign: 'center' }}>
+                <Container maxWidth="sm" sx={{ textAlign: "center" }}>
                   <Card>
                     <CardHeader
-                      subheader={(
-                        <Typography variant="h4"
-color="green">
-                          {"₿" + customer}
+                      subheader={
+                        <Typography variant="h4" color="green">
+                          {"₿" + customer || 0}
                         </Typography>
-                      )}
+                      }
                       sx={{ pb: 0 }}
-                      title={(
-                        <Typography
-                          color="text.secondary"
-                          variant="overline"
-                        >
-                          Total balance 
+                      title={
+                        <Typography color="text.secondary" variant="overline">
+                          Total balance
                         </Typography>
-                      )}
+                      }
                     />
                     <CardContent>
                       <Divider sx={{ mb: 2 }} />
-                      <Typography
-                        color="text.secondary"
-                        variant="overline"
-                      >
+                      <Typography color="text.secondary" variant="overline">
                         Available currency
                       </Typography>
                       <Divider />
-                      <Stack
-                        alignItems="flex-start"
-                        spacing={1}
-                        sx={{ mt: 2 }}
-                      >
-                        <Link component={NextLink}
-href={paths.dashboard.deposits.index}>
+                      <Stack alignItems="flex-start" spacing={1} sx={{ mt: 2 }}>
+                        <Link
+                          component={NextLink}
+                          href={paths.dashboard.deposits.index}
+                        >
                           <Button
                             color="inherit"
-                            endIcon={(
+                            endIcon={
                               <SvgIcon>
                                 <ArrowRightIcon />
                               </SvgIcon>
-                            )}
+                            }
                           >
                             Add money
                           </Button>
                         </Link>
-                        <Link component={NextLink}
-href={paths.dashboard.withdraw.create}>
+                        <Link
+                          component={NextLink}
+                          href={paths.dashboard.withdraw.create}
+                        >
                           <Button
                             color="inherit"
-                            endIcon={(
+                            endIcon={
                               <SvgIcon>
                                 <ArrowRightIcon />
                               </SvgIcon>
-                            )}
+                            }
                           >
                             Withdraw funds
                           </Button>
@@ -289,10 +290,6 @@ href={paths.dashboard.withdraw.create}>
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;

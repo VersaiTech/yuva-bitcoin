@@ -67,7 +67,6 @@ const CryptoMarketplacePage = () => {
 
   const handlePlaceOrder = async () => {
     try {
-     
       // Your logic to fetch form data and post it to the backend API
       // Use axios or any preferred method for making HTTP requests
       console.log("Posting order data...");
@@ -82,15 +81,18 @@ const CryptoMarketplacePage = () => {
       <Head>
         <title>Crypto Marketplace | Your Crypto Hub</title>
       </Head>
-      <Box component="main"
-sx={{ flexGrow: 1, py: 4 }}>
+      <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
         <Container maxWidth="xl">
           <Stack spacing={2}>
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-              <Link href={paths.dashboard.index}
-passHref>
-                <Typography color="inherit">Dashboard</Typography>
+              <Link href={paths.dashboard.index} passHref  style={{textDecoration: "none"}}>
+                <Typography
+                  color="text.primary"
+                  style={{ cursor: "pointer", textDecoration: "none" }}
+                >
+                  Dashboard
+                </Typography>
               </Link>
               <Typography color="text.primary">Crypto Marketplace</Typography>
             </Breadcrumbs>
@@ -125,7 +127,11 @@ passHref>
                 <Typography variant="body1">Ordered</Typography>
               </MenuItem>
             </Select>
-            <Button variant="contained" size="medium" onClick={handleCreateOrder}>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={handleCreateOrder}
+            >
               Create Order
             </Button>
           </Box>
@@ -134,7 +140,11 @@ passHref>
         </Container>
       </Box>
 
-      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
+      <OrderForm
+        open={openForm}
+        handleClose={handleCloseForm}
+        handlePlaceOrder={handlePlaceOrder}
+      />
     </>
   );
 };
