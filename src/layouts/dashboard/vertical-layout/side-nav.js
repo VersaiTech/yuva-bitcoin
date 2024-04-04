@@ -181,22 +181,23 @@ export const SideNav = (props) => {
             spacing={2}
             sx={{ p: 3 }}
           >
-            <Box
-              component={NextLink}
-              href={paths.dashboard.index}
-              sx={{
-                borderColor: 'var(--nav-logo-border)',
-                borderRadius: 1,
-                borderStyle: 'solid',
-                borderWidth: 1,
-                display: 'flex',
-                height: 40,
-                p: '4px',
-                width: 40
-              }}
-            >
-              <Logo />
-            </Box>
+          <Box
+          component={NextLink}
+          href={paths.dashboard.index}
+          sx={{
+            display: 'flex',
+            height: 40,
+            p: '1px',
+            width: 40
+          }}
+        >
+          <img
+          src="/assets/logos/yuvalogo (1).png" // Adjust the path to your logo image
+          alt="Logo"
+          width={45} // Adjust the width as needed
+          height={45} // Adjust the height as needed
+        />
+        </Box>
             <TenantSwitch sx={{ flexGrow: 1 }} />
           </Stack>
           <Stack

@@ -109,9 +109,6 @@ export const paths = {
       create: "/dashboard/newtask/create",
       edit: "/dashboard/newtask/",
     },
-
-    
-
     taskwork: {
       index: "/dashboard/task-work",
       details: "/dashboard/task-work/:taskId",
@@ -126,7 +123,6 @@ export const paths = {
       create: "/dashboard/news/create",
       edit: "/dashboard/newtask/",
     },
-    
     deposit: {
       index: "/dashboard/deposit",
       details: "/dashboard/deposit/:depositId",
@@ -135,6 +131,10 @@ export const paths = {
     },
     Stake:{
       index: "/dashboard/stake",
+    },
+    support: {
+      list: '/dashboard/support/list',
+      create: '/dashboard/support/create',
     },
     withdrawal: {
       index: "/dashboard/withdrawals",
