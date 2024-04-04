@@ -117,7 +117,6 @@ export const paths = {
     },
     news: {
       newsDetails: "/dashboard/news/",
-
       index: "/dashboard/news",
       list: "/dashboard/news/news-list",
       create: "/dashboard/news/create",
@@ -135,6 +134,7 @@ export const paths = {
     support: {
       list: '/dashboard/support/list',
       create: '/dashboard/support/create',
+      edit:'/dashboard/support/'
     },
     withdrawal: {
       index: "/dashboard/withdrawals",

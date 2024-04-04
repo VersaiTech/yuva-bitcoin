@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NextLink from "next/link";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
+import { paths } from "../../../paths";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -143,12 +144,15 @@ export const QueriesListTable = (props) => {
                 <TableCell>{query.twitterId}</TableCell>
                 <TableCell sx={{width: "50%", whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{query.message}</TableCell>
                 <TableCell>
-                  <IconButton
-                    component={NextLink}
-                    href={`/edit-query/${query.id}`}
-                  >
-                    <Edit02Icon />
-                  </IconButton>
+                <IconButton
+                component={NextLink}
+                href={{
+                  pathname: `${paths.dashboard.support.edit}${query._id}/edit`,
+                  query: { query: encodeURIComponent(JSON.stringify(query)) }
+                }}
+              >
+                <Edit02Icon />
+              </IconButton>
                   <IconButton onClick={handleDeleteDialogOpen}>
                     <DeleteIcon />
                   </IconButton>
