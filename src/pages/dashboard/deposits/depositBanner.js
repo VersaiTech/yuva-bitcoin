@@ -175,6 +175,37 @@ export const DepositOperations = (props) => {
   // Minimal ABI to interact with ERC20's transfer function
 
 
+  // async function buyCoin() {
+  //   if (!web3Wallet || !web3Wallet.walletConnect) {
+  //     enqueueSnackbar('Please connect your wallet', { variant: 'error' });
+  //     return;
+  //   }
+
+  //   try {
+  //     const provider = new Web3(Web3.givenProvider || "https://mainnet.infura.io/v3/3840775933b94a0ca2cc13fa742a2b43");
+  //     const contract = new provider.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
+
+  //     // Converting the amount to a hexadecimal string for the contract method call
+  //     const amountToSend = provider.utils.toHex(provider.utils.toWei(values.amount, 'ether'));
+
+  //     // Estimate the gas for the transfer method
+  //     const gasEstimate = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).estimateGas({ from: web3Wallet.walletAddress });
+
+  //     // Perform the transfer
+  //     const tx = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).send({
+  //       from: web3Wallet.walletAddress,
+  //       gas: gasEstimate,
+  //     });
+
+  //     console.log(tx);
+  //     enqueueSnackbar('Transaction successful!', { variant: 'success' });
+  //   } catch (error) {
+  //     console.error(error);
+  //     enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
+  //   }
+  // }
+
+
   async function buyCoin() {
     if (!web3Wallet || !web3Wallet.walletConnect) {
       enqueueSnackbar('Please connect your wallet', { variant: 'error' });
@@ -182,44 +213,46 @@ export const DepositOperations = (props) => {
     }
 
     try {
-
-      const provider = new Web3(window.ethereum);
-
-      if (!provider) {
-        enqueueSnackbar('Web3 Provider not found', { variant: 'error' });
-        return;
-      }
-
-      const contract = new provider.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
-      const amountToSend = provider.utils.toWei(values.amount, 'ether');
+      const contract = new web3.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
+      const amountToSend = web3.utils.toWei(values.amount, 'ether');
+      const data = contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).encodeABI();
 
       const gasEstimate = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).estimateGas({ from: web3Wallet.walletAddress });
 
-      const tx = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).send({
-        from: web3Wallet.walletAddress,
-        gas: gasEstimate,
-      });
+      console.log(gasEstimate);
 
-      console.log(tx);
+      const tx = {
+        'from': web3Wallet.walletAddress,
+        'to': BUSD_TESTNET_CONTRACT_ADDRESS,
+        'data': data,
+        'gasLimit': gasEstimate,
+        'type': 2
+      };
+
+
+      // Sign the transaction with the private key
+      const signedTx = await web3.eth.accounts.signTransaction(tx, 'your_private_key_here');
+
+      // Send the signed transaction
+      const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+
+      console.log(receipt);
       enqueueSnackbar('Transaction successful!', { variant: 'success' });
-      // const tx = await CONTRACT.methods.transfer(BUSD_TESTNET_CONTRACT_ADDRESS, amountToSend).send({ from: web3Wallet.walletAddress });
-
-      // const receipt = await tx.wait();
-
-      if (receipt.status === 1) {
-        enqueueSnackbar('Transaction successful!', { variant: 'success' });
-      } else {
-        enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
-      }
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
     }
   }
 
-  function fetchPrice() {
-    const response = axios.get(`${BASEURL}/api/Price/getPrice`);
 
+
+  function fetchPrice() {
+    try {
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      // const response = axios.get(`${BASEURL}/api/Price/getPrice`);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
 
