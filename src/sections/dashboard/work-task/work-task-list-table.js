@@ -247,7 +247,7 @@ export const WorkListTable = (props) => {
                           {"id:" + customer.userId}
                         </Typography>
                         <Typography color="text.secondary" variant="body2">
-                          {customer.userId}
+                          {"twitter id :"+customer.twitterId}
                         </Typography>
                       </div>
                     </Stack>

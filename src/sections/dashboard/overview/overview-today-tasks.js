@@ -30,7 +30,7 @@ export const TodayTask = (props) => {
             color="primary"
             variant="body2"
           >
-           Today All Task
+            All Task
           </Typography>
           <Typography
             color="text.secondery"
