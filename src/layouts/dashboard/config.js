@@ -12,6 +12,7 @@ import NewssIcon from "../../icons/untitled-ui/duocolor/newss";
 import ReferalIcon from "../../icons/untitled-ui/duocolor/referal";
 import WithdrawIcon from "../../icons/untitled-ui/duocolor/withdraw";
 import Mail03 from "../../icons/untitled-ui/duocolor/mail-03";
+import Support2Icon from "../../icons/untitled-ui/duocolor/support2";
 
 export const getSections = (t) => [
   {
@@ -180,7 +181,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.support),
         icon: (
           <SvgIcon fontSize="small">
-            <Mail03 />
+            <Support2Icon />
           </SvgIcon>
         ),
         items: [
