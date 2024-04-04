@@ -87,7 +87,7 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
-      const response = await axios.get(`${BASEURL}/api/Order/createBuyOrder/${orderId}`, { headers }, { sellerId: 1, buyerId: 1, amount: amount });
+      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${orderId}`, { sellerId: 1, buyerId: 1, amount: amount }, { headers });
       const data = response.data;
       console.log(data);
       setListings(data.order);

@@ -21,10 +21,6 @@ import { useState, useEffect } from "react"; // Add useState import
 export const GridList2 = ({ projects, handleBuyButtonClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Add state for modal open/close
 
- 
-
-
-
   useEffect(() => {
     // Add event listener to detect clicks outside of modal and close it
     const handleClickOutside = (event) => {
@@ -69,7 +65,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
             const formattedUpdatedAt = new Date(updatedAt).toLocaleString();
 
             return (
-              <Grid key={project.id} item xs={12} md={4}>
+              <Grid key={project.id} item xs={12}  md={3} sm={6}>
                 <Box mt={2} mb={2}>
                   {/* Add margin top and bottom */}
                   <Card
@@ -97,12 +93,13 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                     >
                       {/* Logo */}
                       <img
-                        src={`/assets/logos/${coin === "yuva"
+                        src={`/assets/logos/${
+                          coin === "yuva"
                             ? "yuvalogo2.png"
                             : coin === "usdt"
-                              ? "yuvalogo2.png"
-                              : ""
-                          }`}
+                            ? "usdt-logo2.png"
+                            : ""
+                        }`}
                         alt="Logo"
                         style={{
                           position: "absolute",
@@ -159,12 +156,13 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                         >
                           <img
                             alt="Logo"
-                            src={`/assets/logos/${coin === "yuva"
+                            src={`/assets/logos/${
+                              coin === "yuva"
                                 ? "yuvalogo2.png"
                                 : coin === "usdt"
-                                  ? "yuvalogo2.png"
-                                  : ""
-                              }`}
+                                ? "usdt-logo2.png"
+                                : ""
+                            }`}
                             style={{
                               width: "30px",
                               height: "30px",
@@ -174,22 +172,27 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                           <Typography color="text.secondary" variant="body2">
                             <Link color="text.primary" variant="h4">
                               {coin === "usdt"
-                                ? "$"
-                                : coin === "yuva"
-                                  ? ""
-                                  : ""}{" "}
-                              {amount}
+                                ? ""
+                                : coin === "yuva "
+                                ? ""
+                                : ""}{" "}
+                              {amount}  
                             </Link>
                           </Typography>
                         </Box>
                       </Box>
                     </Box>
                     <Box sx={{ pb: 1, px: 5, textAlign: "center" }}>
-                      <Typography color="text.primary" variant="body2">
+                      
+                      <Typography
+                        color="primary"
+                        variant="body2"
+                        sx={{ fontWeight: "bold", paddingBottom: "10px" }}
+                      >
                         {exchange_currency} USDT/YB
                       </Typography>
                       <Typography color="text.primary" variant="body1">
-                        {total}USDT
+                       Total: {parseFloat(total).toFixed(4)} USDT
                       </Typography>
                     </Box>
                     <Divider />
