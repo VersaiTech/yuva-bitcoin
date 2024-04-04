@@ -236,7 +236,7 @@ const NewsDetailPage = () => {
                 src={
                   newsDetail.imageUrls && newsDetail.imageUrls.length > 0
                     ? newsDetail.imageUrls[0]
-                    : "/assets/covers/abstract-1-4x3-large.png"
+                    : "/assets/gallery/news.jpg"
                 }
                 width={800}
                 height={400}

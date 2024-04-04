@@ -182,7 +182,7 @@
 
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography , Stack} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { usePageView } from "../../hooks/use-page-view";
 import { useSettings } from "../../hooks/use-settings";
@@ -322,7 +322,13 @@ const Page = () => {
                       <OverviewPendingIssues amount={overview.pendingTasks} />
                     </Grid>
                 
-                    <Grid item xs={12} md={12}>
+                    <Grid item xs={12} md={12} >
+                    <Stack
+                spacing={{
+                  xs: 3,
+                  lg: 4,
+                }}
+              >
                       {loading ? (
                         <p>Loading...</p>
                       ) : (
@@ -331,11 +337,11 @@ const Page = () => {
                             amount={
                               overview.deposit_usdt
                                 ? parseFloat(overview.deposit_usdt).toFixed(4)
-                                : "N/A"
+                                : "0"
                             }
                           />
                 
-                          <CryptoCurrentBalance
+                          <CryptoCurrentBalance 
                             chartSeries={chartSeries}
                             labels={[
                               "3 Month Investment",
@@ -345,6 +351,7 @@ const Page = () => {
                           />
                         </>
                       )}
+                      </Stack>
                     </Grid>
                   </Grid>
                 </Container>

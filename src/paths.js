@@ -75,7 +75,7 @@ export const paths = {
       stakeHistory: '/dashboard/stakehistory'
     },
     support: {
-      index: '/dashboard/support/list',
+      list: '/dashboard/support/list',
       create: '/dashboard/support/create',
     },
     news: {

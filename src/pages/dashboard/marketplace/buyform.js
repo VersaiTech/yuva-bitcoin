@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 
-const Buyform = ({ open, handleCloseBuyForm, handleBuyOrder }) => {
+const Buyform = ({ currentdata, open, handleCloseBuyForm, handleBuyOrder }) => {
   return (
     <Dialog open={open} onClose={handleCloseBuyForm}>
       <DialogTitle>Buy Order</DialogTitle>
@@ -30,7 +30,7 @@ const Buyform = ({ open, handleCloseBuyForm, handleBuyOrder }) => {
         <Button onClick={handleCloseBuyForm} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleBuyOrder} color="primary">
+        <Button onClick={() => handleBuyOrder(currentdata)} color="primary">
           Place Order
         </Button>
       </DialogActions>

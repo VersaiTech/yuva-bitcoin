@@ -20,6 +20,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Axios from "axios"; // Import Axios for HTTP requests
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 const initialValues = {
   name: "",
@@ -42,6 +43,7 @@ const ContactPage = () => {
   const [submitting, setSubmitting] = useState(false);
   usePageView();
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   // Inside your component
   const formik = useFormik({
@@ -78,7 +80,7 @@ const ContactPage = () => {
         console.log(response.data);
         // Show success notification
         enqueueSnackbar("Form submitted successfully!", { variant: "success" });
-
+        router.push(paths.dashboard.index);
         // Reset form after successful submission
         resetForm();
       } catch (error) {
@@ -183,7 +185,7 @@ const ContactPage = () => {
             <Paper elevation={3} sx={{ p: 1, mt: 1 }}>
               <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={12}>
                     <Typography variant="subtitle1" fontWeight="bold" mb={1}>
                       User Name
                     </Typography>
@@ -219,7 +221,7 @@ const ContactPage = () => {
                       placeholder="Enter your twitter ID"
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} md={12}>
                     <Typography variant="subtitle1" fontWeight="bold" mb={1}>
                       Email
                     </Typography>

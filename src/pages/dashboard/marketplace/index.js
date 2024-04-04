@@ -26,6 +26,7 @@ const CryptoMarketplacePage = () => {
   const [status, setStatus] = useState("Listed");
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
+  const [currentdata , setCurrentData] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -80,24 +81,31 @@ const CryptoMarketplacePage = () => {
     }
   };
 
-  const handleBuyOrder = async (orderId, amount) => {
+  const handleBuyOrder = async (rowdata) => {
     try {
+
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
       const headers = {
         Authorization: token,
       };
-      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${orderId}`, { sellerId: 1, buyerId: 1, amount: amount }, { headers });
-      const data = response.data;
-      console.log(data);
-      setListings(data.order);
-      handleCloseBuyForm();
+      const data = {
+        sellerId: rowdata.userId,
+        coin: rowdata.coin,
+        amount: rowdata.amount,
+      }
+      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
+      const responseData = response.data;
+      console.log(responseData);
+      // setListings(responseData.order);
+      // handleCloseBuyForm();
     } catch (error) {
       console.error("Error placing order:", error);
     }
   };
 
-  const handleBuyButtonClick = () => {
+  const handleBuyButtonClick = (data) => {
+    setCurrentData(data);
     setBuyForm(true);
   };
 
@@ -167,7 +175,7 @@ const CryptoMarketplacePage = () => {
       </Box>
 
       <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
-      <BuyForm open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
+      <BuyForm currentdata={currentdata} open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
     </>
   );
 };
