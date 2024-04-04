@@ -145,9 +145,9 @@ export const AccountPopover = (props) => {
             )}
           />
         </ListItemButton>
-        <ListItemButton
+        {/* <ListItemButton
           component={NextLink}
-          href={paths.dashboard.account}
+          href={paths.dashboard.deposits.depositsHistory}
           sx={{
             borderRadius: 1,
             px: 1,
@@ -166,10 +166,10 @@ export const AccountPopover = (props) => {
               </Typography>
             )}
           />
-        </ListItemButton>
+        </ListItemButton> */}
         <ListItemButton
           component={NextLink}
-          href={paths.dashboard.index}
+          href={paths.dashboard.deposits.depositsHistory}
           sx={{
             borderRadius: 1,
             px: 1,

@@ -65,7 +65,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
             const formattedUpdatedAt = new Date(updatedAt).toLocaleString();
 
             return (
-              <Grid key={project.id} item xs={12}  md={3} sm={6}>
+              <Grid key={project.id} item xs={6}  md={3} sm={3}>
                 <Box mt={2} mb={2}>
                   {/* Add margin top and bottom */}
                   <Card
@@ -97,7 +97,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                           coin === "yuva"
                             ? "yuvalogo2.png"
                             : coin === "usdt"
-                            ? "usdt-logo2.png"
+                            ? "logo-usdt.svg"
                             : ""
                         }`}
                         alt="Logo"
@@ -160,7 +160,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                               coin === "yuva"
                                 ? "yuvalogo2.png"
                                 : coin === "usdt"
-                                ? "usdt-logo2.png"
+                                ? "logo-usdt.svg"
                                 : ""
                             }`}
                             style={{
@@ -189,11 +189,11 @@ export const GridList2 = ({ projects, handleBuyButtonClick }) => {
                         variant="body2"
                         sx={{ fontWeight: "bold", paddingBottom: "10px" }}
                       >
-                        {exchange_currency} USDT/YB
+                        {coin === "usdt" ? `${exchange_currency} YB/USDT` : `${exchange_currency} USDT/YB`}
                       </Typography>
-                      <Typography color="text.primary" variant="body1">
-                       Total: {parseFloat(total).toFixed(4)} USDT
-                      </Typography>
+                      <Typography color="text.primary" variant="body2">
+                      Total: {coin === "usdt" ? `${parseFloat(total).toFixed(4)} YB` : `${parseFloat(total).toFixed(4)} USDT`}
+</Typography>
                     </Box>
                     <Divider />
                     <Box sx={{ px: 3, py: 1, textAlign: "center" }}>
@@ -272,7 +272,7 @@ variant="body2">
                                 "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
                             },
                           }}
-                          onClick={handleBuyButtonClick}
+                          onClick={()=> handleBuyButtonClick(project)}
                         >
                           Buy
                         </Button>
