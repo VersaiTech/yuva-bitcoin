@@ -189,10 +189,6 @@ export const getSections = (t) => [
             title: t(tokens.nav.supportCreate),
             path: paths.dashboard.support.create
           },
-          {
-            title: t(tokens.nav.supportList),
-            path: paths.dashboard.support.list
-          }
         ]
       },
       // {
