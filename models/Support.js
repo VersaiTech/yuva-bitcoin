@@ -16,7 +16,7 @@ const Support = mongoose.model('Support', supportSchema);
 
 const replySchema = new mongoose.Schema({
     name: { type: String, required: true, ref: 'Support' },
-    supportTicketId: { type: String, required: true, unique: true, ref: 'Support' },
+    supportTicketId: { type: String, required: true, ref: 'Support' },
     twitterId: { type: String, required: true, ref: 'Support' },
     email: { type: String, required: true },
     userId: { type: String, required: true, ref: 'Support' },

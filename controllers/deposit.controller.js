@@ -83,7 +83,7 @@ const createDeposit = async (req, res) => {
       wallet_address: Joi.string().required(),
       deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
     });
-    
+
     const { error, value } = schema.validate(req.body);
 
     if (error) {
@@ -109,6 +109,16 @@ const createDeposit = async (req, res) => {
       return res.status(400).json({ error: 'Transaction hash already exists' });
     }
 
+    // check that amount has only 4 decimal in body
+    const decimalCount = (value.amount.toString().split('.')[1] || '').length;
+    if (decimalCount !== 4) {
+      return res.status(400).json({ error: 'Amount should have only 4 decimal places' });
+    }
+
+    // while adding amount only 4 decimal is allowed
+    value.amount = Number(value.amount.toFixed(4));
+
+
     // Create a new deposit
     const newDeposit = new Deposit({
       member: member_user_id,
@@ -133,6 +143,9 @@ const createDeposit = async (req, res) => {
       default:
         return res.status(400).json({ error: 'Invalid deposit type' });
     }
+
+    // deposit_usdthave 4 decimals
+    member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
     // Save the updated member object to the database
     await member.save();

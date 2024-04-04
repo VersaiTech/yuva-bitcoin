@@ -156,7 +156,11 @@ const adminReplyToUser = async (req, res) => {
         if (!latestMessage) {
             return res.status(404).json({ error: 'No message found for the user.' });
         }
-        console.log("latest Message: ", latestMessage);
+
+        // Check if the user has already replied
+        if (latestMessage.replied) {
+            return res.status(400).json({ error: 'Your message has already been replied.' });
+        }
         // Send reply email to the user
         const transporter = nodemailer.createTransport({
             host: 'smtp.hostinger.com',
@@ -188,12 +192,13 @@ const adminReplyToUser = async (req, res) => {
             user_message: latestMessage.message,
             message: message
         });
-        await reply.save();
+        await reply.save()
 
         // Update support message with admin reply
         latestMessage.adminReply = message;
         latestMessage.replied = true;
         await latestMessage.save();
+
 
         return res.status(200).json({ message: 'Reply sent successfully.' });
     } catch (error) {
