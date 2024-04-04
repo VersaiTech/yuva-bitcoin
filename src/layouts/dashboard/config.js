@@ -1,32 +1,18 @@
 import { Chip, SvgIcon } from "@mui/material";
-import AlignLeft02Icon from "../../icons/untitled-ui/duocolor/align-left-02";
-import BarChartSquare02Icon from "../../icons/untitled-ui/duocolor/bar-chart-square-02";
-import Building04Icon from "../../icons/untitled-ui/duocolor/building-04";
-import CalendarIcon from "../../icons/untitled-ui/duocolor/calendar";
-import CheckDone01Icon from "../../icons/untitled-ui/duocolor/check-done-01";
-import CreditCard01Icon from "../../icons/untitled-ui/duocolor/credit-card-01";
-import CurrencyBitcoinCircleIcon from "../../icons/untitled-ui/duocolor/currency-bitcoin-circle";
-import File01Icon from "../../icons/untitled-ui/duocolor/file-01";
-import GraduationHat01Icon from "../../icons/untitled-ui/duocolor/graduation-hat-01";
-import HomeSmileIcon from "../../icons/untitled-ui/duocolor/home-smile";
-import LayoutAlt02Icon from "../../icons/untitled-ui/duocolor/layout-alt-02";
-import LineChartUp04Icon from "../../icons/untitled-ui/duocolor/line-chart-up-04";
-import Lock01Icon from "../../icons/untitled-ui/duocolor/lock-01";
-import LogOut01Icon from "../../icons/untitled-ui/duocolor/log-out-01";
-import Mail03Icon from "../../icons/untitled-ui/duocolor/mail-03";
-import Mail04Icon from "../../icons/untitled-ui/duocolor/mail-04";
-import MessageChatSquareIcon from "../../icons/untitled-ui/duocolor/message-chat-square";
-import ReceiptCheckIcon from "../../icons/untitled-ui/duocolor/receipt-check";
-import Share07Icon from "../../icons/untitled-ui/duocolor/share-07";
-import ShoppingBag03Icon from "../../icons/untitled-ui/duocolor/shopping-bag-03";
-import ShoppingCart01Icon from "../../icons/untitled-ui/duocolor/shopping-cart-01";
-import Truck01Icon from "../../icons/untitled-ui/duocolor/truck-01";
-import Upload04Icon from "../../icons/untitled-ui/duocolor/upload-04";
-import Users03Icon from "../../icons/untitled-ui/duocolor/users-03";
-import XSquareIcon from "../../icons/untitled-ui/duocolor/x-square";
-import NewsIcon from "../../icons/untitled-ui/duocolor/news";
+import PortfolioIcon from "../../icons/untitled-ui/duocolor/portfolio";
+import CryptoIcon from "../../icons/untitled-ui/duocolor/crypto";
+import Calendar from "../../icons/untitled-ui/duocolor/calendar";
+import EarningsIcon from "../../icons/untitled-ui/duocolor/earnings";
 import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
+import DepositsIcon from "../../icons/untitled-ui/duocolor/deposits";
+import StakesIcon from "../../icons/untitled-ui/duocolor/stakes";
+import ContactIcon from "../../icons/untitled-ui/duocolor/contact";
+import NewssIcon from "../../icons/untitled-ui/duocolor/newss";
+import ReferalIcon from "../../icons/untitled-ui/duocolor/referal";
+import WithdrawIcon from "../../icons/untitled-ui/duocolor/withdraw";
+import Mail03 from "../../icons/untitled-ui/duocolor/mail-03";
+import Support2Icon from "../../icons/untitled-ui/duocolor/support2";
 
 export const getSections = (t) => [
   {
@@ -36,7 +22,7 @@ export const getSections = (t) => [
         path: paths.dashboard.portfolio,
         icon: (
           <SvgIcon fontSize="small">
-            <HomeSmileIcon />
+            <PortfolioIcon />
           </SvgIcon>
         ),
       },
@@ -44,7 +30,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.marketplace),
         icon: (
           <SvgIcon fontSize="small">
-            <BarChartSquare02Icon />
+            <CryptoIcon />
           </SvgIcon>
         ),
         items: [
@@ -58,7 +44,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.tasks),
         icon: (
           <SvgIcon fontSize="small">
-            <BarChartSquare02Icon />
+            <Calendar />
           </SvgIcon>
         ),
         items: [
@@ -81,7 +67,7 @@ export const getSections = (t) => [
         // path: paths.dashboard.earnings.index,
         icon: (
           <SvgIcon fontSize="small">
-            <LineChartUp04Icon />
+            <EarningsIcon />
           </SvgIcon>
         ),
         items: [
@@ -104,7 +90,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.deposit),
         icon: (
           <SvgIcon fontSize="small">
-            <LineChartUp04Icon />
+            <DepositsIcon />
           </SvgIcon>
         ),
         items: [
@@ -122,7 +108,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.stake),
         icon: (
           <SvgIcon fontSize="small">
-            <LineChartUp04Icon />
+            <StakesIcon />
           </SvgIcon>
         ),
         items: [
@@ -140,7 +126,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.withdraw),
         icon: (
           <SvgIcon fontSize="small">
-            <LineChartUp04Icon />
+            <WithdrawIcon />
           </SvgIcon>
         ),
         items: [
@@ -158,7 +144,7 @@ export const getSections = (t) => [
         title: t(tokens.nav.referral),
         icon: (
           <SvgIcon fontSize="small">
-            <LineChartUp04Icon />
+            <ReferalIcon />
           </SvgIcon>
         ),
         items: [
@@ -177,7 +163,7 @@ export const getSections = (t) => [
         path: paths.contact,
         icon: (
           <SvgIcon fontSize="small">
-            <Mail04Icon />
+            <ContactIcon />
           </SvgIcon>
         ),
       },
@@ -187,9 +173,27 @@ export const getSections = (t) => [
         icon: (
           <SvgIcon fontSize="small">
           {/* <Mail04Icon /> */}
-          <NewsIcon />
+          <NewssIcon />
         </SvgIcon>
         ),
+      },
+      {
+        title: t(tokens.nav.support),
+        icon: (
+          <SvgIcon fontSize="small">
+            <Support2Icon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.supportCreate),
+            path: paths.dashboard.support.create
+          },
+          {
+            title: t(tokens.nav.supportList),
+            path: paths.dashboard.support.list
+          }
+        ]
       },
       // {
       //   title: t(tokens.nav.error),

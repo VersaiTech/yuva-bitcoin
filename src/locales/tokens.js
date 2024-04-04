@@ -5,6 +5,9 @@ export const tokens = {
   nav: {
     academy: 'nav.academy',
     news:'nav.news',
+    support:'nav.support',
+    supportCreate:'nav.supportCreate',
+    supportList:'nav.supportList',
     marketplace: 'nav.marketplace',
     cryptos: 'nav.cryptos',
     account: 'nav.account',

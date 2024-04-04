@@ -56,7 +56,7 @@ sx={{ mb: 4 }}>
             Education, Metaverse, and Web3 with Yuva Bitcoin Cryptocurrency.
             Join Us in Shaping the Future of Learning in the Digital Age.
           </Typography>
-         <img src="/yuvalogo2.png"
+         <img src="/assets/logos/yuvalogo (1).png"
 alt=""
           style={{ 
             maxWidth: '200px', 

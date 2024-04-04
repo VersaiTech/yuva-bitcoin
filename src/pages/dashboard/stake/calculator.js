@@ -34,7 +34,7 @@ const InterestCalculator = () => {
       <CardContent>
         <Stack spacing={2}>
           <TextField
-            label="Amount (in BTC)"
+            label="Amount (in YB)"
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
@@ -53,7 +53,7 @@ const InterestCalculator = () => {
           <Divider />
           <Stack direction="row"  justifyContent="space-around" alignItems={"center"}>
           <Typography variant="h6" gutterBottom>
-            Total Interest: {interest ? `${interest} BTC` : '0 BTC'}
+            Total Interest: {interest ? `${interest} YB` : '0 YB'}
           </Typography>
             <Button variant="contained" onClick={handleCalculate}>
               Calculate
