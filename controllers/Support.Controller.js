@@ -156,12 +156,12 @@ const adminReplyToUser = async (req, res) => {
         if (!latestMessage) {
             return res.status(404).json({ error: 'No message found for the user.' });
         }
-
+        console.log("latest Message: ", latestMessage);
         // Send reply email to the user
         const transporter = nodemailer.createTransport({
             host: 'smtp.hostinger.com',
             port: 465,
-            secure: false, // Set to true for a secure connection
+            secure: true, // Set to true for a secure connection
             auth: {
                 user: 'support2@yuvabitcoin.com',
                 pass: 'Support@123@YB'
