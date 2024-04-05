@@ -145,7 +145,7 @@ const useSearch = () => {
       isReturning: undefined,
     },
     page: 0,
-    rowsPerPage: 5,
+    rowsPerPage: 10,
     sortBy: "updatedAt",
     sortDir: "desc",
   });

@@ -1,5 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Checkbox, Stack, IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Box, TablePagination } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Checkbox,
+  Stack,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Box,
+  TablePagination,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import { Scrollbar } from "../../../components/scrollbar";
 import { useSnackbar } from "notistack";
@@ -107,19 +127,21 @@ export const QueriesListTable = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" align="center">
                 <Checkbox
-                  indeterminate={selected.length > 0 && selected.length < queries.length}
+                  indeterminate={
+                    selected.length > 0 && selected.length < queries.length
+                  }
                   checked={selected.length === queries.length}
                   onChange={handleSelectAllClick}
                   inputProps={{ "aria-label": "select all queries" }}
                 />
               </TableCell>
-              <TableCell>User Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Twitter ID</TableCell>
-              <TableCell>Query</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell align="center">User Name</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Twitter ID</TableCell>
+              <TableCell align="center">Query</TableCell>
+              <TableCell align="center">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -133,29 +155,41 @@ export const QueriesListTable = (props) => {
                 key={query.id}
                 selected={isSelected(query.id)}
               >
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" align="center">
                   <Checkbox
                     checked={isSelected(query.id)}
                     inputProps={{ "aria-labelledby": `query-${query.id}` }}
                   />
                 </TableCell>
-                <TableCell>{query.name}</TableCell>
-                <TableCell>{query.email}</TableCell>
-                <TableCell>{query.twitterId}</TableCell>
-                <TableCell sx={{width: "50%", whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{query.message}</TableCell>
+                <TableCell align="center">
+                  {query.name.charAt(0).toUpperCase() + query.name.slice(1)}
+                </TableCell>
+                <TableCell align="center">{query.email}</TableCell>
+                <TableCell align="center">{query.twitterId}</TableCell>
+                <TableCell
+                  sx={{ width: "50%", fontWeight: "500" }}
+                  align="center"
+                >
+                  {query.message}
+                </TableCell>
+
                 <TableCell>
-                <IconButton
-                component={NextLink}
-                href={{
-                  pathname: `${paths.dashboard.support.edit}${query._id}/edit`,
-                  query: { query: encodeURIComponent(JSON.stringify(query)) }
-                }}
-              >
-                <Edit02Icon />
-              </IconButton>
-                  <IconButton onClick={handleDeleteDialogOpen}>
-                    <DeleteIcon />
-                  </IconButton>
+                  <Stack direction="row" spacing={1}>
+                    <IconButton
+                      component={NextLink}
+                      href={{
+                        pathname: `${paths.dashboard.support.edit}${query._id}/edit`,
+                        query: {
+                          query: encodeURIComponent(JSON.stringify(query)),
+                        },
+                      }}
+                    >
+                      <Edit02Icon />
+                    </IconButton>
+                    <IconButton onClick={handleDeleteDialogOpen}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -169,7 +203,7 @@ export const QueriesListTable = (props) => {
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 15, 20]}
       />
       {/* Delete Confirmation Dialog */}
       <Dialog
