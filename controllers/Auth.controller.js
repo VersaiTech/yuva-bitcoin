@@ -300,8 +300,10 @@ function generateRandomNumberAdmin() {
 async function sendOTP(email, otp, member_name) {
   try {
 
-    const image = fs.readFileSync('../public/logo.png')
-    const base64Image = Buffer.from(image).toString('base64')
+    const imagePath = path.resolve(__dirname, '../public/logo.png')
+    const images = fs.readFileSync(imagePath)
+
+    const base64Image = Buffer.from(images).toString('base64')
 
     // Path to your HTML file
     const templatePath = path.resolve(__dirname, '../template/emailTemplate/index.html');
