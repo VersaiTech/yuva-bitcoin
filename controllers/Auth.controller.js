@@ -278,6 +278,7 @@ const fs = require('fs');
 const path = require('path');
 // const __dirname = require('../template/emailTemplate')
 
+
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Function to generate a random number
@@ -299,6 +300,9 @@ function generateRandomNumberAdmin() {
 async function sendOTP(email, otp, member_name) {
   try {
 
+    const image = fs.readFileSync('../public/logo.png')
+    const base64Image = Buffer.from(image).toString('base64')
+
     // Path to your HTML file
     const templatePath = path.resolve(__dirname, '../template/emailTemplate/index.html');
     // Read the template file
@@ -313,6 +317,9 @@ async function sendOTP(email, otp, member_name) {
     if (memberName) {
       html = html.replace('[edgar]', memberName.registrationData.member_name);
     }
+
+    // Replace the <img> src attribute with base64 encoded image
+    // html = html.replace('<img src="./images/yuva200px.png" alt="logo"', `<img src="data:image/png;base64,${base64Image}" alt="logo"`);
 
 
     const transporter = nodemailer.createTransport({
@@ -1036,6 +1043,61 @@ async function adminRegister(req, res) {
 //   }
 // }
 
+
+async function sendLoginOTP(email, otp) {
+  try {
+
+    const imagePath = path.resolve(__dirname, '../public/logo.png')
+    const images = fs.readFileSync(imagePath)
+
+    const base64Image = Buffer.from(images).toString('base64')
+    // console.log(base64Image);
+    // Path to your HTML file
+    const templatePath = path.resolve(__dirname, '../template/emailTemplate/login.html');
+    // Read the template file
+    let html = fs.readFileSync(templatePath, 'utf8');
+    // Replace placeholders with actual values
+    html = html.replace('[OTP_Code]', otp);
+
+
+    // const memberName = await TemporaryAdminOTP.findOne(admin_name);
+    // console.log(memberName)
+    // // Replace 'edgar' with  if memberName is defined
+    // if (memberName) {
+    //   html = html.replace('[edgar]', memberName.registrationData.admin_name);
+    // }
+    // Replace the <img> src attribute with base64 encoded image
+    // html = html.replace('src="../public/logo.png"', `src="https://yuvabitcoin.com/images/yuvalogo.png"`);
+
+
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // Set to true for a secure connection
+      auth: {
+        user: 'noreply@yuvabitcoin.com', // Your Gmail email address
+        pass: 'Noreply@123@YB' // Your Gmail password
+      }
+    });
+
+    const mailOptions = {
+      from: 'noreply@yuvabitcoin.com',
+      to: email,
+      subject: 'OTP Verification',
+      // text: `Your OTP for registration is: ${otp}`
+      html: html
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('OTP sent successfully.', email, otp);
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    throw new Error('Failed to send OTP.');
+  }
+}
+
+
 async function adminLogin(req, res) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
@@ -1093,7 +1155,7 @@ async function adminLogin(req, res) {
     }
 
     // Send OTP via email
-    await sendOTP(email, otp);
+    await sendLoginOTP(email, otp);
     console.log("Login OTP is :", otp);
 
     return res.status(200).send({

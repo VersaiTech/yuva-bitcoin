@@ -12,6 +12,9 @@ const path = require('path');
 async function sendOTP(email, otp) {
   try {
 
+    const image = fs.readFileSync('../public/logo.png')
+    const base64Image = Buffer.from(image).toString('base64')
+
     // Path to your HTML file
     const templatePath = path.resolve(__dirname, '../template/emailTemplate/withdraw.html');
     // Read the template file

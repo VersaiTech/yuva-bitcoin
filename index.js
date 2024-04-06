@@ -3,6 +3,7 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const path = require('path');
 
 
 const { Connection } = require("./config/db.config");
@@ -14,6 +15,9 @@ const cron = require('./crons/passiveincome');
 
 
 const port = process.env.PORT || 5001;
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'hbs');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
