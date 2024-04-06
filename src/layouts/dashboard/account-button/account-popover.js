@@ -172,13 +172,6 @@ export const AccountPopover = (props) => {
         >
           Logout
         </Button>
-        <Button
-          color="inherit"
-          onClick={handleLogout}
-          size="small"
-        >
-          Logout
-        </Button>
       </Box>
     </Popover>
   );
