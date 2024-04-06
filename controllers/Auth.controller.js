@@ -313,11 +313,10 @@ async function sendOTP(email, otp, member_name) {
     html = html.replace('[OTP_Code]', otp);
 
 
-    const memberName = await TemporaryRegistration.findOne(member_name);
-    console.log(memberName)
-    // Replace 'edgar' with  if memberName is defined
-    if (memberName) {
-      html = html.replace('[edgar]', memberName.registrationData.member_name);
+    const memberName = await TemporaryRegistration.find({ member_name: member_name });
+    console.log(memberName);
+    if (memberName.length > 0) {
+      html = html.replace('[edgar]', memberName[0].registrationData.member_name);
     }
 
     // Replace the <img> src attribute with base64 encoded image
@@ -1179,6 +1178,15 @@ async function verifyOTPAdmin(req, res) {
   const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
 
   try {
+
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid email"
+      })
+    }
+
     if (!otpFromBody || !email) { // Check if OTP or email is missing
       return res.status(400).json({
         status: false,
@@ -1201,8 +1209,8 @@ async function verifyOTPAdmin(req, res) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: temporaryOTP._id }, // You can use any identifier here
-      JWT_SECRET_KEY,
+      { userId: admin.admin_user_id, userType: admin.userType }, // You can use any identifier here
+      process.env.JWT_SECRET_KEY,
       { expiresIn: '100d' }
     );
 
