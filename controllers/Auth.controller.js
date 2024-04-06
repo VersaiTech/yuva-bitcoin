@@ -270,6 +270,7 @@ const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const TemporaryRegistration = require('../models/TemporaryRegistration');
 const TemporaryPasswordReset = require('../models/TemporaryPasswordReset');
+const TemporaryAdminOTP = require('../models/TemporaryAdminOTP');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
@@ -976,6 +977,65 @@ async function adminRegister(req, res) {
   }
 }
 
+// async function adminLogin(req, res) {
+//   const schema = Joi.object({
+//     email: Joi.string().email().required(),
+//     password: Joi.string().required(),
+//   });
+
+//   try {
+//     const { error, value } = schema.validate(req.body);
+
+//     if (error) {
+//       return res.status(400).send({
+//         status: false,
+//         message: error.details[0].message,
+//       });
+//     }
+
+//     const { email, password } = value;
+
+//     // Find admin by email
+//     const admin = await Admin.findOne({ email });
+
+//     if (!admin) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Invalid credentials!",
+//       });
+//     }
+
+//     // Compare passwords
+//     const validPassword = await bcrypt.compare(password, admin.password);
+
+//     if (!validPassword) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Invalid credentials!",
+//       });
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       { userId: admin.admin_user_id, userType: admin.userType },
+//       JWT_SECRET_KEY,
+//       { expiresIn: '100d' }
+//     );
+
+//     return res.status(200).send({
+//       status: true,
+//       message: "Admin login successful",
+//       token,
+//     });
+//   } catch (error) {
+//     console.error("Error during admin login:", error);
+//     return res.status(500).send({
+//       status: false,
+//       message: "Internal server error",
+//     });
+//   }
+// }
+
 async function adminLogin(req, res) {
   const schema = Joi.object({
     email: Joi.string().email().required(),
@@ -1004,27 +1064,41 @@ async function adminLogin(req, res) {
       });
     }
 
-    // Compare passwords
-    const validPassword = await bcrypt.compare(password, admin.password);
+    // Generate OTP
+    const otp = generateOTP();
 
-    if (!validPassword) {
-      return res.status(400).send({
-        status: false,
-        message: "Invalid credentials!",
+    // Check if data already exists in TemporaryAdminOTP collection
+    const existingData = await TemporaryAdminOTP.findOne({ email });
+
+    if (existingData) {
+      // Update existing data if found
+      existingData.otp = otp;
+      existingData.expiry = new Date(Date.now() + 2 * 60 * 1000); // expire in 2 minutes
+      await existingData.save();
+    } else {
+      // Save OTP to temporary collection if not found
+      const newData = await TemporaryAdminOTP.create({
+        email,
+        otp,
+        expiry: new Date(Date.now() + 2 * 60 * 1000), // expire in 2 minutes
       });
+
+      // start a job to remove expired data after 2 minutes
+      setTimeout(async () => {
+        await TemporaryAdminOTP.findOneAndDelete({
+          email,
+          expiry: { $lt: new Date() },
+        });
+      }, 2 * 60 * 1000);
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: admin.admin_user_id, userType: admin.userType },
-      JWT_SECRET_KEY,
-      { expiresIn: '100d' }
-    );
+    // Send OTP via email
+    await sendOTP(email, otp);
+    console.log("Login OTP is :", otp);
 
     return res.status(200).send({
       status: true,
-      message: "Admin login successful",
-      token,
+      message: "OTP sent successfully",
     });
   } catch (error) {
     console.error("Error during admin login:", error);
@@ -1034,6 +1108,54 @@ async function adminLogin(req, res) {
     });
   }
 }
+
+
+// Verify OTP Controller
+async function verifyOTPAdmin(req, res) {
+  const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
+
+  try {
+    if (!otpFromBody || !email) { // Check if OTP or email is missing
+      return res.status(400).json({
+        status: false,
+        message: "OTP and email are required"
+      });
+    }
+
+    // Find temporary OTP by email
+    const temporaryOTP = await TemporaryAdminOTP.findOne({ email, otp: otpFromBody });
+
+    if (!temporaryOTP) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid OTP or email"
+      });
+    }
+
+    // Delete temporary OTP
+    await temporaryOTP.deleteOne();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: temporaryOTP._id }, // You can use any identifier here
+      JWT_SECRET_KEY,
+      { expiresIn: '100d' }
+    );
+
+    return res.status(200).send({
+      status: true,
+      message: "OTP verified successfully",
+      token,
+    });
+  } catch (err) {
+    console.log("Error in OTP verification", err);
+    return res.status(400).send({
+      status: false,
+      message: "OTP verification failed"
+    });
+  }
+}
+
 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000;
 async function forgotPassword(req, res) {
@@ -1257,5 +1379,6 @@ module.exports = {
   verifyOTP,
   forgotPassword,
   verifyOTPForResetPassword,
-  changePassword
+  changePassword,
+  verifyOTPAdmin
 };
