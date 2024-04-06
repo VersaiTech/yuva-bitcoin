@@ -531,6 +531,12 @@ const deleteOrder = async (req, res) => {
             return res.status(400).json({ error: 'User not found' });
         }
 
+        //find the admin record (assuming there's an Admin model)
+        let admin = await Admin.findOne();
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
+
         // Get the current date
         const currentDate = new Date();
         // Get the last deletion date from the member's record
@@ -551,18 +557,41 @@ const deleteOrder = async (req, res) => {
         // Increment the deletion count after successfully deleting an order
         member.deletionCount++;
 
-        //add deleted amount return back to user coin and deposit_usdt according to the order's coin
+        // // add deleted amount return back to user coin and deposit_usdt according to the order's coin
+        // if (order.coin === 'yuva') {
+        //     member.coins += order.amount;
+        // } else if (order.coin === 'usdt') {
+        //     member.deposit_usdt += order.amount;
+        // }else{
+        //     console.log('Invalid coin type');
+        // }
+
+
+        console.log("admin yuva:", admin.yuva);
+        // Deduct the amount from the admin's account and add it to the member's coin
         if (order.coin === 'yuva') {
+            if (admin.yuva < order.amount) {
+                return res.status(400).json({ error: 'Insufficient funds in admin account' });
+            }
+            admin.yuva -= order.amount;
             member.coins += order.amount;
         } else if (order.coin === 'usdt') {
+            if (admin.usdt < order.amount) {
+                return res.status(400).json({ error: 'Insufficient funds in admin account' });
+            }
+            admin.usdt -= order.amount;
             member.deposit_usdt += order.amount;
+        } else {
+            console.log('Invalid coin type');
         }
+
 
         //amount has 4 decimal places
         member.deposit_usdt = parseFloat(member.deposit_usdt.toFixed(4));
         member.coins = parseFloat(member.coins.toFixed(4));
 
         // Save the updated member object
+        await admin.save();
         await member.save();
 
         // Delete the order from the database
@@ -1087,12 +1116,22 @@ const createBuyOrder = async (req, res) => {
         const buyer = await Member.findOne({ member_user_id: buyerId });
         const seller = await Member.findOne({ member_user_id: sellerId });
 
+        //buyer and seller can not be the same person 
+        if (buyer._id.toString() === seller._id.toString()) {
+            return res.status(400).json({ error: 'Buyer and seller cannot be the same person' });
+        }
+
         // Check if buyer and seller exist
         if (!buyer || !seller) {
             console.log('Buyer or seller not found');
             return res.status(404).json({ message: 'Buyer or seller not found' });
         }
 
+        // Find the admin record
+        let admin = await Admin.findOne();
+        if (!admin) {
+            return res.status(400).json({ error: 'Admin not found' });
+        }
         const orderId = req.params._id;
 
         // Check if the order exists
@@ -1119,42 +1158,70 @@ const createBuyOrder = async (req, res) => {
         // Calculate the total price based on the buy amount and sell price
         const totalPrice = sellOrder.exchange_currency * buyAmount;
 
-        // Check if the buyer has sufficient funds in their deposit_usdt balance
-        if (buyer.deposit_usdt < totalPrice) {
-            return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
+        // // Check if the buyer has sufficient funds in their deposit_usdt balance
+        // if (buyer.deposit_usdt < buyAmount) {
+        //     return res.status(400).json({ error: 'Insufficient funds in buyer\'s deposit_usdt balance' });
+        // }
+
+        // //check if the buyer has sufficienr coins in their coins balance
+        // if (buyer.coins < buyAmount) {
+        //     return res.status(400).json({ error: 'Insufficient coins in buyer\'s coins balance' });
+        // }
+
+        //total can not be minus
+        if (totalPrice < 0) {
+            return res.status(400).json({ error: 'Total price cannot be negative' });
         }
 
-        // Find the admin record
-        let admin = await Admin.findOne();
-        if (!admin) {
-            return res.status(400).json({ error: 'Admin not found' });
-        }
 
-        // Deduct the amount from the admin's balance based on the coin type
+        //==============================================================================================
+        //    // Deduct the amount from the admin's balance based on the coin type
+        //    let deductionAmount = buyAmount;
+
+        //    if (sellOrder.coin === 'yuva') {
+        //        // Deduct the total price from the buyer's deposit_usdt balance
+        //        buyer.deposit_usdt -= totalPrice;
+        //        if (admin.yuva < deductionAmount) {
+        //            return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
+        //        }
+        //        admin.yuva -= deductionAmount;
+        //        // Add the deducted amount to the buyer's coins
+        //        buyer.coins += deductionAmount;
+        //    } else if (sellOrder.coin === 'usdt') {
+        //        if (admin.usdt < totalPrice) {
+        //            return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${totalPrice}, Available: ${admin.usdt}` });
+        //        }
+        //        admin.usdt -= totalPrice;
+        //        // Deduct the total price from the buyer's deposit_usdt balance
+        //        buyer.deposit_usdt -= totalPrice;
+        //        // Add the total price to the seller's deposit_usdt balance
+        //        seller.deposit_usdt += totalPrice;
+        //    } else {
+        //        return res.status(400).json({ error: 'Invalid coin type' });
+        //    }
+        //==============================================================================================
+
+
+        // Deduct the amount from the member's balance based on the coin type
         let deductionAmount = buyAmount;
 
         if (sellOrder.coin === 'yuva') {
             // Deduct the total price from the buyer's deposit_usdt balance
-            buyer.deposit_usdt -= totalPrice;
-            if (admin.yuva < deductionAmount) {
-                return res.status(400).json({ error: `Insufficient balance in admin's yuva wallet. Required: ${deductionAmount}, Available: ${admin.yuva}` });
+            if (buyer.deposit_usdt < totalPrice) {
+                return res.status(400).json({ error: `Insufficient balance in buyer's deposit_usdt balance. Required: ${totalPrice}, Available: ${buyer.deposit_usdt}` });
             }
             admin.yuva -= deductionAmount;
-            // Add the deducted amount to the buyer's coins
-            buyer.coins += deductionAmount;
-        } else if (sellOrder.coin === 'usdt') {
-            if (admin.usdt < totalPrice) {
-                return res.status(400).json({ error: `Insufficient balance in admin's usdt wallet. Required: ${totalPrice}, Available: ${admin.usdt}` });
-            }
-            admin.usdt -= totalPrice;
-            // Deduct the total price from the buyer's deposit_usdt balance
             buyer.deposit_usdt -= totalPrice;
-            // Add the total price to the seller's deposit_usdt balance
-            seller.deposit_usdt += totalPrice;
+        } else if (sellOrder.coin === 'usdt') {
+            // Deduct the total price from the member's coins
+            if (buyer.coins < deductionAmount) {
+                return res.status(400).json({ error: `Insufficient balance in buyer's coins. Required: ${deductionAmount}, Available: ${buyer.coins}` });
+            }
+            admin.usdt -= deductionAmount;
+            buyer.coins -= totalPrice;
         } else {
             return res.status(400).json({ error: 'Invalid coin type' });
         }
-
 
 
         // Create a new buy order instance
@@ -1168,42 +1235,20 @@ const createBuyOrder = async (req, res) => {
             transactionType: 'order_buy'
         });
 
-        // // Update the remaining amount and total in the orderSchema
-        // sellOrder.amount -= buyAmount;
-        // sellOrder.total -= totalPrice;
-
-        // // Transfer the total amount from buyer to seller
-        // seller.deposit_usdt += totalPrice;
-
-        // await Promise.all([admin.save(), buyer.save(), seller.save(), buyOrder.save(), sellOrder.save()]);
-
-        // // Create a new TransactionHistory document for the buyer order
-        // const transactionHistoryBuyer = new TransactionHistory({
-        //     orderId: buyOrder._id,
-        //     userId: buyer.member_user_id,
-        //     adminId: admin.admin_user_id,
-        //     coin: sellOrder.coin,
-        //     amount: totalPrice, // The total amount bought
-        //     transactionType: 'order_buy'
-        // });
-
-        // // Save the transaction history for the buyer order
-        // await transactionHistoryBuyer.save();
-
-        // // Set the sellOrder as inactive if the buy amount equals the sell amount
-        // if (sellOrder.amount === 0) {
-        //     sellOrder.active = false;
-        //     await sellOrder.save();
-        // }
-
-        // res.status(201).json({ message: 'Buy order created successfully', buyOrder });
-
         // Set the remaining amount and total in the orderSchema
         sellOrder.amount -= buyAmount;
+        console.log("purchase amount", buyAmount);
         sellOrder.total -= totalPrice;
+        console.log("total price of amount", totalPrice);
 
-        // // Transfer the total amount from buyer to seller
-        seller.deposit_usdt += totalPrice;
+        // Transfer the total amount from buyer to seller
+        if (sellOrder.coin === 'yuva') {
+            buyer.coins += buyAmount;
+            seller.deposit_usdt += totalPrice;
+        } else if (sellOrder.coin === 'usdt') {
+            buyer.deposit_usdt += buyAmount;
+            seller.coins += totalPrice;
+        }
 
         // Set the sellOrder as inactive if the buy amount equals the sell amount
         if (sellOrder.amount === 0 && sellOrder.total === 0) {
@@ -1224,6 +1269,14 @@ const createBuyOrder = async (req, res) => {
 
         // Save the transaction history for the buyer order
         await transactionHistoryBuyer.save();
+
+        //if amount is 0 and active is false after purchase then delete order from database
+        if (sellOrder.amount === 0 && sellOrder.active === false) {
+            await Order.findByIdAndDelete(sellOrder._id);
+            return res.status(201).json({ message: 'Buy order created successfully', buyOrder });
+        } else {
+            await sellOrder.save();
+        }
 
         res.status(201).json({ message: 'Buy order created successfully', buyOrder });
 
