@@ -276,7 +276,6 @@ const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
 const fs = require('fs');
 const path = require('path');
-// const __dirname = require('../template/emailTemplate')
 
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -313,7 +312,7 @@ async function sendOTP(email, otp, member_name) {
     html = html.replace('[OTP_Code]', otp);
 
 
-    const memberName = await TemporaryRegistration.find({ member_name: member_name });
+    const memberName = await TemporaryRegistration.find({ email });
     console.log(memberName);
     if (memberName.length > 0) {
       html = html.replace('[edgar]', memberName[0].registrationData.member_name);
@@ -364,7 +363,6 @@ async function register(req, res) {
     twitterId: Joi.string().trim(),
     wallet_address: Joi.string().trim().required(),
   });
-
   try {
     // Validate request body parameters
     const { error, value } = registerSchema.validate(req.body);
