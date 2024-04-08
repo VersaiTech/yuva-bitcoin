@@ -43,9 +43,9 @@ export const paths = {
       modern: "/auth/reset-password/modern",
     },
     verifyCode: {
-      classic: "/auth-demo/verify-code/classic",
-      modern: "/auth-demo/verify-code/modern",
-    },
+      classic: '/auth/verify-code/classic',
+      modern: '/auth/verify-code/modern'
+    }
   },
   dashboard: {
     index: "/dashboard/portfolio",

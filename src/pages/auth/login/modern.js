@@ -49,13 +49,16 @@ const Page = () => {
     validationSchema,
 
     onSubmit: async (values, helpers) => {
+      localStorage.setItem("email", values.email);
       console.log(values);
       try {
         await signIn(values.email, values.password);
 
         if (isMounted()) {
-          router.push(returnTo || paths.dashboard.index);
-          enqueueSnackbar('Logged in successfully', { variant: 'success' });
+          enqueueSnackbar("Please Verify", {
+            variant: "success",
+          });
+          router.push(paths.auth.verifyCode.modern);
         }
       } 
       catch (err) {
