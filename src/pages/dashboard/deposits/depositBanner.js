@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import Web3 from 'web3';
 import PropTypes from "prop-types";
-import { BrowserProvider, ethers } from 'ethers'
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
 import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from './wallet';
 import { useSnackbar } from 'notistack';
-import axios from 'axios';
-const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
+// const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 import detectEthereumProvider from "@metamask/detect-provider";
 
@@ -68,18 +66,9 @@ export const DepositOperations = (props) => {
       method: "eth_requestAccounts",
     });
     updateWallet(accounts);
+
   };
 
-
-
-  let injectedProvider = false;
-
-  if (typeof window.ethereum !== "undefined") {
-    injectedProvider = true;
-    console.log(window.ethereum);
-  }
-
-  const isMetaMask = injectedProvider ? window.ethereum.isMetaMask : false;
 
 
   const { enqueueSnackbar } = useSnackbar();
@@ -88,44 +77,13 @@ export const DepositOperations = (props) => {
     address: '',
   })
 
-  const [web3Wallet, setWeb3Wallet] = useState({
-    walletAddress: '',
-    balance: '',
-    allowance: '',
-    tokens: '',
-    chainID: '',
-    walletConnect: false,
-    provider: '',
-  });
 
   const [op, setOp] = useState({
     from: "USDT",
     to: "Yuva_Bitcoin",
   });
 
-  const [userDetails, setUserDetails] = useState({
-    wallet: '',
-    username: '',
-    memberId: ''
-  });
 
-
-
-  const web3 = new Web3(Web3.givenProvider);
-
-
-  async function getBalance(useradd) {
-
-    try {
-      const bnb = await web3.eth.getBalance(useradd);
-      console.log(bnb)
-
-    } catch (error) {
-      console.log(error)
-    }
-
-    return true;
-  }
 
   async function addNetwork() {
     let network;
@@ -163,104 +121,48 @@ export const DepositOperations = (props) => {
   }
 
 
-  async function fetchData() {
-    // try {
-    //   // set bnb testnet
-    //   web3.eth.net.getId().then(async (netId) => {
 
-    //     // console.log(await web3.utils.fromWei(await netId));
+  // async function connectWallet() {
+  //   try {
+  //     await window.ethereum.request({ method: 'eth_requestAccounts' });
+  //     enqueueSnackbar('Connected', { variant: 'success' });
+  //     setWeb3Wallet((prevState) => ({
+  //       ...prevState,
+  //       walletConnect: true
+  //     }));
+  //   } catch (error) {
+  //     enqueueSnackbar('Failed to connect Please try again', { variant: 'error' });
+  //     console.log(error);
+  //   }
+  // }
 
-    //     console.log(netId)
-
-    //     setWeb3Wallet((prevState) => ({
-    //       ...prevState,
-    //       chainID: netId
-    //     }));
-    //   })
-    //   window.ethereum.request({ method: 'eth_requestAccounts' }).then(async (address) => {
-    //     window.userAddress = address[0];
-    //     console.log(address[0])
-
-    //     setUserDetails((prevState) => ({
-    //       ...prevState,
-    //       wallet: address[0]
-    //     }));
-    //     try {
-    //       await getBalance(address[0]);
-    //       setWeb3Wallet((prevState) => ({
-    //         ...prevState,
-    //         walletAddress: address[0]
-    //       }));
-
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  }
-
-  async function connectWallet() {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      enqueueSnackbar('Connected', { variant: 'success' });
-      setWeb3Wallet((prevState) => ({
-        ...prevState,
-        walletConnect: true
-      }));
-    } catch (error) {
-      enqueueSnackbar('Failed to connect Please try again', { variant: 'error' });
-      console.log(error);
-    }
-  }
 
   const ADMIN_WALLET_ADDRESS = '0x8Ec246487834f6C4CAAf2fd67cB1731Cc5C9eB57';
 
 
-
-
-  async function buyCoin() {
-
-    // if (!web3Wallet || !web3Wallet.walletConnect) {
-    
-    //   enqueueSnackbar('Please connect your wallet', { variant: 'error' });
-
-    //   return;
-
-    // }
-
+  const buyToken = async () => {
     try {
+      const provider = await detectEthereumProvider({ silent: true });
+      const web3 = new Web3(provider);
+      console.log(web3);
 
       const contract = new web3.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
 
-      const amountToSend = web3.utils.toWei(values.amount, 'ether');
+      const response = await contract.methods
+        .transfer(ADMIN_WALLET_ADDRESS, web3.utils.toWei(values.amount, 'ether'))
+        .send({ from: "0x6101e6c919dE2E215d7B8565F94B19EA1CB918C0" });
 
-      const data = contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).encodeABI();
+      console.log(response);
 
-      const gasEstimate = await contract.methods.transfer(ADMIN_WALLET_ADDRESS, amountToSend).estimateGas({ from: web3Wallet.walletAddress });
 
-      const tx = {
-        'from': web3Wallet.walletAddress,
-        'to': BUSD_TESTNET_CONTRACT_ADDRESS,
-        'data': data,
-        'gas': gasEstimate,
-      };
-
-      const signedTx = await window.ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [tx],
-      });
-
-      const receipt = await web3.eth.waitForTransactionReceipt(signedTx.hash);
-
-      console.log(receipt);
-      enqueueSnackbar('Transaction successful!', { variant: 'success' });
+      // Handle the response as needed
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar('Transaction failed. Please try again.', { variant: 'error' });
+      console.error("Error fetching data:", error);
     }
-  }
+  };
+
+
+
 
 
 
@@ -281,12 +183,11 @@ export const DepositOperations = (props) => {
     if (window.ethereum === undefined) {
       console.log("Wallet not installed");
     } else {
-      fetchData();
-      fetchPrice();
+      // fetchPrice();
     }
   }, []);
 
-  
+
 
 
 
@@ -400,7 +301,7 @@ export const DepositOperations = (props) => {
         </Typography>
 
         <Button fullWidth
-          onClick={() => buyCoin()}
+          onClick={() => buyToken()}
           size="large"
           sx={{ mt: 2, cursor: "pointer" }}
           variant="contained">
