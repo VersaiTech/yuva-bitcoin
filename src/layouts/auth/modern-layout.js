@@ -47,7 +47,7 @@ export const Layout = (props) => {
       >
         <Box maxWidth="md">
           <Typography sx={{ mb: 1 }} variant="h4">
-            Welcome to <span> Yuva Bitcoin Admin Pannel</span>
+            Welcome to <span> Yuva Bitcoin Admin Panel</span>
           </Typography>
           <Typography color="text.secondary" sx={{ mb: 4 }}>
             Unlocking Knowledge, Empowering Futures: Explore the Intersection of
