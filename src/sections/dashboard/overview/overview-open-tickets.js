@@ -32,7 +32,7 @@ export const OverviewOpenTickets = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Today Task
+            All Task
           </Typography>
           <Typography
             color="text.primary"

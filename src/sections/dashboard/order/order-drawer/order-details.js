@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { format } from "date-fns";
+import { format, differenceInSeconds } from "date-fns"; // Import differenceInSeconds from date-fns
 import numeral from "numeral";
 import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import { PropertyList } from "../../../../components/property-list";
@@ -27,9 +27,8 @@ export const OrderDetails = (props) => {
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      updateCountdown();
-    }, 1000);
+    updateCountdown(); // Call updateCountdown once initially
+    const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -37,25 +36,24 @@ export const OrderDetails = (props) => {
   const updateCountdown = () => {
     const completionTime = new Date(order.completionTime);
     const currentTime = new Date();
-    const timeDifference = completionTime - currentTime;
-    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor(
-      (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    setCountdown(
-      `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`
-    );
-    if (timeDifference > 0) {
+
+    // Calculate difference in seconds
+    const timeDifferenceInSeconds = differenceInSeconds(completionTime, currentTime);
+
+    if (timeDifferenceInSeconds > 0) {
+      const days = Math.floor(timeDifferenceInSeconds / (24 * 60 * 60));
+      const hours = Math.floor((timeDifferenceInSeconds % (24 * 60 * 60)) / (60 * 60));
+      const minutes = Math.floor((timeDifferenceInSeconds % (60 * 60)) / 60);
+      const seconds = Math.floor(timeDifferenceInSeconds % 60);
+
       if (days > 0) {
-        setCountdown(
-          `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`
-        );
-      } else {
+        setCountdown(`${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`);
+      } else if (hours > 0) {
         setCountdown(`${hours} hours ${minutes} minutes ${seconds} seconds`);
+      } else if (minutes > 0) {
+        setCountdown(`${minutes} minutes ${seconds} seconds`);
+      } else {
+        setCountdown(`${seconds} seconds`);
       }
     } else {
       setCountdown("Task Expired");
@@ -115,7 +113,6 @@ export const OrderDetails = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const align = lgUp ? "horizontal" : "vertical";
   const items = order.items || [];
-  // const statusColor = statusMap[order.status];
   const statusColor =
     countdown === "Task Expired" ? statusMap.expired : statusMap[order.status];
 
@@ -168,16 +165,17 @@ export const OrderDetails = (props) => {
             align={align}
             disableGutters
             divider
-            label="Task End Date"
+            label="Task End Time"
             value={countdown}
           />
-          {/* <PropertyListItem align={align} disableGutters divider label="Status">
-            <SeverityPill color={statusColor}>{order.status}</SeverityPill>
-          </PropertyListItem> */}
-          <PropertyListItem align={align}
-disableGutters
-divider
-label="Status">
+          <PropertyListItem
+            align={align}
+            disableGutters
+            divider
+            label="Task Open Time"
+            value={format(new Date(order.scheduledTime), "yyyy-MM-dd HH:mm:ss")}
+          />
+          <PropertyListItem align={align} disableGutters divider label="Status">
             <SeverityPill color={statusColor}>
               {countdown === "Task Expired" ? "Expired" : order.status}
             </SeverityPill>
@@ -212,9 +210,7 @@ label="Status">
           >
             Cancel
           </Button>
-          <Typography variant="subtitle2"
-color="warning"
-sx={{ pt: 5 }}>
+          <Typography variant="subtitle2" color="warning" sx={{ pt: 5 }}>
             Please go to the link and complete the task. If you submit without
             visiting the link, you won&apos;t receive the reward.
           </Typography>
@@ -228,6 +224,5 @@ OrderDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,
   onReject: PropTypes.func,
-  // @ts-ignore
   order: PropTypes.object,
 };

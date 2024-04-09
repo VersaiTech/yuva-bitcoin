@@ -13,6 +13,7 @@ import {
   Typography,
   Card,
   Grid,
+  
   CardHeader,
   CardContent,
   Divider,
@@ -25,8 +26,10 @@ import { CustomerEditForm } from "../../../sections/dashboard/stake/stake-add-fo
 import { CustomerWithdrawForm } from "../../../sections/dashboard/stake/stake-withdraw-form";
 import InterestCalculator from "./calculator";
 import { padding } from "@mui/system";
+import Image from 'next/image'
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+const imageURL = '/assets/logos/yuvalogo2.png'; 
 
 export const useTotalInvestment = () => {
   const [totalInvestment, setTotalInvestment] = useState(null);
@@ -119,17 +122,14 @@ const Page = () => {
                       {" "}
                       {/* Remove all padding from the Card */}
                       <CardHeader
-                        subheader={
+                       subheader={
+                        <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
+                          {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
                           <Typography variant="h4" color="green">
-                            {"₿ " + totalInvestment || 0}
+                            {" " +totalInvestment || 0}
                           </Typography>
-                        }
-                        sx={{ pb: 0 }}
-                        title={
-                          <Typography color="text.secondary" variant="overline">
-                            Total Stake balance
-                          </Typography>
-                        }
+                        </div>
+                      }
                       />
                       <CardContent sx={{ padding: 0 , }}>
                         {" "}

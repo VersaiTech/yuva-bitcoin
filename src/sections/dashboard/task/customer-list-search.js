@@ -16,7 +16,7 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'Today Task',
+    label: 'All Task',
     value: 'all'
   },
   {

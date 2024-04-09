@@ -93,7 +93,7 @@ export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
   const chartOptions = useChartOptions(labels);
   const totalAmount = chartSeries.reduce((acc, item) => acc += item, 0);
-  const formattedTotalAmount = numeral(totalAmount).format('$0,0');
+  const formattedTotalAmount = numeral(totalAmount).format('YB 0,0');
 
   return (
     <Card>
@@ -156,7 +156,7 @@ export const CryptoCurrentBalance = (props) => {
                 }}
               >
                 {chartSeries.map((item, index) => {
-                  const amount = numeral(item).format('$0,0.00');
+                  const amount = numeral(item).format('YB0,0.00');
 
                   return (
                     <Stack

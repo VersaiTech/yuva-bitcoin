@@ -39,7 +39,7 @@ export const en = {
   [tokens.nav.referralHistory]: 'Referral History',
   [tokens.nav.withdrawHistory]: 'Withdraw History',
   [tokens.nav.withdraw]: 'Withdraw',
-  [tokens.nav.todayTasks]: 'Today Tasks',
+  [tokens.nav.todayTasks]: 'All Tasks',
   [tokens.nav.pending]: 'Pending',
   [tokens.nav.earnings]: 'Earnings',
   [tokens.nav.deposit]: 'Deposit',

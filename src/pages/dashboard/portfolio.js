@@ -313,7 +313,7 @@ const Page = () => {
                     </Grid>
                 
                     <Grid item xs={12} md={4}>
-                      <OverviewOpenTickets amount={overview.userTasks} />
+                      <OverviewOpenTickets amount={overview.totalTasks} />
                     </Grid>
                     <Grid item xs={12} md={4}>
                       <OverviewDoneTasks amount={overview.completedTasks} />
