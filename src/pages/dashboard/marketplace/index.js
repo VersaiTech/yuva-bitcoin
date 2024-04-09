@@ -15,6 +15,7 @@ import {
   Button,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
+// import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
 import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
 import { paths } from "../../../paths";
 import axios from "axios";
@@ -72,9 +73,18 @@ const CryptoMarketplacePage = () => {
     setBuyForm(false);
   };
 
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (formData) => {
     try {
-      console.log("Posting order data...");
+      console.log("Posting order data...", formData);
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+      const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
+      const responseData = response.data;
+      console.log(responseData);
+      // Handle the response as needed
       handleCloseForm();
     } catch (error) {
       console.error("Error placing order:", error);
@@ -170,11 +180,11 @@ const CryptoMarketplacePage = () => {
             </Button>
           </Box>
           <Divider sx={{ my: 3 }} />
-          <GridList2 projects={listings} key={listings} handleBuyButtonClick={handleBuyButtonClick} />
+          <GridList2 projects={listings} key={listings} handleBuyButtonClick={handleBuyButtonClick}  />
         </Container>
       </Box>
 
-      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
+      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder}/>
       <BuyForm currentdata={currentdata} open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
     </>
   );
