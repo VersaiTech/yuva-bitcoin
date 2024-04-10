@@ -59,6 +59,10 @@ export const getSections = (t) => [
           {
             title: t(tokens.nav.completedTasks),
             path: paths.dashboard.tasks.completedTasks
+          },
+          {
+            title: t(tokens.nav.rejected),
+            path: paths.dashboard.tasks.rejected
           }
         ]
       },

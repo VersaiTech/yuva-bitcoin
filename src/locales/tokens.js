@@ -63,6 +63,7 @@ export const tokens = {
     todayTasks: 'nav.todayTasks',
     completedTasks: 'nav.completedTasks',
     pending: 'nav.pending',
+    rejected: 'nav.rejected',
     pages: 'nav.pages',
     postCreate: 'nav.postCreate',
     postDetails: 'nav.postDetails',

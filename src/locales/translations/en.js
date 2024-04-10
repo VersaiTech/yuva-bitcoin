@@ -41,6 +41,7 @@ export const en = {
   [tokens.nav.withdraw]: 'Withdraw',
   [tokens.nav.todayTasks]: 'All Tasks',
   [tokens.nav.pending]: 'Pending',
+  [tokens.nav.rejected]: 'Rejected',
   [tokens.nav.earnings]: 'Earnings',
   [tokens.nav.deposit]: 'Deposit',
   [tokens.nav.depositHistory]: 'Deposit History',

@@ -134,7 +134,9 @@ export const paths = {
       today: '/dashboard/tasks',
       details: '/dashboard/tasks/:taskId',
       completedTasks: '/dashboard/tasks?s=completed',
-      pending: '/dashboard/tasks?s=failed'
+      pending: '/dashboard/tasks?s=failed',
+      rejected: '/dashboard/tasks?s=rejected'
+      
     },
     products: {
       index: '/dashboard/products',
