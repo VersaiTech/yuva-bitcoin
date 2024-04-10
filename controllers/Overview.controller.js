@@ -90,6 +90,7 @@ async function getUserOverview(req, res) {
     stakeDuration12months.forEach(stake => {
       total12months += stake.investment
     })
+    // const stakingTotals = [total3months = total3months, total6months = total6months, total12months = total12months];
 
     return res.status(200).json({
       status: true,
@@ -98,9 +99,11 @@ async function getUserOverview(req, res) {
         totalTasks: totalTasksCount,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
-        total3months: total3months,
-        total6months: total6months,
-        total12months: total12months,
+        stakingTotals: {
+          total3months: total3months,
+          total6months: total6months,
+          total12months: total12months
+        },
         coins: memberData ? memberData.coins : 0,
         deposit_usdt: memberData ? memberData.deposit_usdt : 0,
       }
