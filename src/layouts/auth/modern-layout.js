@@ -122,7 +122,7 @@ export const Layout = (props) => {
               component={NextLink}
               direction="row"
               display="inline-flex"
-              href={paths.index}
+              href={paths.auth.login.modern}
               spacing={1}
               sx={{ textDecoration: "none" }}
             >

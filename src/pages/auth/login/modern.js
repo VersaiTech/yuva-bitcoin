@@ -1,44 +1,40 @@
-import NextLink from "next/link";
-import * as Yup from "yup";
-import { useFormik } from "formik";
-import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
-import {
-  Box,
-  Button,
-  Link,
-  Stack,
-  SvgIcon,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Layout as AuthLayout } from "../../../layouts/auth/modern-layout";
-import { paths } from "../../../paths";
-import { useAuth } from "../../../hooks/use-auth";
-import { useMounted } from "../../../hooks/use-mounted";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSnackbar } from "notistack";
-import { useState } from "react";
+import NextLink from 'next/link';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
+import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
+import { Box, Button, Link, Stack, SvgIcon, TextField, Typography } from '@mui/material';
+import { Layout as AuthLayout } from '../../../layouts/auth/modern-layout';
+import { paths } from '../../../paths';
+import { useAuth } from '../../../hooks/use-auth';
+import { useMounted } from '../../../hooks/use-mounted';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSnackbar } from 'notistack';
 
 const initialValues = {
-  email: "",
-  password: "",
-  submit: null,
+  email: '',
+  password: '',
+  submit: null
 };
+
 
 const useParams = () => {
   const searchParams = useSearchParams();
-  const returnTo = searchParams.get("returnTo") || undefined;
+  const returnTo = searchParams.get('returnTo') || undefined;
   return {
-    returnTo,
+    returnTo
   };
 };
 
 const validationSchema = Yup.object({
-  email: Yup.string()
-    .email("Must be a valid email")
+  email: Yup
+    .string()
+    .email('Must be a valid email')
     .max(255)
-    .required("Email is required"),
-  password: Yup.string().max(255).required("Password is required"),
+    .required('Email is required'),
+  password: Yup
+    .string()
+    .max(255)
+    .required('Password is required')
 });
 
 const Page = () => {
@@ -47,9 +43,7 @@ const Page = () => {
   const { issuer, signIn } = useAuth();
   const { returnTo } = useParams();
   const router = useRouter();
-
-  // Inside the Page component
-  const [loginSuccess, setLoginSuccess] = useState(false);
+  
 
   const formik = useFormik({
     initialValues,
@@ -57,27 +51,19 @@ const Page = () => {
 
     onSubmit: async (values, helpers) => {
       localStorage.setItem("email", values.email);
-
-      setLoginSuccess(true);
       console.log(values);
       try {
         await signIn(values.email, values.password);
 
-        // if (isMounted()) {
-        //   enqueueSnackbar("Please Verify", {
-        //     variant: "success",
-        //   });
-        //   router.push(paths.auth.verifyCode.modern);
-
-        // Redirect to OTP verification page if login was successful
-        if (loginSuccess) {
+        if (isMounted()) {
           enqueueSnackbar("Please Verify", {
             variant: "success",
           });
           router.push(paths.auth.verifyCode.modern);
         }
-      } catch (err) {
-        enqueueSnackbar(err.response.data.message, { variant: "error" });
+      } 
+      catch (err) {
+        enqueueSnackbar(err.response.data.message, { variant: 'error' });
         console.log(err.response.data.message);
 
         if (isMounted()) {
@@ -86,7 +72,7 @@ const Page = () => {
           helpers.setSubmitting(false);
         }
       }
-    },
+    }
   });
 
   return (
@@ -97,19 +83,26 @@ const Page = () => {
           component={NextLink}
           href={paths.dashboard.index}
           sx={{
-            alignItems: "center",
-            display: "inline-flex",
+            alignItems: 'center',
+            display: 'inline-flex'
           }}
           underline="hover"
         >
           <SvgIcon sx={{ mr: 1 }}>
             <ArrowLeftIcon />
           </SvgIcon>
-          <Typography variant="subtitle2">Dashboard</Typography>
+          <Typography variant="subtitle2">
+            Dashboard
+          </Typography>
         </Link>
       </Box>
-      <Stack sx={{ mb: 4 }} spacing={1}>
-        <Typography variant="h5">Admin Log in</Typography>
+      <Stack
+        sx={{ mb: 4 }}
+        spacing={1}
+      >
+        <Typography variant="h5">
+         Admin Log inn
+        </Typography>
         {/* <Typography
           color="text.secondary"
           variant="body2"
@@ -125,7 +118,10 @@ const Page = () => {
           </Link>
         </Typography> */}
       </Stack>
-      <form noValidate onSubmit={formik.handleSubmit}>
+      <form
+        noValidate
+        onSubmit={formik.handleSubmit}
+      >
         <Stack spacing={3}>
           <TextField
             autoFocus
@@ -174,6 +170,10 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
+Page.getLayout = (page) => (
+  <AuthLayout>
+    {page}
+  </AuthLayout>
+);
 
 export default Page;
