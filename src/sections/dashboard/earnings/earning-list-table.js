@@ -191,7 +191,7 @@ const statusMap = {
 
 const useSelectionModel = (orders) => {
   const customerIds = useMemo(() => {
-    return  orders.map((customer) => customer.member_user_id);
+    return orders.map((customer) => customer.member_user_id);
   }, [orders]);
   const [selected, setSelected] = useState([]);
 
@@ -229,7 +229,6 @@ const useSelectionModel = (orders) => {
 export const EarningListTable = (props) => {
   const router = useRouter();
 
-
   const {
     orders,
     ordersCount,
@@ -262,8 +261,7 @@ export const EarningListTable = (props) => {
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box sx={{ position: "relative" }}
-{...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -287,12 +285,10 @@ export const EarningListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit"
-size="small">
+          <Button color="inherit" size="small">
             Delete
           </Button>
-          <Button color="inherit"
-size="small">
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -342,20 +338,10 @@ size="small">
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center"
-direction="row"
-spacing={2}>
-                      <Avatar
-                        src={customer.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {/* {getInitials(customer.name)} */}
-                        <img src="/yuvalogo2 - copy.png"
-alt="Yuva Logo" />
-                      </Avatar>
+                    <Stack alignItems="center" direction="row" spacing={2}>
+                      
+                        <Avatar  src="/yuvalogo2.png" alt="" sx={{ width: '42px', height: '42px' }} />
+                     
                       <div>
                         {/* <Link
                           color="inherit"
@@ -365,30 +351,31 @@ alt="Yuva Logo" />
                         >
                           {customer.name}
                         </Link> */}
-                        <Typography color="text.primary"
-variant="body2">
+                        <Typography color="text.primary" variant="body2">
                           <h2>{customer.coins}</h2>
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
                   <TableCell>{customer.description}</TableCell>
-                  <TableCell>{customer.link ? (
+                  <TableCell>
+                    {customer.link ? (
                       <Link
                         color="inherit"
                         href={customer.link}
                         target="_blank"
                         variant="subtitle2"
                         onClick={(e) => {
-                          e.preventDefault(); 
-                          router.push(customer.link); 
+                          e.preventDefault();
+                          router.push(customer.link);
                         }}
                       >
                         {customer.link}
                       </Link>
                     ) : (
                       <Typography variant="subtitle2">N/A</Typography>
-                    )}</TableCell>
+                    )}
+                  </TableCell>
                   {/* <TableCell>{customer.name}</TableCell> */}
 
                   <TableCell>

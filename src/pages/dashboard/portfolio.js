@@ -10,8 +10,13 @@ import { OverviewOpenTickets } from "../../sections/dashboard/overview/overview-
 import { OverviewPendingIssues } from "../../sections/dashboard/overview/overview-pending-issues";
 import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-current-balance";
+import { OverviewRegisteredMembers } from "../../sections/dashboard/overview/overview-registered-members";
 import { useTotalInvestment } from "./stake/[stakeId]";
 import axios from "axios";
+import { OverviewCoinHolders } from "../../sections/dashboard/overview/overview-coin-holders";
+import { OverviewStakeCoins } from "../../sections/dashboard/overview/overview-stake-coins";
+import { OverviewTotalUsdtSell } from "../../sections/dashboard/overview/overview-total-usdt-sell";
+import { OverviewTotalYuvaBuy } from "../../sections/dashboard/overview/overview-total-yuva-buy";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -19,6 +24,7 @@ const Page = () => {
   const settings = useSettings();
   const theme = useTheme();
   const [overview, setOverview] = useState([]);
+  const [dummy, setDummy] = useState([]);
   const [loading, setLoading] = useState(true); // State to track loading status
 
   usePageView();
@@ -51,6 +57,37 @@ const Page = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDummyData = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) {
+          // If token is not available, redirect to login page
+          window.location.href = "/auth/login/modern"; // Assuming login page route is "/login"
+          return;
+        }
+        const headers = {
+          Authorization: token,
+        };
+
+        const response = await axios.get(`${BASEURL}/api/Dummy/getDummyDataForAll`, {
+          headers: headers,
+        });
+
+        setDummy(response.data);
+        console.log(response.data);
+
+        // setOverview(response.data);
+        setLoading(false); // Data fetching completed, set loading to false
+      } catch (error) {
+        console.error(error);
+        setLoading(false); // Error occurred, set loading to false
+      }
+    };
+
+    fetchDummyData();
   }, []);
 
   // Format data for CryptoCurrentBalance component
@@ -87,6 +124,23 @@ const Page = () => {
               lg: 4,
             }}
           >
+          <Grid item xs={12}>
+            <Typography variant="h4">Yuva Bitcoin Daily Insights</Typography>
+          </Grid>
+
+          <Grid item xs={12} md={3}>
+            <OverviewRegisteredMembers amount={dummy.totalRegisteredMembers} />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <OverviewCoinHolders amount={dummy.totalCoinHolders} />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <OverviewStakeCoins amount={dummy.totalStakedCoins} />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <OverviewTotalYuvaBuy amount={dummy.totalBuyTodayYuva} />
+          </Grid>
+
             <Grid item xs={12}>
               <Typography variant="h4">Overview</Typography>
             </Grid>
