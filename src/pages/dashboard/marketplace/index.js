@@ -21,6 +21,8 @@ import { paths } from "../../../paths";
 import axios from "axios";
 import OrderForm from "./Orderform";
 import BuyForm from "./buyform";
+import { useSnackbar } from 'notistack';
+
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
@@ -28,6 +30,8 @@ const CryptoMarketplacePage = () => {
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
   const [currentdata , setCurrentData] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
+
 
   useEffect(() => {
     fetchData();
@@ -83,11 +87,17 @@ const CryptoMarketplacePage = () => {
       };
       const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
       const responseData = response.data;
-      console.log(responseData);
+      console.log(responseData)
+      enqueueSnackbar(response.data.message, {
+        variant: 'success',
+      });;
       // Handle the response as needed
       handleCloseForm();
     } catch (error) {
       console.error("Error placing order:", error);
+      enqueueSnackbar(error.response.data.error, {
+        variant: 'error',
+      });
     }
   };
 
@@ -110,7 +120,10 @@ const CryptoMarketplacePage = () => {
       // setListings(responseData.order);
       // handleCloseBuyForm();
     } catch (error) {
-      console.error("Error placing order:", error);
+      console.error("Error placing order:", error.response.data);
+      enqueueSnackbar(error.response.data.error, {
+        variant: 'error',
+      });
     }
   };
 
