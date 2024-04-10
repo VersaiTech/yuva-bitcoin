@@ -482,7 +482,7 @@ const useSelectionModel = (customers) => {
 
 export const WithdrawalsListTable = (props) => {
   const {
-    customers,
+    customers= [], 
     customersCount,
     onPageChange,
     onRowsPerPageChange,

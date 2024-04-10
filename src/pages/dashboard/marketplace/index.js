@@ -57,6 +57,7 @@ const CryptoMarketplacePage = () => {
       console.log(data);
       setListings(data.order);
     } catch (error) {
+      enqueueSnackbar("Error fetching data", { variant: "error" });
       console.error("Error fetching data:", error);
     }
   };
@@ -85,15 +86,15 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
+
       const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
       const responseData = response.data;
-      console.log(responseData)
-      enqueueSnackbar(response.data.message, {
-        variant: 'success',
-      });;
-      // Handle the response as needed
+      console.log(responseData);
+
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseForm();
     } catch (error) {
+      enqueueSnackbar("Error placing order", { variant: "error" });
       console.error("Error placing order:", error);
       enqueueSnackbar(error.response.data.error, {
         variant: 'error',
@@ -117,8 +118,10 @@ const CryptoMarketplacePage = () => {
       const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
       const responseData = response.data;
       console.log(responseData);
+
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
       // setListings(responseData.order);
-      // handleCloseBuyForm();
+      handleCloseBuyForm();
     } catch (error) {
       console.error("Error placing order:", error.response.data);
       enqueueSnackbar(error.response.data.error, {

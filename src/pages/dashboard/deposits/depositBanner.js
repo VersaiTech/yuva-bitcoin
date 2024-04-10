@@ -60,6 +60,7 @@ export const DepositOperations = (props) => {
   const handleConnect = async () => {
     if (wallet?.accounts?.length > 0) {
       enqueueSnackbar('Already Connected', { variant: 'success' });
+      return;
     }
 
     let accounts = await window.ethereum.request({
@@ -191,8 +192,6 @@ export const DepositOperations = (props) => {
 
 
 
-
-
   return (
     <Card
       {...props}
@@ -209,7 +208,7 @@ export const DepositOperations = (props) => {
 
             {hasProvider ? (
               <Button onClick={handleConnect}>Connect MetaMask</Button>) : (
-              <Button onClick={handleConnect}>Install Wallet</Button>
+              <Button target="_blank" href="https://metamask.io">Install Wallet</Button>
             )
             }
 

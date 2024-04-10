@@ -405,7 +405,7 @@ const Page = () => {
         console.log(values);
 
         if (isMounted()) {
-          enqueueSnackbar("Registration successful Please Verify", {
+          enqueueSnackbar("Please Verify", {
             variant: "success",
           });
           router.push(paths.auth.verifyCode.modern);
