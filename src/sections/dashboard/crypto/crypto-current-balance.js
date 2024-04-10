@@ -93,6 +93,8 @@ const useChartOptions = (labels) => {
 
 export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
+  console.log(chartSeries)
+  console.log(labels)
   const chartOptions = useChartOptions(labels);
   const totalAmount = chartSeries.reduce((acc, item) => (acc += item), 0);
   const formattedTotalAmount = (
