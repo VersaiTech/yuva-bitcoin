@@ -11,9 +11,6 @@ require("dotenv").config();
 
 const cron = require('./crons/passiveincome');
 
-// const assignedTaskController = require('./controllers/AssignedTaskController');
-
-
 const port = process.env.PORT || 5001;
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
