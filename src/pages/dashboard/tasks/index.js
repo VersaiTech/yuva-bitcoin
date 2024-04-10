@@ -44,6 +44,8 @@ const useOrders = (search) => {
     orders: [],
     ordersCount: 0,
   });
+  const { page, rowsPerPage } = search;
+
 
   const getOrders = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
@@ -59,7 +61,7 @@ const useOrders = (search) => {
     };
 
     try {
-      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth`, { headers });
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`, { headers });
       console.log(response.data.tasks);
       tasks.orders = response.data.tasks;
       tasks.ordersCount = response.data.count; // Assuming 'count' is directly on 'data'
@@ -68,7 +70,7 @@ const useOrders = (search) => {
     }
 
     try {
-      const completedTasks = await axios.get(`${BASEURL}/admin/getConfirmedTasksForUser`, { headers });
+      const completedTasks = await axios.get(`${BASEURL}/admin/getConfirmedTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
       console.log(completedTasks.data.tasks);
       tasks.completed = completedTasks.data.tasks;
     } catch (err) {
@@ -76,7 +78,7 @@ const useOrders = (search) => {
     }
 
     try {
-      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasksForUser`, { headers });
+      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
       console.log(pendingTasks.data.tasks);
       tasks.pending = pendingTasks.data.tasks;
     } catch (err) {
@@ -84,7 +86,7 @@ const useOrders = (search) => {
     }
 
     try {
-      const rejectedTasks = await axios.get(`${BASEURL}/admin/getRejectedTasksForUser`, { headers });
+      const rejectedTasks = await axios.get(`${BASEURL}/admin/getRejectedTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
       console.log(rejectedTasks.data.tasks);
       tasks.rejected = rejectedTasks.data.tasks;
     } catch (err) {
@@ -161,6 +163,7 @@ const Page = () => {
 
   const handleRowsPerPageChange = useCallback(
     (event) => {
+      console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
