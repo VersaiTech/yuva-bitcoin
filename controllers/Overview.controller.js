@@ -72,11 +72,24 @@ async function getUserOverview(req, res) {
     const totalTasksCount = await Task.countDocuments();
 
     // Count staking duration for 3, 6 and 12 months
-    let stakeDuration3months = 0, stakeDuration6months = 0, stakeDuration12months = 0;
-    stakeDuration3months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 3, stake_type: 'Wallet' });
-    stakeDuration6months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 6, stake_type: 'Wallet' });
-    stakeDuration12months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 12, stake_type: 'Wallet' });
+    const stakeDuration3months = await StakeHistory.find({ member_user_id: userId, stakingDuration: 3, stake_type: 'Wallet' });
+    const stakeDuration6months = await StakeHistory.find({ member_user_id: userId, stakingDuration: 6, stake_type: 'Wallet' });
+    const stakeDuration12months = await StakeHistory.find({ member_user_id: userId, stakingDuration: 12, stake_type: 'Wallet' });
 
+    let total3months = 0
+    stakeDuration3months.forEach(stake => {
+      total3months += stake.investment
+    })
+
+    let total6months = 0
+    stakeDuration6months.forEach(stake => {
+      total6months += stake.investment
+    })
+
+    let total12months = 0
+    stakeDuration12months.forEach(stake => {
+      total12months += stake.investment
+    })
 
     return res.status(200).json({
       status: true,
@@ -85,9 +98,9 @@ async function getUserOverview(req, res) {
         totalTasks: totalTasksCount,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
-        stakeDuration3months,
-        stakeDuration6months,
-        stakeDuration12months,
+        total3months: total3months,
+        total6months: total6months,
+        total12months: total12months,
         coins: memberData ? memberData.coins : 0,
         deposit_usdt: memberData ? memberData.deposit_usdt : 0,
       }
@@ -100,6 +113,7 @@ async function getUserOverview(req, res) {
     });
   }
 }
+
 
 
 
