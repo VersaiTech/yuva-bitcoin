@@ -114,6 +114,9 @@ const OrderForm = ({ open, handleClose, handlePlaceOrder }) => {
           fullWidth
           value={amount}
           onChange={handleAmountChange}
+          required
+          error={amount === ""}
+          helperText={amount === "" ? "Please enter the amount" : null}
         />
         {/* Exchange Currency TextField */}
         <TextField
@@ -124,13 +127,16 @@ const OrderForm = ({ open, handleClose, handlePlaceOrder }) => {
           fullWidth
           value={exchange_currency}
           onChange={handleexchange_currencyChange}
+          required
+          error={exchange_currency === ""}
+          helperText={exchange_currency === "" ? "Please enter the exchange currency  amount" : null}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleClose} color="error" variant="outlined">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleSubmit} color="primary" variant="contained">
           Place Order
         </Button>
       </DialogActions>

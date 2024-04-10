@@ -1,7 +1,9 @@
-import PropTypes from 'prop-types';
-import numeral from 'numeral';
-import TrendUp02Icon from '@untitled-ui/icons-react/build/esm/TrendUp02';
-import TrendDown02Icon from '@untitled-ui/icons-react/build/esm/TrendDown02';
+import PropTypes from "prop-types";
+import numeral from "numeral";
+//want to import string
+
+import TrendUp02Icon from "@untitled-ui/icons-react/build/esm/TrendUp02";
+import TrendDown02Icon from "@untitled-ui/icons-react/build/esm/TrendDown02";
 import {
   Box,
   Button,
@@ -12,19 +14,19 @@ import {
   Divider,
   Stack,
   SvgIcon,
-  Typography
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Chart } from '../../../components/chart';
-import { paths } from '../../../paths';
-import Link from 'next/link';
+  Typography,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { Chart } from "../../../components/chart";
+import { paths } from "../../../paths";
+import Link from "next/link";
 
 const useChartOptions = (labels) => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent'
+      background: "transparent",
     },
     colors: [
       theme.palette.primary.main,
@@ -33,67 +35,78 @@ const useChartOptions = (labels) => {
       theme.palette.error.main,
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     grid: {
       padding: {
         top: 0,
         right: 0,
         bottom: 0,
-        left: 0
-      }
+        left: 0,
+      },
     },
     labels,
     legend: {
-      show: false
+      show: false,
     },
     plotOptions: {
       pie: {
-        expandOnClick: false
+        expandOnClick: false,
       },
       radialBar: {
         dataLabels: {
-          show: false
+          show: false,
         },
         hollow: {
-          size: '100%'
-        }
-      }
+          size: "100%",
+        },
+      },
     },
     states: {
       active: {
         filter: {
-          type: 'none'
-        }
+          type: "none",
+        },
       },
       hover: {
         filter: {
-          type: 'none'
-        }
-      }
+          type: "none",
+        },
+      },
     },
     stroke: {
-      width: 0
+      width: 0,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
       fillSeriesColor: false,
       y: {
         formatter(value) {
-          return numeral(value).format('$0,0.00');
-        }
-      }
-    }
+          return numeral(value).format("$0,0.00");
+        },
+      },
+    },
   };
 };
 
 export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
+  console.log(chartSeries)
+  console.log(labels)
   const chartOptions = useChartOptions(labels);
-  const totalAmount = chartSeries.reduce((acc, item) => acc += item, 0);
-  const formattedTotalAmount = numeral(totalAmount).format('$0,0');
+  const totalAmount = chartSeries.reduce((acc, item) => (acc += item), 0);
+  const formattedTotalAmount = (
+    <span>
+      <img
+        src="/assets/logos/yuvalogo2.png"
+        alt="YB Chain Logo"
+        style={{ height: "1.5rem", marginRight: "0.5rem" }}
+      />
+      {numeral(totalAmount).format("0,0")}
+    </span>
+  );
 
   return (
     <Card>
@@ -102,19 +115,14 @@ export const CryptoCurrentBalance = (props) => {
         subheader="Total coins you invested in the platform"
       />
       <CardContent>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          spacing={3}
-        >
+        <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={3}>
           <Box
             sx={{
-              alignItems: 'center',
-              display: 'flex',
+              alignItems: "center",
+              display: "flex",
               height: 200,
-              justifyContent: 'center',
-              width: 200
+              justifyContent: "center",
+              width: 200,
             }}
           >
             <Chart
@@ -124,39 +132,28 @@ export const CryptoCurrentBalance = (props) => {
               type="donut"
             />
           </Box>
-          <Stack
-            spacing={4}
-            sx={{ flexGrow: 1 }}
-          >
+          <Stack spacing={4} sx={{ flexGrow: 1 }}>
             <Stack spacing={1}>
-              <Typography
-                color="text.secondary"
-                variant="overline"
-              >
-                Total Investment 
+              <Typography color="text.secondary" variant="overline">
+                Total Investment
               </Typography>
-              <Typography variant="h4">
-                {formattedTotalAmount}
-              </Typography>
+              <Typography variant="h4">{formattedTotalAmount}</Typography>
             </Stack>
             <Stack spacing={1}>
-              <Typography
-                color="text.secondary"
-                variant="overline"
-              >
+              <Typography color="text.secondary" variant="overline">
                 Total Months
               </Typography>
               <Stack
                 component="ul"
                 spacing={1}
                 sx={{
-                  listStyle: 'none',
+                  listStyle: "none",
                   m: 0,
-                  p: 0
+                  p: 0,
                 }}
               >
                 {chartSeries.map((item, index) => {
-                  const amount = numeral(item).format('$0,0.00');
+                  const amount = numeral(item).format("0.00");
 
                   return (
                     <Stack
@@ -169,22 +166,24 @@ export const CryptoCurrentBalance = (props) => {
                       <Box
                         sx={{
                           backgroundColor: chartOptions.colors[index],
-                          borderRadius: '4px',
+                          borderRadius: "4px",
                           height: 16,
-                          width: 16
+                          width: 16,
                         }}
                       />
-                      <Typography
-                        sx={{ flexGrow: 1 }}
-                        variant="subtitle2"
-                      >
+                      <Typography sx={{ flexGrow: 1 }} variant="subtitle2">
                         {labels[index]}
                       </Typography>
-                      <Typography
-                        color="text.secondary"
-                        variant="subtitle2"
-                      >
-                        {amount}
+                      <Typography color="text.secondary" variant="subtitle2">
+                        <span>
+                          <img
+                            src="/assets/logos/yuvalogo2.png"
+                            alt="YB Chain Logo"
+                            style={{ height: "1rem", marginRight: "0.5rem" }}
+                          />
+
+                          {amount}
+                        </span>
                       </Typography>
                     </Stack>
                   );
@@ -196,19 +195,19 @@ export const CryptoCurrentBalance = (props) => {
       </CardContent>
       <Divider />
       <CardActions>
-      <Link  href={paths.dashboard.stake.create}> 
-        <Button
-          color="inherit"
-          endIcon={(
-            <SvgIcon fontSize="small">
-              <TrendUp02Icon />
-            </SvgIcon>
-          )}
-          size="small"
-        >
-          Add Investment
-        </Button>
-      </Link>
+        <Link href={paths.dashboard.stake.create}>
+          <Button
+            color="inherit"
+            endIcon={
+              <SvgIcon fontSize="small">
+                <TrendUp02Icon />
+              </SvgIcon>
+            }
+            size="small"
+          >
+            Add Investment
+          </Button>
+        </Link>
         {/* <Button
           color="inherit"
           endIcon={(
@@ -227,5 +226,5 @@ export const CryptoCurrentBalance = (props) => {
 
 CryptoCurrentBalance.propTypes = {
   chartSeries: PropTypes.array.isRequired,
-  labels: PropTypes.array.isRequired
+  labels: PropTypes.array.isRequired,
 };

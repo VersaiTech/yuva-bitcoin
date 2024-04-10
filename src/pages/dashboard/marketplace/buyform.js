@@ -14,9 +14,10 @@ const Buyform = ({ currentdata, open, handleCloseBuyForm, handleBuyOrder }) => {
     <Dialog open={open} onClose={handleCloseBuyForm}>
       <DialogTitle>Buy Order</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Fill in the details to Buy this order.
+        <DialogContentText color="text.primary">
+        How many coin would you like to buy?
         </DialogContentText>
+      
         <TextField
           autoFocus
           margin="dense"
@@ -26,14 +27,15 @@ const Buyform = ({ currentdata, open, handleCloseBuyForm, handleBuyOrder }) => {
           fullWidth
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCloseBuyForm} color="primary">
+      <DialogActions sx={{ display: "flex", justifyContent: "space-around" }} >
+        <Button onClick={handleCloseBuyForm} color="error" variant="outlined">
           Cancel
         </Button>
-        <Button onClick={() => handleBuyOrder(currentdata)} color="primary">
+        <Button onClick={() => handleBuyOrder(currentdata)} color="primary" variant="contained">
           Place Order
         </Button>
       </DialogActions>
+     
     </Dialog>
   );
 };

@@ -48,7 +48,7 @@ export const TaskListTable = (props) => {
       const completionTime = new Date(order.completionTime);
       const currentTime = new Date();
       let timeDifference = completionTime - currentTime;
-  
+
       if (timeDifference <= 0) {
         return "Task Completed";
       } else {
@@ -59,7 +59,7 @@ export const TaskListTable = (props) => {
         const minutes = Math.floor(timeDifference / (1000 * 60));
         timeDifference -= minutes * (1000 * 60); // Remove minutes from time difference
         const seconds = Math.floor(timeDifference / 1000);
-  
+
         if (days > 0) {
           return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
         } else if (hours > 0) {
@@ -71,8 +71,6 @@ export const TaskListTable = (props) => {
     });
     setCountdowns(updatedCountdowns);
   };
-  
-  
 
   return (
     <div {...other}>
@@ -94,10 +92,10 @@ export const TaskListTable = (props) => {
               ? format(new Date(order.createdAt), "d")
               : "";
 
-            const words = order.description.split(' ');
+            const words = order.description.split(" ");
             let description = order.description;
             if (words.length > 6) {
-              description = words.slice(0, 6).join(' ') + '...';
+              description = words.slice(0, 6).join(" ") + "...";
             }
 
             return (
@@ -125,12 +123,10 @@ export const TaskListTable = (props) => {
                         p: 1,
                       }}
                     >
-                      <Typography align="center"
-variant="subtitle2">
+                      <Typography align="center" variant="subtitle2">
                         {createdAtMonth}
                       </Typography>
-                      <Typography align="center"
-variant="h6">
+                      <Typography align="center" variant="h6">
                         {createdAtDay}
                       </Typography>
                     </Box>
@@ -138,8 +134,7 @@ variant="h6">
                       <Typography variant="subtitle2">
                         {order.taskName}
                       </Typography>
-                      <Typography color="text.secondary"
-variant="body2">
+                      <Typography color="text.secondary" variant="body2">
                         Reward <b>{order.coins} </b> Coins
                       </Typography>
                     </Box>
@@ -147,8 +142,8 @@ variant="body2">
                 </TableCell>
                 {/* <TableCell >{description}</TableCell> */}
                 {/* <TableCell >{countdowns[index]}</TableCell> */}
-                <TableCell >
-                  <SeverityPill color={statusMap[order.status] || 'warning'}>
+                <TableCell>
+                  <SeverityPill color={statusMap[order.status] || "warning"}>
                     {order.status}
                   </SeverityPill>
                 </TableCell>

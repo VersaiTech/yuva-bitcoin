@@ -10,8 +10,10 @@ import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
 import { useSnackbar } from 'notistack';
 import { useFormik } from 'formik';
-import axios from 'axios';
-
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
 const initialValues = {
@@ -49,6 +51,14 @@ const Page = () => {
   const { enqueueSnackbar } = useSnackbar(); // Snackbar notification
   const [loading, setLoading] = useState(false);
   const { returnTo } = useParams();
+
+  // Inside your Page component
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   const formik = useFormik({
     initialValues,
@@ -143,9 +153,24 @@ const Page = () => {
             name="password"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={formik.values.password}
+            InputProps={{ // <-- Add this prop
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleTogglePasswordVisibility}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
+
+
         </Stack>
         <Button
           fullWidth

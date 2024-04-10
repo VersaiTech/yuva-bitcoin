@@ -147,7 +147,7 @@
 //     <>
 //       <Head>
 //         <title>
-//           Dashboard: Earnings | Yuva Bitcoin 
+//           Dashboard: Earnings | Yuva Bitcoin
 //         </title>
 //       </Head>
 //       <Divider />
@@ -182,10 +182,10 @@
 //               >
 //                 <div>
 //                   <Typography variant="h4">
-//                     All Withdrawals 
+//                     All Withdrawals
 //                   </Typography>
 //                 </div>
-               
+
 //               </Stack>
 //             </Box>
 //             <Divider />
@@ -225,7 +225,6 @@
 // );
 
 // export default Page;
-
 
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
@@ -392,14 +391,10 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack direction="row"
-justifyContent="space-between"
-spacing={4}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">All Withdrawals</Typography>
-                <Stack alignItems="center"
-direction="row"
-spacing={1}>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
                     size="small"
@@ -424,12 +419,12 @@ spacing={1}>
                   </Button> */}
                 </Stack>
               </Stack>
-              <Stack alignItems="center"
-direction="row"
-spacing={3}>
-                <Link component={NextLink}
-color="inherit"
-href={paths.dashboard.withdraw.create}>
+              <Stack alignItems="center" direction="row" spacing={3}>
+                <Link
+                  component={NextLink}
+                  color="inherit"
+                  href={paths.dashboard.withdraw.create}
+                >
                   <Button
                     startIcon={
                       <SvgIcon>

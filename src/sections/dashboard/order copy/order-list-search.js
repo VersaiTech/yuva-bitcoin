@@ -14,45 +14,48 @@ import {
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
-const tabs = [
+const tabOptions = [
   {
-    label: 'All Task',
+    label: 'All',
     value: 'all'
   },
   {
-    label: 'Completed',
-    value: 'hasAcceptedMarketing'
+    label: 'Canceled',
+    value: 'canceled'
   },
   {
-    label: 'Failed',
-    value: 'isProspect'
+    label: 'Completed',
+    value: 'complete'
+  },
+  {
+    label: 'Pending',
+    value: 'pending'
+  },
+  {
+    label: 'Rejected',
+    value: 'rejected'
   }
 ];
 
 const sortOptions = [
   {
-    label: 'Last update (newest)',
-    value: 'updatedAt|desc'
+    label: 'Newest',
+    value: 'desc'
   },
   {
-    label: 'Last update (oldest)',
-    value: 'updatedAt|asc'
-  },
-  {
-    label: 'Total orders (highest)',
-    value: 'totalOrders|desc'
-  },
-  {
-    label: 'Total orders (lowest)',
-    value: 'totalOrders|asc'
+    label: 'Oldest',
+    value: 'asc'
   }
 ];
 
-export const TaskListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
+export const OrderListSearch = (props) => {
+  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    query: undefined,
+    status: undefined
+  });
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -62,43 +65,32 @@ export const TaskListSearch = (props) => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
 
-  const handleTabsChange = useCallback((event, value) => {
-    setCurrentTab(value);
-    setFilters((prevState) => {
-      const updatedFilters = {
-        ...prevState,
-        hasAcceptedMarketing: undefined,
-        isProspect: undefined,
-        isReturning: undefined
-      };
+  const handleTabsChange = useCallback((event, tab) => {
+    setCurrentTab(tab);
+    const status = tab === 'all' ? undefined : tab;
 
-      if (value !== 'all') {
-        updatedFilters[value] = true;
-      }
-
-      return updatedFilters;
-    });
+    setFilters((prevState) => ({
+      ...prevState,
+      status
+    }));
   }, []);
 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
+    const query = queryRef.current?.value || '';
     setFilters((prevState) => ({
       ...prevState,
-      query: queryRef.current?.value
+      query
     }));
   }, []);
 
   const handleSortChange = useCallback((event) => {
-    const [sortBy, sortDir] = event.target.value.split('|');
-
-    onSortChange?.({
-      sortBy,
-      sortDir
-    });
+    const sortDir = event.target.value;
+    onSortChange?.(sortDir);
   }, [onSortChange]);
 
   return (
-    <>
+    <div>
       <Tabs
         indicatorColor="primary"
         onChange={handleTabsChange}
@@ -108,7 +100,7 @@ export const TaskListSearch = (props) => {
         value={currentTab}
         variant="scrollable"
       >
-        {tabs.map((tab) => (
+        {tabOptions.map((tab) => (
           <Tab
             key={tab.value}
             label={tab.label}
@@ -121,7 +113,7 @@ export const TaskListSearch = (props) => {
         alignItems="center"
         direction="row"
         flexWrap="wrap"
-        spacing={3}
+        gap={3}
         sx={{ p: 3 }}
       >
         <Box
@@ -133,7 +125,8 @@ export const TaskListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search customers"
+            name="orderNumber"
+            placeholder="Search by order number"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -149,7 +142,7 @@ export const TaskListSearch = (props) => {
           onChange={handleSortChange}
           select
           SelectProps={{ native: true }}
-          value={`${sortBy}|${sortDir}`}
+          value={sortDir}
         >
           {sortOptions.map((option) => (
             <option
@@ -161,11 +154,11 @@ export const TaskListSearch = (props) => {
           ))}
         </TextField>
       </Stack>
-    </>
+    </div>
   );
 };
 
-TaskListSearch.propTypes = {
+OrderListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
