@@ -65,7 +65,7 @@ export const TaskListTable = (props) => {
         } else if (hours > 0) {
           return `${hours} hours ${minutes} minutes ${seconds} seconds`;
         } else {
-          return `${minutes} minutes  seconds} seconds`;
+          return `${minutes} minutes ${seconds} seconds`;
         }
       }
     });
@@ -78,8 +78,6 @@ export const TaskListTable = (props) => {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            {/* <TableCell >Details</TableCell> */}
-            {/* <TableCell>End Date</TableCell> */}
             <TableCell>Status</TableCell>
           </TableRow>
         </TableHead>
@@ -91,12 +89,6 @@ export const TaskListTable = (props) => {
             const createdAtDay = order.createdAt
               ? format(new Date(order.createdAt), "d")
               : "";
-
-            const words = order.description.split(" ");
-            let description = order.description;
-            if (words.length > 6) {
-              description = words.slice(0, 6).join(" ") + "...";
-            }
 
             return (
               <TableRow
@@ -140,8 +132,6 @@ export const TaskListTable = (props) => {
                     </Box>
                   </Box>
                 </TableCell>
-                {/* <TableCell >{description}</TableCell> */}
-                {/* <TableCell >{countdowns[index]}</TableCell> */}
                 <TableCell>
                   <SeverityPill color={statusMap[order.status] || "warning"}>
                     {order.status}
