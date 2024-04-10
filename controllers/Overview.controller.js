@@ -3,6 +3,7 @@ const Stake = require("../models/stake");
 const Deposit = require("../models/deposit");
 const Admin = require("../models/AdminModel");
 const { Task, CompletedTask } = require("../models/Task");
+const StakeHistory = require("../models/stakingHistory");
 
 async function getOverview(req, res) {
   try {
@@ -66,8 +67,16 @@ async function getUserOverview(req, res) {
     const completedTasksCount = await CompletedTask.countDocuments({ userId, status: 'confirmed' });
     const pendingTasksCount = await CompletedTask.countDocuments({ userId, status: 'pending' });
 
+
     // Count total tasks (tasks without status)
     const totalTasksCount = await Task.countDocuments();
+
+    // Count staking duration for 3, 6 and 12 months
+    let stakeDuration3months = 0, stakeDuration6months = 0, stakeDuration12months = 0;
+    stakeDuration3months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 3, stake_type: 'Wallet' });
+    stakeDuration6months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 6, stake_type: 'Wallet' });
+    stakeDuration12months = await StakeHistory.countDocuments({ member_user_id: userId, stakingDuration: 12, stake_type: 'Wallet' });
+
 
     return res.status(200).json({
       status: true,
@@ -76,6 +85,9 @@ async function getUserOverview(req, res) {
         totalTasks: totalTasksCount,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
+        stakeDuration3months,
+        stakeDuration6months,
+        stakeDuration12months,
         coins: memberData ? memberData.coins : 0,
         deposit_usdt: memberData ? memberData.deposit_usdt : 0,
       }
@@ -88,6 +100,9 @@ async function getUserOverview(req, res) {
     });
   }
 }
+
+
+
 
 
 module.exports = {
