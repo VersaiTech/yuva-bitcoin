@@ -21,13 +21,15 @@ import { paths } from "../../../paths";
 import axios from "axios";
 import OrderForm from "./Orderform";
 import BuyForm from "./buyform";
+import { useSnackbar } from "notistack";
 
 const CryptoMarketplacePage = () => {
   const [listings, setListings] = useState([]);
   const [status, setStatus] = useState("Listed");
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
-  const [currentdata , setCurrentData] = useState({});
+  const [currentdata, setCurrentData] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchData();
@@ -53,6 +55,7 @@ const CryptoMarketplacePage = () => {
       console.log(data);
       setListings(data.order);
     } catch (error) {
+      enqueueSnackbar("Error fetching data", { variant: "error" });
       console.error("Error fetching data:", error);
     }
   };
@@ -81,13 +84,18 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
+
       const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
       const responseData = response.data;
       console.log(responseData);
-      // Handle the response as needed
+
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseForm();
     } catch (error) {
+      enqueueSnackbar("Error placing order", { variant: "error" });
       console.error("Error placing order:", error);
+      handleCloseForm();
+
     }
   };
 
@@ -107,10 +115,16 @@ const CryptoMarketplacePage = () => {
       const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
       const responseData = response.data;
       console.log(responseData);
+
+      enqueueSnackbar("Order placed successfully", { variant: "success" });
       // setListings(responseData.order);
-      // handleCloseBuyForm();
+      handleCloseBuyForm();
     } catch (error) {
+
+      enqueueSnackbar("Error placing order", { variant: "error" });
       console.error("Error placing order:", error);
+      handleCloseBuyForm();
+
     }
   };
 
