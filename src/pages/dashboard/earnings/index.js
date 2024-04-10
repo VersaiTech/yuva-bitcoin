@@ -12,6 +12,7 @@ import { usePageView } from '../../../hooks/use-page-view';
 import { EarningListContainer } from '../../../sections/dashboard/earnings/earning-list-container';
 import { EarningListSearch } from '../../../sections/dashboard/earnings/earning-list-search';
 import { EarningListTable } from '../../../sections/dashboard/earnings/earning-list-table';
+import { EarningDrawer } from '../../../sections/dashboard/order copy/order-drawer';
 
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -241,7 +242,8 @@ const Page = () => {
             rowsPerPage={search.rowsPerPage}
           />
           </EarningListContainer>
-          <TaskDrawer
+          <EarningDrawer
+          // onOpen = {handleOrderOpen}
           container={rootRef.current}
           onClose={handleOrderClose}
           open={drawer.isOpen}
