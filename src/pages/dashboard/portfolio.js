@@ -104,7 +104,7 @@ const Page = () => {
               <BlockUsers amount={overview.inactiveMembers} />
             </Grid>
             <Grid xs={12} md={4}>
-              <AllTask amount={overview.totalTasks} />
+              <AllTask amount={overview.allTasks} />
             </Grid>
             
             <Grid xs={12} md={4}>
