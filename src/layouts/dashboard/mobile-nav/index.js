@@ -143,17 +143,18 @@ export const MobileNav = (props) => {
               component={NextLink}
               href={paths.index}
               sx={{
-                borderColor: 'var(--nav-logo-border)',
-                borderRadius: 1,
-                borderStyle: 'solid',
-                borderWidth: 1,
                 display: 'flex',
                 height: 40,
-                p: '4px',
+                p: '1px',
                 width: 40
               }}
             >
-              <Logo />
+            <img
+            src="/assets/logos/yuvalogo (1).png" // Adjust the path to your logo image
+            alt="Logo"
+            width={45} // Adjust the width as needed
+            height={45} // Adjust the height as needed
+          />
             </Box>
             <TenantSwitch sx={{ flexGrow: 1 }} />
           </Stack>
