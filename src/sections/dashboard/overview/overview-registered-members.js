@@ -24,7 +24,7 @@ export const OverviewRegisteredMembers = (props) => {
         <div>
           <img
             src="/assets/iconly/team.svg"
-            width={56}
+            width={40}
           />
         </div>
         <Box sx={{ flexGrow: 2 }}>

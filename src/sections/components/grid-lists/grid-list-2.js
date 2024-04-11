@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 
+
 export const GridList2 = ({ projects, handleBuyButtonClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const theme = useTheme();

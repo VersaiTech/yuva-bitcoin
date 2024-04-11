@@ -23,7 +23,7 @@ export const OverviewStakeCoins = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/iconly-glass-paper.svg"
+            src="/assets/logos/staking.png"
             width={48}
           />
         </div>

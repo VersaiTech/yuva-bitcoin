@@ -23,7 +23,7 @@ export const OverviewCoinHolders = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/coin.svg"
+            src="/assets/logos/yuvalogo.png"
             width={56}
           />
         </div>

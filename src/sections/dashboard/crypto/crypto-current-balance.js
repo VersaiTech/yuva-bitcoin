@@ -169,9 +169,10 @@ export const CryptoCurrentBalance = (props) => {
                           borderRadius: "4px",
                           height: 16,
                           width: 16,
+                          // fontSize: 18,
                         }}
                       />
-                      <Typography sx={{ flexGrow: 1 }} variant="subtitle2">
+                      <Typography sx={{ flexGrow: 1 }} variant="subtitle2" >
                         {labels[index]}
                       </Typography>
                       <Typography color="text.secondary" variant="subtitle2">
