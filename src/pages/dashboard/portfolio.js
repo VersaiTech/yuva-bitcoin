@@ -128,16 +128,16 @@ const Page = () => {
             <Typography variant="h4">Yuva Bitcoin Daily Insights</Typography>
           </Grid>
 
-          <Grid item xs={12} md={3}>
+          <Grid item xs={6} md={3}>
             <OverviewRegisteredMembers amount={dummy.totalRegisteredMembers} />
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={6} md={3}>
             <OverviewCoinHolders amount={dummy.totalCoinHolders} />
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={6} md={3}>
             <OverviewStakeCoins amount={dummy.totalStakedCoins} />
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={6} md={3}>
             <OverviewTotalYuvaBuy amount={dummy.totalBuyTodayYuva} />
           </Grid>
 

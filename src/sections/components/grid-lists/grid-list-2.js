@@ -274,6 +274,7 @@ import {
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 
+
 export const GridList2 = ({ projects, handleBuyButtonClick }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

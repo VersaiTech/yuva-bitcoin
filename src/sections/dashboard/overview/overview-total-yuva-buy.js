@@ -32,8 +32,9 @@ export const OverviewTotalYuvaBuy
           <Typography
             color="text.secondary"
             variant="body2"
+            fontSize={10}
           >
-            Total Yuva Buy
+            Today Yuva Bitcoi Buyer
           </Typography>
           <Typography
             color="text.primary"
