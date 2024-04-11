@@ -101,7 +101,7 @@ const Page = () => {
         spacing={1}
       >
         <Typography variant="h5">
-         Admin Log inn
+         Admin Login
         </Typography>
         {/* <Typography
           color="text.secondary"
