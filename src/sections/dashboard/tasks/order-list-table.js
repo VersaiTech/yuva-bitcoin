@@ -79,6 +79,7 @@ export const TaskListTable = (props) => {
           <TableRow>
             <TableCell>Date</TableCell>
             <TableCell>Status</TableCell>
+            <TableCell>Reject Reason</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -137,6 +138,7 @@ export const TaskListTable = (props) => {
                     {order.status}
                   </SeverityPill>
                 </TableCell>
+                <TableCell>{order.rejectReason}</TableCell>
               </TableRow>
             );
           })}

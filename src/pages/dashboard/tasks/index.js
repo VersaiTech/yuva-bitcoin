@@ -13,7 +13,10 @@ import { ordersApi } from "../../../api/orders";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { OrderDrawer, TaskDrawer } from "../../../sections/dashboard/order/order-drawer";
+import {
+  OrderDrawer,
+  TaskDrawer,
+} from "../../../sections/dashboard/order/order-drawer";
 import { OrderListContainer } from "../../../sections/dashboard/order/order-list-container";
 import { TaskListSearch } from "../../../sections/dashboard/tasks/order-list-search";
 import { TaskListTable } from "../../../sections/dashboard/tasks/order-list-table";
@@ -46,7 +49,6 @@ const useOrders = (search) => {
   });
   const { page, rowsPerPage } = search;
 
-
   const getOrders = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
     const headers = { Authorization: token };
@@ -61,7 +63,10 @@ const useOrders = (search) => {
     };
 
     try {
-      const response = await axios.get(`${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`, { headers });
+      const response = await axios.get(
+        `${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`,
+        { headers }
+      );
       console.log(response.data.tasks);
       tasks.orders = response.data.tasks;
       tasks.ordersCount = response.data.count; // Assuming 'count' is directly on 'data'
@@ -70,7 +75,10 @@ const useOrders = (search) => {
     }
 
     try {
-      const completedTasks = await axios.get(`${BASEURL}/admin/getConfirmedTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
+      const completedTasks = await axios.get(
+        `${BASEURL}/admin/getConfirmedTasksForUser/${page + 1}/${rowsPerPage}`,
+        { headers }
+      );
       console.log(completedTasks.data.tasks);
       tasks.completed = completedTasks.data.tasks;
     } catch (err) {
@@ -78,7 +86,10 @@ const useOrders = (search) => {
     }
 
     try {
-      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
+      const pendingTasks = await axios.get(
+        `${BASEURL}/admin/getPendingTasksForUser/${page + 1}/${rowsPerPage}`,
+        { headers }
+      );
       console.log(pendingTasks.data.tasks);
       tasks.pending = pendingTasks.data.tasks;
     } catch (err) {
@@ -86,21 +97,23 @@ const useOrders = (search) => {
     }
 
     try {
-      const rejectedTasks = await axios.get(`${BASEURL}/admin/getRejectedTasksForUser/${page + 1}/${rowsPerPage}`, { headers });
+      const rejectedTasks = await axios.get(
+        `${BASEURL}/admin/getRejectedTasksForUser/${page + 1}/${rowsPerPage}`,
+        { headers }
+      );
       console.log(rejectedTasks.data.tasks);
       tasks.rejected = rejectedTasks.data.tasks;
     } catch (err) {
       console.error("Error fetching rejected tasks:", err);
     }
-    
+
     // Update state if component is still mounted
     if (isMounted()) {
       setState({
-        ...tasks
+        ...tasks,
       });
     }
   }, [search, isMounted]);
-
 
   useEffect(
     () => {
@@ -116,7 +129,8 @@ const useOrders = (search) => {
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
-  const { orders, ordersCount, pending, completed, rejected } = useOrders(search);
+  const { orders, ordersCount, pending, completed, rejected } =
+    useOrders(search);
   const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({
     isOpen: false,
@@ -175,7 +189,7 @@ const Page = () => {
   const handleOrderOpen = useCallback(
     (orderId) => {
       // Close drawer if is the same order
-      console.log(drawer)
+      console.log(drawer);
 
       if (drawer.isOpen && drawer.data === orderId) {
         setDrawer({
@@ -269,28 +283,43 @@ const Page = () => {
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              orders={currentTab === "all" ? orders : currentTab === "pending" ? pending : currentTab === "complete" ? completed : currentTab === "rejected" ? rejected : []}
+              orders={
+                currentTab === "all"
+                  ? orders
+                  : currentTab === "pending"
+                  ? pending
+                  : currentTab === "complete"
+                  ? completed
+                  : currentTab === "rejected"
+                  ? rejected
+                  : []
+              }
               ordersCount={ordersCount}
               page={search.page}
               rowsPerPage={search.rowsPerPage}
-            // customers={
-            //   currentTab === "all"
-            //     ? orders
-            //     : currentTab === "hasAcceptedMarketing"
-            //     ? pending
-            //     : currentTab === "isProspect"
-            //     ? completed
-            //     : []
-            // }
+              // customers={
+              //   currentTab === "all"
+              //     ? orders
+              //     : currentTab === "hasAcceptedMarketing"
+              //     ? pending
+              //     : currentTab === "isProspect"
+              //     ? completed
+              //     : []
+              // }
             />
           </OrderListContainer>
+          {currentTab !== "complete" && currentTab !== "rejected" && (
           <TaskDrawer
-            // orders = {orders}
             container={rootRef.current}
             onClose={handleOrderClose}
-            open={drawer.isOpen}
+            open={
+              drawer.isOpen &&
+              currentTab !== "complete" &&
+              currentTab !== "rejected"
+            }
             order={currentOrder}
           />
+          )}
         </Box>
       </Box>
     </>

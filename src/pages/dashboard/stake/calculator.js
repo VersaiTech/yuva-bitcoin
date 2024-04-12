@@ -17,15 +17,19 @@ function calculateInterest(amount, months) {
   const totalInterest = amount * monthlyInterestRate * months;
   return totalInterest.toFixed(2); // return total interest rounded to 2 decimal places
 }
-
 const InterestCalculator = () => {
   const [amount, setAmount] = useState('');
   const [months, setMonths] = useState('');
+  const [totalAmount, setTotalAmount] = useState('');
   const [interest, setInterest] = useState('');
 
   const handleCalculate = () => {
-    const totalInterest = calculateInterest(parseFloat(amount), parseInt(months));
-    setInterest(totalInterest);
+    const principal = parseFloat(amount);
+    const calculatedInterest = calculateInterest(principal, parseInt(months));
+    const total = principal + parseFloat(calculatedInterest);
+    
+    setInterest(calculatedInterest);
+    setTotalAmount(total.toFixed(2));
   };
 
   return (
@@ -51,10 +55,13 @@ const InterestCalculator = () => {
             <MenuItem value={12}>12 Months</MenuItem>
           </Select>
           <Divider />
-          <Stack direction="row"  justifyContent="space-around" alignItems={"center"}>
-          <Typography variant="h6" gutterBottom>
-            Total Interest: {interest ? `${interest} YB` : '0 YB'}
-          </Typography>
+          <Stack direction="row" justifyContent="space-around" alignItems="center">
+            <Typography variant="h6" gutterBottom>
+              Principal + Interest: {totalAmount ? `${totalAmount} YB` : '0 YB'}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+              Interest: {interest ? `${interest} YB` : '0 YB'}
+            </Typography>
             <Button variant="contained" onClick={handleCalculate}>
               Calculate
             </Button>
