@@ -362,6 +362,7 @@ async function register(req, res) {
     email: Joi.string().trim().email().lowercase().required(),
     twitterId: Joi.string().trim(),
     wallet_address: Joi.string().trim().required(),
+    referalCode: Joi.string().trim(),
   });
   try {
     // Validate request body parameters
@@ -372,7 +373,7 @@ async function register(req, res) {
         message: error.details[0].message,
       });
     }
-    let { contactNo, member_name, password, email, twitterId, wallet_address } = value;
+    let { contactNo, member_name, password, email, twitterId, wallet_address, referalCode } = value;
 
     // Check if the email is already registered
     const existingMember = await Member.findOne({ email: email });
@@ -408,6 +409,18 @@ async function register(req, res) {
       })
     }
 
+    const existingReferalCode = await Member.findOne({ referalCode: referalCode });
+    if (!existingReferalCode) {
+      console.log("Referal code not found, continuing without referal");
+    }
+
+    const alreadyReffered = await Member.findOne({ isReffered: true });
+    if (alreadyReffered) {
+      return res.status(400).send({
+        status: false,
+        message: "Already Reffered ",
+      })
+    }
 
     // Check if there's an existing temporary registration for the same email
     const existingTemporaryRegistration = await TemporaryRegistration.findOne({ email });
@@ -424,6 +437,7 @@ async function register(req, res) {
         email,
         twitterId,
         wallet_address,
+        referalCode,
       };
       await existingTemporaryRegistration.save();
 
@@ -450,6 +464,7 @@ async function register(req, res) {
         email,
         twitterId,
         wallet_address,
+        referalCode,
       }
     });
     await temporaryRegistration.save();
@@ -470,6 +485,97 @@ async function register(req, res) {
     });
   }
 }
+
+async function verifyOTP(req, res) {
+  const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
+
+  try {
+    if (!otpFromBody || !email) { // Check if OTP or email is missing
+      return res.status(400).json({
+        status: false,
+        message: "OTP and email are required"
+      });
+    }
+
+    // Find temporary registration data by OTP and email
+    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });;
+
+    if (!temporaryRegistrationFromBody) {
+      return res.status(400).send({
+        status: false,
+        message: "Invalid OTP or email"
+      });
+    }
+
+    // Verify that the OTP matches
+    if (temporaryRegistrationFromBody.otp !== otpFromBody) {
+      return res.status(400).send({
+        status: false,
+        message: "OTP does not match"
+      });
+    }
+
+    // Find member by email
+    let existingMember = await Member.findOne({ email });
+    console.log("existingMember: ", existingMember);
+    // If member exists, update the data, otherwise create a new member
+    if (existingMember) {
+      // Update existing member data
+      const { contactNo, member_name, password, twitterId, wallet_address, referalCode } = temporaryRegistrationFromBody.registrationData;
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      existingMember.member_name = member_name;
+      existingMember.contactNo = contactNo;
+      existingMember.wallet_address = wallet_address;
+      existingMember.password = hashedPassword;
+      existingMember.twitterId = twitterId;
+      existingMember.isActive = true;
+      existingMember.referalCode = referalCode;
+
+
+      await existingMember.save();
+    } else {
+      // Create new member instance using registration data
+      const { contactNo, member_name, password, twitterId, wallet_address, referalCode } = temporaryRegistrationFromBody.registrationData;
+      const reg_date = new Date();
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const newMember = new Member({
+        member_user_id: generateRandomNumber(),
+        member_name,
+        contactNo,
+        wallet_address,
+        email,
+        password: hashedPassword,
+        registration_date: reg_date,
+        twitterId,
+        referalCode: referalCode,
+        isActive: true,
+        coins: 2 // Give 2 coins as bonus
+      });
+
+      // Save the member to the database
+      await newMember.save();
+    }
+
+    // Delete temporary registration data
+    await temporaryRegistrationFromBody.deleteOne();
+
+    return res.status(200).send({
+      status: true,
+      message: "Registration successful"
+    });
+  } catch (err) {
+    console.log("Error in OTP verification", err);
+    return res.status(400).send({
+      status: false,
+      message: "OTP verification failed"
+    });
+  }
+}
+
 
 // async function verifyOTP(req, res) {
 //   const { otp: otpFromBody } = req.body; // Extract OTP from request body
@@ -559,92 +665,6 @@ async function register(req, res) {
 
 //==========================================================================================================================
 
-async function verifyOTP(req, res) {
-  const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
-
-  try {
-    if (!otpFromBody || !email) { // Check if OTP or email is missing
-      return res.status(400).json({
-        status: false,
-        message: "OTP and email are required"
-      });
-    }
-
-    // Find temporary registration data by OTP and email
-    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });;
-
-    if (!temporaryRegistrationFromBody) {
-      return res.status(400).send({
-        status: false,
-        message: "Invalid OTP or email"
-      });
-    }
-
-    // Verify that the OTP matches
-    if (temporaryRegistrationFromBody.otp !== otpFromBody) {
-      return res.status(400).send({
-        status: false,
-        message: "OTP does not match"
-      });
-    }
-
-    // Find member by email
-    let existingMember = await Member.findOne({ email });
-
-    // If member exists, update the data, otherwise create a new member
-    if (existingMember) {
-      // Update existing member data
-      const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      existingMember.member_name = member_name;
-      existingMember.contactNo = contactNo;
-      existingMember.wallet_address = wallet_address;
-      existingMember.password = hashedPassword;
-      existingMember.twitterId = twitterId;
-      existingMember.isActive = true;
-
-      await existingMember.save();
-    } else {
-      // Create new member instance using registration data
-      const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
-      const reg_date = new Date();
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      const newMember = new Member({
-        member_user_id: generateRandomNumber(),
-        member_name,
-        contactNo,
-        wallet_address,
-        email,
-        password: hashedPassword,
-        registration_date: reg_date,
-        twitterId,
-        isActive: true,
-        coins: 2 // Give 2 coins as bonus
-      });
-
-      // Save the member to the database
-      await newMember.save();
-    }
-
-    // Delete temporary registration data
-    await temporaryRegistrationFromBody.deleteOne();
-
-    return res.status(200).send({
-      status: true,
-      message: "Registration successful"
-    });
-  } catch (err) {
-    console.log("Error in OTP verification", err);
-    return res.status(400).send({
-      status: false,
-      message: "OTP verification failed"
-    });
-  }
-}
 
 
 // function generateRandomNumber() {
