@@ -27,6 +27,10 @@ import { AllUsers } from "../../sections/dashboard/overview/overview-all-users";
 import { ActiveUsers } from "../../sections/dashboard/overview/overview-active-users";
 import { BlockUsers } from "../../sections/dashboard/overview/overview-block-users";
 import { AllTask } from "../../sections/dashboard/overview/overview-all-tasks";
+import { OverviewRegisteredMembers } from "../../sections/dashboard/overview/overview-registered-members";
+import { OverviewTotalYuvaBuy } from "../../sections/dashboard/overview/overview-total-yuva-buy";
+import { OverviewCoinHolders } from "../../sections/dashboard/overview/overview-coin-holders";
+import { OverviewStakeCoins } from "../../sections/dashboard/overview/overview-stake-coins";
 import { OverviewAllTasks } from "../../sections/dashboard/overview/overview-all-tasks";
 // import { TodayTask } from "../../sections/dashboard/overview/overview-today-task";
 import { TodayTask } from "../../sections/dashboard/overview/overview-today-tasks";
@@ -45,6 +49,8 @@ const Page = () => {
   const settings = useSettings();
   const theme = useTheme();
 
+  const [loading, setLoading] = useState(true); // State to track loading status
+  const [dummy, setDummy] = useState([]);
   const [overview, setOverview] = useState([]);
 
   usePageView();
@@ -53,17 +59,44 @@ const Page = () => {
     const token = localStorage.getItem("accessToken");
     const headers = {
       Authorization: token,
-    }
+    };
 
-    const response = await axios.get(`${BASEURL}/admin/getOverview`, { headers: headers });
+    const response = await axios.get(`${BASEURL}/admin/getOverview`, {
+      headers: headers,
+    });
 
-    console.log(response.data.overview)
-    setOverview(response.data.overview)
-  }
+    console.log(response.data.overview);
+    setOverview(response.data.overview);
+  };
 
   useEffect(() => {
     OverviewData();
-  }, []) 
+  }, []);
+
+  const fetchDummyData = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        window.location.href = "/auth/login/modern"; // Redirect to login if token is not available
+        return;
+      }
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/api/Dummy/getDummyData`, {
+        headers: headers,
+      });
+
+      setDummy(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDummyData();
+  }, []);
 
   return (
     <>
@@ -86,6 +119,45 @@ const Page = () => {
               lg: 4,
             }}
           >
+            <Grid
+              container
+              disableGutters
+              spacing={{
+                xs: 3,
+                lg: 4,
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography variant="h4">
+                  Yuva Bitcoin Daily Insights
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6} md={3}>
+                <OverviewRegisteredMembers
+                  amount={dummy}
+                  fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+              <Grid item xs={6} md={3}>
+                <OverviewCoinHolders
+                  amount={dummy}
+                  fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+              <Grid item xs={6} md={3}>
+                <OverviewStakeCoins
+                  amount={dummy}
+                  fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+              <Grid item xs={6} md={3}>
+                <OverviewTotalYuvaBuy
+                  amount={dummy}
+                  fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+            </Grid>
             <Grid xs={12}>
               <Stack direction="row" justifyContent="space-between" spacing={4}>
                 <div>
@@ -106,7 +178,7 @@ const Page = () => {
             <Grid xs={12} md={4}>
               <AllTask amount={overview.allTasks} />
             </Grid>
-            
+
             <Grid xs={12} md={4}>
               <OverviewDoneTasks amount={overview.completedTasks} />
             </Grid>
@@ -114,27 +186,23 @@ const Page = () => {
             <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
-            <Grid xs={12} md={4}> 
-            <Stack>
-              <CryptoTransactions
-               amount  = {overview.totalDepositAmount}
-               />
-             </Stack>
-           </Grid>
-            <Grid xs={12} md={4}> 
-            <Stack>
-              <TotalMemberCoins
-               amount  = {overview.totalMemberCoins}
-               />
-             </Stack>
-           </Grid>
-            <Grid xs={12} md={4}> 
-            <Stack>
-              <TotalStakesInvestment
-               amount  = {overview.totalStakesInvestment}
-               />
-             </Stack>
-           </Grid>
+            <Grid xs={12} md={4}>
+              <Stack>
+                <CryptoTransactions amount={overview.totalDepositAmount} />
+              </Stack>
+            </Grid>
+            <Grid xs={12} md={4}>
+              <Stack>
+                <TotalMemberCoins amount={overview.totalMemberCoins} />
+              </Stack>
+            </Grid>
+            <Grid xs={12} md={4}>
+              <Stack>
+                <TotalStakesInvestment
+                  amount={overview.totalStakesInvestment}
+                />
+              </Stack>
+            </Grid>
             {/* <Grid xs={12} md={4}>
               <TodayTask amount={12} />
             </Grid>
