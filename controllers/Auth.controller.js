@@ -364,6 +364,7 @@ async function register(req, res) {
     wallet_address: Joi.string().trim().required(),
     referalCode: Joi.string().trim(),
   });
+
   try {
     // Validate request body parameters
     const { error, value } = registerSchema.validate(req.body);
@@ -409,17 +410,20 @@ async function register(req, res) {
       })
     }
 
-    const existingReferalCode = await Member.findOne({ referalCode: referalCode });
-    if (!existingReferalCode) {
-      console.log("Referal code not found, continuing without referal");
-    }
 
-    const alreadyReffered = await Member.findOne({ isReffered: true });
-    if (alreadyReffered) {
+
+    // referalcode not given then save value ' if given then save taht value which is in req.body
+    // referalCode = referalCode ? referalCode : "";
+
+    const isreferalCode = await Member.findOne({ member_user_id: referalCode })
+
+    if (!isreferalCode) {
       return res.status(400).send({
         status: false,
-        message: "Already Reffered ",
-      })
+        message: "Invalid referal code",
+      });
+    } else {
+      isreferalCode: ""
     }
 
     // Check if there's an existing temporary registration for the same email
@@ -498,7 +502,7 @@ async function verifyOTP(req, res) {
     }
 
     // Find temporary registration data by OTP and email
-    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });;
+    const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });
 
     if (!temporaryRegistrationFromBody) {
       return res.status(400).send({
@@ -517,22 +521,18 @@ async function verifyOTP(req, res) {
 
     // Find member by email
     let existingMember = await Member.findOne({ email });
-    console.log("existingMember: ", existingMember);
     // If member exists, update the data, otherwise create a new member
     if (existingMember) {
       // Update existing member data
       const { contactNo, member_name, password, twitterId, wallet_address, referalCode } = temporaryRegistrationFromBody.registrationData;
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
-
       existingMember.member_name = member_name;
       existingMember.contactNo = contactNo;
       existingMember.wallet_address = wallet_address;
       existingMember.password = hashedPassword;
       existingMember.twitterId = twitterId;
       existingMember.isActive = true;
-      existingMember.referalCode = referalCode;
-
 
       await existingMember.save();
     } else {
@@ -551,9 +551,9 @@ async function verifyOTP(req, res) {
         password: hashedPassword,
         registration_date: reg_date,
         twitterId,
-        referalCode: referalCode,
         isActive: true,
-        coins: 2 // Give 2 coins as bonus
+        coins: 2, // Give 2 coins as bonus
+        referalCode
       });
 
       // Save the member to the database

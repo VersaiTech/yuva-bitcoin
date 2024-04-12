@@ -177,6 +177,7 @@ const withdrawRequest = async (req, res) => {
       });
     }
 
+    // it is taking Yuva as withdrawal  currancy
     if (amount < 10) {
       return res.status(400).json({
         status: false,

@@ -1,6 +1,7 @@
 const Deposit = require('../models/deposit');
 const Coin = require('../models/Coin');
 const Member = require('../models/memberModel');
+const ReferalHistory = require('../models/referalModel');
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
 
@@ -109,15 +110,20 @@ const createDeposit = async (req, res) => {
       return res.status(400).json({ error: 'Transaction hash already exists' });
     }
 
+    //minimum amount is 50
+    // if (value.amount < 50) {
+    //   return res.status(400).json({ error: 'Minimum deposit amount is 50' });
+    // }
+
+
     // check that amount has only 4 decimal in body
-    const decimalCount = (value.amount.toString().split('.')[1] || '').length;
-    if (decimalCount !== 4) {
-      return res.status(400).json({ error: 'Amount should have only 4 decimal places' });
+    const [integer, decimal] = value.amount.toString().split('.');
+    if (decimal && decimal.length > 4) {
+      return res.status(400).json({ error: 'Amount should have maximum 4 decimal places' });
     }
 
     // while adding amount only 4 decimal is allowed
-    value.amount = Number(value.amount.toFixed(4));
-
+    value.amount = decimal ? Number(integer + '.' + decimal.slice(0, 4)) : value.amount;
 
     // Create a new deposit
     const newDeposit = new Deposit({
@@ -147,16 +153,33 @@ const createDeposit = async (req, res) => {
     // deposit_usdthave 4 decimals
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
+
+    if (member.deposit_usdt >= 50 && member.referalCode) {
+      member.isReferred = true;
+      const referalUserId = await Member.findOne({ referalCode: member.referalCode }, 'member_user_id');
+      console.log(member.referalCode)
+      if (referalUserId) {
+        const referalMember = await Member.findOne({ member_user_id: member.referalCode });
+        console.log('referalMember', referalMember);
+        if (referalMember) {
+          referalMember.coins += 8;
+          await referalMember.save();
+        }
+      }
+    }
+
+    const referalHistory
+
     // Save the updated member object to the database
     await member.save();
 
     // Save the deposit to the database
     const savedDeposit = await newDeposit.save();
 
-    res.status(201).json(savedDeposit);
+    return res.status(201).json(savedDeposit);
   } catch (error) {
     console.error('Error creating deposit:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
