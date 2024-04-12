@@ -9,12 +9,12 @@ const createDummyData = async (req, res) => {
             return res.status(400).json({ error: 'No admin found' });
         }
 
-        const { totalRegisteredMembers, totalCoinHolders, totalStakedCoins, totalSellTodayUSDT, totalSellTodayYuva, totalBuyTodayUSDT, totalBuyTodayYuva, totalUSDT, totalYuva } = req.body
+        // const { totalRegisteredMembers, totalCoinHolders, totalStakedCoins, totalSellTodayUSDT, totalSellTodayYuva, totalBuyTodayUSDT, totalBuyTodayYuva, totalUSDT, totalYuva } = req.body
 
-        if (!totalRegisteredMembers || !totalCoinHolders || !totalStakedCoins || !totalSellTodayUSDT || !totalSellTodayYuva || !totalBuyTodayUSDT || !totalBuyTodayYuva || !totalUSDT || !totalYuva) {
-            return res.status(400).json({ error: 'All fields are required ' })
-        }
-        console.log(req.body)
+        // if (!totalRegisteredMembers || !totalCoinHolders || !totalStakedCoins || !totalSellTodayUSDT || !totalSellTodayYuva || !totalBuyTodayUSDT || !totalBuyTodayYuva || !totalUSDT || !totalYuva) {
+        //     return res.status(400).json({ error: 'All fields are required ' })
+        // }
+        // console.log(req.body)
 
         const dummy = await Dummy.findOne();
         if (dummy) {
