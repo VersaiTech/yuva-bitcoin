@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -68,6 +68,8 @@ const Page = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOtpField, setShowOtpField] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [referralCode, setReferralCode] = useState(router.query.code);
+
 
   const formik = useFormik({
     initialValues,
@@ -80,7 +82,6 @@ const Page = () => {
           values.email,
           values.password,
           values.contactNo,
-          // values.confirmPassword,
           values.twitterId,
           values.wallet_address,
           values.referralCode
@@ -94,9 +95,14 @@ const Page = () => {
           router.push(paths.auth.verifyCode.modern);
         }
       } catch (err) {
-        console.error(err.response.data.message);
-        enqueueSnackbar(err.response.data.message, { variant: "error" });
-        helpers.setSubmitting(false);
+        if (err?.response?.data?.message) {
+          console.error(err.response.data.message);
+          enqueueSnackbar(err.response.data.message, { variant: "error" });
+          helpers.setSubmitting(false);
+        } else {
+          enqueueSnackbar("Something went wrong ", { variant: "error" });
+          helpers.setSubmitting(false);
+        }
 
         if (isMounted()) {
           helpers.setStatus({ success: false });
@@ -106,6 +112,13 @@ const Page = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (router.query.code) {
+      formik.setFieldValue("referralCode", router.query.code);
+    }
+  }, [router.query.code]);
+
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -288,3 +301,5 @@ const Page = () => {
 Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default Page;
+
+

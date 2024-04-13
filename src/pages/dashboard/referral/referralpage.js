@@ -1,8 +1,5 @@
-import { useState } from 'react';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
-import ChevronUpIcon from '@untitled-ui/icons-react/build/esm/ChevronUp';
-// import referralImage from './assets/referral.png';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -12,92 +9,54 @@ import {
   CardContent,
   Divider,
   Stack,
-  SvgIcon,
-  InputAdornment ,
-  SomeIcon,
-  IconButton,
-  FileCopyIcon,
-  // InputAdornment,
-  TextField,
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Chart } from '../../../components/chart';
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-const chartSeries = [83];
-
-const useChartOptions = () => {
-  const theme = useTheme();
-
-  return {
-    chart: {
-      background: 'transparent',
-      toolbar: {
-        show: false
-      }
-    },
-    colors: [theme.palette.primary.main],
-    fill: {
-      opacity: 1,
-      type: 'solid'
-    },
-    plotOptions: {
-      radialBar: {
-        dataLabels: {
-          show: false
-        },
-        hollow: {
-          size: '50%'
-        },
-        track: {
-          background: theme.palette.background.default
-        }
-      }
-    },
-    states: {
-      active: {
-        filter: {
-          type: 'none'
-        }
-      },
-      hover: {
-        filter: {
-          type: 'none'
-        }
-      }
-    },
-    theme: {
-      mode: theme.palette.mode
-    }
-  };
-};
 
 export const ReferralPage = () => {
-  const chartOptions = useChartOptions();
-  const [invitationCode, setInvitationCode] = useState(generateRandomCode());
-  const [invitationLink, setInvitationLink] = useState(generateRandomLink());
 
-  function generateRandomCode() {
-    // Generate random code logic here
-    return 'ABC123';
-  }
 
-  function generateRandomLink() {
-    // Generate random link logic here
-    return 'https://yourwebsite.com/referral/ABC123';
-  }
+  const [invitationCode, setInvitationCode] = useState('');
+  const [invitationLink, setInvitationLink] = useState(`https://yuvabitcoin.com/auth/register/modern?code=`);
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(invitationCode);
-  };
+
+
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(invitationLink);
+    navigator.clipboard.writeText(invitationLink+invitationCode);
   };
 
   const handleSharePoster = () => {
     // Logic for sharing referral poster
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const getProfile = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+
+      const headers = {
+        Authorization: token
+      }
+
+      const response = await axios.get(`${BASEURL}/api/Dashboard`, {
+        headers: headers
+      })
+
+      console.log(response.data.data)
+      setInvitationCode(response.data.data.member_user_id)
+      // return response.data.member_user_id
+
+    } catch (error) {
+      console.log(error)
+
+      return '';
+    }
   };
 
   return (
@@ -108,7 +67,6 @@ export const ReferralPage = () => {
           : 'neutral.100',
         p: 3,
         width: '100%',
-        // borderRadius:'10'
       }}
     >
       <Grid
@@ -118,7 +76,7 @@ export const ReferralPage = () => {
         <Grid
           xs={12}
           md={6}
-          // paddingTop={}
+        // paddingTop={}
         >
           <Card>
             <CardContent>
@@ -126,9 +84,6 @@ export const ReferralPage = () => {
                 alignItems="center"
                 direction="row"
                 spacing={2}
-                
-                // paddingTop={'50%'}
-                // paddingBottom={''}
               >
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
@@ -141,10 +96,10 @@ export const ReferralPage = () => {
                   </Stack>
                 </Box>
               </Stack>
-           <img src="/referral.png"
-alt="photo not showing"
-           style={{width:'100%'}} />
- 
+              <img src="/referral.png"
+                alt="photo not showing"
+                style={{ width: '100%' }} />
+
             </CardContent>
             {/* <Divider /> */}
             <CardActions>
@@ -162,10 +117,7 @@ alt="photo not showing"
                 alignItems="center"
                 direction="row"
                 spacing={2}
-                // marginBottom={'50%'}
-                
-                
-                
+              // marginBottom={'50%'}
               >
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
@@ -173,14 +125,14 @@ alt="photo not showing"
                       Referral Link & Code
                     </Typography>
                     <Stack spacing={1}>
+                      <Typography variant="body1">
+                        Invitation Code: {invitationCode}
+                        <Button onClick={handleCopyLink}>Copy</Button>
+                      </Typography>
+
+                    </Stack>
                     <Typography variant="body1">
-                      Invitation Code: {invitationCode}
-                      <Button onClick={handleCopyLink}>Copy</Button>
-                    </Typography>
-                
-                </Stack>
-                    <Typography variant="body1">
-                      Invitation Link: {invitationLink}
+                      Invitation Link: {invitationLink+invitationCode}
                       <Button onClick={handleCopyLink}>Copy</Button>
                     </Typography>
                   </Stack>
@@ -188,16 +140,13 @@ alt="photo not showing"
               </Stack>
             </CardContent>
             <Divider />
-            <CardActions 
-             sx={{
-              justifyContent: 'center',
-              
-              // alignItems: 'center',
-              // Center align the button horizontally
-            }}
+            <CardActions
+              sx={{
+                justifyContent: 'center',
+              }}
             >
               <Button variant="outlined"
-onClick={handleSharePoster}>Share Referral Poster</Button>
+                onClick={handleSharePoster}>Share Referral Poster</Button>
             </CardActions>
           </Card>
         </Grid>
