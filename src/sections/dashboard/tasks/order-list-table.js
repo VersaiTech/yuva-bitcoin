@@ -79,7 +79,6 @@ export const TaskListTable = (props) => {
           <TableRow>
             <TableCell>Date</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell>Reject Reason</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -139,11 +138,10 @@ export const TaskListTable = (props) => {
                     {order.status}
                   </SeverityPill>
                 </TableCell>
-                <TableCell>{order.rejectReason}</TableCell>
               </TableRow>
-              {order.status === "rejected" && (
+              {order.status === "rejected" && order?.reason && (
                 <TableRow key={`${order.id}-reason`}>
-                  <TableCell colSpan={2}>
+                  <TableCell colSpan={3}>
                     <Typography variant="body2">
                       Reason: {order.reason}
                     </Typography>
