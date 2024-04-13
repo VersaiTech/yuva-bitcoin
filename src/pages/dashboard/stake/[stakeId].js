@@ -121,13 +121,22 @@ const Page = () => {
                     <Card sx={{ padding: 0 , }}>
                       {" "}
                       {/* Remove all padding from the Card */}
+                      <Divider sx={{ mb: 2 }} />
+                        <Typography color="text.primary" variant="overline">
+                          Total Yuva Bitcoin invested
+                        </Typography>
+                        <Divider />
                       <CardHeader
                        subheader={
-                        <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'space-around' }}>
+                          <img src="/assets/logos/investment.png" style={{ width: 70 }} alt="investment" />
+                          <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
                           {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-                          <Typography variant="h4" color="green">
-                            {" " +totalInvestment || 0}
+                          <Typography variant="h3">
+                            {"" +totalInvestment || 0}
+
                           </Typography>
+                          </div>
                         </div>
                       }
                       />
@@ -135,11 +144,7 @@ const Page = () => {
                         {" "}
                         {/* Remove all padding from the CardContent */}
                         <Divider sx={{ mb: 2 }} />
-                        <Typography color="text.secondary" variant="overline">
-                          Available currency
-                        </Typography>
-                        <Divider />
-                        <Stack
+                        {/* <Stack
                           alignItems="flex-start"
                           spacing={1}
                           sx={{ mt: 2 }}
@@ -163,7 +168,7 @@ const Page = () => {
                               Withdraw funds
                             </Button>
                           </Link>
-                        </Stack>
+                        </Stack> */}
                       </CardContent>
                     </Card>
                   </Container>
