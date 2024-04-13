@@ -171,10 +171,12 @@ const createDeposit = async (req, res) => {
     const referralHistory = new ReferralHistory({
       user_id: referralMember.member_user_id,
       user_name: referralMember.member_name,
-      user_earned: referralMember.coins,
+      // user_earned: referralMember.coins,
+      user_earned: 8,
       referral_code: member.referralCode,
       referral_user_name: member.member_name,
-      referral_user: member.member_user_id
+      referral_user: member.member_user_id,
+      referral_user_isRefered: member.isReferred
     })
     if (member.isReferred === true) {
       await referralHistory.save();
