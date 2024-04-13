@@ -362,7 +362,7 @@ async function register(req, res) {
     email: Joi.string().trim().email().lowercase().required(),
     twitterId: Joi.string().trim(),
     wallet_address: Joi.string().trim().required(),
-    referalCode: Joi.string().trim(),
+    referralCode: Joi.string().allow('').optional(),
   });
 
   try {
@@ -374,7 +374,7 @@ async function register(req, res) {
         message: error.details[0].message,
       });
     }
-    let { contactNo, member_name, password, email, twitterId, wallet_address, referalCode } = value;
+    let { contactNo, member_name, password, email, twitterId, wallet_address, referralCode } = value;
 
     // Check if the email is already registered
     const existingMember = await Member.findOne({ email: email });
@@ -413,18 +413,38 @@ async function register(req, res) {
 
 
     // referalcode not given then save value ' if given then save taht value which is in req.body
-    // referalCode = referalCode ? referalCode : "";
+    // referralCode = referralCode ? await Member.findOne({ member_user_id: referralCode })?.member_user_id : "";
+    const isReferralCodeEmpty = !referralCode || referralCode.trim() === "";
 
-    const isreferalCode = await Member.findOne({ member_user_id: referalCode })
-
-    if (!isreferalCode) {
-      return res.status(400).send({
-        status: false,
-        message: "Invalid referal code",
-      });
+    if (isReferralCodeEmpty) {
+      // If referral code is empty, set it to an empty string
+      referralCode = "";
     } else {
-      isreferalCode: ""
+      // Check if the referral code exists in the Member collection
+      const existingReferralMember = await Member.findOne({ member_user_id: referralCode });
+      if (!existingReferralMember) {
+        return res.status(400).send({
+          status: false,
+          message: "Invalid referral code",
+        });
+      }
     }
+    // const isreferralCode = await Member.findOne({ member_user_id: referralCode })
+
+    // if (isreferralCode === "") {
+
+    //   referralCode = "";
+    // }
+
+
+    // if (!isreferralCode) {
+    //   return res.status(400).send({
+    //     status: false,
+    //     message: "Invalid referral code",
+    //   });
+    // }
+
+
 
     // Check if there's an existing temporary registration for the same email
     const existingTemporaryRegistration = await TemporaryRegistration.findOne({ email });
@@ -441,7 +461,7 @@ async function register(req, res) {
         email,
         twitterId,
         wallet_address,
-        referalCode,
+        referralCode,
       };
       await existingTemporaryRegistration.save();
 
@@ -468,7 +488,7 @@ async function register(req, res) {
         email,
         twitterId,
         wallet_address,
-        referalCode,
+        referralCode,
       }
     });
     await temporaryRegistration.save();
@@ -524,7 +544,7 @@ async function verifyOTP(req, res) {
     // If member exists, update the data, otherwise create a new member
     if (existingMember) {
       // Update existing member data
-      const { contactNo, member_name, password, twitterId, wallet_address, referalCode } = temporaryRegistrationFromBody.registrationData;
+      const { contactNo, member_name, password, twitterId, wallet_address, referralCode } = temporaryRegistrationFromBody.registrationData;
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       existingMember.member_name = member_name;
@@ -537,7 +557,7 @@ async function verifyOTP(req, res) {
       await existingMember.save();
     } else {
       // Create new member instance using registration data
-      const { contactNo, member_name, password, twitterId, wallet_address, referalCode } = temporaryRegistrationFromBody.registrationData;
+      const { contactNo, member_name, password, twitterId, wallet_address, referralCode } = temporaryRegistrationFromBody.registrationData;
       const reg_date = new Date();
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -553,7 +573,7 @@ async function verifyOTP(req, res) {
         twitterId,
         isActive: true,
         coins: 2, // Give 2 coins as bonus
-        referalCode
+        referralCode
       });
 
       // Save the member to the database

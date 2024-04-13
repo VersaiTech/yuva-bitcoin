@@ -1,6 +1,6 @@
 const monogoose = require('mongoose');
 
-const ReferalHistorySchema = new monogoose.Schema({
+const ReferralHistorySchema = new monogoose.Schema({
     user_id: {
         type: String,
         required: true
@@ -13,23 +13,23 @@ const ReferalHistorySchema = new monogoose.Schema({
         type: Number,
         required: true
     },
-    referal_code: {
+    referral_code: {
         type: String,
         required: true
     },
-    referal_user: {
+    referral_user: {
         type: String,
         required: true
     },
-    referal_user_name: {
+    referral_user_name: {
         type: String,
         required: true
     },
-    referal_user_isRefered: {
+    referral_user_isRefered: {
         type: Boolean,
         ref: 'Deposit',
     }
 
 }, { timestamps: true });
 
-module.exports = monogoose.model('ReferalHistory', ReferalHistorySchema)
+module.exports = monogoose.model('ReferralHistory', ReferralHistorySchema)

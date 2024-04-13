@@ -1,7 +1,7 @@
 const Deposit = require('../models/deposit');
 const Coin = require('../models/Coin');
 const Member = require('../models/memberModel');
-const ReferalHistory = require('../models/referalModel');
+const ReferralHistory = require('../models/referralModel');
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
 const { log } = require('util');
@@ -155,29 +155,29 @@ const createDeposit = async (req, res) => {
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
 
-    if (member.deposit_usdt >= 50 && member.referalCode) {
+    if (member.deposit_usdt >= 50 && member.referralCode) {
       member.isReferred = true;
-      const referalUserId = await Member.findOne({ referalCode: member.referalCode }, 'member_user_id');
-      if (referalUserId) {
-        const referalMember = await Member.findOne({ member_user_id: member.referalCode });
-        if (referalMember) {
-          referalMember.coins += 8;
-          await referalMember.save();
+      const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
+      if (referralUserId) {
+        const referralMember = await Member.findOne({ member_user_id: member.referralCode });
+        if (referralMember) {
+          referralMember.coins += 8;
+          await referralMember.save();
         }
       }
     }
-    const referalMember = await Member.findOne({ member_user_id: member.referalCode });
+    const referralMember = await Member.findOne({ member_user_id: member.referralCode });
 
-    const referalHistory = new ReferalHistory({
-      user_id: referalMember.member_user_id,
-      user_name: referalMember.member_name,
-      user_earned: referalMember.coins,
-      referal_code: member.referalCode,
-      referal_user_name: member.member_name,
-      referal_user: member.member_user_id
+    const referralHistory = new ReferralHistory({
+      user_id: referralMember.member_user_id,
+      user_name: referralMember.member_name,
+      user_earned: referralMember.coins,
+      referral_code: member.referralCode,
+      referral_user_name: member.member_name,
+      referral_user: member.member_user_id
     })
     if (member.isReferred === true) {
-      await referalHistory.save();
+      await referralHistory.save();
     }
 
     // Save the updated member object to the database

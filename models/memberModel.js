@@ -13,7 +13,7 @@ const memberSchema = new mongoose.Schema({
   userType: { type: String, default: 'member' },
   twitterId: { type: String, unique: true, required: true },
   isActive: { type: Boolean, default: true },
-  referalCode: { type: String },
+  referralCode: { type: String },
   isReferred: { type: Boolean, default: false },
 
 

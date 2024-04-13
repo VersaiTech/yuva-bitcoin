@@ -37,6 +37,7 @@ app.use('/api/Withdraw', require('./routes/Withdraw.route'));
 app.use('/api/Order', require('./routes/Order.route'));
 app.use('/api/Support', require('./routes/Support.route'));
 app.use('/api/Dummy', require('./routes/Dummy.route'));
+app.use('/api/Referral', require('./routes/Referral.route'));
 // Create an API endpoint to manually trigger the cron job
 
 
