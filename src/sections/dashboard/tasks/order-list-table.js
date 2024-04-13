@@ -91,6 +91,7 @@ export const TaskListTable = (props) => {
               : "";
 
             return (
+              <>
               <TableRow
                 hover
                 key={order.id}
@@ -138,6 +139,16 @@ export const TaskListTable = (props) => {
                   </SeverityPill>
                 </TableCell>
               </TableRow>
+              {order.status === "rejected" && (
+                <TableRow key={`${order.id}-reason`}>
+                  <TableCell colSpan={2}>
+                    <Typography variant="body2">
+                      Reason: {order.reason}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              )}
+              </>
             );
           })}
         </TableBody>

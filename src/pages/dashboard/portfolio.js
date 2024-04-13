@@ -13,10 +13,10 @@ import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-cur
 import { OverviewRegisteredMembers } from "../../sections/dashboard/overview/overview-registered-members";
 import { useTotalInvestment } from "./stake/[stakeId]";
 import axios from "axios";
+import { OverviewTotalYuvaBuy } from "../../sections/dashboard/overview/overview-total-yuva-buy";
 import { OverviewCoinHolders } from "../../sections/dashboard/overview/overview-coin-holders";
 import { OverviewStakeCoins } from "../../sections/dashboard/overview/overview-stake-coins";
 import { OverviewTotalUsdtSell } from "../../sections/dashboard/overview/overview-total-usdt-sell";
-import { OverviewTotalYuvaBuy } from "../../sections/dashboard/overview/overview-total-yuva-buy";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
