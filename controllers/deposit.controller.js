@@ -4,6 +4,7 @@ const Member = require('../models/memberModel');
 const ReferalHistory = require('../models/referalModel');
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
+const { log } = require('util');
 
 
 function generateTransactionId() {
@@ -157,18 +158,27 @@ const createDeposit = async (req, res) => {
     if (member.deposit_usdt >= 50 && member.referalCode) {
       member.isReferred = true;
       const referalUserId = await Member.findOne({ referalCode: member.referalCode }, 'member_user_id');
-      console.log(member.referalCode)
       if (referalUserId) {
         const referalMember = await Member.findOne({ member_user_id: member.referalCode });
-        console.log('referalMember', referalMember);
         if (referalMember) {
           referalMember.coins += 8;
           await referalMember.save();
         }
       }
     }
+    const referalMember = await Member.findOne({ member_user_id: member.referalCode });
 
-    const referalHistory
+    const referalHistory = new ReferalHistory({
+      user_id: referalMember.member_user_id,
+      user_name: referalMember.member_name,
+      user_earned: referalMember.coins,
+      referal_code: member.referalCode,
+      referal_user_name: member.member_name,
+      referal_user: member.member_user_id
+    })
+    if (member.isReferred === true) {
+      await referalHistory.save();
+    }
 
     // Save the updated member object to the database
     await member.save();

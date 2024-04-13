@@ -5,6 +5,14 @@ const ReferalHistorySchema = new monogoose.Schema({
         type: String,
         required: true
     },
+    user_name: {
+        type: String,
+        required: true
+    },
+    user_earned: {
+        type: Number,
+        required: true
+    },
     referal_code: {
         type: String,
         required: true
@@ -12,7 +20,14 @@ const ReferalHistorySchema = new monogoose.Schema({
     referal_user: {
         type: String,
         required: true
-
+    },
+    referal_user_name: {
+        type: String,
+        required: true
+    },
+    referal_user_isRefered: {
+        type: Boolean,
+        ref: 'Deposit',
     }
 
 }, { timestamps: true });
