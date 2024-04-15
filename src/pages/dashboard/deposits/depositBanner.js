@@ -6,7 +6,7 @@ import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from './wallet';
 import { useSnackbar } from 'notistack';
 // const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-import detectEthereumProvider from "@metamask/detect-provider";
+// import detectEthereumProvider from "@metamask/detect-provider";
 
 
 
@@ -42,16 +42,27 @@ export const DepositOperations = (props) => {
   const [wallet, setWallet] = useState([]);
 
   useEffect(() => {
-    const getProvider = async () => {
-      const provider = await detectEthereumProvider({ silent: true });
-      setHasProvider(Boolean(provider));
-      if (provider) {
-        setProvider(provider);
+    const checkProvider = async () => {
+      if (window.ethereum) {
+        setProvider(window.ethereum);
+      } else {
+        console.error("MetaMask not detected.");
       }
     };
-
-    getProvider();
+    
+    checkProvider();
   }, []);
+  // useEffect(() => {
+  //   const getProvider = async () => {
+  //     const provider = await detectEthereumProvider({ silent: true });
+  //     setHasProvider(Boolean(provider));
+  //     if (provider) {
+  //       setProvider(provider);
+  //     }
+  //   };
+
+  //   getProvider();
+  // }, []);
 
   const updateWallet = async (accounts) => {
     setWallet({ accounts });
