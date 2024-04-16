@@ -115,6 +115,10 @@ export const paths = {
       create: "/dashboard/task-work/create",
       edit: "/dashboard/task-work/",
     },
+    refer : {
+      index: '/dashboard/referral',
+      referRecord: '/dashboard/referral/referralRecord'
+    },
     news: {
       newsDetails: "/dashboard/news/",
       index: "/dashboard/news",

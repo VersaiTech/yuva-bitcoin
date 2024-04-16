@@ -10,6 +10,7 @@ import NewssIcon from "../../icons/untitled-ui/duocolor/newss";
 import ReferalIcon from "../../icons/untitled-ui/duocolor/referal";
 import WithdrawIcon from "../../icons/untitled-ui/duocolor/withdraw";
 import Support2Icon from "../../icons/untitled-ui/duocolor/support2";
+// import ReferalIcon from "../../icons/untitled-ui/duocolor/referal";
 
 export const getSections = (t) => [
   {
@@ -495,6 +496,20 @@ export const getSections = (t) => [
             path: paths.dashboard.news.list,
           },
         ],
+      },
+      {
+        title: t(tokens.nav.referral),
+        icon: (
+          <SvgIcon fontSize="small">
+            <ReferalIcon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.refer),
+            path: paths.dashboard.refer.index
+          },
+        ]
       },
       // {
       //   title: t(tokens.nav.error),
