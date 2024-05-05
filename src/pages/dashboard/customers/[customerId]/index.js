@@ -24,12 +24,12 @@ import { useMounted } from '../../../../hooks/use-mounted';
 import { usePageView } from '../../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
 import { paths } from '../../../../paths';
-import { CustomerBasicDetails } from '../../../../sections/dashboard/customer/customer-basic-details';
-import { CustomerDataManagement } from '../../../../sections/dashboard/customer/customer-data-management';
-import { CustomerEmailsSummary } from '../../../../sections/dashboard/customer/customer-emails-summary';
-import { CustomerInvoices } from '../../../../sections/dashboard/customer/customer-invoices';
-import { CustomerPayment } from '../../../../sections/dashboard/customer/customer-payment';
-import { CustomerLogs } from '../../../../sections/dashboard/customer/customer-logs';
+import { CustomerBasicDetails } from '../../../../sections/dashboard/demo/customer-basic-details';
+import { CustomerDataManagement } from '../../../../sections/dashboard/demo/customer-data-management';
+import { CustomerEmailsSummary } from '../../../../sections/dashboard/demo/customer-emails-summary';
+import { CustomerInvoices } from '../../../../sections/dashboard/demo/customer-invoices';
+import { CustomerPayment } from '../../../../sections/dashboard/demo/customer-payment';
+import { CustomerLogs } from '../../../../sections/dashboard/demo/customer-logs';
 import { getInitials } from '../../../../utils/get-initials';
 
 const tabs = [

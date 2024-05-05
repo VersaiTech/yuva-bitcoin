@@ -187,6 +187,9 @@ import Link from "next/link";
 import { WithdrawalsCreateForm } from "../../../sections/dashboard/withdrawals/withdrawals-create-form";
 import { useCustomer } from "./useCustomer"; // Import the useCustomer hook from the new file
 import Head from "next/head";
+import Image from 'next/image'
+
+const imageURL = '/assets/logos/yuvalogo2.png'; 
 
 const Page = () => {
   const customer = useCustomer();
@@ -207,18 +210,18 @@ const Page = () => {
         <Container maxWidth="lg">
           <Stack spacing={4}>
             <Stack spacing={4}>
-              <div  
+              <div
               >
                 <Link
-                  style={{ display: "flex", alignItems: "center" , textDecoration: "none", }
+                  style={{ display: "flex", alignItems: "center", textDecoration: "none", }
                   }
-                  
+
                   component={NextLink}
                   href={paths.dashboard.withdraw.index}
-                 
-                  // underline="hover"
+
+                // underline="hover"
                 >
-                  <SvgIcon sx={{ mr: 1 , color: "text.primary"}}>
+                  <SvgIcon sx={{ mr: 1, color: "text.primary" }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2" color={"text.primary"}>Withdrawals</Typography>
@@ -229,8 +232,10 @@ const Page = () => {
                   <Card>
                     <CardHeader
                       subheader={
-                        <Typography variant="h4" color="green">
-                          {"₿" + customer || 0}
+                        <Typography variant="h3" color="green">
+                          {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
+                            {"" + customer || 0}
+                          {/* {"₿" + customer || 0} */}
                         </Typography>
                       }
                       sx={{ pb: 0 }}
