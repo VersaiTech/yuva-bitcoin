@@ -132,8 +132,8 @@ const Page = () => {
                           <img src="/assets/logos/investment.png" style={{ width: 70 }} alt="investment" />
                           <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
                           {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-                          <Typography variant="h3">
-                            {"" +totalInvestment || 0}
+                          <Typography variant="h3" sx ={{ marginLeft: 1}}>
+                            {"" + totalInvestment || 0}
 
                           </Typography>
                           </div>
