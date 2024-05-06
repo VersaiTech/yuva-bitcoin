@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import NextLink from 'next/link';
+import NextLink from "next/link";
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
@@ -63,11 +63,8 @@ const useCustomers = (search) => {
         `${BASEURL}/api/Deposit/getDepositsForUser`,
         { headers: headers }
       );
-        console.log(response.data);
-      
-      
-        
-          
+      console.log(response.data);
+
       if (isMounted()) {
         setState({
           customers: response.data,
@@ -160,14 +157,10 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack direction="row"
-justifyContent="space-between"
-spacing={4}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">Deposit History</Typography>
-                <Stack alignItems="center"
-direction="row"
-spacing={1}>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
                     size="small"
@@ -191,10 +184,8 @@ spacing={1}>
                     Export
                   </Button> */}
                 </Stack>
-              </Stack> 
-              <Stack alignItems="center"
-direction="row"
-spacing={3}>
+              </Stack>
+              <Stack alignItems="center" direction="row" spacing={3}>
                 {/* <Button
                   component={NextLink}
                   startIcon={
@@ -220,7 +211,7 @@ spacing={3}>
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <DepositListTable 
+              <DepositListTable
                 // customers={customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}

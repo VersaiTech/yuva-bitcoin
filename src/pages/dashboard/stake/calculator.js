@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, Divider, Stack, Button, TextField, Typography, Select, MenuItem } from '@mui/material';
+import { Card, CardContent, CardHeader, Divider, Stack, Button, TextField, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 function calculateInterest(amount, months) {
   let interestRate;
@@ -44,16 +44,18 @@ const InterestCalculator = () => {
             onChange={(e) => setAmount(e.target.value)}
             fullWidth
           />
-          <Select
-            value={months}
-            onChange={(e) => setMonths(e.target.value)}
-            fullWidth
-            label="Months"
-          >
-            <MenuItem value={3}>3 Months</MenuItem>
-            <MenuItem value={6}>6 Months</MenuItem>
-            <MenuItem value={12}>12 Months</MenuItem>
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel style={{marginTop: '0.5rem'}}>Months</InputLabel>
+            <Select
+              value={months}
+              onChange={(e) => setMonths(e.target.value)}
+              fullWidth
+            >
+              <MenuItem value={3}>3 Months</MenuItem>
+              <MenuItem value={6}>6 Months</MenuItem>
+              <MenuItem value={12}>12 Months</MenuItem>
+            </Select>
+          </FormControl>
           <Divider />
           <Stack direction="row" justifyContent="space-around" alignItems="center">
             <Typography variant="h6" gutterBottom>

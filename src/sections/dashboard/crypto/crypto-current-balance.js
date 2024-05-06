@@ -90,11 +90,10 @@ const useChartOptions = (labels) => {
     },
   };
 };
-
 export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
-  console.log(chartSeries)
-  console.log(labels)
+  console.log(chartSeries);
+  console.log(labels);
   const chartOptions = useChartOptions(labels);
   const totalAmount = chartSeries.reduce((acc, item) => (acc += item), 0);
   const formattedTotalAmount = (
@@ -115,84 +114,88 @@ export const CryptoCurrentBalance = (props) => {
         subheader="Total coins you invested in the platform"
       />
       <CardContent>
-        <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={3}>
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-              height: 200,
-              justifyContent: "center",
-              width: 200,
-            }}
-          >
-            <Chart
-              height={200}
-              options={chartOptions}
-              series={chartSeries}
-              type="donut"
-            />
-          </Box>
-          <Stack spacing={4} sx={{ flexGrow: 1 }}>
-            <Stack spacing={1}>
-              <Typography color="text.secondary" variant="overline">
-                Total Investment
-              </Typography>
-              <Typography variant="h4">{formattedTotalAmount}</Typography>
-            </Stack>
-            <Stack spacing={1}>
-              <Typography color="text.secondary" variant="overline">
-                Total Months
-              </Typography>
-              <Stack
-                component="ul"
-                spacing={1}
-                sx={{
-                  listStyle: "none",
-                  m: 0,
-                  p: 0,
-                }}
-              >
-                {chartSeries.map((item, index) => {
-                  const amount = numeral(item).format("0.00");
+        {chartSeries.length > 0 ? (
+          <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={3}>
+            <Box
+              sx={{
+                alignItems: "center",
+                display: "flex",
+                height: 200,
+                justifyContent: "center",
+                width: 200,
+              }}
+            >
+              <Chart
+                height={200}
+                options={chartOptions}
+                series={chartSeries}
+                type="donut"
+              />
+            </Box>
+            <Stack spacing={4} sx={{ flexGrow: 1 }}>
+              <Stack spacing={1}>
+                <Typography color="text.secondary" variant="overline">
+                  Total Investment
+                </Typography>
+                <Typography variant="h4">{formattedTotalAmount}</Typography>
+              </Stack>
+              <Stack spacing={1}>
+                <Typography color="text.secondary" variant="overline">
+                  Total Months
+                </Typography>
+                <Stack
+                  component="ul"
+                  spacing={1}
+                  sx={{
+                    listStyle: "none",
+                    m: 0,
+                    p: 0,
+                  }}
+                >
+                  {chartSeries.map((item, index) => {
+                    const amount = numeral(item).format("0.00");
 
-                  return (
-                    <Stack
-                      alignItems="center"
-                      component="li"
-                      direction="row"
-                      key={index}
-                      spacing={2}
-                    >
-                      <Box
-                        sx={{
-                          backgroundColor: chartOptions.colors[index],
-                          borderRadius: "4px",
-                          height: 16,
-                          width: 16,
-                          // fontSize: 18,
-                        }}
-                      />
-                      <Typography sx={{ flexGrow: 1 }} variant="subtitle2" >
-                        {labels[index]}
-                      </Typography>
-                      <Typography color="text.secondary" variant="subtitle2">
-                        <span>
-                          <img
-                            src="/assets/logos/yuvalogo2.png"
-                            alt="YB Chain Logo"
-                            style={{ height: "1rem", marginRight: "0.5rem" }}
-                          />
+                    return (
+                      <Stack
+                        alignItems="center"
+                        component="li"
+                        direction="row"
+                        key={index}
+                        spacing={2}
+                      >
+                        <Box
+                          sx={{
+                            backgroundColor: chartOptions.colors[index],
+                            borderRadius: "4px",
+                            height: 16,
+                            width: 16,
+                            // fontSize: 18,
+                          }}
+                        />
+                        <Typography sx={{ flexGrow: 1 }} variant="subtitle2">
+                          {labels[index]}
+                        </Typography>
+                        <Typography color="text.secondary" variant="subtitle2">
+                          <span>
+                            <img
+                              src="/assets/logos/yuvalogo2.png"
+                              alt="YB Chain Logo"
+                              style={{ height: "1rem", marginRight: "0.5rem" }}
+                            />
 
-                          {amount}
-                        </span>
-                      </Typography>
-                    </Stack>
-                  );
-                })}
+                            {amount}
+                          </span>
+                        </Typography>
+                      </Stack>
+                    );
+                  })}
+                </Stack>
               </Stack>
             </Stack>
           </Stack>
-        </Stack>
+        ) : (
+          <Typography variant="body1">No data available</Typography>
+        )}
       </CardContent>
       <Divider />
       <CardActions>
@@ -229,3 +232,4 @@ CryptoCurrentBalance.propTypes = {
   chartSeries: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
 };
+

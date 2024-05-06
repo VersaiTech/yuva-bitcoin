@@ -15,6 +15,8 @@ import {
   TextField,
   Typography,
   MenuItem,
+  FormControl,
+  InputLabel,
   Select,
   Unstable_Grid2 as Grid,
   Dialog,
@@ -110,29 +112,32 @@ export const CustomerEditForm = (props) => {
               />
             </Grid>
             <Grid xs={12} md={6}>
-              <Select
-                error={
-                  !!(
+              <FormControl fullWidth>
+                <InputLabel id="staking-duration-label">Staking Duration</InputLabel>
+                <Select
+                  labelId="staking-duration-label"
+                  error={
+                    !!(
+                      formik.touched.stakingDuration &&
+                      formik.errors.stakingDuration
+                    )
+                  }
+                  fullWidth
+                  helperText={
                     formik.touched.stakingDuration &&
                     formik.errors.stakingDuration
-                  )
-                }
-                fullWidth
-                helperText={
-                  formik.touched.stakingDuration &&
-                  formik.errors.stakingDuration
-                }
-                label="Staking Duration"
-                name="stakingDuration"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                required
-                value={formik.values.stakingDuration}
-              >
-                <MenuItem value="3">3 Month</MenuItem>
-                <MenuItem value="6">6 Month</MenuItem>
-                <MenuItem value="12">12 Month</MenuItem>
-              </Select>
+                  }
+                  name="stakingDuration"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  required
+                  value={formik.values.stakingDuration}
+                >
+                  <MenuItem value="3">3 Month</MenuItem>
+                  <MenuItem value="6">6 Month</MenuItem>
+                  <MenuItem value="12">12 Month</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </CardContent>
@@ -180,8 +185,6 @@ export const CustomerEditForm = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      
-
     </form>
   );
 };

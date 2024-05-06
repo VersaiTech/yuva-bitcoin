@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import RupeeIcon from "@mui/icons-material/MonetizationOn"; // Import Rupee icon from Material-UI Icons
-import IndianRupeeIcon from "../depostis/deposits-drawer/indianRupeeIcon.svg"
+import IndianRupeeIcon from "../depostis/deposits-drawer/indianRupeeIcon.svg";
 
 import {
   Avatar,
@@ -97,8 +97,7 @@ export const DepositListTable = (props) => {
   const enableBulkActions = selected.length > 0;
 
   return (
-    <Box sx={{ position: "relative" }}
-{...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -122,12 +121,10 @@ export const DepositListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button color="inherit"
-size="small">
+          <Button color="inherit" size="small">
             Delete
           </Button>
-          <Button color="inherit"
-size="small">
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -179,9 +176,7 @@ size="small">
                     />
                   </TableCell> */}
                   <TableCell>
-                    <Stack alignItems="center"
-direction="row"
-spacing={1}>
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.member_name}
                         sx={{
@@ -190,7 +185,7 @@ spacing={1}>
                         }}
                       >
                         {/* <img src={IndianRupeeIcon} alt="Rupee" /> */}
-                        <h1>₿</h1>
+                        <h1></h1>
                         {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
@@ -210,12 +205,18 @@ spacing={1}>
                   </TableCell>
                   {/* <TableCell>{customer.taskId}</TableCell> */}
 
-                  <TableCell>                    {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'}
-</TableCell>
+                  <TableCell>
+                    {" "}
+                    {customer.createdAt
+                      ? new Date(customer.createdAt).toLocaleDateString()
+                      : "N/A"}
+                  </TableCell>
 
                   <TableCell>{customer.deposit_method}</TableCell>
                   <TableCell>
-                    <Typography variant="subtitle2">{customer.transaction_id}</Typography>
+                    <Typography variant="subtitle2">
+                      {customer.transaction_id}
+                    </Typography>
                   </TableCell>
                   <TableCell align="right">
                     {/* <IconButton

@@ -13,7 +13,6 @@ import {
   Typography,
   Card,
   Grid,
-  
   CardHeader,
   CardContent,
   Divider,
@@ -26,10 +25,10 @@ import { CustomerEditForm } from "../../../sections/dashboard/stake/stake-add-fo
 import { CustomerWithdrawForm } from "../../../sections/dashboard/stake/stake-withdraw-form";
 import InterestCalculator from "./calculator";
 import { padding } from "@mui/system";
-import Image from 'next/image'
+import Image from "next/image";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-const imageURL = '/assets/logos/yuvalogo2.png'; 
+const imageURL = "/assets/logos/yuvalogo2.png";
 
 export const useTotalInvestment = () => {
   const [totalInvestment, setTotalInvestment] = useState(null);
@@ -89,10 +88,10 @@ const Page = () => {
         <Container
           maxWidth="lg"
           //want to padding 0
-          sx={ { pl: 0 }}
+          sx={{ pl: 0 }}
         >
-          <Stack spacing={4 }sx={ { pl: 0 }}>
-            <Stack spacing={4} sx={ { pl: 0 }}>
+          <Stack spacing={4} sx={{ pl: 0 }}>
+            <Stack spacing={4} sx={{ pl: 0 }}>
               <div>
                 <Link
                   color="text.primary"
@@ -116,31 +115,54 @@ const Page = () => {
                 <Grid item xs={12} md={6}>
                   <Container
                     maxWidth="sm"
-                    sx={{ textAlign: "center", padding: 0 }}
+                    sx={{ textAlign: "center", pb: 4, px: 4 }}
                   >
-                    <Card sx={{ padding: 0 , }}>
+                    <Card sx={{ padding: 0 }}>
                       {" "}
                       {/* Remove all padding from the Card */}
                       <Divider sx={{ mb: 2 }} />
-                        <Typography color="text.primary" variant="overline">
-                          Total Yuva Bitcoin invested
-                        </Typography>
-                        <Divider />
+                      <Typography color="text.primary" variant="overline">
+                        Total Yuva Bitcoin invested
+                      </Typography>
+                      <Divider />
                       <CardHeader
-                       subheader={
-                        <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'space-around' }}>
-                          <img src="/assets/logos/investment.png" style={{ width: 70 }} alt="investment" />
-                          <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
-                          {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-                          <Typography variant="h3">
-                            {"" +totalInvestment || 0}
-
-                          </Typography>
+                        subheader={
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <img
+                              src="/assets/logos/investment.png"
+                              style={{ width: 70 }}
+                              alt="investment"
+                            />
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {imageURL && (
+                                <Image
+                                  src={imageURL}
+                                  alt="Image"
+                                  width={30}
+                                  height={30}
+                                />
+                              )}{" "}
+                              {/* Render image if imageURL is available */}
+                              <Typography variant="h3">
+                                {"" + totalInvestment || 0}
+                              </Typography>
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
                       />
-                      <CardContent sx={{ padding: 0 , }}>
+                      <CardContent sx={{ padding: 0 }}>
                         {" "}
                         {/* Remove all padding from the CardContent */}
                         <Divider sx={{ mb: 2 }} />
