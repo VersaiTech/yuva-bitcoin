@@ -8,7 +8,7 @@ import { useMounted } from '../../../../hooks/use-mounted';
 import { usePageView } from '../../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
 import { paths } from '../../../../paths';
-import { CustomerEditForm } from '../../../../sections/dashboard/customer/customer-edit-form';
+import { CustomerEditForm } from '../../../../sections/dashboard/demo/customer-edit-form';
 import { getInitials } from '../../../../utils/get-initials';
 
 const useCustomer = () => {

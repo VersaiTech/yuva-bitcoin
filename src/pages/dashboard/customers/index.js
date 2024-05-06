@@ -8,8 +8,8 @@ import { customersApi } from '../../../api/customers';
 import { useMounted } from '../../../hooks/use-mounted';
 import { usePageView } from '../../../hooks/use-page-view';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
-import { CustomerListSearch } from '../../../sections/dashboard/customer/customer-list-search';
-import { CustomerListTable } from '../../../sections/dashboard/customer/customer-list-table';
+import { CustomerListSearch } from '../../../sections/dashboard/demo/customer-list-search';
+import { CustomerListTable } from '../../../sections/dashboard/demo/customer-list-table';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
