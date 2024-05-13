@@ -986,8 +986,10 @@ const createBuyOrder = async (req, res) => {
         const buyer = await Member.findOne({ member_user_id: buyerId });
         const seller = await Member.findOne({ member_user_id: sellerId });
 
+        console.log("buyer", buyer);
+        console.log("seller", seller);
         //buyer and seller can not be the same person 
-        if (buyer._id.toString() === seller._id.toString()) {
+        if (buyer.member_user_id === seller.member_user_id) {
             return res.status(400).json({ error: 'Buyer and seller cannot be the same person' });
         }
 
