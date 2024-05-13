@@ -21,6 +21,7 @@ import { paths } from "../../../paths";
 import axios from "axios";
 import OrderForm from "./Orderform";
 import BuyForm from "./buyform";
+import UpdateForm from "./updateForm";
 import { useSnackbar } from 'notistack';
 
 
@@ -29,6 +30,7 @@ const CryptoMarketplacePage = () => {
   const [status, setStatus] = useState("Listed");
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
+  const [updateForm,setUpdateForm]=useState(false);
   const [currentdata , setCurrentData] = useState({});
   const { enqueueSnackbar } = useSnackbar();
 
@@ -77,6 +79,9 @@ const CryptoMarketplacePage = () => {
   const handleCloseBuyForm = () => {
     setBuyForm(false);
   };
+  const handleCloseUpdateForm = () => {
+    setUpdateForm(false);
+  };
 
   const handlePlaceOrder = async (formData) => {
     try {
@@ -87,7 +92,7 @@ const CryptoMarketplacePage = () => {
         Authorization: token,
       };
 
-      const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
+      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder`, formData, { headers });
       const responseData = response.data;
       console.log(responseData);
 
@@ -115,7 +120,8 @@ const CryptoMarketplacePage = () => {
         coin: rowdata.coin,
         amount: rowdata.amount,
       }
-      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
+      console.log("Order ID:", rowdata._id);
+      const response = await axios.post(`${BASEURL}/api/Order/createOrder/${rowdata._id}`, data, { headers });
       const responseData = response.data;
       console.log(responseData);
 
@@ -130,10 +136,45 @@ const CryptoMarketplacePage = () => {
     }
   };
 
+  const handleUpdateOrder = async (rowdata,userId) => {
+    try {
+
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+      const data = {
+        coin: rowdata.coin,
+        amount: rowdata.amount,
+        userId:userId
+      }
+      console.log("Order ID:", rowdata._id);
+      const response = await axios.post(`${BASEURL}/api/Order/updateOrder`, data, { headers });
+      const responseData = response.data;
+      console.log(responseData);
+
+      enqueueSnackbar("Order Updated successfully", { variant: "success" });
+      // setListings(responseData.order);
+      handleCloseBuyForm();
+    } catch (error) {
+      console.error("Error placing order:", error.response.data);
+    }
+  };
+
   const handleBuyButtonClick = (data) => {
     setCurrentData(data);
     setBuyForm(true);
   };
+
+  const handleUpdateButtonClick=(data)=>{
+    setCurrentData(data);
+    setUpdateForm(true);
+    console.log("Update Clicked");
+  }
+  const handleDeleteButtonClick=(data)=>{
+    console.log("Delete Clicked");
+  }
 
   return (
     <>
@@ -194,14 +235,17 @@ const CryptoMarketplacePage = () => {
             >
               Create Order
             </Button>
+            
           </Box>
           <Divider sx={{ my: 3 }} />
-          <GridList2 projects={listings} key={listings} handleBuyButtonClick={handleBuyButtonClick}  />
+          <GridList2 projects={listings} key={listings} handleBuyButtonClick={handleBuyButtonClick} handleUpdateButtonClick={handleUpdateButtonClick} handleDeleteButtonClick={handleDeleteButtonClick}
+           status={status}  />
         </Container>
       </Box>
 
       <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder}/>
       <BuyForm currentdata={currentdata} open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
+      <UpdateForm currentdata={currentdata} open={updateForm} handleCloseUpdateForm={handleCloseUpdateForm} handleUpdateOrder={(rowData, userId) => handleUpdateOrder(rowData, userId)}/>
     </>
   );
 };
