@@ -88,11 +88,12 @@ const CryptoMarketplacePage = () => {
       console.log("Posting order data...", formData);
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
+      
       const headers = {
         Authorization: token,
       };
 
-      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder`, formData, { headers });
+      const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
       const responseData = response.data;
       console.log(responseData);
 
@@ -101,9 +102,7 @@ const CryptoMarketplacePage = () => {
     } catch (error) {
       enqueueSnackbar("Error placing order", { variant: "error" });
       console.error("Error placing order:", error);
-      enqueueSnackbar(error.response.data.error, {
-        variant: 'error',
-      });
+     
     }
   };
 
@@ -121,7 +120,7 @@ const CryptoMarketplacePage = () => {
         amount: rowdata.amount,
       }
       console.log("Order ID:", rowdata._id);
-      const response = await axios.post(`${BASEURL}/api/Order/createOrder/${rowdata._id}`, data, { headers });
+      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
       const responseData = response.data;
       console.log(responseData);
 
@@ -130,9 +129,9 @@ const CryptoMarketplacePage = () => {
       handleCloseBuyForm();
     } catch (error) {
       console.error("Error placing order:", error.response.data);
-      enqueueSnackbar(error.response.data.error, {
-        variant: 'error',
-      });
+      // enqueueSnackbar(error.response.data.error, {
+      //   variant: 'error',
+      // });
     }
   };
 
