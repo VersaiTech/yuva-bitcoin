@@ -46,39 +46,40 @@ export const Layout = (props) => {
         }}
       >
         <Box maxWidth="md">
-          <Typography sx={{ mb: 1 }}
-variant="h4">
+          <Typography sx={{ mb: 1 }} variant="h4">
             Welcome to <span> Yuva Bitcoin</span>
           </Typography>
-          <Typography color="text.secondary"
-sx={{ mb: 4 }}>
+          <Typography color="text.secondary" sx={{ mb: 4 }}>
             Unlocking Knowledge, Empowering Futures: Explore the Intersection of
             Education, Metaverse, and Web3 with Yuva Bitcoin Cryptocurrency.
             Join Us in Shaping the Future of Learning in the Digital Age.
           </Typography>
-         <img src="/assets/logos/yuvalogo (1).png"
-alt=""
-          style={{ 
-            maxWidth: '200px', 
-            height: 'auto' ,
-            filter: 'drop-shadow(0 0 10px rgba(255, 215, 0, 0.7))', // Golden shadow
-            animation: 'glow 1s infinite alternate', // Alternate glow animation
-            // alignItems: "center",
-            display: "flex",
-            justifyContent: "center",
-            margin: "0 auto",
-          
-          }} />
+          <img
+            src="/assets/logos/yuvalogo (1).png"
+            alt=""
+            style={{
+              maxWidth: "200px",
+              height: "auto",
+              filter: "drop-shadow(0 0 10px rgba(255, 215, 0, 0.7))", // Golden shadow
+              animation: "glow 1s infinite alternate", // Alternate glow animation
+              // alignItems: "center",
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 auto",
+            }}
+          />
           <style jsx>{`
-  @keyframes glow {
-    0% {
-      filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
-    }
-    100% {
-      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)); // Increase shadow size
-    }
-  }
-`}</style>
+            @keyframes glow {
+              0% {
+                filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+              }
+              100% {
+                filter: drop-shadow(
+                  0 0 20px rgba(255, 215, 0, 0.7)
+                ); // Increase shadow size
+              }
+            }
+          `}</style>
           <Stack
             alignItems="center"
             direction="row"
@@ -91,9 +92,7 @@ alt=""
                 flex: "0 0 auto",
               },
             }}
-          >
-           
-          </Stack>
+          ></Stack>
         </Box>
       </Box>
       <Box

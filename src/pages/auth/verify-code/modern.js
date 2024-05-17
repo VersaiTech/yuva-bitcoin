@@ -242,6 +242,10 @@ onSubmit={formik.handleSubmit}>
           Verify
         </Button>
       </form>
+      <Typography variant="body2" sx={{ mt: 2 }}>
+        We've sent a one-time verification code to your email. Please check
+        your inbox and enter the code here.
+      </Typography>
     </div>
   );
 };

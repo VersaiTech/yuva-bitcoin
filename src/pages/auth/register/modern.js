@@ -261,7 +261,7 @@ const Page = () => {
             helperText={
               formik.touched.referralCode && formik.errors.referralCode
             }
-            label="Referal Code"
+            label="Referal Code (Optional)"
             name="referralCode"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
