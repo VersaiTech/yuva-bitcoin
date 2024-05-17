@@ -302,6 +302,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import { Chip } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
@@ -426,22 +427,22 @@ export const StakeListTable = (props) => {
                 />
               </TableCell> */}
               <TableCell>
-                Amount
+              Amount
               </TableCell>
               <TableCell>
-              stakingDuration
+              Staking Duration
               </TableCell>
               {/* <TableCell>
               Amount
               </TableCell> */}
               <TableCell>
-              interestCredited
+              Interest Credited
               </TableCell>
               <TableCell>
               Date
               </TableCell>
               <TableCell>
-              transaction_id
+              Transaction_id
               </TableCell>
               {/* <TableCell align="right">
                 Actions
@@ -466,7 +467,7 @@ export const StakeListTable = (props) => {
                       spacing={1}
                     >
                       <Avatar
-                        src={customer.avatar}
+                        src="/yuvalogo2.png"
                         sx={{
                           height: 42,
                           width: 42
@@ -496,8 +497,12 @@ export const StakeListTable = (props) => {
                     {customer.investment}
                   </TableCell> */}
                   <TableCell>
-                  {customer.interestCredited ? 'True' : 'False'}
-                  </TableCell>
+                  {customer.interestCredited ? (
+                    <Chip label="Credited" color="success" />
+                  ) : (
+                    <Chip label="Not Credited" color="error" />
+                  )}
+                </TableCell>
                   
                   <TableCell>
                     <Typography variant="subtitle2">

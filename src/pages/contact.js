@@ -70,9 +70,6 @@ const Page = () => {
                   </Typography>
                 </Link>
               </div>
-              <Typography variant="h3">
-                Contact
-              </Typography>
             </Stack>
             <Stack
               alignItems="center"
@@ -102,13 +99,13 @@ const Page = () => {
               sx={{ mb: 3 }}
               variant="h1"
             >
-              Talk to our account expert
+              Contact our account expert
             </Typography>
             <Typography
               sx={{ mb: 3 }}
               variant="body1"
             >
-              Have you any query and doubt please contact us
+              For any queries & doubts please contact us
             </Typography>
             {/* <Typography
               color="primary"
