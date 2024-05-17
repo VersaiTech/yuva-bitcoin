@@ -95,7 +95,7 @@ export const SearchDialog = (props) => {
         <Tip message="Search by entering a keyword and pressing Enter" />
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          // onSubmit={handleSubmit}
           sx={{ mt: 3 }}
         >
           <TextField
