@@ -127,7 +127,7 @@ export const StakeListSearch = (props) => {
             fullWidth
             inputProps={{ ref: queryRef }}
             name="orderNumber"
-            placeholder="Search by order number"
+            placeholder="Search by Transaction Id"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -137,23 +137,6 @@ export const StakeListSearch = (props) => {
             )}
           />
         </Box>
-        <TextField
-          label="Sort By"
-          name="sort"
-          onChange={handleSortChange}
-          select
-          SelectProps={{ native: true }}
-          value={sortDir}
-        >
-          {sortOptions.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          ))}
-        </TextField>
       </Stack>
     </div>
   );

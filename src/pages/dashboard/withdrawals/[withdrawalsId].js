@@ -232,7 +232,7 @@ const Page = () => {
                   <Card>
                     <CardHeader
                       subheader={
-                        <Typography variant="h3" color="green">
+                        <Typography variant="h3" color="white">
                           {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
                             {"" + customer || 0}
                           {/* {"₿" + customer || 0} */}
@@ -240,7 +240,7 @@ const Page = () => {
                       }
                       sx={{ pb: 0 }}
                       title={
-                        <Typography color="text.secondary" variant="overline">
+                        <Typography color="text.primary" variant="overline">
                           Total balance
                         </Typography>
                       }

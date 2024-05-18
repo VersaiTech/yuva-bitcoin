@@ -215,7 +215,6 @@ const Page = () => {
               <StakeListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
-                sortBy={search.sortBy}
                 sortDir={search.sortDir}
                 history={history}
                 currentTab={currentTab}

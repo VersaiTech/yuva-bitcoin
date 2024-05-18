@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { Logo } from './logo';
+import Image from 'next/image';
 
 export const SplashScreen = () => (
   <Box
@@ -25,7 +25,7 @@ export const SplashScreen = () => (
         width: 48
       }}
     >
-      <Logo />
+    <Image src="/assets/logo/yuvalogo (1).png" alt="Yuva Logo" width={25} height={25} />
     </Box>
   </Box>
 );

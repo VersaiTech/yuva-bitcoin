@@ -118,25 +118,27 @@ export const SettingsDrawer = (props) => {
             onChange={(value) => handleFieldUpdate('paletteMode', value)}
             value={values.paletteMode}
           />
+          {/*<OptionsLayout
+          onChange={(value) => handleFieldUpdate('layout', value)}
+          value={values.layout}
+          />
+          <OptionsDirection
+          onChange={(value) => handleFieldUpdate('direction', value)}
+          value={values.direction}
+          />
           <OptionsNavColor
             onChange={(value) => handleFieldUpdate('navColor', value)}
             value={values.navColor}
-          />
-          <OptionsLayout
-            onChange={(value) => handleFieldUpdate('layout', value)}
-            value={values.layout}
           />
           <OptionsStretch
             onChange={(value) => handleFieldUpdate('stretch', value)}
             value={values.stretch}
           />
+          
+          */}
           <OptionsContrast
             onChange={(value) => handleFieldUpdate('contrast', value)}
             value={values.contrast}
-          />
-          <OptionsDirection
-            onChange={(value) => handleFieldUpdate('direction', value)}
-            value={values.direction}
           />
         </Stack>
       </Scrollbar>

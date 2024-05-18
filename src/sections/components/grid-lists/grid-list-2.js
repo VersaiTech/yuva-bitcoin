@@ -268,44 +268,46 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                           </Button>
                         ) : (
                           <>
-                            <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{
-                              ml: 1,
-                              width: isScreenSizeGreaterThanSm ? "80%" : "100%",
-                              height: "36px",
-                              fontSize: "0.8rem",
-                              boxShadow:
-                                "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
-                              "&:hover": {
-                                boxShadow:
-                                  "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
-                              },
-                            }}
-                              onClick={() => handleUpdateButtonClick(project)}
-                            >
-                              Update
-                            </Button>
-                            <Button
-                            variant="contained"
-                            color="primary"
-                            sx={{
-                              ml: 1,
-                              width: isScreenSizeGreaterThanSm ? "80%" : "100%",
-                              height: "36px",
-                              fontSize: "0.8rem",
-                              boxShadow:
-                                "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
-                              "&:hover": {
-                                boxShadow:
-                                  "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
-                              },
-                            }}
-                              onClick={() => handleDeleteButtonClick(project)}
-                            >
-                              Delete
-                            </Button>
+                           <Stack
+      direction={isScreenSizeGreaterThanSm ? 'row' : 'column'}
+      spacing={isScreenSizeGreaterThanSm ? 1 : 2}
+      sx={{
+        width: '100%',
+      }}
+    >
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          width: isScreenSizeGreaterThanSm ? 'auto' : '100%',
+          height: '36px',
+          fontSize: '0.8rem',
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+          '&:hover': {
+            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)',
+          },
+        }}
+        onClick={() => handleUpdateButtonClick(project)}
+      >
+        Update
+      </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          width: isScreenSizeGreaterThanSm ? 'auto' : '100%',
+          height: '36px',
+          fontSize: '0.8rem',
+          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+          '&:hover': {
+            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)',
+          },
+        }}
+        onClick={() => handleDeleteButtonClick(project)}
+      >
+        Delete
+      </Button>
+    </Stack>
                           </>
                         )}
                       </Box>

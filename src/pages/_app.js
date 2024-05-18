@@ -112,7 +112,6 @@ console.log('-------------------')
                                       paletteMode: settings.paletteMode,
                                       responsiveFontSizes: settings.responsiveFontSizes,
                                       stretch: settings.stretch,
-                                      layout: settings.layout,
                                       navColor: settings.navColor
                                     }}
                                   />

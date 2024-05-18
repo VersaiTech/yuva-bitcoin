@@ -28,17 +28,12 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.marketplace),
+        path: paths.dashboard.marketplace.index,
         icon: (
           <SvgIcon fontSize="small">
             <CryptoIcon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.cryptos),
-            path: paths.dashboard.marketplace.index
-          },
-        ]
       },
       {
         title: t(tokens.nav.tasks),

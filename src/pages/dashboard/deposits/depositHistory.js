@@ -204,7 +204,6 @@ const Page = () => {
               <DepositListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
-                sortBy={search.sortBy}
                 sortDir={search.sortDir}
                 completed={completed}
                 pending={pending}
