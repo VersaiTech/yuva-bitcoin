@@ -26,7 +26,7 @@ export const AccountPopover = (props) => {
   const router = useRouter();
   const auth = useAuth();
   const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-  console.log(profile)
+  // console.log(profile)
 
   const handleDeleteAccount = useCallback(async () => {
     try {

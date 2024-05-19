@@ -25,7 +25,7 @@ export const SplashScreen = () => (
         width: 48
       }}
     >
-    <Image src="/assets/logo/yuvalogo (1).png" alt="Yuva Logo" width={25} height={25} />
+    <img src="/assets/logo/yuvalogo (1).png" alt="Yuva Logo" width={25} height={25} />
     </Box>
   </Box>
 );

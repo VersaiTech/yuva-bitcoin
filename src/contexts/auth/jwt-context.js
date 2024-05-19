@@ -76,17 +76,17 @@ export const AuthProvider = (props) => {
   const initialize = useCallback(async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      console.log(accessToken);
+      // console.log(accessToken);
       const headers = {
         Authorization: accessToken,
       };
-      console.log(headers);
+      // console.log(headers);
 
       if (accessToken) {
         const user = await axios.get(`${BASEURL}/api/Dashboard/`, {
           headers: headers,
         });
-        console.log(user);
+        // console.log(user);
 
         dispatch({
           type: ActionType.INITIALIZE,

@@ -46,7 +46,7 @@ const Page = () => {
           headers: headers,
         });
 
-        console.log(response.data.overview);
+        // console.log(response.data.overview);
 
         setOverview(response.data.overview);
         setLoading(false); // Data fetching completed, set loading to false
@@ -77,7 +77,7 @@ const Page = () => {
         });
 
         setDummy(response.data);
-        console.log(response.data);
+        // console.log(response.data);
 
         // setOverview(response.data);
         setLoading(false); // Data fetching completed, set loading to false

@@ -51,7 +51,7 @@ const Page = () => {
 
     const response = await axios.get(`${BASEURL}/admin/getUserOverview`, { headers: headers });
 
-    console.log(response.data.overview)
+    // console.log(response.data.overview)
     setOverview(response.data.overview)
   
   } catch (error) {
