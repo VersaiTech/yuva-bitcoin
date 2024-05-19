@@ -80,7 +80,7 @@ export const AuthProvider = (props) => {
     try {
       const accessToken = globalThis.localStorage.getItem('accessToken');
 
-      console.log(accessToken);
+      // console.log(accessToken);
 
       if (accessToken) {
 
@@ -90,7 +90,7 @@ export const AuthProvider = (props) => {
           }
         })
 
-        console.log(user.data);
+        // console.log(user.data);
 
         dispatch({
           type: ActionType.INITIALIZE,
@@ -132,11 +132,11 @@ export const AuthProvider = (props) => {
           password
         });
         
-          console.log(response.data);
+          // console.log(response.data);
           const { token, user } = response.data;
           localStorage.setItem(STORAGE_KEY, token);
 
-          console.log(token);
+          // console.log(token);
   
           dispatch({
             type: ActionType.SIGN_IN,
