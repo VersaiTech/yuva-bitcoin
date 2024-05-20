@@ -1,9 +1,10 @@
 import dynamic from 'next/dynamic';
 import { alpha, styled } from '@mui/material/styles';
 
+
 const ApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
-  loading: () => null
+  loading: () => nulls
 });
 
 export const Chart = styled(ApexChart)(({ theme }) => ({

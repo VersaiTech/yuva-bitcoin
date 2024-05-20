@@ -40,7 +40,6 @@ const initialValues = {
   submit: null,
 };
 
-
 // const initialValues = {
 //   name: "",
 //   description: "",
@@ -74,7 +73,7 @@ export const NewTaskForm = (props) => {
         const headers = {
           Authorization: token,
         };
-        
+
         const data = {
           taskName: values.name,
           description: values.description,
@@ -116,8 +115,10 @@ export const NewTaskForm = (props) => {
                       {/* Combine startDate and startTime into one field */}
                       <TextField
                         error={
-                          !!(formik.touched.openDateTime &&
-                          formik.errors.openDateTime)
+                          !!(
+                            formik.touched.openDateTime &&
+                            formik.errors.openDateTime
+                          )
                         }
                         fullWidth
                         label="Start Date & Time"
@@ -135,8 +136,10 @@ export const NewTaskForm = (props) => {
                       {/* Combine endDate and endTime into one field */}
                       <TextField
                         error={
-                          !!(formik.touched.endDateTime &&
-                          formik.errors.endDateTime)
+                          !!(
+                            formik.touched.endDateTime &&
+                            formik.errors.endDateTime
+                          )
                         }
                         fullWidth
                         label="End Date & Time"
@@ -177,7 +180,10 @@ export const NewTaskForm = (props) => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.description}
+                    multiline
+                    rows={4} // You can adjust the number of rows as needed
                   />
+
                   <TextField
                     error={
                       !!(formik.touched.oldPrice && formik.errors.oldPrice)
