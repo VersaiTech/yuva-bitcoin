@@ -161,7 +161,7 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
-  
+
       const response = await axios.delete(`${BASEURL}/api/Order/deleteOrder`, {
         headers,
         data: { orderId: rowdata._id, userId: rowdata.userId },

@@ -158,15 +158,6 @@ export const getSections = (t) => [
         ]
       },
       {
-        title: t(tokens.nav.contact),
-        path: paths.contact,
-        icon: (
-          <SvgIcon fontSize="small">
-            <ContactIcon />
-          </SvgIcon>
-        ),
-      },
-      {
         title: t(tokens.nav.news),
         path: paths.dashboard.news.list,
         icon: (
@@ -178,17 +169,12 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.support),
+        path: paths.dashboard.support.create,
         icon: (
           <SvgIcon fontSize="small">
             <Support2Icon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.supportCreate),
-            path: paths.dashboard.support.create
-          },
-        ]
       },
       // {
       //   title: t(tokens.nav.error),

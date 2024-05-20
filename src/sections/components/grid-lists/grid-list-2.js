@@ -98,7 +98,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                       </Typography>
                     </Box>
                     <Badge
-                      badgeContent="Listed"
+                      badgeContent={status === "Listed" ? "Listed": "Ordered"}
                       color="success"
                       sx={{
                         position: "absolute",
