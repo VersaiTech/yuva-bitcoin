@@ -65,7 +65,7 @@ const Page = () => {
       headers: headers,
     });
 
-    console.log(response.data.overview);
+    // console.log(response.data.overview);
     setOverview(response.data.overview);
   };
 

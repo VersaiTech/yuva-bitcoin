@@ -51,7 +51,7 @@ const Page = () => {
 
     onSubmit: async (values, helpers) => {
       localStorage.setItem("email", values.email);
-      console.log(values);
+      // console.log(values);
       try {
         await signIn(values.email, values.password);
 
