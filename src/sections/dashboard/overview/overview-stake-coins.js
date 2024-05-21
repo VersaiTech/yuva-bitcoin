@@ -1,76 +1,7 @@
-// import PropTypes from 'prop-types';
-// import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-// import { Box, Button, Card, Chip, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-// import Link from 'next/link';
-// import { paths } from '../../../paths';
-
-// export const OverviewStakeCoins = (props) => {
-//   const { amount } = props; 
-
-//   return (
-//     <Card>
-//       <Stack
-//         alignItems="center"
-//         direction={{
-//           xs: 'column',
-//           sm: 'row'
-//         }}
-//         spacing={3}
-//         sx={{
-//           px: 4,
-//           py: 3
-//         }}
-//       >
-//         <div>
-//           <img
-//             src="/assets/logos/staking.png"
-//             width={48}
-//           />
-//         </div>
-//         <Box sx={{ flexGrow: 2 }}>
-//           <Typography
-//             color="text.secondary"
-//             variant="body2"
-//           >
-//             Staked Coins
-//           </Typography>
-//           <Typography
-//             color="text.primary"
-//             variant="h4"
-//           >
-//             {amount.totalStakedCoins}
-//           </Typography>
-//         </Box>
-//         </Stack>
-//         <Divider />
-//         <CardActions>
-//           <Link href="/dashboard/users"> {/* Use Next.js Link component */}
-//             <Button
-//               color="inherit"
-//               endIcon={(
-//                 <SvgIcon>
-//                   <ArrowRightIcon />
-//                 </SvgIcon>
-//               )}
-//               size="small"
-//             >
-//               Set Staked Coins
-//             </Button>
-//           </Link>
-//         </CardActions>
-//       </Card>
-//   );
-// };
-
-// OverviewStakeCoins.propTypes = {
-//   amount: PropTypes.number
-// };
 
 
 
 
-
-// OverviewStakeCoins.jsx
 
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
@@ -109,6 +40,9 @@ export const OverviewStakeCoins = (props) => {
     }
   };
 
+  // Check if amount is null or undefined before accessing totalCoinHolders
+  const totalCoinHolders = amount ? amount.totalCoinHolders : 0;
+
   return (
     <Card>
       <Stack
@@ -140,7 +74,7 @@ export const OverviewStakeCoins = (props) => {
             color="text.primary"
             variant="h4"
           >
-            {amount.totalStakedCoins}
+            {totalCoinHolders}
           </Typography>
         </Box>
       </Stack>
@@ -171,7 +105,7 @@ export const OverviewStakeCoins = (props) => {
 };
 
 OverviewStakeCoins.propTypes = {
-  amount: PropTypes.object.isRequired, // Change the prop type according to your data structure
+  amount: PropTypes.object, // Change the prop type according to your data structure
   fetchDummyData: PropTypes.func.isRequired, // Pass the fetchStakeData function as prop
 };
 

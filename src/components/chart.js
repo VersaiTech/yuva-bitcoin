@@ -4,7 +4,7 @@ import { alpha, styled } from '@mui/material/styles';
 
 const ApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
-  loading: () => nulls
+  loading: () => null
 });
 
 export const Chart = styled(ApexChart)(({ theme }) => ({

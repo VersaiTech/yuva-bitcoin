@@ -1,3 +1,5 @@
+
+
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import {
@@ -53,6 +55,9 @@ export const OverviewTotalYuvaBuy = (props) => {
     }
   };
 
+  // Add null check before accessing amount.totalBuyTodayYuva
+  const totalBuyTodayYuva = amount ? amount.totalBuyTodayYuva : 0;
+
   return (
     <Card>
       <Stack
@@ -75,7 +80,7 @@ export const OverviewTotalYuvaBuy = (props) => {
             Today Yuva Bitcoin Buyer
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {amount.totalBuyTodayYuva}
+            {totalBuyTodayYuva}
           </Typography>
         </Box>
       </Stack>
@@ -106,8 +111,8 @@ export const OverviewTotalYuvaBuy = (props) => {
 };
 
 OverviewTotalYuvaBuy.propTypes = {
-  amount: PropTypes.number.isRequired,
-  fetchTotalBuyAmount: PropTypes.func.isRequired,
+  amount: PropTypes.object, // Adjust the prop type accordingly
+  fetchDummyData: PropTypes.func.isRequired,
 };
 
 export default OverviewTotalYuvaBuy;

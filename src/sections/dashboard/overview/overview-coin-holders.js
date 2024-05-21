@@ -1,4 +1,5 @@
-// coinholders component
+
+
 
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
@@ -14,13 +15,11 @@ import {
 } from "@mui/material";
 import SetDummyData from "./set-dummy-data";
 import { useSnackbar } from "notistack";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 
 export const OverviewCoinHolders = (props) => {
   const { amount, fetchDummyData } = props;
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
 
@@ -51,6 +50,9 @@ export const OverviewCoinHolders = (props) => {
     }
   };
 
+  // Check if amount is null or undefined before accessing totalCoinHolders
+  const totalCoinHolders = amount ? amount.totalCoinHolders : 0;
+
   return (
     <Card>
       <Stack
@@ -73,7 +75,7 @@ export const OverviewCoinHolders = (props) => {
             Coin Holders
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {amount.totalCoinHolders}
+            {totalCoinHolders}
           </Typography>
         </Box>
       </Stack>
@@ -104,7 +106,7 @@ export const OverviewCoinHolders = (props) => {
 };
 
 OverviewCoinHolders.propTypes = {
-  amount: PropTypes.array.isRequired, // Adjust the prop type accordingly
+  amount: PropTypes.object, // Adjust the prop type accordingly
   fetchDummyData: PropTypes.func.isRequired,
 };
 

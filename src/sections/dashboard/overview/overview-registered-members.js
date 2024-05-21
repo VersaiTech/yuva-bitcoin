@@ -1,3 +1,5 @@
+
+
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import {
@@ -58,6 +60,9 @@ export const OverviewRegisteredMembers = (props) => {
     }
   };
 
+  // Check if amount is null or undefined before accessing totalRegisteredMembers
+  const totalRegisteredMembers = amount ? amount.totalRegisteredMembers : 0;
+
   return (
     <Card>
       <Stack
@@ -80,13 +85,12 @@ export const OverviewRegisteredMembers = (props) => {
             Registered Members
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {amount.totalRegisteredMembers}
+            {totalRegisteredMembers}
           </Typography>
         </Box>
       </Stack>
       <Divider />
       <CardActions>
-        {" "}
         {/* Use Next.js Link component */}
         <Button
           color="inherit"
@@ -113,7 +117,7 @@ export const OverviewRegisteredMembers = (props) => {
 };
 
 OverviewRegisteredMembers.propTypes = {
-  amount: PropTypes.array.isRequired,
+  amount: PropTypes.object, // Change the prop type according to your data structure
   fetchDummyData: PropTypes.func.isRequired,
 };
 
