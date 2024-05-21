@@ -164,6 +164,7 @@ export const AuthProvider = (props) => {
     localStorage.removeItem(STORAGE_KEY);
     dispatch({ type: ActionType.SIGN_OUT });
     enqueueSnackbar("Logged out successfully", { variant: "success" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (

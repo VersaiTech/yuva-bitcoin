@@ -41,6 +41,7 @@ console.error('Error fetching news detail:', error);
     if (router.query.blogId) {
       fetchNewsDetail();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.blogId]);
 
   return newsDetail;

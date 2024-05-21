@@ -198,10 +198,12 @@ const useQueries = (search) => {
 
       console.error(err.response.data.message);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(() => {
     getQueries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return state;

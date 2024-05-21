@@ -12,7 +12,7 @@ import { LogoBolt } from '../components/companies-logos/logo-bolt';
 import { LogoAws } from '../components/companies-logos/logo-aws';
 import { LogoAccenture } from '../components/companies-logos/logo-accenture';
 import { LogoAtt } from '../components/companies-logos/logo-att';
-import SupportList from './dashboard/support/supportList';
+// import SupportList from './dashboard/support/supportList';
 // import { Layout as DashboardLayout } from "../../../layouts/dashboard";4
 import { Layout as DashboardLayout } from '../layouts/dashboard';
 
@@ -161,7 +161,6 @@ const Page = () => {
               Fill the form below
             </Typography>
             {/* <ContactForm /> */}
-            <SupportList />
             
 
           </Container>

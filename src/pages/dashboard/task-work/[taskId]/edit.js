@@ -237,6 +237,7 @@ const useCustomer = () => {
     } catch (err) {
       console.error(err.response.data.error);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted]);
 
   useEffect(() => {

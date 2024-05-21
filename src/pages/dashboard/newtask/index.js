@@ -85,10 +85,12 @@ const useCustomers = (search) => {
     } catch (err) {
       // console.error(err.response.datax);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(() => {
     getCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return state;
