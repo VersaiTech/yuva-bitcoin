@@ -34,7 +34,8 @@ export const SplashScreen = () => (
       {/*<Image src="/assets/images/Furniture Shop/RoundSofa.png" alt="Ecommerce" width={100} height={100} />*/}
     </Box>
 
-    <style jsx global>{`
+    <style jsx 
+    global>{`
       @keyframes pulse {
         0% {
           opacity: 1;

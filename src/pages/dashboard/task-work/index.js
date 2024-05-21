@@ -75,11 +75,13 @@ const useCustomers = (search) => {
     } catch (err) {
       console.error(err);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(() => {
     console.log("calling useeffect");
     getCustomers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return state;
@@ -110,6 +112,7 @@ const Page = () => {
 
     // Set current tab with sorted and filtered data
     // setCurrentTab(currentData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   useEffect(() => {
@@ -174,12 +177,18 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Stack direction="row" 
+            justifyContent="space-between"
+             spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">Approve Task</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}></Stack>
+                <Stack alignItems="center" 
+                direction="row" 
+                spacing={1}></Stack>
               </Stack>
-              <Stack alignItems="center" direction="row" spacing={3}>
+              <Stack alignItems="center" 
+              direction="row" 
+              spacing={3}>
                 <Button
                   component={NextLink}
                   startIcon={

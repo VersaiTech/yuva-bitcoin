@@ -71,6 +71,7 @@ export const DepositListSearch = (props) => {
     if(sturl){
       setCurrentTab(sturl);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sturl]);
 
   useEffect(() => {

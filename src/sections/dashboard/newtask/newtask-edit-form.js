@@ -135,12 +135,16 @@ console.log('Completion Date Time:', customer.completionTime);
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit} 
+    {...other}>
       <Card>
         <CardHeader title="Edit Task" />
         <CardContent sx={{ pt: 0 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
+          <Grid container 
+          spacing={2}>
+            <Grid item 
+            xs={12} 
+            md={4}>
               <TextField
                 fullWidth
                 disabled // Disable editing
@@ -149,7 +153,9 @@ console.log('Completion Date Time:', customer.completionTime);
                 value={formik.values.taskId}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item 
+            xs={12} 
+            md={4}>
               <TextField
                 error={!!(formik.touched.taskName && formik.errors.taskName)}
                 fullWidth
@@ -162,7 +168,9 @@ console.log('Completion Date Time:', customer.completionTime);
                 value={formik.values.taskName}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item 
+            xs={12} 
+            md={4}>
               <TextField
                 error={!!(formik.touched.coins && formik.errors.coins)}
                 fullWidth
@@ -174,7 +182,8 @@ console.log('Completion Date Time:', customer.completionTime);
                 value={formik.values.coins}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item 
+            xs={12}>
               <TextField
                 error={!!(formik.touched.link && formik.errors.link)}
                 fullWidth
@@ -186,7 +195,8 @@ console.log('Completion Date Time:', customer.completionTime);
                 value={formik.values.link}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item 
+            xs={12}>
               <TextField
                 error={
                   !!(formik.touched.description && formik.errors.description)
@@ -206,7 +216,9 @@ console.log('Completion Date Time:', customer.completionTime);
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item 
+            xs={12} 
+            md={6}>
   <TextField
     error={
       !!(
@@ -230,7 +242,9 @@ console.log('Completion Date Time:', customer.completionTime);
     }}
   />
 </Grid>
-<Grid item xs={12} md={6}>
+<Grid item 
+xs={12} 
+md={6}>
   <TextField
     error={
       !!(
@@ -266,10 +280,13 @@ console.log('Completion Date Time:', customer.completionTime);
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button type="submit" variant="contained">
+          <Button type="submit"
+           variant="contained">
             Update
           </Button>
-          <Button color="error" onClick={handleOpenDialog} variant="contained">
+          <Button color="error" 
+          onClick={handleOpenDialog} 
+          variant="contained">
             Delete Task
           </Button>
           <Button
@@ -284,7 +301,8 @@ console.log('Completion Date Time:', customer.completionTime);
       </Card>
 
       {/* Confirmation Dialog */}
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
+      <Dialog open={openDialog} 
+      onClose={handleCloseDialog}>
         <DialogTitle>Delete Task</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -292,10 +310,13 @@ console.log('Completion Date Time:', customer.completionTime);
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
+          <Button onClick={handleCloseDialog} 
+          color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteTask} color="error" autoFocus>
+          <Button onClick={handleDeleteTask} 
+          color="error" 
+          autoFocus>
             Delete
           </Button>
         </DialogActions>

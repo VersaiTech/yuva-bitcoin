@@ -99,19 +99,27 @@ export const NewTaskForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...props}>
+    <form onSubmit={formik.handleSubmit}
+     {...props}>
       <Stack spacing={4}>
         <Card>
           <CardContent>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={4}>
+            <Grid container 
+            spacing={3}>
+              <Grid item 
+              xs={12} 
+              md={4}>
                 <Typography variant="h6">New Task Details</Typography>
               </Grid>
-              <Grid item xs={12} md={8}>
+              <Grid item 
+              xs={12} 
+              md={8}>
                 <Stack spacing={3}>
-                  <Grid container spacing={3}>
+                  <Grid container 
+                  spacing={3}>
                     {/* Grid for start and end date/time */}
-                    <Grid item xs={6}>
+                    <Grid item 
+                    xs={6}>
                       {/* Combine startDate and startTime into one field */}
                       <TextField
                         error={
@@ -132,7 +140,8 @@ export const NewTaskForm = (props) => {
                         }}
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item 
+                    >
                       {/* Combine endDate and endTime into one field */}
                       <TextField
                         error={
@@ -219,7 +228,8 @@ export const NewTaskForm = (props) => {
           <Link href={paths.dashboard.newtask.index}>
             <Button color="inherit">Cancel</Button>
           </Link>
-          <Button type="submit" variant="contained">
+          <Button type="submit" 
+          >
             Create
           </Button>
         </Stack>
