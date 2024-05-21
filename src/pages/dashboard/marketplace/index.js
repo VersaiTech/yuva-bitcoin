@@ -154,17 +154,18 @@ const CryptoMarketplacePage = () => {
     }
   };
 
-  const handleDeleteOrder = async (rowdata) => {
+  const handleDeleteOrder = async (_id , userId) => {
     try {
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
       const headers = {
         Authorization: token,
       };
-
+      
+      
       const response = await axios.delete(`${BASEURL}/api/Order/deleteOrder`, {
         headers,
-        data: { orderId: rowdata._id, userId: rowdata.userId },
+        data: { orderId: _id, userId: userId },
       });
     
   
@@ -177,8 +178,8 @@ const CryptoMarketplacePage = () => {
       // After successful deletion, fetch updated data
       fetchData();
     } catch (error) {
-      console.error("Error deleting order:", error.response.data);
-      enqueueSnackbar(error.response.data.error, { variant: "error" });
+      console.error("Error deleting order:", error.response?.data);
+      enqueueSnackbar(error.response?.data?.error, { variant: "error" });
     }
   };
   
@@ -197,6 +198,7 @@ const CryptoMarketplacePage = () => {
     const { _id: orderId, userId } = data;
     handleDeleteOrder(orderId, userId);
   };
+
 
   return (
     <>

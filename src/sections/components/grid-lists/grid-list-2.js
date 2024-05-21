@@ -293,7 +293,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
       </Button>
       <Button
         variant="contained"
-        color="primary"
+        color="error"
         sx={{
           width: isScreenSizeGreaterThanSm ? 'auto' : '100%',
           height: '36px',
