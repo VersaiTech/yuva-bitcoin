@@ -41,6 +41,7 @@ export const TaskListTable = (props) => {
     }, 1000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateCountdowns = () => {

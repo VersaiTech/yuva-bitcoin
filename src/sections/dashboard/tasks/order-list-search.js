@@ -73,6 +73,7 @@ export const TaskListSearch = (props) => {
       ...prevState,
       status
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleQueryChange = useCallback((event) => {

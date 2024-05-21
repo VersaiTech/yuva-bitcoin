@@ -74,6 +74,7 @@ export const StakeListSearch = (props) => {
       ...prevState,
       status
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleQueryChange = useCallback((event) => {

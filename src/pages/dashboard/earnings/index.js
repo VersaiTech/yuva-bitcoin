@@ -68,6 +68,7 @@ const useOrders = (search) => {
         ordersCount: 0
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(() => {

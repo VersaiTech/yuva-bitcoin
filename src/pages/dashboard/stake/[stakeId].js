@@ -61,6 +61,7 @@ export const useTotalInvestment = () => {
 
   useEffect(() => {
     getTotalInvestment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return totalInvestment;

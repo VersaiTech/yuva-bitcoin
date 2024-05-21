@@ -30,6 +30,7 @@ export const useCustomer = () => {
 
   useEffect(() => {
     getCustomer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return customer;

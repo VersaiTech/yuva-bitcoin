@@ -310,6 +310,7 @@ const useCustomers = (search) => {
     } catch (err) {
       console.error(err.response.data);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(

@@ -60,6 +60,7 @@ export const NewtaskListSearch = (props) => {
     if(sturl){
       setCurrentTab(sturl);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sturl]);
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export const NewtaskListSearch = (props) => {
 
   useUpdateEffect(() => {
     handleFiltersUpdate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, handleFiltersUpdate]);
 
   const handleTabsChange = useCallback(async(event, value) => {

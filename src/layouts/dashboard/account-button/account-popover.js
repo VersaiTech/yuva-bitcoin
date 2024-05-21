@@ -59,6 +59,7 @@ export const AccountPopover = (props) => {
       console.error(err);
       toast.error('Failed to delete account. Please try again later.');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.isAdmin, profile, router, onClose]);
 
   const handleLogout = useCallback(async () => {

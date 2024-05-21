@@ -117,6 +117,7 @@ const Page = () => {
     if (router.query.code) {
       formik.setFieldValue("referralCode", router.query.code);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.code]);
 
 
