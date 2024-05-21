@@ -113,6 +113,7 @@ const useOrders = (search) => {
         ...tasks,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(
