@@ -13,7 +13,6 @@ import {
   Typography,
   Grid
 } from '@mui/material';
-import Tooltip from '../../../components/tooltip';
 import ReferralIntro from './referralIntro';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
