@@ -33,6 +33,11 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ error: 'Amount cannot be negative' });
         }
 
+        //if coin is yuva exchange_currency is minimum 0.1
+        if (coin === 'yuva' && exchange_currency < 0.1) {
+            return res.status(400).json({ error: 'Minimum exchange currency is 0.1' });
+        }
+
         // Set payment method based on coin type
         let payment_method;
         if (coin === 'yuva') {
