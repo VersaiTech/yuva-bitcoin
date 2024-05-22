@@ -417,26 +417,26 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.deposit),
+        path: paths.dashboard.deposit.index,
         // path: paths.dashboard.deposit.index,
         icon: (
           <SvgIcon fontSize="small">
             <DepositsIcon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.alldeposit),
-            path: paths.dashboard.deposit.index,
-          },
-          // {
-          //   title: t(tokens.nav.pendingDeposit),
-          //   path: paths.dashboard.deposit.pending,
-          // },
-          // {
-          //   title: t(tokens.nav.completedDeposit),
-          //   path: paths.dashboard.deposit.completed,
-          // },
-        ],
+        // items: [
+        //   {
+        //     title: t(tokens.nav.alldeposit),
+        //   },
+        //   // {
+        //   //   title: t(tokens.nav.pendingDeposit),
+        //   //   path: paths.dashboard.deposit.pending,
+        //   // },
+        //   // {
+        //   //   title: t(tokens.nav.completedDeposit),
+        //   //   path: paths.dashboard.deposit.completed,
+        //   // },
+        // ],
       },
       {
         title: t(tokens.nav.Stake),
@@ -464,53 +464,56 @@ export const getSections = (t) => [
 
       {
         title: t(tokens.nav.support),
+        path: paths.dashboard.support.list,
         icon: (
           <SvgIcon fontSize="small">
             <Support2Icon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.supportList),
-            path: paths.dashboard.support.list
-          }
-        ]
+        // items: [
+        //   {
+        //     title: t(tokens.nav.supportList),
+        //   }
+        // ]
       },
 
       {
-        title: t(tokens.nav.news),
-        // path: paths.contact,
-        icon: (
-          <SvgIcon fontSize="small">
-            {/* <Mail04Icon /> */}
-            <NewssIcon />
-          </SvgIcon>
-        ),
-        items: [
-          {
-            title: t(tokens.nav.createnews),
-            path: paths.dashboard.news.create,
-          },
-          {
-            title: t(tokens.nav.newslist),
-            path: paths.dashboard.news.list,
-          },
-        ],
-      },
-      {
         title: t(tokens.nav.referral),
+        path: paths.dashboard.refer.index,
         icon: (
           <SvgIcon fontSize="small">
             <ReferalIcon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.refer),
-            path: paths.dashboard.refer.index
+        // items: [
+          //   {
+            //     title: t(tokens.nav.refer),
+            //   },
+            // ]
           },
-        ]
-      },
+          
+          {
+            title: t(tokens.nav.news),
+            // path: paths.contact,
+            icon: (
+              <SvgIcon fontSize="small">
+                {/* <Mail04Icon /> */}
+                <NewssIcon />
+              </SvgIcon>
+            ),
+            items: [
+              {
+                title: t(tokens.nav.createnews),
+                path: paths.dashboard.news.create,
+              },
+              {
+                title: t(tokens.nav.newslist),
+                path: paths.dashboard.news.list,
+              },
+            ],
+          },
+
+
       // {
       //   title: t(tokens.nav.error),
       //   icon: (

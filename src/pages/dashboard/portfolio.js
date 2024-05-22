@@ -222,7 +222,7 @@ const Page = () => {
               >
                 <CryptoCurrentBalance
                   chartSeries={[16213.2, 9626.8, 10076.81]}
-                  labels={["Bitcoin", "Ethereum", "Deposit"]}
+                  labels={["Task", "Bonus", "Referral"]}
                 />
               </Stack>
             </Grid>

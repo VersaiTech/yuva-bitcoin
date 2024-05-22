@@ -90,7 +90,16 @@ export const CryptoCurrentBalance = (props) => {
   const { chartSeries, labels } = props;
   const chartOptions = useChartOptions(labels);
   const totalAmount = chartSeries.reduce((acc, item) => acc += item, 0);
-  const formattedTotalAmount = numeral(totalAmount).format('$0,0.00');
+  const formattedTotalAmount = (
+    <span>
+      <img
+        src="/assets/logos/yuvalogo2.png"
+        alt="YB Chain Logo"
+        style={{ height: "1.5rem", marginRight: "0.5rem" }}
+      />
+      {numeral(totalAmount).format("0,0")}
+    </span>
+  );
 
   return (
     <Card>
@@ -153,7 +162,7 @@ export const CryptoCurrentBalance = (props) => {
                 }}
               >
                 {chartSeries.map((item, index) => {
-                  const amount = numeral(item).format('$0,0.00');
+                  const amount = numeral(item).format('0,0.00');
 
                   return (
                     <Stack
@@ -177,12 +186,17 @@ export const CryptoCurrentBalance = (props) => {
                       >
                         {labels[index]}
                       </Typography>
-                      <Typography
-                        color="text.secondary"
-                        variant="subtitle2"
-                      >
-                        {amount}
-                      </Typography>
+                      <Typography color="text.secondary" variant="subtitle2">
+                          <span>
+                            <img
+                              src="/assets/logos/yuvalogo2.png"
+                              alt="YB Chain Logo"
+                              style={{ height: "1rem", marginRight: "0.5rem" }}
+                            />
+
+                            {amount}
+                          </span>
+                        </Typography>
                     </Stack>
                   );
                 })}
