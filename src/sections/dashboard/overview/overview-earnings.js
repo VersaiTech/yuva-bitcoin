@@ -158,7 +158,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Chart } from '../../../components/chart';
-import { useCustomer } from '../../../pages/dashboard/withdrawals/useCustomer';
+// import { useCustomer } from '../../../pages/dashboard/withdrawals/useCustomer';
 import {paths} from '../../../paths';
 // import Link/ from '@mui/material';
 
@@ -216,7 +216,7 @@ export const OverviewEarnings = (props) => {
   const { amount } = props;
 
   const chartOptions = useChartOptions();
-  const customer = useCustomer();
+  // const customer = useCustomer();
 
 
   return (
@@ -315,7 +315,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {customer == null ? 0  + " Coins" : customer + " Yuva Bitcoin"} {/* Display the customer balance */}
+                      {/* {customer == null ? 0  + " Coins" : customer + " Yuva Bitcoin"} */}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance

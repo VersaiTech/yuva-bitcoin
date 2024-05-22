@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import Web3 from 'web3';
+import Web3 from "web3";
 import PropTypes from "prop-types";
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
-import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from './wallet';
-import { useSnackbar } from 'notistack';
+import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from "./wallet";
+import { useSnackbar } from "notistack";
 // const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
-const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-// import detectEthereumProvider from "@metamask/detect-provider";
-
-
-
+const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+import detectEthereumProvider from "@metamask/detect-provider";
 
 import {
   Box,
@@ -23,19 +20,12 @@ import {
   Typography,
 } from "@mui/material";
 
-
-
-
 const logoMap = {
   USDT: "/assets/logos/logo-usdt.svg",
   Yuva_Bitcoin: "/assets/logos/logo-eth.svg",
 };
 
-
-
 export const DepositOperations = (props) => {
-
-
   const [hasProvider, setHasProvider] = useState(null);
   const [provider, setProvider] = useState(null);
 
@@ -49,20 +39,20 @@ export const DepositOperations = (props) => {
         console.error("MetaMask not detected.");
       }
     };
-    
+
     checkProvider();
   }, []);
-  // useEffect(() => {
-  //   const getProvider = async () => {
-  //     const provider = await detectEthereumProvider({ silent: true });
-  //     setHasProvider(Boolean(provider));
-  //     if (provider) {
-  //       setProvider(provider);
-  //     }
-  //   };
+  useEffect(() => {
+    const getProvider = async () => {
+      const provider = await detectEthereumProvider({ silent: true });
+      setHasProvider(Boolean(provider));
+      if (provider) {
+        setProvider(provider);
+      }
+    };
 
-  //   getProvider();
-  // }, []);
+    getProvider();
+  }, []);
 
   const updateWallet = async (accounts) => {
     setWallet({ accounts });
@@ -70,7 +60,7 @@ export const DepositOperations = (props) => {
 
   const handleConnect = async () => {
     if (wallet?.accounts?.length > 0) {
-      enqueueSnackbar('Already Connected', { variant: 'success' });
+      enqueueSnackbar("Already Connected", { variant: "success" });
       return;
     }
 
@@ -78,61 +68,58 @@ export const DepositOperations = (props) => {
       method: "eth_requestAccounts",
     });
     updateWallet(accounts);
-
   };
-
-
 
   const { enqueueSnackbar } = useSnackbar();
   const [values, setValues] = useState({
-    amount: '',
-    address: '',
-  })
-
+    amount: "",
+    address: "",
+  });
 
   const [op, setOp] = useState({
     from: "USDT",
     to: "Yuva_Bitcoin",
   });
 
-
-
   async function addNetwork() {
     let network;
     let params;
 
     if (window.ethereum) {
-      network = await window.ethereum.request({ method: 'eth_chainId' });
+      network = await window.ethereum.request({ method: "eth_chainId" });
       network = parseInt(network.slice(2), 16).toString();
-      if (network === '1') {
-        network = '97';
+      if (network === "1") {
+        network = "97";
       }
-      if (network === '97') {
-        enqueueSnackbar('Connected', { variant: 'success' });
+      if (network === "97") {
+        enqueueSnackbar("Connected", { variant: "success" });
       } else {
         params = [
           {
-            chainId: '0xEEBB',
-            chainName: 'BNB Smart Chain Testnet',
-            rpcUrls: ['https://data-seed-prebsc-1-s1.bnbchain.org:8545'],
+            chainId: "0xEEBB",
+            chainName: "BNB Smart Chain Testnet",
+            rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
             blockExplorerUrls: ["https://testnet.bscscan.com"],
             nativeCurrency: {
-              name: 'BNB',
-              symbol: 'BNB',
-              decimals: 18
-            }
-          }
+              name: "BNB",
+              symbol: "BNB",
+              decimals: 18,
+            },
+          },
         ];
 
-        await window.ethereum.request({ method: 'wallet_addEthereumChain', params });
-        enqueueSnackbar('Connected', { variant: 'success' });
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params,
+        });
+        enqueueSnackbar("Connected", { variant: "success" });
       }
     } else {
-      enqueueSnackbar('Unable to locate a compatible web3 browser!', { variant: 'error' });
+      enqueueSnackbar("Unable to locate a compatible web3 browser!", {
+        variant: "error",
+      });
     }
   }
-
-
 
   // async function connectWallet() {
   //   try {
@@ -148,36 +135,34 @@ export const DepositOperations = (props) => {
   //   }
   // }
 
-
-  const ADMIN_WALLET_ADDRESS = '0x8Ec246487834f6C4CAAf2fd67cB1731Cc5C9eB57';
-
+  const ADMIN_WALLET_ADDRESS = "0x8Ec246487834f6C4CAAf2fd67cB1731Cc5C9eB57";
 
   const buyToken = async () => {
     try {
       const provider = await detectEthereumProvider({ silent: true });
       const web3 = new Web3(provider);
-      console.log(web3);
 
-      const contract = new web3.eth.Contract(BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS);
+      console.log(wallet.accounts[0]);
+
+      const contract = new web3.eth.Contract(
+        BUSDabi,
+        BUSD_TESTNET_CONTRACT_ADDRESS
+      );
 
       const response = await contract.methods
-        .transfer(ADMIN_WALLET_ADDRESS, web3.utils.toWei(values.amount, 'ether'))
-        .send({ from: "0x6101e6c919dE2E215d7B8565F94B19EA1CB918C0" });
+        .transfer(
+          ADMIN_WALLET_ADDRESS,
+          web3.utils.toWei(values.amount, "ether")
+        )
+        .send({ from: wallet.accounts[0]});
 
       console.log(response);
-
 
       // Handle the response as needed
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-
-
-
-
-
 
   function fetchPrice() {
     try {
@@ -188,9 +173,6 @@ export const DepositOperations = (props) => {
     }
   }
 
-
-
-
   useEffect(() => {
     if (window.ethereum === undefined) {
       console.log("Wallet not installed");
@@ -198,10 +180,6 @@ export const DepositOperations = (props) => {
       // fetchPrice();
     }
   }, []);
-
-
-
-
 
   return (
     <Card
@@ -213,21 +191,28 @@ export const DepositOperations = (props) => {
       }}
     >
       <CardHeader
-        title="Buy Bitcoin"
+        title="Buy Yuva Bitcoin"
         action={
           <>
-
             {hasProvider ? (
-              <Button onClick={handleConnect}>Connect MetaMask</Button>) : (
-              <Button target="_blank" href="https://metamask.io">Install Wallet</Button>
-            )
-            }
+              <Box>
+                {wallet && wallet?.accounts?.length > 0 ? (
+                  <Button onClick={handleConnect}>
+                    {wallet?.accounts[0]?.slice(0, 7)}...{wallet?.accounts[0]?.slice(-5)}
+                  </Button>
+                ) : (
+                  <Button onClick={handleConnect}>Connect MetaMask</Button>
+                )}
+              </Box>
+            ) : (
+              <Button target="_blank" href="https://metamask.io">
+                Install Wallet
+              </Button>
+            )}
 
-            {
-              hasProvider && (
-                <Button onClick={addNetwork}>Add Chain to MetaMask</Button>
-              )
-            }
+            {hasProvider && (
+              <Button onClick={addNetwork}>Add Chain to MetaMask</Button>
+            )}
 
             {/* {wallet.accounts.length > 0 && ( 
               <div>Wallet Accounts: {wallet?.accounts[0]}</div>
@@ -263,7 +248,7 @@ export const DepositOperations = (props) => {
           onChange={(event) => {
             setValues((prevState) => ({
               ...prevState,
-              amount: event.target.value
+              amount: event.target.value,
             }));
           }}
         />
@@ -304,22 +289,20 @@ export const DepositOperations = (props) => {
           }}
           value="5.9093"
         />
-        <Typography color="text.secondary"
-          sx={{ mt: 2 }}
-          variant="body2">
-          1 BTC = $20,024.90
+        <Typography color="text.secondary" sx={{ mt: 2 }} variant="body2">
+          {values.amount} {op.from} = {values.amount} {op.to}
         </Typography>
 
-        <Button fullWidth
+        <Button
+          fullWidth
           onClick={() => buyToken()}
           size="large"
           sx={{ mt: 2, cursor: "pointer" }}
-          variant="contained">
+          variant="contained"
+        >
           Buy Yuva Bitcoin
         </Button>
-        <Box style={{ marginTop: "10px" }}>
-
-        </Box>
+        <Box style={{ marginTop: "10px" }}></Box>
       </CardContent>
     </Card>
   );
@@ -328,3 +311,4 @@ export const DepositOperations = (props) => {
 DepositOperations.propTypes = {
   sx: PropTypes.object,
 };
+

@@ -1,18 +1,12 @@
 /** @type {import('next').NextConfig} */
 const config = {
-  swcMinify: true,
+  swcMinify: false,
   reactStrictMode: false,
   experimental: {
-    appDir: false
+    appDir: false,
+    esmExternals: false
   },
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack']
-    });
-    return config;
-  },
-  async redirects() {
+  redirects() {
     return [
       {
         source: '/docs',
@@ -23,14 +17,5 @@ const config = {
   }
 };
 
-// Remove this if you're not using Fullcalendar features
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/react',
-  '@fullcalendar/daygrid',
-  '@fullcalendar/list',
-  '@fullcalendar/timegrid',
-  '@fullcalendar/timeline'
-]);
+module.exports = config;
 
-module.exports = withTM(config);

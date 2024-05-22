@@ -22,6 +22,11 @@ import '../libs/nprogress';
 import '../libs/mapbox';
 // Remove if locales are not used
 import '../locales/i18n';
+// import '@fullcalendar/common/main.css';
+// import '@fullcalendar/daygrid/main.css';
+// import '@fullcalendar/timegrid/main.css';
+// import '@fullcalendar/list/main.css';
+// import '@fullcalendar/timeline/main.css';
 import { SettingsButton } from '../components/settings-button';
 import { SettingsDrawer } from '../components/settings-drawer';
 import SnackbarProvider from "../components/SnackbarProvider";

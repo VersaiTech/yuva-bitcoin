@@ -1,8 +1,8 @@
 {
-  "name": "@devias/kit-pro-react",
+  "name": "devias-dashboard",
   "version": "6.0.0",
-  "author": "Devias",
-  "homepage": "https://devias.io",
+  "author": "Yuvabitcoin Dashboard",
+  "homepage": "yuvabitcoin.com",
   "private": true,
   "scripts": {
     "dev": "next",
@@ -48,6 +48,7 @@
     "@mui/x-date-pickers": "5.0.11",
     "@react-pdf/renderer": "3.0.1",
     "@reduxjs/toolkit": "1.8.5",
+    "@swc/core": "1.2.119",
     "@types/lodash": "4.14.185",
     "@untitled-ui/icons-react": "0.1.0",
     "@web3modal/ethers": "^4.0.13",

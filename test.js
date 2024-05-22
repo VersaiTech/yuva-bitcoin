@@ -1,5 +1,4 @@
 import logo from './logo.svg';
-import './App.css';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers/react'
 
 // 1. Get projectId at https://cloud.walletconnect.com

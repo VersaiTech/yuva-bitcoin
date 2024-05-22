@@ -166,7 +166,6 @@
 // export default Page;
 
 import {
-  NextLink,
   Typography,
   Box,
   Container,
@@ -183,16 +182,16 @@ import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { paths } from "../../../paths";
 import Link from "next/link";
-// import Nextlink from 'next/link';
+import NextLink from 'next/link';
 import { WithdrawalsCreateForm } from "../../../sections/dashboard/withdrawals/withdrawals-create-form";
-import { useCustomer } from "./useCustomer"; // Import the useCustomer hook from the new file
+// import { useCustomer } from "./useCustomer"; // Import the useCustomer hook from the new file
 import Head from "next/head";
 import Image from 'next/image'
 
 const imageURL = '/assets/logos/yuvalogo2.png'; 
 
 const Page = () => {
-  const customer = useCustomer();
+  // const customer = useCustomer();
 
 
   return (
@@ -234,7 +233,7 @@ const Page = () => {
                       subheader={
                         <Typography variant="h3" color="white">
                           {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-                            {"" + customer || 0}
+                            {/* {"" + customer || 0} */}
                           {/* {"₿" + customer || 0} */}
                         </Typography>
                       }
