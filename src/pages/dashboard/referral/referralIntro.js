@@ -17,13 +17,13 @@ const ReferralIntro = () => {
             <ListItemIcon>
               <CheckCircleIcon color="primary" />
             </ListItemIcon>
-            <ListItemText primary="Earn up to 8 Yuva Bitcoins!." />
+            <ListItemText primary="Earn up to 5 Yuva Bitcoins!." />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <CheckCircleIcon color="primary" />
             </ListItemIcon>
-            <ListItemText primary="On Successful registration and 100 USDT deposition of your friends " />
+            <ListItemText primary="On Successful registration and 10 USDT deposition of your friends " />
           </ListItem>
           <ListItem>
             <ListItemIcon>

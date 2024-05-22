@@ -110,7 +110,7 @@ export const CryptoCurrentBalance = (props) => {
   return (
     <Card>
       <CardHeader
-        title="Total Stake"
+        title="Total Stake (Fixed Deposits)"
         subheader="Total coins you invested in the platform"
       />
       <CardContent>

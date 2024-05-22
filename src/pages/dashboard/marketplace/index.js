@@ -24,8 +24,8 @@ import UpdateForm from "./updateForm";
 import { useSnackbar } from 'notistack';
 
 const CryptoMarketplacePage = () => {
-  const [listings, setListings] = useState([]);
   const [status, setStatus] = useState("Listed");
+  const [listings, setListings] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
   const [updateForm,setUpdateForm]=useState(false);
@@ -127,51 +127,58 @@ const CryptoMarketplacePage = () => {
     }
   };
 
-  const handleUpdateOrder = async (rowdata) => {
+  const handleUpdateOrder = async (rowdata, updateListings) => {
     try {
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
       const headers = {
         Authorization: token,
       };
-
+  
       const data = {
-        orderId: rowdata._id, 
-        userId: rowdata.userId, 
+        orderId: rowdata._id,
+        userId: rowdata.userId,
         coin: rowdata.coin,
         amount: rowdata.amount,
         exchange_currency: rowdata.exchange_currency,
         payment_method: rowdata.payment_method,
       };
-
+  
       const response = await axios.post(`${BASEURL}/api/Order/updateOrder`, data, { headers });
       const responseData = response.data;
-
+  
       enqueueSnackbar("Order updated successfully", { variant: "success" });
+  
+      // Update the listings state
+      updateListings((prevListings) =>
+        prevListings.map((listing) =>
+          listing._id === rowdata._id ? { ...listing, ...responseData } : listing
+        )
+      );
+  
       handleCloseUpdateForm();
     } catch (error) {
-      console.error("Error updating order:", error.response.data);
-      enqueueSnackbar(error.response.data.error, { variant: "error" });
+      console.error("Error updating order:", error.response?.data);
     }
   };
+  
+  
 
-  const handleDeleteOrder = async (_id , userId) => {
+  const handleDeleteOrder = async (_id, userId) => {
     try {
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
       const headers = {
         Authorization: token,
       };
-      
-      
+  
       const response = await axios.delete(`${BASEURL}/api/Order/deleteOrder`, {
         headers,
         data: { orderId: _id, userId: userId },
       });
-    
   
       const responseData = response.data;
-      console.log(`DELETE order with data: ${JSON.stringify(rowdata)}`);
+      console.log(`DELETE order with data: ${JSON.stringify({ orderId: _id, userId })}`);
       console.log(`DELETE order response: ${JSON.stringify(responseData)}`);
   
       enqueueSnackbar("Order deleted successfully", { variant: "success" });
@@ -180,9 +187,13 @@ const CryptoMarketplacePage = () => {
       fetchData();
     } catch (error) {
       console.error("Error deleting order:", error.response?.data);
-      enqueueSnackbar(error.response?.data?.error, { variant: "error" });
+  
+      // Provide a default error message if error.response?.data?.error is not available
+      const errorMessage = error.response?.data?.error || "An error occurred while deleting the order.";
+      enqueueSnackbar(errorMessage, { variant: "error" });
     }
   };
+  
   
 
   const handleBuyButtonClick = (data) => {
@@ -275,4 +286,3 @@ CryptoMarketplacePage.getLayout = (page) => (
 );
 
 export default CryptoMarketplacePage;
-

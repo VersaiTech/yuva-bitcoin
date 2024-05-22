@@ -315,7 +315,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {customer == null ? 0  + " Coins" : customer + " Coins"} {/* Display the customer balance */}
+                      {customer == null ? 0  + " Coins" : customer + " Yuva Bitcoin"} {/* Display the customer balance */}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance
