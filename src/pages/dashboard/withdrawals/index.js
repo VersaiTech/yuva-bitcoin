@@ -330,12 +330,34 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
+  const [customerBalance, setCustomerBalance] = useState(null);
   const { customers, customersCount, completed, rejected, pending } =
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
 
   usePageView();
+
+  const getCustomerBalance = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        window.location.href = "/auth/login/modern";
+        return;
+      }
+      const headers = {
+        'Authorization': token
+      };
+      const response = await axios.get(`${BASEURL}/admin/getuserbalance`, { headers: headers });
+      setCustomerBalance(response.data.balance);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  useEffect(() => {
+    getCustomerBalance();
+  }, [getCustomerBalance]);
 
   const handleFiltersChange = useCallback(
     (filters) => {
