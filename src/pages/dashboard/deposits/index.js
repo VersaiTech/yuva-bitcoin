@@ -11,7 +11,7 @@ import { DepositsListSearch } from '../../../sections/dashboard/depostis/deposit
 import { DepositsListContainer } from '../../../sections/dashboard/depostis/deposits-list-container';
 import { DepositsListTable } from '../../../sections/dashboard/depostis/deposits-list-table';
 import { CryptoOperation } from '../../../sections/dashboard/crypto/crypto-operation';
-// import { DepositOperations } from './depositBanner';
+import { DepositOperations } from '../../../sections/dashboard/web3/depositBanner'
 import { ceil } from 'lodash';
 import { auto } from '@popperjs/core';
 import axios from 'axios';
@@ -152,7 +152,7 @@ const Page = () => {
         </title>
       </Head>
       <Divider sx={{ mb: 3 }} />
-      {/* <DepositOperations /> */}
+      <DepositOperations />
       <Box
         component="main"
         ref={rootRef}

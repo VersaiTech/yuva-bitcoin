@@ -5306,6 +5306,7 @@
     "@swc/core-win32-x64-msvc" "^1.2.119"
 
 "@swc/helpers@0.4.14", "legacy-swc-helpers@npm:@swc/helpers@=0.4.14":
+  name legacy-swc-helpers
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"
   integrity sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==
@@ -11763,7 +11764,7 @@ web3-validator@^2.0.3, web3-validator@^2.0.4, web3-validator@^2.0.5:
     web3-types "^1.5.0"
     zod "^3.21.4"
 
-web3@^4.6.0:
+web3@^4.8.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/web3/-/web3-4.8.0.tgz#c7c7d2a7616ae387f8b2e3a3e416153a4bff479a"
   integrity sha512-kQSF2NlHk8yjS3SRiJW3S+U5ibkEmVRhB4/GYsVwGvdAkFC2b+EIE1Ob7J56OmqW9VBZgkx1+SuWqo5JTIJSYQ==
