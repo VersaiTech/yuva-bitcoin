@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Web3 from "web3";
+import axios from "axios";
 import PropTypes from "prop-types";
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
 import { CONTRACT, USDTABI, USDT_CONTRACT_ADDRESS } from "./wallet";
@@ -22,40 +23,50 @@ import {
 
 const logoMap = {
   USDT: "/assets/logos/logo-usdt.svg",
-  Yuva_Bitcoin: "/assets/logos/logo-eth.svg",
+  YuvaBitcoin: "/assets/logos/logo-eth.svg",
 };
 
 export const DepositOperations = (props) => {
   const [hasProvider, setHasProvider] = useState(null);
-  const [provider, setProvider] = useState(null);
+  // const [provider, setProvider] = useState(null);
+
+  const [rate, setRate] = useState(0);
+
 
   const [wallet, setWallet] = useState([]);
 
-  useEffect(() => {
-    const checkProvider = async () => {
-      if (window.ethereum) {
-        setProvider(window.ethereum);
-      } else {
-        console.error("MetaMask not detected.");
-      }
-    };
 
-    checkProvider();
-  }, []);
+  
   useEffect(() => {
     const getProvider = async () => {
       const provider = await detectEthereumProvider({ silent: true });
       setHasProvider(Boolean(provider));
-      if (provider) {
-        setProvider(provider);
-      }
+      // if (provider) {
+      //   setProvider(provider);
+      // }
     };
 
     getProvider();
+    getPrice();
   }, []);
 
   const updateWallet = async (accounts) => {
     setWallet({ accounts });
+  };
+
+  const getPrice = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const response = await axios.get(`${BASEURL}/api/Coin/getAllCoinsUser`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      setRate(response.data[0]?.price?.usdt);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleConnect = async () => {
@@ -78,48 +89,58 @@ export const DepositOperations = (props) => {
 
   const [op, setOp] = useState({
     from: "USDT",
-    to: "Yuva_Bitcoin",
+    to: "YuvaBitcoin",
   });
 
   async function addNetwork() {
     let network;
+    let networkid;
     let params;
 
     if (window.ethereum) {
-      network = await window.ethereum.request({ method: "eth_chainId" });
-      network = parseInt(network.slice(2), 16).toString();
-      if (network === "1") {
-        network = "97";
-      }
-      if (network === "97") {
-        enqueueSnackbar("Connected", { variant: "success" });
-      } else {
-        params = [
-          {
-            chainId: "0xEEBB",
-            chainName: "BNB Smart Chain",
-            rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
-            blockExplorerUrls: ["https://testnet.bscscan.com"],
-            nativeCurrency: {
-              name: "BNB",
-              symbol: "BNB",
-              decimals: 18,
-            },
+      params = [
+        {
+          chainId: "0x38",
+          chainName: "Binance Smart Chain",
+          rpcUrls: ["https://bsc-dataseed1.binance.org"],
+          blockExplorerUrls: ["https://bscscan.com"],
+          nativeCurrency: {
+            name: "BNB",
+            symbol: "BNB",
+            decimals: 18,
           },
-        ];
+        },
+      ];
 
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params,
-        });
-        enqueueSnackbar("Connected", { variant: "success" });
-      }
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params,
+      });
+      enqueueSnackbar("Connected", { variant: "success" });
     } else {
       enqueueSnackbar("Unable to locate a compatible web3 browser!", {
         variant: "error",
       });
     }
   }
+
+  const depositUsdtApi = async () => {
+    try {
+      const token = localStorage.getItem("accessToken"); 
+
+      const response = await axios.post(`${BASEURL}/api/Deposit/createDeposit`, {
+        amount: values.amount,
+        address: values.address,
+      }, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      enqueueSnackbar("Deposit Success", { variant: "success" });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } 
+  };
 
   // async function connectWallet() {
   //   try {
@@ -139,28 +160,31 @@ export const DepositOperations = (props) => {
 
   const buyToken = async () => {
     try {
+      console.log(values);
+      if (values.amount <= 0 || !values.amount) {
+        enqueueSnackbar("Enter Amount", { variant: "error" });
+        return;
+      }
       const provider = await detectEthereumProvider({ silent: true });
       const web3 = new Web3(provider);
 
       console.log(wallet.accounts[0]);
 
-      const contract = new web3.eth.Contract(
-        USDTABI,
-        USDT_CONTRACT_ADDRESS
-      );
+      const contract = new web3.eth.Contract(USDTABI, USDT_CONTRACT_ADDRESS);
 
       const response = await contract.methods
         .transfer(
           ADMIN_WALLET_ADDRESS,
           web3.utils.toWei(values.amount, "ether")
         )
-        .send({ from: wallet.accounts[0]});
+        .send({ from: wallet.accounts[0] });
 
       console.log(response);
 
       // Handle the response as needed
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error: Please Connect Wallet", error);
+      enqueueSnackbar("Please Connect Wallet", { variant: "error" });
     }
   };
 
@@ -198,7 +222,8 @@ export const DepositOperations = (props) => {
               <Box>
                 {wallet && wallet?.accounts?.length > 0 ? (
                   <Button onClick={handleConnect}>
-                    {wallet?.accounts[0]?.slice(0, 7)}...{wallet?.accounts[0]?.slice(-5)}
+                    {wallet?.accounts[0]?.slice(0, 7)}...
+                    {wallet?.accounts[0]?.slice(-5)}
                   </Button>
                 ) : (
                   <Button onClick={handleConnect}>Connect MetaMask</Button>
@@ -287,10 +312,11 @@ export const DepositOperations = (props) => {
               </Box>
             ),
           }}
-          value="5.9093"
+          value={values.amount / rate}
+          disabled
         />
         <Typography color="text.secondary" sx={{ mt: 2 }} variant="body2">
-          {values.amount} {op.from} = {values.amount} {op.to}
+          {values.amount} {op.from} = {values.amount / rate} {op.to}
         </Typography>
 
         <Button
@@ -311,4 +337,3 @@ export const DepositOperations = (props) => {
 DepositOperations.propTypes = {
   sx: PropTypes.object,
 };
-
