@@ -94,7 +94,7 @@ const createDeposit = async (req, res) => {
 
     // Retrieve member information based on member_user_id
     const { member_user_id, member_name, wallet_address } = req.user;
-    const member = await Member.findOne({ member_user_id, wallet_address });
+    const member = await Member.findOne({ member_user_id });
 
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
