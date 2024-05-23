@@ -572,7 +572,7 @@ async function verifyOTP(req, res) {
         registration_date: reg_date,
         twitterId,
         isActive: true,
-        coins: 2, // Give 2 coins as bonus
+        coins: 1, // Give 2 coins as bonus
         referralCode
       });
 
