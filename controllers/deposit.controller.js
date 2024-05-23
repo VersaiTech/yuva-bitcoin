@@ -132,7 +132,7 @@ const createDeposit = async (req, res) => {
       name: member_name,
       amount: value.amount,
       transaction_hash: value.transaction_hash,
-      wallet_address: wallet_address,
+      wallet_address: value.wallet_address,
       deposit_type: value.deposit_type,
     });
 
