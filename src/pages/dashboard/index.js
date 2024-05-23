@@ -123,7 +123,7 @@ md={12}>
                   lg: 4,
                 }}
               >
-            <OverviewEarnings />
+            <OverviewEarnings overview={overview}   />
 
                 <CryptoCurrentBalance
                   chartSeries={chartSeries}

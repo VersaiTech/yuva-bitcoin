@@ -213,7 +213,7 @@ const useChartOptions = () => {
 };
 
 export const OverviewEarnings = (props) => {
-  const { amount } = props;
+  const { overview } = props;
 
   const chartOptions = useChartOptions();
   // const customer = useCustomer();
@@ -258,7 +258,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {amount+ ' ' + 'USDT' || 0} 
+                      {parseFloat(overview.deposit_usdt)+ ' ' + 'USDT' || 0} 
                     </Typography>
                     <Typography variant="h6">
                       Total Deposit
@@ -315,7 +315,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {/* {customer == null ? 0  + " Coins" : customer + " Yuva Bitcoin"} */}
+                      {parseFloat(overview.coins) || 0}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance

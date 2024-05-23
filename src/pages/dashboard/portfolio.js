@@ -355,11 +355,7 @@ const Page = () => {
                 ) : (
                   <>
                     <OverviewEarnings
-                      amount={
-                        overview.deposit_usdt
-                          ? parseFloat(overview.deposit_usdt).toFixed(4)
-                          : "0"
-                      }
+                      overview={overview}
                     />
 
                     <CryptoCurrentBalance
