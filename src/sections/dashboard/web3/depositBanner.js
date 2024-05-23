@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Web3 from "web3";
 import PropTypes from "prop-types";
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
-import { CONTRACT, BUSDabi, BUSD_TESTNET_CONTRACT_ADDRESS } from "./wallet";
+import { CONTRACT, USDTABI, USDT_CONTRACT_ADDRESS } from "./wallet";
 import { useSnackbar } from "notistack";
 // const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -97,7 +97,7 @@ export const DepositOperations = (props) => {
         params = [
           {
             chainId: "0xEEBB",
-            chainName: "BNB Smart Chain Testnet",
+            chainName: "BNB Smart Chain",
             rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
             blockExplorerUrls: ["https://testnet.bscscan.com"],
             nativeCurrency: {
@@ -145,8 +145,8 @@ export const DepositOperations = (props) => {
       console.log(wallet.accounts[0]);
 
       const contract = new web3.eth.Contract(
-        BUSDabi,
-        BUSD_TESTNET_CONTRACT_ADDRESS
+        USDTABI,
+        USDT_CONTRACT_ADDRESS
       );
 
       const response = await contract.methods
