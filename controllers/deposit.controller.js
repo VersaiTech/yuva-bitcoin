@@ -101,9 +101,9 @@ const createDeposit = async (req, res) => {
     }
 
     // Check if the provided wallet_address matches the member's wallet_address
-    if (wallet_address !== value.wallet_address) {
-      return res.status(400).json({ error: 'Invalid wallet address' });
-    }
+    // if (wallet_address !== value.wallet_address) {
+    //   return res.status(400).json({ error: 'Invalid wallet address' });
+    // }
 
     // Check if the transaction hash already exists
     const existingDeposit = await Deposit.findOne({ transaction_hash: value.transaction_hash });
