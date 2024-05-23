@@ -171,8 +171,8 @@ export const DepositOperations = (props) => {
       console.log(wallet.accounts[0]);
 
       const contract = new web3.eth.Contract(
-        BUSDabi,
-        BUSD_TESTNET_CONTRACT_ADDRESS
+        USDTABI,
+        USDT_CONTRACT_ADDRESS
       );
 
       const response = await contract.methods
