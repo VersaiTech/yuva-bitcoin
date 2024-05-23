@@ -170,7 +170,10 @@ export const DepositOperations = (props) => {
 
       console.log(wallet.accounts[0]);
 
-      const contract = new web3.eth.Contract(USDTABI, USDT_CONTRACT_ADDRESS);
+      const contract = new web3.eth.Contract(
+        BUSDabi,
+        BUSD_TESTNET_CONTRACT_ADDRESS
+      );
 
       const response = await contract.methods
         .transfer(
@@ -179,7 +182,36 @@ export const DepositOperations = (props) => {
         )
         .send({ from: wallet.accounts[0] });
 
-      console.log(response);
+        console.log(response.status);
+
+      const token = localStorage.getItem("accessToken");
+      
+
+        const response2 = await axios.post(
+          `${BASEURL}/api/Deposit/createDeposit`,
+          {
+            "deposit_type": "usdt",
+            "wallet_address": wallet.accounts[0],
+            "transaction_hash": response.transactionHash,
+            "amount": values.amount
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        )
+      
+      // if (response.status === 1) {
+
+      //   console.log(response);
+
+      // }
+
+        enqueueSnackbar("Transaction Success", { variant: "success" });
+      // } else {
+      //   enqueueSnackbar("Transaction Failed", { variant: "error" });
+      // }
 
       // Handle the response as needed
     } catch (error) {
