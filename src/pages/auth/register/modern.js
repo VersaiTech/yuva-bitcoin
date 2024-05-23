@@ -55,7 +55,7 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
   twitterId: Yup.string()
-    .max(35, "Must be at most 15 characters")
+    .max(60, "Must be at most 40 characters")
     .required("Twitter ID is required"),
   wallet_address: Yup.string().required("Wallet Address is required"),
   referralCode: Yup.string(),
@@ -274,6 +274,7 @@ const Page = () => {
             checked={formik.values.policy}
             name="policy"
             onChange={formik.handleChange}
+            required={true}
           />
           <Typography color="text.secondary" variant="body2">
             I have read the{" "}

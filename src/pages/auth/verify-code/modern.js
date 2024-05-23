@@ -219,7 +219,10 @@ onSubmit={formik.handleSubmit}>
             onFocus={() => formik.setFieldTouched("code")}
             sx={{
               "& .MuiFilledInput-input": {
-                p: "14px",
+                p: {
+                  xs: "7px",  // 5px padding on small screens
+                  sm: "14px"  // 14px padding on larger screens
+                },
               },
             }}
             value={formik.values.code}
