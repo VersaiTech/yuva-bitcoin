@@ -35,7 +35,7 @@ const initialValues = {
   password: "",
   contactNo: "", // New field
   confirmPassword: "",
-  twitterId: "https://twitter.com/", // New field
+  twitterId: "", // New field
   wallet_address: "",
   referralCode: "",
   policy: false,
@@ -59,6 +59,9 @@ const validationSchema = Yup.object({
     .required("Twitter ID is required"),
   wallet_address: Yup.string().required("Wallet Address is required"),
   referralCode: Yup.string(),
+  policy: Yup.boolean()
+    .oneOf([true], 'Terms and Conditions must be accepted')
+    .required('Terms and Conditions must be accepted'),
 });
 
 const Page = () => {
@@ -77,12 +80,13 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       localStorage.setItem("email", values.email);
       try {
+        const fullTwitterId = `https://twitter.com/${values.twitterId}`;
         await signUp(
           values.member_name,
           values.email,
           values.password,
           values.contactNo,
-          values.twitterId,
+          fullTwitterId,
           values.wallet_address,
           values.referralCode
         );
@@ -292,6 +296,7 @@ const Page = () => {
           sx={{ mt: 3 }}
           type="submit"
           variant="contained"
+          disabled={formik.isSubmitting}
         >
           Register
         </Button>
