@@ -73,7 +73,7 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const CustomerListTable = (props) => { 
+export const CustomerListTable = (props) => {
   const {
     customers,
     customersCount,
@@ -188,7 +188,7 @@ export const CustomerListTable = (props) => {
                 />
               </TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>TwitterId</TableCell>
+              <TableCell>Twitter Id</TableCell>
               <TableCell>Coins</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Contact No.</TableCell>
@@ -239,12 +239,23 @@ export const CustomerListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{customer.twitterId}</TableCell>
+                  <TableCell>
+                  <Link
+                    href={`${customer.twitterId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {customer.twitterId}
+                  </Link>
+                  </TableCell>
                   <TableCell>{customer.coins}</TableCell>
                   <TableCell>
-                  <Typography variant="subtitle2" style={{ color: customer.isActive ? 'green' : 'red' }}>
-                    {customer.isActive ? "Active" : "Blocked"}
-                  </Typography>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ color: customer.isActive ? "green" : "red" }}
+                    >
+                      {customer.isActive ? "Active" : "Blocked"}
+                    </Typography>
                   </TableCell>
 
                   <TableCell>
