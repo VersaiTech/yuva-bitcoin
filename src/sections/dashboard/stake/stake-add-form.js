@@ -24,6 +24,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Alert,
 } from "@mui/material";
 import { paths } from "../../../paths";
 import { wait } from "../../../utils/wait";
@@ -163,10 +164,12 @@ export const CustomerEditForm = (props) => {
           </Button>
           
         </Stack>
-        <Typography variant="body2" color="error" sx={{ p: 3 }}>
-           Warning: Please stake coins carefully. Once you stake coins, you cannot
+        <Alert severity="warning" sx={{ p: 3 }}>
+          <Typography variant="body2">
+            Warning: Please stake coins carefully. Once you stake coins, you cannot
             withdraw them until the staking duration ends.
           </Typography>
+        </Alert>
       </Card>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Confirm Stake</DialogTitle>

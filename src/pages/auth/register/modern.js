@@ -241,7 +241,7 @@ const Page = () => {
             helperText={formik.touched.twitterId && formik.errors.twitterId}
             label="Twitter ID"
             name="twitterId"
-            placeholder="@username or add profile url"
+            placeholder="@twitter_username"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.twitterId}
