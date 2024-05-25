@@ -589,11 +589,13 @@ const getPendingTasks = async (req, res) => {
     const count = value.count || 10;
     const offset = (page_number - 1) * count;
 
+
     // Fetch tasks for the user with sorting and pagination
     const tasks = await CompletedTask.find({ status: 'pending' })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
+
 
     const totalPendingTasks = await CompletedTask.countDocuments({ status: 'pending' });
 
@@ -639,6 +641,8 @@ const getCompletedTasks = async (req, res) => {
       .skip(offset)
       .limit(count);
 
+
+    console.log("tasks", tasks)
     const totalCompletedTasks = await CompletedTask.countDocuments({ status: 'confirmed' });
 
     if (!tasks || tasks.length === 0) {
@@ -1250,7 +1254,7 @@ const getAllMembers = async (req, res) => {
       return res.status(200).json({
         status: false,
         message: "No members found",
-        totalMembers: totalMembers,
+        count: totalMembers,
         members: [],
       });
     }
@@ -1258,7 +1262,7 @@ const getAllMembers = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Members found",
-      totalMembers: totalMembers,
+      count: totalMembers,
       members: members,
     });
   } catch (error) {
@@ -1304,7 +1308,7 @@ async function getActiveMembers(req, res) {
       return res.status(200).json({
         status: false,
         message: "No active members found",
-        totalActiveMembers: totalActiveMembers,
+        count: totalActiveMembers,
         members: [],
       });
     }
@@ -1313,7 +1317,7 @@ async function getActiveMembers(req, res) {
     return res.status(200).json({
       status: true,
       message: "Active members found",
-      totalActiveMembers: totalActiveMembers,
+      count: totalActiveMembers,
       members: activeMembers,
     });
   } catch (error) {
@@ -1354,7 +1358,7 @@ async function getBlockedMembers(req, res) {
       return res.status(200).json({
         status: false,
         message: "No Blocked members found",
-        totalActiveMembers: totalActiveMembers,
+        count: totalActiveMembers,
         members: [],
       });
     }
@@ -1363,7 +1367,7 @@ async function getBlockedMembers(req, res) {
     return res.status(200).json({
       status: true,
       message: "Blocked members found",
-      totalActiveMembers: totalActiveMembers,
+      count: totalActiveMembers,
       members: activeMembers,
     });
   } catch (error) {
