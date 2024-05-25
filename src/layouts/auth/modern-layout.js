@@ -9,6 +9,7 @@ import { LogoAws } from "../../components/companies-logos/logo-aws";
 import { LogoAccenture } from "../../components/companies-logos/logo-accenture";
 import { LogoAtt } from "../../components/companies-logos/logo-att";
 import { paths } from "../../paths";
+import Image from "next/image"
 
 export const Layout = (props) => {
   const { children } = props;
@@ -129,11 +130,11 @@ export const Layout = (props) => {
               <Box
                 sx={{
                   display: "inline-flex",
-                  height: 24,
-                  width: 24,
+                  height: 34,
+                  width: 34,
                 }}
               >
-                <Logo />
+              <Image src="/assets/logos/yuvalogo (1).png" width={35} height={35}/>
               </Box>
               <Box
                 sx={{
