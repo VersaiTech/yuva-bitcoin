@@ -20,16 +20,15 @@ import { CryptoWallet } from "../../sections/dashboard/crypto/crypto-wallet";
 import { CryptoTransactions } from "../../sections/dashboard/crypto/crypto-transactions";
 import { CryptoUpgrade } from "../../sections/dashboard/crypto/crypto-upgrade";
 import { CryptoCurrentBalance } from "../../sections/dashboard/crypto/crypto-current-balance";
-import { OverviewDoneTasks } from '../../sections/dashboard/overview/overview-done-tasks';
-import { OverviewOpenTickets } from '../../sections/dashboard/overview/overview-open-tickets';
-import { OverviewPendingIssues } from '../../sections/dashboard/overview/overview-pending-issues';
+import { OverviewDoneTasks } from "../../sections/dashboard/overview/overview-done-tasks";
+import { OverviewOpenTickets } from "../../sections/dashboard/overview/overview-open-tickets";
+import { OverviewPendingIssues } from "../../sections/dashboard/overview/overview-pending-issues";
 // import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { OverviewEarnings } from "../../sections/dashboard/overview/overview-earnings";
 import { useTotalInvestment } from "./stake/[stakeId]";
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-
 
 const now = new Date();
 
@@ -38,30 +37,29 @@ const Page = () => {
   const theme = useTheme();
   const [overview, setOverview] = useState([]);
   const totalInvestment = useTotalInvestment();
-  const chartSeries = [
-     totalInvestment
-  ];
+  const chartSeries = [totalInvestment];
   usePageView();
   const OverviewData = async () => {
-    try{
-    const token = localStorage.getItem("accessToken");
-    const headers = {
-      Authorization: token,
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/admin/getUserOverview`, {
+        headers: headers,
+      });
+
+      // console.log(response.data.overview)
+      setOverview(response.data.overview);
+    } catch (error) {
+      console.error(error);
     }
-
-    const response = await axios.get(`${BASEURL}/admin/getUserOverview`, { headers: headers });
-
-    // console.log(response.data.overview)
-    setOverview(response.data.overview)
-  
-  } catch (error) {
-    console.error(error);
-  }
-}
+  };
 
   useEffect(() => {
     OverviewData();
-  }, []) 
+  }, []);
 
   return (
     <>
@@ -85,78 +83,40 @@ const Page = () => {
             }}
           >
             <Grid xs={12}>
-              <Stack direction="row"
-justifyContent="space-between"
-spacing={4}>
+              <Stack direction="row" justifyContent="space-between" spacing={4}>
                 <div>
                   <Typography variant="h4">Overview</Typography>
                 </div>
               </Stack>
             </Grid>
 
-            <Grid
-              xs={12}
-              md={4}
-            >
+            <Grid xs={12} md={4}>
               <OverviewOpenTickets amount={overview.userTasks} />
             </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
+            <Grid xs={12} md={4}>
               <OverviewDoneTasks amount={overview.completedTasks} />
             </Grid>
-            <Grid
-              xs={12}
-              md={4}
-            >
+            <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
 
-
-            
-            <Grid xs={12}
-md={12}>
+            <Grid xs={12} md={12}>
               <Stack
                 spacing={{
                   xs: 3,
                   lg: 4,
                 }}
               >
-            <OverviewEarnings overview={overview}   />
+                <OverviewEarnings overview={overview} />
 
                 <CryptoCurrentBalance
                   chartSeries={chartSeries}
-                  labels={["3 Month Investment", "6 Month Investment", "9 Month "]}
-                />
-                {/* <CryptoTransactions
-                  transactions={[
-                    {
-                      id: "3cc450e88286fdd4e220c719",
-                      amount: 0.1337,
-                      balance: 4805,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 43), 5),
-                        3
-                      ).getTime(),
-                      operation: "add",
-                      title: "Buy BTC",
-                    },
-                    {
-                      id: "6442793e96a90d4e584a19f7",
-                      amount: 0.2105,
-                      balance: 2344,
-                      coin: "BTC",
-                      createdAt: subDays(
-                        subHours(subMinutes(now, 32), 54),
-                        6
-                      ).getTime(),
-                      operation: "sub",
-                      title: "Sell BTC",
-                    },
+                  labels={[
+                    "3 Month Investment",
+                    "6 Month Investment",
+                    "9 Month ",
                   ]}
-                /> */}
+                />
               </Stack>
             </Grid>
             {/* <Grid xs={12} md={4}>

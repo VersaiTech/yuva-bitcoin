@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
@@ -16,6 +17,7 @@ import {
   CardHeader,
   CardContent,
   Divider,
+  CardActions,
 } from "@mui/material";
 import axios from "axios";
 import { usePageView } from "../../../hooks/use-page-view";
@@ -69,6 +71,32 @@ export const useTotalInvestment = () => {
 
 const Page = () => {
   const totalInvestment = useTotalInvestment();
+  
+  const [overview, setOverview] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const OverviewData = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/admin/getUserOverview`, {
+        headers: headers,
+      });
+
+      // console.log(response.data.overview)
+      setOverview(response.data.overview);
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    OverviewData();
+  }, []);
 
   usePageView();
 
@@ -127,60 +155,120 @@ const Page = () => {
                       </Typography>
                       <Divider />
                       <CardHeader
-                       subheader={
-                        <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'space-around' }}>
-                          <img src="/assets/logos/investment.png" style={{ width: 70 }} alt="investment" />
-                          <div style={{ display: 'flex', alignItems: 'center' , justifyContent: 'center' }}>
-                          {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-                          <Typography variant="h3" sx ={{ marginLeft: 1}}>
-                            {"" + totalInvestment || 0}
-
-                          </Typography>
+                        subheader={
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <img
+                              src="/assets/logos/investment.png"
+                              style={{ width: 70 }}
+                              alt="investment"
+                            />
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {imageURL && (
+                                <Image
+                                  src={imageURL}
+                                  alt="Image"
+                                  width={30}
+                                  height={30}
+                                />
+                              )}{" "}
+                              {/* Render image if imageURL is available */}
+                              <Typography variant="h3" sx={{ marginLeft: 1 }}>
+                                {"" + totalInvestment || 0}
+                              </Typography>
+                            </div>
                           </div>
-                        </div>
-                      }
+                        }
                       />
                       <CardContent sx={{ padding: 0 }}>
                         {" "}
                         {/* Remove all padding from the CardContent */}
                         <Divider sx={{ mb: 2 }} />
-                        {/* <Stack
-                          alignItems="flex-start"
-                          spacing={1}
-                          sx={{ mt: 2 }}
-                          display={"flex"}
-                          direction={"row"}
-                          justifyContent={"space-around"}
-                        >
-                          <Link href={paths.dashboard.deposits.index}>
-                            <Button color="primary" variant="contained">
-                              Add money to wallet
-                            </Button>
-                          </Link>
-                          <Link href={paths.dashboard.withdraw.create}>
-                            <Button
-                              //want to color orange
-                              sx={{
-                                backgroundColor: "orange",
-                              }}
-                              variant="contained"
+                        <Card>
+                          <CardContent>
+                            <Stack
+                            sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-around"
+                          }}
                             >
-                              Withdraw funds
-                            </Button>
-                          </Link>
-                        </Stack> */}
+                              <img
+                                src="/Wallet.png " // Replace with the path to your image
+                                alt="Your Image"
+                                style={{
+                                  width: 100, // Adjust the width of the image as needed
+                                  height: 100, // Adjust the height of the image as needed
+                                  objectFit: "contain", // Ensure the image covers the entire container
+                                  zIndex: 1, // Ensure the image is above other content
+                                }}
+                              />
+                              <Box sx={{ flexGrow: 1 }}>
+                                <Stack spacing={1}>
+                                {loading ? (
+                                  // Show a loading indicator or placeholder while data is loading
+                                  <Typography>Loading...</Typography>
+                                ) : (
+                                  // Render user balance when data is available
+                                  <Typography variant="h4">
+                                    {overview && parseFloat(overview.coins) + " Yuva Bitcoin" || "0 Yuva Bitcoin"}
+                                  </Typography>
+                                )}
+                                  <Typography variant="h6">
+                                    Your Wallet Balance
+                                  </Typography>
+                                </Stack>
+                              </Box>
+                            </Stack>
+                          </CardContent>
+                        </Card>
                       </CardContent>
                     </Card>
                   </Container>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  sx={{ paddingRight: 2, paddingLeft: 2 }}
+                >
                   <InterestCalculator />
                 </Grid>
               </Grid>
             </Stack>
-            <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
-            <CustomerWithdrawForm />
+            <Grid container spacing={4} sx={{ pl: 0, mb: 4 }}>
+              {/* Add Stake Card */}
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{ paddingRight: 2, paddingLeft: 2 }}
+              >
+                <CustomerEditForm /> {/* handleSubmit={handleSubmit} */}
+              </Grid>
+
+              {/* Withdraw Stake Card */}
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{ paddingRight: 2, paddingLeft: 2 }}
+              >
+                <CustomerWithdrawForm />
+              </Grid>
+            </Grid>
           </Stack>
         </Container>
       </Box>

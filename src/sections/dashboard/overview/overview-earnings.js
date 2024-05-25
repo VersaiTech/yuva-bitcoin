@@ -315,7 +315,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {parseFloat(overview.coins) || 0}
+                    {overview && parseFloat(overview.coins) + " Yuva Bitcoin" || 0 + " Yuva Bitcoin"}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance
