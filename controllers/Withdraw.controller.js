@@ -37,13 +37,13 @@ async function sendOTP(email, otp) {
       port: 465,
       secure: true, // Set to true for a secure connection
       auth: {
-        user: 'noreply@yuvabitcoin.com', // Your Gmail email address
-        pass: 'Noreply@123@YB' // Your Gmail password
+        user: 'no-reply@yuvabitcoin.com', // Your Gmail email address
+        pass: 'Yuvabitcoin@1234' // Your Gmail password
       }
     });
 
     const mailOptions = {
-      from: 'noreply@yuvabitcoin.com',
+      from: 'no-reply@yuvabitcoin.com',
       to: email,
       subject: 'OTP Verification',
       // text: `Your OTP for Withdrawal Request is: ${otp}`
