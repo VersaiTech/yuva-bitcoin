@@ -55,8 +55,9 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
   twitterId: Yup.string()
-    .max(60, "Must be at most 40 characters")
-    .required("Twitter ID is required"),
+    .matches(/^[a-zA-Z0-9_]+$/, 'Please enter a valid Twitter username without "@"')
+    .max(60, 'Must be at most 60 characters')
+    .required('Twitter ID is required'),
   wallet_address: Yup.string().required("Wallet Address is required"),
   referralCode: Yup.string(),
   policy: Yup.boolean()
@@ -241,7 +242,7 @@ const Page = () => {
             helperText={formik.touched.twitterId && formik.errors.twitterId}
             label="Twitter ID"
             name="twitterId"
-            placeholder="@twitter_username"
+            placeholder="username"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.twitterId}
