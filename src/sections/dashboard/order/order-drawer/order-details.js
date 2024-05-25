@@ -464,7 +464,11 @@ export const OrderDetails = (props) => {
             disableGutters
             divider
             label="Task Description "
-            value={order.description}
+            value={
+              <Typography sx={{ whiteSpace: "pre-line" }}>
+                {order.description}
+              </Typography>
+            }
           />
           <PropertyListItem
             align={align}
