@@ -163,23 +163,21 @@ const createDeposit = async (req, res) => {
         if (referralMember) {
           referralMember.coins += 5;
           await referralMember.save();
+          if (member.isReferred === true) {
+            const referralHistory = new ReferralHistory({
+              user_id: referralMember.member_user_id,
+              user_name: referralMember.member_name,
+              // user_earned: referralMember.coins,
+              user_earned: 5,
+              referral_code: member.referralCode,
+              referral_user_name: member.member_name,
+              referral_user: member.member_user_id,
+              referral_user_isRefered: member.isReferred
+            })
+            await referralHistory.save();
+          }
         }
       }
-    }
-    const referralMember = await Member.findOne({ member_user_id: member.referralCode });
-
-    const referralHistory = new ReferralHistory({
-      user_id: referralMember.member_user_id,
-      user_name: referralMember.member_name,
-      // user_earned: referralMember.coins,
-      user_earned: 5,
-      referral_code: member.referralCode,
-      referral_user_name: member.member_name,
-      referral_user: member.member_user_id,
-      referral_user_isRefered: member.isReferred
-    })
-    if (member.isReferred === true) {
-      await referralHistory.save();
     }
 
     // Save the updated member object to the database
