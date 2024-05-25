@@ -596,6 +596,20 @@ const getPendingTasks = async (req, res) => {
       .skip(offset)
       .limit(count);
 
+    console.log("tasks", tasks)
+    // Extract userIds from tasks
+    const userIds = tasks.map(task => task.userId);
+    console.log("userIds", userIds)
+
+
+    // Fetch user details for each userId
+    const users = await Member.find({ member_user_id: { $in: userIds } });
+    console.log("users", users)
+
+    //fetch twitterId from users data
+    const twitterIds = users.map(user => user.twitterId);
+    console.log("twitterIds", twitterIds)
+
 
     const totalPendingTasks = await CompletedTask.countDocuments({ status: 'pending' });
 
@@ -604,6 +618,7 @@ const getPendingTasks = async (req, res) => {
         status: false,
         message: "No tasks found for the user",
         totalPendingTasks: totalPendingTasks,
+        twitterIds: twitterIds,
         tasks: [],
       });
     }
@@ -612,6 +627,7 @@ const getPendingTasks = async (req, res) => {
       status: true,
       message: "Tasks found for the user",
       totalPendingTasks: totalPendingTasks,
+      twitterIds: twitterIds,
       tasks: tasks,
     });
   } catch (error) {
@@ -643,6 +659,19 @@ const getCompletedTasks = async (req, res) => {
 
 
     console.log("tasks", tasks)
+    // Extract userIds from tasks
+    const userIds = tasks.map(task => task.userId);
+    console.log("userIds", userIds)
+
+
+    // Fetch user details for each userId
+    const users = await Member.find({ member_user_id: { $in: userIds } });
+    console.log("users", users)
+
+    //fetch twitterId from users data
+    const twitterIds = users.map(user => user.twitterId);
+    console.log("twitterIds", twitterIds)
+
     const totalCompletedTasks = await CompletedTask.countDocuments({ status: 'confirmed' });
 
     if (!tasks || tasks.length === 0) {
@@ -650,6 +679,7 @@ const getCompletedTasks = async (req, res) => {
         status: false,
         message: "No tasks found for the user",
         totalCompletedTasks: totalCompletedTasks,
+        twitterIds: twitterIds,
         tasks: [],
       });
     }
@@ -658,6 +688,7 @@ const getCompletedTasks = async (req, res) => {
       status: true,
       message: "Tasks found for the user",
       totalCompletedTasks: totalCompletedTasks,
+      twitterIds: twitterIds,
       tasks: tasks,
     });
   } catch (error) {

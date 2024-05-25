@@ -22,7 +22,7 @@ const completedTaskSchema = new mongoose.Schema({
     description: { type: String, required: true, ref: 'Task' },
     link: { type: String, required: true, ref: 'Task' },
     coins: { type: Number, required: true, ref: 'Task' },
-    twitterId: { type: String, required: true, ref: 'Member' },
+    // twitterId: { type: String, required: true, ref: 'Member' },
     dateCompleted: { type: Date, default: Date.now },
     status: {
         type: String,
