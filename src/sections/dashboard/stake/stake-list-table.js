@@ -302,6 +302,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
+import { Chip } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
 import { paths } from '../../../paths';
 import { getInitials } from '../../../utils/get-initials';
@@ -440,13 +441,13 @@ export const StakeListTable = (props) => {
                 Name
               </TableCell>
               <TableCell>
-              stakingDuration
+              staking Duration
               </TableCell>
               <TableCell>
               Amount
               </TableCell>
               <TableCell>
-              interestCredited
+              Interest Credited
               </TableCell>
               <TableCell>
               Date
@@ -524,12 +525,16 @@ export const StakeListTable = (props) => {
                     {customer.investment}
                   </TableCell>
                   <TableCell>
-                  {customer.interestCredited ? 'True' : 'False'}
-                  </TableCell>
+                  {customer.interestCredited ? (
+                    <Chip label="Credited" color="success" />
+                  ) : (
+                    <Chip label="Not Credited" color="error" />
+                  )}
+                </TableCell>
                   
                   <TableCell>
                     <Typography variant="subtitle2">
-                      {formatDate(customer.sys_date)}
+                    {customer.sys_date ? new Date(customer.sys_date).toLocaleDateString() : 'N/A'}
                     </Typography>
                   </TableCell>
                   <TableCell>
