@@ -90,7 +90,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.members,
-          customersCount: response.count,
+          customersCount: response.data.count,
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
         });
@@ -101,7 +101,7 @@ const useCustomers = (search) => {
     } catch (err) {
       setState({
         customers: [],
-        customersCount: [],
+        customersCount: 0,
         activeUsers: [],
         blockedUsers: [],
       });
@@ -243,8 +243,8 @@ const Page = () => {
               />
               <CustomerListTable
                 // customers={customers}
-                // customersCount={customersCount}
-                customersCount={0}
+                customersCount={customersCount}
+                // customersCount={0}
                 customers={
                   currentTab === "all"
                     ? customers

@@ -135,8 +135,8 @@ const Page = () => {
 
               <Grid item xs={6} md={3}>
                 <OverviewRegisteredMembers
-                  amount={dummy}
-                  fetchDummyData={fetchDummyData}
+                  amount={overview.allMembers}
+                  // fetchDummyData={overview.allMembers}
                 />
               </Grid>
               <Grid item xs={6} md={3}>

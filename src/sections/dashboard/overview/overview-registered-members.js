@@ -22,7 +22,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export const OverviewRegisteredMembers = (props) => {
-  const { amount, fetchDummyData } = props;
+  const { amount} = props;
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
@@ -30,6 +30,8 @@ export const OverviewRegisteredMembers = (props) => {
   const handleClick = () => {
     setOpenDataForm(true);
   };
+
+  console.log(amount)
 
   const handleDataSubmit = async (data) => {
     try {
@@ -85,7 +87,7 @@ export const OverviewRegisteredMembers = (props) => {
             Registered Members
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {totalRegisteredMembers}
+            {amount}
           </Typography>
         </Box>
       </Stack>

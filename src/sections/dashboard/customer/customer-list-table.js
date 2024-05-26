@@ -83,6 +83,7 @@ export const CustomerListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
+  console.log(customersCount)
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
     useSelectionModel(customers);
 
