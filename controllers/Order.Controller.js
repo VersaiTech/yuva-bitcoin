@@ -33,8 +33,8 @@ const createOrder = async (req, res) => {
             return res.status(400).json({ error: 'Amount cannot be negative' });
         }
 
-        //minimum yuva amount is 500
-        if (coin === 'yuva' && amount < 500) {
+        //minimum yuva amount is 100
+        if (coin === 'yuva' && amount < 100) {
             return res.status(400).json({ error: 'Minimum amount is 500' });
         }
 

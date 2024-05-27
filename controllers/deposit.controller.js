@@ -1,6 +1,7 @@
 const Deposit = require('../models/deposit');
 const Coin = require('../models/Coin');
 const Member = require('../models/memberModel');
+const ConvertHistory = require("../models/converHistoryModel")
 const ReferralHistory = require('../models/referralModel');
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
@@ -198,11 +199,31 @@ const createDeposit = async (req, res) => {
 
 
 async function getAllDepositsForAdmin(req, res) {
-  try {
-    // Retrieve all deposits
-    const allDeposits = await Deposit.find();
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+  const { error, value } = Schema.validate(req.params);
 
-    res.status(200).json(allDeposits);
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+    const allDepositsTotal = await Deposit.find().sort({ createdAt: -1 })
+    const allDeposits = await Deposit.find().sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!allDeposits || allDeposits.length === 0) {
+      return res.status(200).json({ status: false, message: "No deposit found", allDeposits: [] });
+    }
+
+    return res.status(200).json({ status: true, message: "Deposit found", allDeposits: allDeposits, allDepositsTotal: allDepositsTotal.length });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -212,14 +233,34 @@ async function getAllDepositsForAdmin(req, res) {
 
 
 async function getDepositsForUser(req, res) {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   const userId = req.user.member_user_id; // Assuming you're passing userId as a route parameter
 
   try {
-    // Retrieve deposits for the specific user
-    const userDeposits = await Deposit.find({ member: userId });
-    console.log('User Deposits:', userDeposits);
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
 
-    res.status(200).json(userDeposits);
+    // Retrieve deposits for the specific user
+    const userDepositsTotal = await Deposit.find({ member: userId });
+    const userDeposits = await Deposit.find({ member: userId }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!userDeposits || userDeposits.length === 0) {
+      return res.status(200).json({ status: false, message: "No deposit found", userDeposits: [] });
+    }
+
+    return res.status(200).json({ status: true, message: "Deposit found", userDeposits: userDeposits, userDepositsTotal: userDepositsTotal.length });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -280,17 +321,102 @@ async function convertDepositToCoins(req, res) {
     // Save the updated member object to the database
     await member.save();
 
-    res.status(200).json({ message: 'Deposit converted to coins successfully', coinAmount, member });
+    //if conversion is successful then that data will be saved in ConvertHistory db and i want to show that data that which method is converted to which coin
+
+    const convertHistory = await ConvertHistory.create({
+      member: member.member_user_id,
+      name: member.member_name,
+      wallet_address: member.wallet_address,
+      transaction_hash: Deposit.transaction_hash,
+      deposit_type: req.body.deposit_type,
+      amount: req.body.amount,
+      coin_amount: coinAmount
+    })
+
+    await convertHistory.save();
+
+    return res.status(200).json({ message: 'Deposit converted to coins successfully', coinAmount, member });
   } catch (error) {
     console.error('Error converting deposit to coins:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+async function convertHistoryUser(req, res) {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+
+    const userId = req.user.member_user_id;
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    const userDepositsTotal = await ConvertHistory.find({ member: userId });
+    const userDeposits = await ConvertHistory.find({ member: userId })
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+
+    if (!userDeposits || userDeposits.length === 0) {
+      return res.status(200).json({ status: false, message: "No deposit found", userDeposits: [] });
+    }
+
+    return res.status(200).json({ status: true, message: "Deposit found", userDeposits: userDeposits, userDepositsTotal: userDepositsTotal.length });
+
+  } catch (error) {
+    console.error('Error retrieving user deposits:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+async function convertHistoryAdmin(req, res) {
+  const Schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+  const { error, value } = Schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
+  try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
+    const userDepositsTotal = await ConvertHistory.find();
+    const userDeposits = await ConvertHistory.find()
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+
+    if (!userDeposits || userDeposits.length === 0) {
+      return res.status(200).json({ status: false, message: "No deposit found", userDeposits: [] });
+    }
+
+    return res.status(200).json({ status: true, message: "Deposit found", userDeposits: userDeposits, userDepositsTotal: userDepositsTotal.length });
+
+  } catch (error) {
+    console.error('Error retrieving user deposits:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
 
-
 module.exports = {
-  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins
+  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins, convertHistoryUser, convertHistoryAdmin
 };
 
 
