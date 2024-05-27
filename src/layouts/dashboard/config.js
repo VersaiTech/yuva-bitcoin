@@ -80,6 +80,15 @@ export const getSections = (t) => [
         //   }
         // ]
       },
+      {
+        title: t(tokens.nav.convert),
+        path: paths.dashboard.convert.index,
+        icon: (
+          <SvgIcon fontSize="small">
+            <EarningsIcon />
+          </SvgIcon>
+        ),
+      },
     ],
   },
   {

@@ -60,6 +60,9 @@ export const paths = {
       index: '/dashboard/earnings',
       details: '/dashboard/earnings'
     },
+    convert:{
+      index: '/dashboard/convert',
+    },
     deposits:{
       index: '/dashboard/deposits',
       depositsHistory: '/dashboard/deposits/depositHistory'

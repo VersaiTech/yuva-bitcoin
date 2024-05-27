@@ -3,6 +3,7 @@ export const tokens = {
     languageChanged: 'common.languageChanged'
   },
   nav: {
+    convert: 'nav.convert',
     academy: 'nav.academy',
     news:'nav.news',
     support:'nav.support',
