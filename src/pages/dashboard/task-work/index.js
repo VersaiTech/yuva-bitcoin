@@ -42,20 +42,19 @@ const useSearch = () => {
 const useCustomers = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
-    customers: [],
-    customersCount: 0,
+    pending: [],
+    completed: [],
+    rejected: [],
   });
 
   const getCustomers = useCallback(async () => {
     try {
-      // const response = await customersApi.getCustomers(search);
       const token = localStorage.getItem("accessToken");
-
       const headers = {
         Authorization: token,
       };
 
-      const PendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
+      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
         headers: headers,
       });
 
@@ -63,62 +62,68 @@ const useCustomers = (search) => {
         `${BASEURL}/admin/getCompletedTasks`,
         { headers: headers }
       );
-      console.log(PendingTasks.data.tasks);
+
+      const rejectedTasks = await axios.get(
+        `${BASEURL}/admin/getRejectedTasks`,
+        { headers: headers }
+      );
+
+      console.log(pendingTasks.data.tasks);
       console.log(completedTasks.data.tasks);
+      console.log(rejectedTasks.data.tasks);
 
       if (isMounted()) {
         setState({
-          pending: PendingTasks.data.tasks,
+          pending: pendingTasks.data.tasks,
           completed: completedTasks.data.tasks,
+          rejected: rejectedTasks.data.tasks,
         });
       }
     } catch (err) {
       console.error(err);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
   useEffect(() => {
-    console.log("calling useeffect");
+    console.log("calling useEffect");
     getCustomers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getCustomers]);
 
   return state;
 };
 
-const Page = () => {
 
+const Page = () => {
   const { search, updateSearch } = useSearch();
   const { completed, rejected, pending } = useCustomers(search);
 
-  const [currentTab, setCurrentTab] = useState('pending');
-
-  const [customersCount, setCustomersCount] = useState(5);
+  const [currentTab, setCurrentTab] = useState("pending");
 
   const [currentData, setCurrentData] = useState([]);
 
   usePageView();
 
   useEffect(() => {
-
     if (search?.filters?.query) {
       setCurrentData(
-        currentData?.filter((customer) => {
-          return customer.taskName.toLowerCase().includes(search.filters.query);
-        })
+        currentData?.filter((customer) =>
+          customer.taskName.toLowerCase().includes(search.filters.query)
+        )
       );
     }
-
-    // Set current tab with sorted and filtered data
-    // setCurrentTab(currentData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   useEffect(() => {
-    const data = currentTab === "pending" ? pending : completed;
+    let data;
+    if (currentTab === "pending") {
+      data = pending;
+    } else if (currentTab === "completed") {
+      data = completed;
+    } else if (currentTab === "rejected") {
+      data = rejected;
+    }
     setCurrentData(data);
-  }, [currentTab, completed, pending]);
+  }, [currentTab, completed, pending, rejected]);
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -130,10 +135,8 @@ const Page = () => {
     [updateSearch]
   );
 
-  
   const handleSortChange = useCallback(
     (sort) => {
-      console.log(sort.sortBy);
       updateSearch((prevState) => ({
         ...prevState,
         sortBy: sort.sortBy,
@@ -177,18 +180,12 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack direction="row" 
-            justifyContent="space-between"
-             spacing={4}>
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">Approve Task</Typography>
-                <Stack alignItems="center" 
-                direction="row" 
-                spacing={1}></Stack>
+                <Stack alignItems="center" direction="row" spacing={1}></Stack>
               </Stack>
-              <Stack alignItems="center" 
-              direction="row" 
-              spacing={3}>
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
                   component={NextLink}
                   startIcon={
@@ -228,16 +225,17 @@ const Page = () => {
                 sortDir={search.sortDir}
                 completed={completed}
                 pending={pending}
+                rejected={rejected}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
               <WorkListTable
-                currentTab = {currentTab}
+                currentTab={currentTab}
                 customers={currentData ? currentData : []}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={customersCount}
-                page={5}
+                rowsPerPage={search.rowsPerPage}
+                page={search.page}
               />
             </Card>
           </Stack>
@@ -250,3 +248,5 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
+
+

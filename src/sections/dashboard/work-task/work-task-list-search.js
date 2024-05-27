@@ -25,11 +25,11 @@ const tabs = [
     value: 'completed',
     key: 2
   }
-  // ,
-  // {
-  //   label: 'Returning',
-  //   value: 'isReturning'
-  // }
+  ,
+  {
+    label: 'Rejected Task',
+    value: 'rejected',
+  }
 ];
 
 const sortOptions = [

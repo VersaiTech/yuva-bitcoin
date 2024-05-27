@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import NextLink from "next/link";
-import numeral from "numeral";
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
@@ -30,6 +29,7 @@ import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
 import axios from "axios";
 import { SeverityPill } from "../../../components/severity-pill";
+
 const statusMap = {
   complete: "success",
   pending: "info",
@@ -81,7 +81,7 @@ export const WorkListTable = (props) => {
     customers,
     customersCount,
     onPageChange,
-    currentTab, //import form task-list-table
+    currentTab, //import from task-list-table
     onRowsPerPageChange,
     page,
     rowsPerPage,
@@ -175,9 +175,6 @@ export const WorkListTable = (props) => {
           >
             Delete
           </Button>
-          {/* <Button color="inherit" size="small">
-            Edit
-          </Button> */}
         </Stack>
       )}
       <Scrollbar>
@@ -193,12 +190,11 @@ export const WorkListTable = (props) => {
               </TableCell>
               <TableCell>User Name</TableCell>
               <TableCell>Task Id</TableCell>
-              {/* <TableCell>Coins</TableCell> */}
-              <TableCell> Description</TableCell>
+              <TableCell>Description</TableCell>
               <TableCell>Link</TableCell>
-              {currentTab !== 'completed' && (
-            <TableCell align="right">Edit Task</TableCell>
-          )}
+              {currentTab !== 'completed' && currentTab !== 'rejected' && (
+                <TableCell align="right">Edit Task</TableCell>
+              )}
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -225,29 +221,13 @@ export const WorkListTable = (props) => {
                   </TableCell>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                      {/* <Avatar
-                        src={customer.name}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar> */}
                       <div>
-                        {/* <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={`${paths.dashboard.newtask.edit}${customer.taskId}/edit`}
-                          variant="subtitle2"
-                        > */}
                         {customer.name}
-                        {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
                           {"id:" + customer.userId}
                         </Typography>
                         <Typography color="text.secondary" variant="body2">
-                          {"twitter id :"+customer.twitterId}
+                          {"twitter id :" + customer.twitterId}
                         </Typography>
                       </div>
                     </Stack>
@@ -256,7 +236,6 @@ export const WorkListTable = (props) => {
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <div>
                         {customer.taskName}
-                        {/* </Link> */}
                         <Typography color="text.secondary" variant="body2">
                           {"taskId:" + customer.taskId}
                         </Typography>
@@ -264,9 +243,8 @@ export const WorkListTable = (props) => {
                           {"coin:" + customer.coins}
                         </Typography>
                       </div>
-                    </Stack>{" "}
+                    </Stack>
                   </TableCell>
-                  {/* <TableCell>{customer.coins}</TableCell> */}
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
@@ -276,24 +254,22 @@ export const WorkListTable = (props) => {
                         rel="noopener noreferrer"
                       >
                         {customer.link.substring(0, 20)}{" "}
-                        {/* Displaying only the first 20 characters */}
-                        {customer.link.length > 20 && "..."}{" "}
-                        {/* Adding ellipsis if link is longer than 20 characters */}
+                        {customer.link.length > 20 && "..."}
                       </Link>
                     </Typography>
                   </TableCell>
-                  {currentTab !== 'completed' && (
-                <TableCell align="right">
-                  <IconButton
-                    component={NextLink}
-                    href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit?userId=${customer.userId}`}
-                  >
-                    <SvgIcon>
-                      <Edit02Icon />
-                    </SvgIcon>
-                  </IconButton>
-                </TableCell>
-              )}
+                  {currentTab !== 'completed' && currentTab !== 'rejected' && (
+                    <TableCell align="right">
+                      <IconButton
+                        component={NextLink}
+                        href={`${paths.dashboard.taskwork.edit}${customer.taskId}/edit?userId=${customer.userId}`}
+                      >
+                        <SvgIcon>
+                          <Edit02Icon />
+                        </SvgIcon>
+                      </IconButton>
+                    </TableCell>
+                  )}
                   <TableCell>
                     <SeverityPill
                       color={statusMap[customer.status] || "warning"}
@@ -307,17 +283,7 @@ export const WorkListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
-      {/* <TablePagination
-        component="div"
-        count={customersCount}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      /> */}
 
-      {/* Delete confirmation dialog */}
       <Dialog
         open={confirmDeleteDialogOpen}
         onClose={() => setConfirmDeleteDialogOpen(false)}
@@ -332,10 +298,7 @@ export const WorkListTable = (props) => {
           <Button onClick={() => setConfirmDeleteDialogOpen(false)}>
             Cancel
           </Button>
-          <Button
-            onClick={() => handleDeleteConfirm(customers.taskId)}
-            color="error"
-          >
+          <Button onClick={handleDeleteConfirm} color="error">
             Delete
           </Button>
         </DialogActions>
@@ -346,7 +309,7 @@ export const WorkListTable = (props) => {
 
 WorkListTable.propTypes = {
   customers: PropTypes.array.isRequired,
-  // customersCount: PropTypes.number.isRequired,
+  customersCount: PropTypes.number,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
