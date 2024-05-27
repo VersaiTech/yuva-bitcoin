@@ -18,10 +18,11 @@ import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { DepositListSearch } from "../../../sections/dashboard/depostis/deposits-list-search";
-import { DepositListTable } from "../../../sections/dashboard/depostis/deposits-list-table";
+
 import axios from "axios";
 import { logs } from "../../../api/customers/data";
+import { ConvertListSearch } from "../../../sections/dashboard/convert/convert-list-search";
+import { ConvertListTable } from "../../../sections/dashboard/convert/convert-list-table";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -60,15 +61,15 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/api/Deposit/getDepositsForUser`,
+        `${BASEURL}/api/Deposit/convertHistoryUser`,
         { headers: headers }
       );
       console.log(response.data);
 
       if (isMounted()) {
         setState({
-          customers: response.data.userDeposits || [],
-          customersCount: response.count,
+          customers: response.data.userDeposits,
+          customersCount: response.data.userDepositsTotal,
           // pending: pendingTasks.data,
           // completed: completedTasks.data,
         });
@@ -160,7 +161,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Deposit History</Typography>
+                <Typography variant="h4">Convert  History</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   {/* <Button
                     color="inherit"
@@ -202,7 +203,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <DepositListSearch
+              <ConvertListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortDir={search.sortDir}
@@ -211,7 +212,7 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
               />
-              <DepositListTable
+              <ConvertListTable
                 // customers={customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}

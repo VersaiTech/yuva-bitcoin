@@ -4,6 +4,7 @@ export const tokens = {
   },
   nav: {
     convert: 'nav.convert',
+    convertHistory: 'nav.convertHistory',
     academy: 'nav.academy',
     news:'nav.news',
     support:'nav.support',

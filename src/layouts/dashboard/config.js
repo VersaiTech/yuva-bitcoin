@@ -82,13 +82,24 @@ export const getSections = (t) => [
       },
       {
         title: t(tokens.nav.convert),
-        path: paths.dashboard.convert.index,
         icon: (
           <SvgIcon fontSize="small">
             <EarningsIcon />
           </SvgIcon>
         ),
+         items: [
+          {
+            title: t(tokens.nav.convert),
+            path: paths.dashboard.convert.index,
+
+          },
+          {
+            title: t(tokens.nav.convertHistory),
+            path: paths.dashboard.convert.convertHistory
+          }
+        ]
       },
+
     ],
   },
   {
