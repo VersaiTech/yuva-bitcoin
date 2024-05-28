@@ -1507,4 +1507,70 @@ function generateRandomNumber() {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus };
+
+async function countMembersWithCoins(req, res) {
+  try {
+    const membersWithCoins = await Member.aggregate([
+      { $match: { coins: { $gte: 1 } } },
+      {
+        $group: {
+          _id: null,
+          totalCoins: { $sum: '$coins' },
+          totalUsdt: { $sum: '$deposit_usdt' },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const result = {
+      totalCoins: 0,
+      totalUsdt: 0,
+      count: 0
+    };
+
+    if (membersWithCoins.length > 0) {
+      const { totalCoins, totalUsdt, count } = membersWithCoins[0];
+      result.totalCoins = totalCoins;
+      result.totalUsdt = totalUsdt
+      result.count = count;
+    }
+
+    return res.status(200).json({ status: true, message: "Members with coins", data: result });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+
+
+async function countMemberWithStakeCoins(req, res) {
+  try {
+    const membersWithStakeCoins = await Stake.aggregate([
+      { $match: { stake_type: "Wallet" } },
+      {
+        $group: {
+          _id: null,
+          totalStakeCoins: { $sum: '$investment' },
+          count: { $sum: 1 }
+        }
+      }]);
+    const result = {
+      totalStakeCoins: 0,
+      count: 0
+    };
+    if (membersWithStakeCoins.length > 0) {
+      const { totalStakeCoins, count } = membersWithStakeCoins[0];
+      result.totalStakeCoins = totalStakeCoins;
+      result.count = count;
+    }
+
+    return res.status(200).json({ status: true, message: "Members with stake coins", data: result });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins };
