@@ -23,7 +23,7 @@ import {
 
 const logoMap = {
   USDT: "/assets/logos/logo-usdt.svg",
-  YuvaBitcoin: "/assets/logos/logo-eth.svg",
+  YuvaBitcoin: "/assets/logos/yuvalogo.png",
 };
 
 export const DepositOperations = (props) => {
