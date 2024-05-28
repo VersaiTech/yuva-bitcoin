@@ -82,6 +82,7 @@ const useCustomers = (search) => {
         });
       }
       console.log(customers.data.tasks);
+      console.log(customersCount);
     } catch (err) {
       // console.error(err.response.datax);
     }

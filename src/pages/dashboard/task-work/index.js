@@ -45,7 +45,9 @@ const useCustomers = (search) => {
     pending: [],
     completed: [],
     rejected: [],
+    customersCount: 0,
   });
+  const { page, rowsPerPage } = search;
 
   const getCustomers = useCallback(async () => {
     try {
@@ -54,29 +56,34 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasks`, {
+      const pendingTasks = await axios.get(`${BASEURL}/admin/getPendingTasks/${page + 1}/${rowsPerPage}`, {
         headers: headers,
       });
 
       const completedTasks = await axios.get(
-        `${BASEURL}/admin/getCompletedTasks`,
+        `${BASEURL}/admin/getCompletedTasks/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
       const rejectedTasks = await axios.get(
-        `${BASEURL}/admin/getRejectedTasks`,
+        `${BASEURL}/admin/getRejectedTasks/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
       console.log(pendingTasks.data.tasks);
       console.log(completedTasks.data.tasks);
       console.log(rejectedTasks.data.tasks);
+      console.log(pendingTasks)
+      console.log(completedTasks)
+      console.log(rejectedTasks)
+
 
       if (isMounted()) {
         setState({
           pending: pendingTasks.data.tasks,
           completed: completedTasks.data.tasks,
           rejected: rejectedTasks.data.tasks,
+          customersCount: pendingTasks.data.totalPendingTasks + completedTasks.data.totalCompletedTasks + rejectedTasks.data.totalRejectedTasks,
         });
       }
     } catch (err) {
@@ -85,7 +92,7 @@ const useCustomers = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-    console.log("calling useEffect");
+    console.log("calling useEffect"); 
     getCustomers();
   }, [getCustomers]);
 
@@ -95,7 +102,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { completed, rejected, pending } = useCustomers(search);
+  const { completed, rejected, pending ,customersCount } = useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("pending");
 
@@ -158,6 +165,7 @@ const Page = () => {
 
   const handleRowsPerPageChange = useCallback(
     (event) => {
+      console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
@@ -230,6 +238,8 @@ const Page = () => {
                 setCurrentTab={setCurrentTab}
               />
               <WorkListTable
+                customersCount={customersCount}
+
                 currentTab={currentTab}
                 customers={currentData ? currentData : []}
                 onPageChange={handlePageChange}

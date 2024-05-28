@@ -283,6 +283,15 @@ export const WorkListTable = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
+      <TablePagination
+        component="div"
+        count={customersCount}
+        onPageChange={onPageChange}
+        onRowsPerPageChange={onRowsPerPageChange}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
 
       <Dialog
         open={confirmDeleteDialogOpen}
