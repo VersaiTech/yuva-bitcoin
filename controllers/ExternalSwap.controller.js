@@ -457,10 +457,7 @@ async function createExternalSwap(req, res) {
     // Save ExternalSwap object to database
     const savedExternalSwap = await newExternalSwap.save();
 
-    // If deposit type is 'usdt', add amount to Admin.usdt
-    if (deposit_type === "usdt") {
-      await Admin.updateOne({}, { $inc: { usdt: amount } });
-    }
+    
 
     return res.status(200).json({
       success: true,
