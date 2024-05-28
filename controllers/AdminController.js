@@ -573,6 +573,65 @@ const getOneTaskforAdminConfirmationTask = async (req, res) => {
 };
 
 
+// const getPendingTasks = async (req, res) => {
+//   const Schema = Joi.object({
+//     page_number: Joi.number(),
+//     count: Joi.number(),
+//   });
+
+//   const { error, value } = Schema.validate(req.params);
+
+//   if (error) {
+//     return res.status(400).json({ status: false, error: error.details[0].message });
+//   }
+//   try {
+//     const page_number = value.page_number || 1;
+//     const count = value.count || 10;
+//     const offset = (page_number - 1) * count;
+
+
+//     const tasks = await CompletedTask.find({ status: 'pending' })
+//       .sort({ createdAt: -1 })
+//       .skip(offset)
+//       .limit(count);
+
+//     console.log("tasks", tasks)
+//     const userIds = tasks.map(task => task.userId);
+//     console.log("userIds", userIds)
+
+
+//     const users = await Member.find({ member_user_id: { $in: userIds } });
+//     console.log("users", users)
+
+//     const twitterIds = users.map(user => user.twitterId );
+//     console.log("twitterIds", twitterIds)
+
+
+//     const totalPendingTasks = await CompletedTask.countDocuments({ status: 'pending' });
+
+//     if (!tasks || tasks.length === 0) {
+//       return res.status(200).json({
+//         status: false,
+//         message: "No tasks found for the user",
+//         totalPendingTasks: totalPendingTasks,
+//         twitterIds: twitterIds,
+//         tasks: [],
+//       });
+//     }
+
+//     return res.status(200).json({
+//       status: true,
+//       message: "Tasks found for the user",
+//       totalPendingTasks: totalPendingTasks,
+//       twitterIds: twitterIds,
+//       tasks: tasks,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
 const getPendingTasks = async (req, res) => {
   const Schema = Joi.object({
     page_number: Joi.number(),
@@ -584,32 +643,21 @@ const getPendingTasks = async (req, res) => {
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
+
   try {
     const page_number = value.page_number || 1;
     const count = value.count || 10;
     const offset = (page_number - 1) * count;
 
-
-    // Fetch tasks for the user with sorting and pagination
     const tasks = await CompletedTask.find({ status: 'pending' })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
 
-    console.log("tasks", tasks)
-    // Extract userIds from tasks
     const userIds = tasks.map(task => task.userId);
-    console.log("userIds", userIds)
 
-
-    // Fetch user details for each userId
     const users = await Member.find({ member_user_id: { $in: userIds } });
-    console.log("users", users)
-
-    //fetch twitterId from users data
-    const twitterIds = users.map(user => user.twitterId);
-    console.log("twitterIds", twitterIds)
-
+    const twitterIdMap = new Map(users.map(user => [user.member_user_id, user.twitterId]));
 
     const totalPendingTasks = await CompletedTask.countDocuments({ status: 'pending' });
 
@@ -618,22 +666,85 @@ const getPendingTasks = async (req, res) => {
         status: false,
         message: "No tasks found for the user",
         totalPendingTasks: totalPendingTasks,
-        twitterIds: twitterIds,
         tasks: [],
       });
     }
+
+    const tasksWithTwitterIds = tasks.map(task => {
+      const twitterId = twitterIdMap.get(task.userId);
+      return {
+        ...task.toObject(),
+        twitterId: twitterId || null
+      };
+    });
 
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
       totalPendingTasks: totalPendingTasks,
-      twitterIds: twitterIds,
-      tasks: tasks,
+      tasks: tasksWithTwitterIds,
     });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// const getCompletedTasks = async (req, res) => {
+//   const Schema = Joi.object({
+//     page_number: Joi.number(),
+//     count: Joi.number(),
+//   });
+
+//   const { error, value } = Schema.validate(req.params);
+
+//   if (error) {
+//     return res.status(400).json({ status: false, error: error.details[0].message });
+//   }
+//   try {
+//     const page_number = value.page_number || 1;
+//     const count = value.count || 10;
+//     const offset = (page_number - 1) * count;
+
+//     const tasks = await CompletedTask.find({ status: 'confirmed' })
+//       .sort({ createdAt: -1 })
+//       .skip(offset)
+//       .limit(count);
+
+
+//     console.log("tasks", tasks)
+//     const userIds = tasks.map(task => task.userId);
+//     console.log("userIds", userIds)
+
+
+//     const users = await Member.find({ member_user_id: { $in: userIds } });
+//     console.log("users", users)
+
+//     const twitterIds = users.map(user => user.twitterId);
+//     console.log("twitterIds", twitterIds)
+
+//     const totalCompletedTasks = await CompletedTask.countDocuments({ status: 'confirmed' });
+
+//     if (!tasks || tasks.length === 0) {
+//       return res.status(200).json({
+//         status: false,
+//         message: "No tasks found for the user",
+//         totalCompletedTasks: totalCompletedTasks,
+//         twitterIds: twitterIds,
+//         tasks: [],
+//       });
+//     }
+
+//     return res.status(200).json({
+//       status: true,
+//       message: "Tasks found for the user",
+//       totalCompletedTasks: totalCompletedTasks,
+//       twitterIds: twitterIds,
+//       tasks: tasks,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
 const getCompletedTasks = async (req, res) => {
   const Schema = Joi.object({
@@ -646,31 +757,21 @@ const getCompletedTasks = async (req, res) => {
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
+
   try {
     const page_number = value.page_number || 1;
     const count = value.count || 10;
     const offset = (page_number - 1) * count;
 
-    // Fetch tasks for the user with sorting and pagination
     const tasks = await CompletedTask.find({ status: 'confirmed' })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
 
-
-    console.log("tasks", tasks)
-    // Extract userIds from tasks
     const userIds = tasks.map(task => task.userId);
-    console.log("userIds", userIds)
 
-
-    // Fetch user details for each userId
     const users = await Member.find({ member_user_id: { $in: userIds } });
-    console.log("users", users)
-
-    //fetch twitterId from users data
-    const twitterIds = users.map(user => user.twitterId);
-    console.log("twitterIds", twitterIds)
+    const twitterIdMap = new Map(users.map(user => [user.member_user_id, user.twitterId]));
 
     const totalCompletedTasks = await CompletedTask.countDocuments({ status: 'confirmed' });
 
@@ -679,23 +780,72 @@ const getCompletedTasks = async (req, res) => {
         status: false,
         message: "No tasks found for the user",
         totalCompletedTasks: totalCompletedTasks,
-        twitterIds: twitterIds,
         tasks: [],
       });
     }
+
+    const tasksWithTwitterIds = tasks.map(task => {
+      const twitterId = twitterIdMap.get(task.userId);
+      return {
+        ...task.toObject(),
+        twitterId: twitterId || null
+      };
+    });
 
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
       totalCompletedTasks: totalCompletedTasks,
-      twitterIds: twitterIds,
-      tasks: tasks,
+      tasks: tasksWithTwitterIds,
     });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+
+// const getRejectedTasks = async (req, res) => {
+//   const Schema = Joi.object({
+//     page_number: Joi.number(),
+//     count: Joi.number(),
+//   });
+
+//   const { error, value } = Schema.validate(req.params);
+
+//   if (error) {
+//     return res.status(400).json({ status: false, error: error.details[0].message });
+//   }
+//   try {
+//     const page_number = value.page_number || 1;
+//     const count = value.count || 10;
+//     const offset = (page_number - 1) * count;
+
+//     // Fetch tasks for the user with sorting and pagination
+//     const tasks = await CompletedTask.find({ status: 'rejected' })
+//       .sort({ createdAt: -1 })
+//       .skip(offset)
+//       .limit(count);
+//     const totalRejectedTasks = await CompletedTask.countDocuments({ status: 'rejected' });
+
+//     if (!tasks || tasks.length === 0) {
+//       return res.status(200).json({
+//         status: false,
+//         message: "No tasks found for the user",
+//         totalRejectedTasks: totalRejectedTasks,
+//         tasks: [],
+//       });
+//     }
+
+//     return res.status(200).json({
+//       status: true,
+//       message: "Tasks found for the user",
+//       totalRejectedTasks: totalRejectedTasks,
+//       tasks: tasks,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
 const getRejectedTasks = async (req, res) => {
   const Schema = Joi.object({
@@ -708,16 +858,22 @@ const getRejectedTasks = async (req, res) => {
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
+
   try {
     const page_number = value.page_number || 1;
     const count = value.count || 10;
     const offset = (page_number - 1) * count;
 
-    // Fetch tasks for the user with sorting and pagination
     const tasks = await CompletedTask.find({ status: 'rejected' })
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
+
+    const userIds = tasks.map(task => task.userId);
+
+    const users = await Member.find({ member_user_id: { $in: userIds } });
+    const twitterIdMap = new Map(users.map(user => [user.member_user_id, user.twitterId]));
+
     const totalRejectedTasks = await CompletedTask.countDocuments({ status: 'rejected' });
 
     if (!tasks || tasks.length === 0) {
@@ -729,11 +885,19 @@ const getRejectedTasks = async (req, res) => {
       });
     }
 
+    const tasksWithTwitterIds = tasks.map(task => {
+      const twitterId = twitterIdMap.get(task.userId);
+      return {
+        ...task.toObject(),
+        twitterId: twitterId || null
+      };
+    });
+
     return res.status(200).json({
       status: true,
       message: "Tasks found for the user",
       totalRejectedTasks: totalRejectedTasks,
-      tasks: tasks,
+      tasks: tasksWithTwitterIds,
     });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
