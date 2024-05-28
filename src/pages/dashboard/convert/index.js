@@ -47,7 +47,7 @@ const useOrders = (search) => {
       if (isMounted()) {
         setState({
           orders: response.data,
-          ordersCount: response.count
+          ordersCount: response.userDepositsTotal,
         });
       }
     } catch (err) {
