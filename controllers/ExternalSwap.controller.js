@@ -457,8 +457,6 @@ async function createExternalSwap(req, res) {
     // Save ExternalSwap object to database
     const savedExternalSwap = await newExternalSwap.save();
 
-    
-
     return res.status(200).json({
       success: true,
       message: "ExternalSwap created successfully",
@@ -600,10 +598,10 @@ async function findExternalSwap(req, res) {
 }
 
 async function transferYuva(req, res) {
-  const totalExternalSwap = await ExternalSwap.countDocuments();
+  console.log("transferYuva");
   const externalSwap = await ExternalSwap.find({ status: "Pending" });
 
-  if (!externalSwap || externalSwap.length === 0) {
+  if (externalSwap.length === 0) {
     return {
       status: false,
       message: "No ExternalSwap found",
@@ -639,39 +637,42 @@ async function transferYuva(req, res) {
             signer
           );
 
-          // const gasEstimate = await contract.estimateGas.transfer(
-          //   wallet_address,
-          //   ethers.utils.parseUnits(amount.toString(), "ether"),
-          //   { gasLimit: 20000 }
-          // );
+          const transaction = await provider.getTransaction(transaction_hash);
 
-          // console.log("gasEstimate", gasEstimate);
+          if (transaction == null) {
+            return "Transaction not found";
+          }
 
-          const transactionResponse = await contract
-            .transfer(
-              wallet_address,
-              ethers.utils.parseUnits(amount.toString(), "ether"),
-              {
-                gasLimit: 200000,
-              }
-            )
-            .then((tx) => tx.wait());
 
-          console.log("transactionResponse", transactionResponse);
+          const transactionExist = await ExternalSwap.findOne({
+            transaction_hash: transaction.hash,
+            status: "Approved",
+          });
+
+          if (transactionExist) {
+            return "Transaction already approved";
+          }
+
+          // const transactionResponse = await contract
+          //   .transfer(
+          //     wallet_address,
+          //     ethers.utils.parseUnits(amount.toString(), "ether"),
+          //     {
+          //       gasLimit: 200000,
+          //     }
+          //   )
+          //   .then((tx) => tx.wait());
+
+          // console.log("transactionResponse", transactionResponse);
 
           // externalSwap[i].amount ? ethers.parseEther(externalSwap[i].amount.toString()) : undefined
 
-          if (transactionResponse.status === 1) {
-            const updateExternalSwap = await ExternalSwap.updateOne(
-              { _id: externalSwap[i]._id },
-              { $set: { status: "Approved", reason: "" } }
-            );
-          }
-          return res.status(200).json({
-            status: true,
-            message: "ExternalSwap found",
-            data: transactionResponse,
-          });
+          // if (transactionResponse.status === 1) {
+          //   const updateExternalSwap = await ExternalSwap.updateOne(
+          //     { _id: externalSwap[i]._id },
+          //     { $set: { status: "Approved", reason: "" } }
+          //   );
+          // }
         } else {
           return res.status(500).json({
             error: "Internal Server Error",
