@@ -17,8 +17,7 @@ const ExternalSwapSchema = new mongoose.Schema({
     },
     wallet_address: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     orderId: {
         type: String,

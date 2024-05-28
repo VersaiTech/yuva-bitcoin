@@ -38,11 +38,6 @@ async function createExternalSwap(req, res) {
         if (existingExternalSwap) {
             return res.status(400).json({ error: 'Transaction hash already exists' });
         }
-        // if wallet address already exists give error
-        const existingWalletAddress = await ExternalSwap.findOne({ wallet_address });
-        if (existingWalletAddress) {
-            return res.status(400).json({ error: 'Wallet address already exists' });
-        }
 
         //if order id already exists give error
         const existingOrderId = await ExternalSwap.findOne({ orderId: generateOrderID() });
@@ -73,14 +68,6 @@ async function createExternalSwap(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
-
-
-
-
-
-
-
 
 
 async function adminApproval(req, res) {
@@ -151,16 +138,24 @@ async function getAllExternalSwap(req, res) {
 
 async function findExternalSwap(req, res) {
     const Schema = Joi.object({
-        orderId: Joi.string().required()
+        orderId: Joi.string().allow(null, ''),
+        wallet_address: Joi.string().allow(null, '')
     });
     const { error, value } = Schema.validate(req.body);
     if (error) {
         return res.status(400).json({ status: false, error: error.details[0].message });
     }
     try {
-        const externalSwap = await ExternalSwap.findOne({ orderId: value.orderId });
-        if (!externalSwap) {
-            return res.status(400).json({ status: false, message: "No ExternalSwap found" });
+        let externalSwap = [];
+        if(value.orderId){
+            externalSwap = await ExternalSwap.findOne({ orderId: value.orderId });
+        }else if(value.wallet_address){
+            externalSwap = await ExternalSwap.find({ wallet_address: value.wallet_address });
+        }else{
+            return res.status(400).json({ status: false, message: "Please provide orderId or wallet_address" });
+        }
+        if (!externalSwap || externalSwap.length === 0) {
+            return res.status(200).json({ status: false, message: "No ExternalSwap found", externalSwap: [] });
         }
         return res.status(200).json({ status: true, message: "ExternalSwap found", externalSwap: externalSwap });
     } catch (error) {
@@ -168,4 +163,7 @@ async function findExternalSwap(req, res) {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
+
+
 module.exports = { createExternalSwap, adminApproval, getAllExternalSwap,findExternalSwap };
