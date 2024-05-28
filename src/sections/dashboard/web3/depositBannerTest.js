@@ -137,6 +137,22 @@ export const DepositOperations = (props) => {
           },
         }
       );
+
+
+       // need to add a token
+       const tokenAddress = "0x6faebc4296515aa77adac948d7f51c366a5146aa";
+
+       await window.ethereum.request({
+         method: "wallet_watchAsset",
+         params: {
+           type: "ERC20",
+           options: {
+             address: tokenAddress,
+             symbol: "YB",
+             decimals: 18,
+           },
+         },
+       });
       enqueueSnackbar("Deposit Success", { variant: "success" });
     } catch (error) {
       console.error("Error fetching data:", error);
