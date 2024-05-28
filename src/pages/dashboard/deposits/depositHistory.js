@@ -67,7 +67,7 @@ const useCustomers = (search) => {
 
       if (isMounted()) {
         setState({
-          customers: response.data.userDeposits || [],
+          customers: response.data,
           customersCount: response.count,
           // pending: pendingTasks.data,
           // completed: completedTasks.data,
