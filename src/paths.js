@@ -132,6 +132,10 @@ export const paths = {
       pending:"/dashboard/deposit?status=hasAcceptedMarketing",
       completed:"/dashboard/deposit?status=isProspect",
     },
+    
+    exdeposit:{
+      index: "/dashboard/deposit_external",
+    },
     Stake:{
       index: "/dashboard/stake",
     },

@@ -19,9 +19,11 @@ export const en = {
   [tokens.nav.referral]: 'Referrals',
   [tokens.nav.referralRecord]: 'Particular User Referral',
   [tokens.nav.deposit]: 'Deposit',
+
   [tokens.nav.alldeposit]: 'All Deposit',
   [tokens.nav.pendingDeposit]: 'Pending Deposit',
   [tokens.nav.completedDeposit]: 'Completed Deposit',
+  [tokens.nav.external_deposit]: 'External Deposit',
   [tokens.nav.support]: 'Support',
   [tokens.nav.news]: 'News',
   [tokens.nav.createnews]: 'Create News',

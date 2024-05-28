@@ -424,19 +424,18 @@ export const getSections = (t) => [
             <DepositsIcon />
           </SvgIcon>
         ),
-        // items: [
-        //   {
-        //     title: t(tokens.nav.alldeposit),
-        //   },
-        //   // {
-        //   //   title: t(tokens.nav.pendingDeposit),
-        //   //   path: paths.dashboard.deposit.pending,
-        //   // },
-        //   // {
-        //   //   title: t(tokens.nav.completedDeposit),
-        //   //   path: paths.dashboard.deposit.completed,
-        //   // },
-        // ],
+        
+      },
+      {
+        title: t(tokens.nav.external_deposit),
+        path: paths.dashboard.exdeposit.index,
+        // path: paths.dashboard.deposit.index,
+        icon: (
+          <SvgIcon fontSize="small">
+            <DepositsIcon />
+          </SvgIcon>
+        ),
+        
       },
       {
         title: t(tokens.nav.Stake),

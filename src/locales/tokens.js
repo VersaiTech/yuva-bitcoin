@@ -74,6 +74,8 @@ export const tokens = {
     socialMedia: 'nav.socialMedia',
     verifyCode: 'nav.verifyCode',
     deposit: 'nav.deposit',
+    external_deposit: 'nav.external_deposit',
+    external_deposit: 'nav.external_deposit',
     alldeposit: 'nav.alldeposit',
     createnews: 'nav.createnews',
     newslist: 'nav.newslist',
