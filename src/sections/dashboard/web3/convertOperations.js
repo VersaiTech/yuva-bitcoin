@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 const logoMap = {
   USDT: "/assets/logos/logo-usdt.svg",
@@ -24,6 +25,7 @@ export const ConvertOperations = (props) => {
   const [values, setValues] = useState({
     amount: "",
   });
+  
   
 
   const [op, setOp] = useState({
@@ -70,6 +72,8 @@ export const ConvertOperations = (props) => {
         }
       );
       enqueueSnackbar("Conversion Success", { variant: "success" });
+      // Call the prop function to handle conversion success
+      props.onConversionSuccess();
     } catch (error) {
       console.error("Error performing conversion:", error);
       enqueueSnackbar("Conversion Failed", { variant: "error" });
