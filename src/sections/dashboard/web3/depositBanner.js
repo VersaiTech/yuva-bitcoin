@@ -235,8 +235,8 @@ export const DepositOperations = (props) => {
 
       // Handle the response as needed
     } catch (error) {
-      console.error("Error: Please Connect Wallet", error);
-      enqueueSnackbar("Please Connect Wallet", { variant: "error" });
+      console.error("Error: Transaction failed", error);
+      enqueueSnackbar("Transaction Failed", { variant: "error" });
     }
   };
 
