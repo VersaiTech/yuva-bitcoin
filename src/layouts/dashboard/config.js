@@ -3,6 +3,7 @@ import PortfolioIcon from "../../icons/untitled-ui/duocolor/portfolio";
 import CryptoIcon from "../../icons/untitled-ui/duocolor/crypto";
 import Calendar from "../../icons/untitled-ui/duocolor/calendar";
 import EarningsIcon from "../../icons/untitled-ui/duocolor/earnings";
+import ConversionIcon from "../../icons/untitled-ui/duocolor/conversion";
 import { tokens } from "../../locales/tokens";
 import { paths } from "../../paths";
 import DepositsIcon from "../../icons/untitled-ui/duocolor/deposits";
@@ -45,21 +46,21 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.todayTasks),
-            path: paths.dashboard.tasks.today
+            path: paths.dashboard.tasks.today,
           },
           {
             title: t(tokens.nav.pending),
-            path: paths.dashboard.tasks.pending
+            path: paths.dashboard.tasks.pending,
           },
           {
             title: t(tokens.nav.completedTasks),
-            path: paths.dashboard.tasks.completedTasks
+            path: paths.dashboard.tasks.completedTasks,
           },
           {
             title: t(tokens.nav.rejected),
-            path: paths.dashboard.tasks.rejected
-          }
-        ]
+            path: paths.dashboard.tasks.rejected,
+          },
+        ],
       },
       {
         title: t(tokens.nav.earnings),
@@ -84,22 +85,20 @@ export const getSections = (t) => [
         title: t(tokens.nav.convert),
         icon: (
           <SvgIcon fontSize="small">
-            <EarningsIcon />
+            <ConversionIcon />
           </SvgIcon>
         ),
-         items: [
+        items: [
           {
             title: t(tokens.nav.convert),
             path: paths.dashboard.convert.index,
-
           },
           {
             title: t(tokens.nav.convertHistory),
-            path: paths.dashboard.convert.convertHistory
-          }
-        ]
+            path: paths.dashboard.convert.convertHistory,
+          },
+        ],
       },
-
     ],
   },
   {
@@ -115,13 +114,13 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.deposit),
-            path: paths.dashboard.deposits.index
+            path: paths.dashboard.deposits.index,
           },
           {
             title: t(tokens.nav.depositHistory),
-            path: paths.dashboard.deposits.depositsHistory
-          }
-        ]
+            path: paths.dashboard.deposits.depositsHistory,
+          },
+        ],
       },
       {
         title: t(tokens.nav.stake),
@@ -133,13 +132,13 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.stake),
-            path: paths.dashboard.stake.create
+            path: paths.dashboard.stake.create,
           },
           {
             title: t(tokens.nav.stakeHistory),
-            path: paths.dashboard.stake.index
-          }
-        ]
+            path: paths.dashboard.stake.index,
+          },
+        ],
       },
       {
         title: t(tokens.nav.withdraw),
@@ -151,13 +150,13 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.withdraw),
-            path: paths.dashboard.withdraw.create
+            path: paths.dashboard.withdraw.create,
           },
           {
             title: t(tokens.nav.withdrawHistory),
-            path: paths.dashboard.withdraw.index
-          }
-        ]
+            path: paths.dashboard.withdraw.index,
+          },
+        ],
       },
       {
         title: t(tokens.nav.referral),
@@ -169,22 +168,22 @@ export const getSections = (t) => [
         items: [
           {
             title: t(tokens.nav.refer),
-            path: paths.dashboard.refer.index
+            path: paths.dashboard.refer.index,
           },
           {
             title: t(tokens.nav.referralHistory),
-            path: paths.dashboard.refer.referHistory
-          }
-        ]
+            path: paths.dashboard.refer.referHistory,
+          },
+        ],
       },
       {
         title: t(tokens.nav.news),
         path: paths.dashboard.news.list,
         icon: (
           <SvgIcon fontSize="small">
-          {/* <Mail04Icon /> */}
-          <NewssIcon />
-        </SvgIcon>
+            {/* <Mail04Icon /> */}
+            <NewssIcon />
+          </SvgIcon>
         ),
       },
       {
