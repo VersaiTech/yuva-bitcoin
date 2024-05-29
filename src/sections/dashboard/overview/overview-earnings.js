@@ -258,7 +258,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {parseFloat(overview.deposit_usdt)+ ' ' + 'USDT' || 0} 
+                    {(parseFloat(overview.deposit_usdt) || 0).toFixed(3) + ' USDT'} 
                     </Typography>
                     <Typography variant="h6">
                       Total Deposit
@@ -315,7 +315,7 @@ export const OverviewEarnings = (props) => {
                 <Box sx={{ flexGrow: 1 }}>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                    {overview && parseFloat(overview.coins) + " Yuva Bitcoin" || 0 + " Yuva Bitcoin"}
+                    {overview && (parseFloat(overview.coins).toFixed(3)) + " Yuva Bitcoin" || 0 + " Yuva Bitcoin"}
                     </Typography>
                     <Typography variant="h6">
                       Your Wallet Balance

@@ -178,7 +178,7 @@ export const ConvertListTable = (props) => {
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
-                        src={customer.member_name}
+                        src="/assets/logos/logo-usdt.svg"
                         sx={{
                           height: 42,
                           width: 42,
@@ -212,7 +212,7 @@ export const ConvertListTable = (props) => {
                       : "N/A"}
                   </TableCell>
 
-                  <TableCell>{customer.deposit_type}</TableCell>
+                  <TableCell>{customer.deposit_type.toUpperCase()}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
                       {customer.wallet_address}
