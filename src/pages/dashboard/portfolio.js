@@ -50,6 +50,8 @@ const Page = () => {
   const theme = useTheme();
 
   const [loading, setLoading] = useState(true); // State to track loading status
+  const [coinholders, setCoinHolders] = useState([]);
+  const [coinholderswithstakeholders, setCoinHoldersWithStakeHolders] = useState([]);
   const [dummy, setDummy] = useState([]);
   const [overview, setOverview] = useState([]);
 
@@ -73,7 +75,32 @@ const Page = () => {
     OverviewData();
   }, []);
 
-  const fetchDummyData = async () => {
+  // const fetchDummyData = async () => {
+  //   try {
+  //     const token = localStorage.getItem("accessToken");
+  //     if (!token) {
+  //       window.location.href = "/auth/login/modern"; // Redirect to login if token is not available
+  //       return;
+  //     }
+  //     const headers = {
+  //       Authorization: token,
+  //     };
+
+  //     const response = await axios.get(`${BASEURL}/api/Dummy/getDummyData`, {
+  //       headers: headers,
+  //     });
+
+  //     setDummy(response.data);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchDummyData();
+  // }, []);
+  
+  const CoinHolders = async () => {
     try {
       const token = localStorage.getItem("accessToken");
       if (!token) {
@@ -84,18 +111,42 @@ const Page = () => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/api/Dummy/getDummyData`, {
+      const response = await axios.get(`${BASEURL}/admin/countMembersWithCoins`, {
         headers: headers,
       });
 
-      setDummy(response.data);
+      setCoinHolders(response.data.data);
+      console.log(response.data.data.count);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const CoinHoldersWithStakeCoins = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        window.location.href = "/auth/login/modern"; // Redirect to login if token is not available
+        return;
+      }
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/admin/countMemberWithStakeCoins`, {
+        headers: headers,
+      });
+
+      setCoinHoldersWithStakeHolders(response.data.data);
+      console.log(response.data.data.totalStakeCoins);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchDummyData();
+    CoinHolders();
+    CoinHoldersWithStakeCoins();
   }, []);
 
   return (
@@ -133,30 +184,30 @@ const Page = () => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={6} md={3}>
+              <Grid item xs={6} md={4}>
                 <OverviewRegisteredMembers
                   amount={overview.allMembers}
                   // fetchDummyData={overview.allMembers}
                 />
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item xs={6} md={4}>
                 <OverviewCoinHolders
-                  amount={dummy}
-                  fetchDummyData={fetchDummyData}
+                  amount={coinholders.count}
+                  // fetchDummyData={fetchDummyData}
                 />
               </Grid>
-              <Grid item xs={6} md={3}>
+              <Grid item xs={6} md={4}>
                 <OverviewStakeCoins
-                  amount={dummy}
-                  fetchDummyData={fetchDummyData}
+                  amount={coinholderswithstakeholders.totalStakeCoins}
+                  // fetchDummyData={fetchDummyData}
                 />
               </Grid>
-              <Grid item xs={6} md={3}>
+              {/* <Grid item xs={6} md={3}>
                 <OverviewTotalYuvaBuy
                   amount={dummy}
                   fetchDummyData={fetchDummyData}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid xs={12}>
               <Stack direction="row" justifyContent="space-between" spacing={4}>

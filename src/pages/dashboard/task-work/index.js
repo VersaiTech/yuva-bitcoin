@@ -83,7 +83,8 @@ const useCustomers = (search) => {
           pending: pendingTasks.data.tasks,
           completed: completedTasks.data.tasks,
           rejected: rejectedTasks.data.tasks,
-          customersCount: pendingTasks.data.totalPendingTasks + completedTasks.data.totalCompletedTasks + rejectedTasks.data.totalRejectedTasks,
+          customersCount: pendingTasks.data.tasks.length,
+          // totalPendingTasks + completedTasks.data.totalCompletedTasks + rejectedTasks.data.totalRejectedTasks,
         });
       }
     } catch (err) {
@@ -238,7 +239,7 @@ const Page = () => {
                 setCurrentTab={setCurrentTab}
               />
               <WorkListTable
-                customersCount={customersCount}
+                customersCount={currentTab === "all" ? customersCount : currentTab === "pending" ? pending.length : currentTab === "completed" ? completed.length : currentTab === "rejected" ? rejected.length : 0}
 
                 currentTab={currentTab}
                 customers={currentData ? currentData : []}

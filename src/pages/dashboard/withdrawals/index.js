@@ -494,7 +494,7 @@ const Page = () => {
                     ? completed
                     : []
                 }
-                customersCount={customersCount}
+                customersCount={currentTab === "all" ? customersCount :  currentTab === "pending" ? pending.length :  currentTab === "hasAcceptedMarketing" ? rejected.length : currentTab === "isProspect" ? completed.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

@@ -76,7 +76,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.allDeposits || [],
-          customersCount: response.allDepositsTotal,
+          customersCount: response.data.allDeposits.length,
           // activeUsers: activeUsersResponse.data.members,
           // blockedUsers: blockedUsersResponse.data.members,
         });

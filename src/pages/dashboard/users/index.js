@@ -90,7 +90,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.members,
-          customersCount: response.data.count,
+          customersCount: response.data.members.length,
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
         });
@@ -243,7 +243,7 @@ const Page = () => {
               />
               <CustomerListTable
                 // customers={customers}
-                customersCount={customersCount}
+                // customersCount={customersCount}
                 // customersCount={0}
                 customers={
                   currentTab === "all"
@@ -254,7 +254,7 @@ const Page = () => {
                     ? blockedUsers
                     : customers
                 }
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
