@@ -1737,4 +1737,43 @@ async function countMemberWithStakeCoins(req, res) {
 }
 
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins };
+async function findMember(req, res) {
+  try {
+
+    const { member_name } = req.body;
+    //minimum 3 character
+    if (member_name.length < 3) {
+      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    }
+    const member = await Member.find({ member_name: { $regex: member_name, $options: "i" } });
+    if (member.length == 0) {
+      return res.status(404).json({ status: false, message: "Member not found" });
+    }
+    return res.status(200).json({ status: true, message: "Member found", data: member });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+
+async function findMemberInTask(req, res) {
+  try {
+    const { name } = req.body
+    if (name.length < 3) {
+      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    }
+    const member = await CompletedTask.find({ name: { $regex: name, $options: "i" } });
+
+    if (member.length == 0) {
+      return res.status(404).json({ status: false, message: "Member not found" });
+    }
+    return res.status(200).json({ status: true, message: "Member found", data: member });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask };
