@@ -30,7 +30,7 @@ import { getInitials } from "../../../utils/get-initials";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.member_user_id);
+    return Array.isArray(customers) ? customers.map((customer) => customer.member_user_id) : [];
   }, [customers]);
   const [selected, setSelected] = useState([]);
 
@@ -67,7 +67,7 @@ const useSelectionModel = (customers) => {
 
 export const DepositListTable = (props) => {
   const {
-    customers,
+    customers=[],
     customersCount,
     onPageChange,
     onRowsPerPageChange,
@@ -149,97 +149,49 @@ export const DepositListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
-              const isSelected = selected.includes(customer.member_user_id);
-              // const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              // const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
+          {Array.isArray(customers) && customers.map((customer) => {
+            const isSelected = selected.includes(customer.member_user_id);
 
-              return (
-                <TableRow
-                  hover
-                  key={customer.member_user_id + 1}
-                  selected={isSelected}
-                >
-                  {/* <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        const { checked } = event.target;
-
-                        if (checked) {
-                          selectOne(customer.member_user_id);
-                        } else {
-                          deselectOne(customer.member_user_id);
-                        }
+            return (
+              <TableRow
+                hover
+                key={customer.member_user_id}
+                selected={isSelected}
+              >
+                <TableCell>
+                  <Stack alignItems="center" direction="row" spacing={1}>
+                    <Avatar
+                      src={customer.member_name || ""}
+                      sx={{
+                        height: 42,
+                        width: 42,
                       }}
-                      value={isSelected}
-                    />
-                  </TableCell> */}
-                  <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Avatar
-                        src={customer.member_name}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {/* <img src={IndianRupeeIcon} alt="Rupee" /> */}
-                        <h1></h1>
-                        {/* {getInitials(customer.member_name)} */}
-                      </Avatar>
-                      <div>
-                        {/* <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.tasks.index}
-                          variant="subtitle2"
-                        > */}
-                        {customer.amount}
-                        {/* </Link> */}
-                        {/* <Typography color="text.secondary" variant="body2">
-                          {customer.email}
-                        </Typography> */}
-                      </div>
-                    </Stack>
-                  </TableCell>
-                  {/* <TableCell>{customer.taskId}</TableCell> */}
-
-                  <TableCell>
-                    {" "}
-                    {customer.createdAt
-                      ? new Date(customer.createdAt).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
-
-                  <TableCell>{customer.deposit_method}</TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">
-                      {customer.transaction_id}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    {/* <IconButton
-                      component={NextLink}
-                      href={`${paths.dashboard.users.edit}${customer.member_user_id}/edit`}
                     >
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    </IconButton> */}
-                    {/* <IconButton
-                      component={NextLink}
-                      href={paths.dashboard.customers.details}
-                    >
-                      <SvgIcon>
-                        <ArrowRightIcon />
-                      </SvgIcon>
-                    </IconButton> */}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
+                      <h1></h1>
+                    </Avatar>
+                    <div>
+                      {customer.amount || "N/A"}
+                    </div>
+                  </Stack>
+                </TableCell>
+                <TableCell>
+                  {customer.createdAt
+                    ? new Date(customer.createdAt).toLocaleDateString()
+                    : "N/A"}
+                </TableCell>
+                <TableCell>{customer.deposit_method || "N/A"}</TableCell>
+                <TableCell>
+                  <Typography variant="subtitle2">
+                    {customer.transaction_id || "N/A"}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  {/* Actions if needed */}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
         </Table>
       </Scrollbar>
       <TablePagination
