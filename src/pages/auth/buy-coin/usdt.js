@@ -175,12 +175,12 @@ const Page = () => {
       const token = localStorage.getItem("accessToken");
 
       const response2 = await axios.post(
-        `${BASEURL}/api/Deposit/createDeposit`,
+        `${BASEURL}/api/ExternalSwap/createExternalSwap`,
         {
           deposit_type: "usdt",
           wallet_address: wallet.accounts[0],
           transaction_hash: response.transactionHash,
-          amount: values.amount,
+          amount: values.amount / rate,
         },
         {
           headers: {
