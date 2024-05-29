@@ -301,14 +301,14 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.data,
-          customersCount: response.count,
+          customersCount: response.data.data.length,
           // pending: PendingWithdrawals.data.data,
           // rejected: rejectedWithdrawals.data.data,
           // completed: completedWithdrawals.data.data,
         });
       }
     } catch (err) {
-      console.error(err.response.data);
+      console.error(err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
@@ -482,13 +482,13 @@ const Page = () => {
                 //   currentTab === "all"
                 //     ? customers
                 // }
-                // customersCount={
-                //   currentTab === 'all' ? customersCount :
-                //     currentTab === 'pending' ? pending.length :
-                //       currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                //         currentTab === 'isProspect' ? completed.length :
-                //           0
-                // }
+                customersCount={
+                  currentTab === 'all' ? customersCount :
+                    currentTab === 'pending' ? pending.length :
+                      currentTab === 'hasAcceptedMarketing' ? rejected.length :
+                        currentTab === 'isProspect' ? completed.length :
+                          0
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
