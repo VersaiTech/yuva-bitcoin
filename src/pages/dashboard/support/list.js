@@ -186,7 +186,7 @@ const useQueries = (search) => {
     if (isMounted()) {
         setState({
           queries: response.data.supportMessages,
-          queriesCount: response.count,
+          queriesCount: response.data.supportMessages.length,
         });
         console.log(response.data.supportMessages)
       }
@@ -322,7 +322,7 @@ const Page = () => {
             */}
             <QueriesListTable 
             queries={queries}
-            queriesCount={0}
+            queriesCount={currentTab === 'all' ? queriesCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : 0}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleRowsPerPageChange}
             rowsPerPage={search.rowsPerPage}
