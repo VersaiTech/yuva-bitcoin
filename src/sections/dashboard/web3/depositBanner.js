@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 // const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 import detectEthereumProvider from "@metamask/detect-provider";
+import { useRouter } from "next/router";
 
 import {
   Box,
@@ -34,6 +35,7 @@ export const DepositOperations = (props) => {
 
 
   const [wallet, setWallet] = useState([]);
+  const router = useRouter();
 
 
   
@@ -226,6 +228,7 @@ export const DepositOperations = (props) => {
       // }
 
         enqueueSnackbar("Transaction Success", { variant: "success" });
+        router.push('/convert');
       // } else {
       //   enqueueSnackbar("Transaction Failed", { variant: "error" });
       // }
@@ -264,7 +267,11 @@ export const DepositOperations = (props) => {
       }}
     >
       <CardHeader
-        title="Buy Yuva Bitcoin"
+      title={
+        <Typography sx={{ letterSpacing: '0.1em' }}>
+          Add USDT To Your Wallet
+        </Typography>
+      }
         action={
           <>
             {hasProvider ? (
@@ -296,7 +303,7 @@ export const DepositOperations = (props) => {
       />
       <CardContent sx={{ pt: 0 }}>
         <TextField
-          label="From"
+          label="USDT"
           fullWidth
           InputProps={{
             startAdornment: (
@@ -333,37 +340,7 @@ export const DepositOperations = (props) => {
             my: 1,
           }}
         >
-          <IconButton>
-            <SvgIcon fontSize="small">
-              <SwitchVertical01Icon />
-            </SvgIcon>
-          </IconButton>
         </Box>
-        <TextField
-          label="To"
-          fullWidth
-          InputProps={{
-            startAdornment: (
-              <Box
-                sx={{
-                  mr: 1,
-                  mt: 2.5,
-                }}
-              >
-                <Box
-                  component="img"
-                  src={logoMap[op.to]}
-                  sx={{
-                    height: 24,
-                    width: 24,
-                  }}
-                />
-              </Box>
-            ),
-          }}
-          value={values.amount / rate}
-          disabled
-        />
         <Typography color="text.secondary" sx={{ mt: 2 }} variant="body2">
           {values.amount} {op.from} = {values.amount / rate} {op.to}
         </Typography>
@@ -375,7 +352,7 @@ export const DepositOperations = (props) => {
           sx={{ mt: 2, cursor: "pointer" }}
           variant="contained"
         >
-          Buy Yuva Bitcoin
+          Add USDT
         </Button>
         <Box style={{ marginTop: "10px" }}></Box>
       </CardContent>
