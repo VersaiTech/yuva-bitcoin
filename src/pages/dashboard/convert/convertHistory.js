@@ -69,7 +69,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.userDeposits,
-          customersCount: response.data.userDepositsTotal,
+          customersCount: response.data.userDeposits.length,
           // pending: pendingTasks.data,
           // completed: completedTasks.data,
         });
@@ -226,13 +226,13 @@ const Page = () => {
                     ? completed
                     : []
                 }
-                // customersCount={
-                //   currentTab === 'all' ? customersCount :
-                //     currentTab === 'pending' ? pending.length :
-                //       currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                //         currentTab === 'isProspect' ? completed.length :
-                //           0
-                // }
+                customersCount={
+                  currentTab === 'all' ? customersCount :
+                    currentTab === 'pending' ? pending.length :
+                      currentTab === 'hasAcceptedMarketing' ? rejected.length :
+                        currentTab === 'isProspect' ? completed.length :
+                          0
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

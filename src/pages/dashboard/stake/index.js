@@ -66,6 +66,8 @@ const useCustomers = (search) => {
       });
       console.log(response.data.staked);
 
+      const totalStaked = response.data.total || response.data.staked.length;
+
       // Second API call
       const history = await axios.get(`${BASEURL}/api/Staking/getUnstaked`, {
         headers: headers,
@@ -75,7 +77,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.staked,
-          customersCount: response.count,
+          customersCount: totalStaked,
           history: history.data.staked,
           // Add state for other data from the second API call if needed
         });
@@ -228,6 +230,13 @@ const Page = () => {
                     : currentTab === "history"
                     ? history
                     : []
+                }
+                customersCount={
+                  currentTab === "all"
+                    ? customersCount
+                    : currentTab === "history"
+                    ? history.length
+                    : 0
                 }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
