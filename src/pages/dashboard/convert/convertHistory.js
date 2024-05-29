@@ -61,7 +61,7 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/api/Deposit/convertHistoryUser/`,
+        `${BASEURL}/api/Deposit/convertHistoryUser`,
         { headers: headers }
       );
       console.log(response.data);
