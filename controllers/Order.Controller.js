@@ -1531,24 +1531,7 @@ const getBuyOrdersForAdminForOneUser = async (req, res) => {
 
 
 
-const findMemberOrder = async (req, res) => {
-    try {
-        const { userId } = req.body
-        if (userId.length < 3) {
-          return res.status(400).json({ status: false, message: "Minimum 3 character required" });
-        }
-        const member = await Order.find({ userId: { $regex: userId, $options: "i" } });
-    
-        if (member.length == 0) {
-          return res.status(404).json({ status: false, message: "Member not found" });
-        }
-        return res.status(200).json({ status: true, message: "Member found", data: member });
-      } catch (error) {
-        console.log(error);
-        return res.status(500).json({ status: false, message: "Internal server error" });
-      }
-}
 
 module.exports = {
-    createOrder, updateOrder, getAllOrder, getAAllOrder, getAAllBuyOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder, getAllBuyOrder, getAllBuyOrderForOneUSer, getBuyOrdersForAdminForOneUser,findMemberOrder
+    createOrder, updateOrder, getAllOrder, getAAllOrder, getAAllBuyOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder, getAllBuyOrder, getAllBuyOrderForOneUSer, getBuyOrdersForAdminForOneUser
 };
