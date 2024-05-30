@@ -41,7 +41,7 @@ export const OverviewStakeCoins = (props) => {
   };
 
   // Check if amount is null or undefined before accessing totalCoinHolders
-  const totalCoinHolders = amount ? amount.totalCoinHolders : 0;
+  const totalCoinHolders = amount ? amount : 0;
 
   return (
     <Card>
@@ -105,8 +105,7 @@ export const OverviewStakeCoins = (props) => {
 };
 
 OverviewStakeCoins.propTypes = {
-  amount: PropTypes.object, // Change the prop type according to your data structure
-  fetchDummyData: PropTypes.func.isRequired, // Pass the fetchStakeData function as prop
+  amount: PropTypes.number // Pass the fetchStakeData function as prop
 };
 
 export default OverviewStakeCoins;

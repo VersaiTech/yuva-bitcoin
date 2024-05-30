@@ -51,7 +51,8 @@ const Page = () => {
 
   const [loading, setLoading] = useState(true); // State to track loading status
   const [coinholders, setCoinHolders] = useState([]);
-  const [coinholderswithstakeholders, setCoinHoldersWithStakeHolders] = useState([]);
+  const [coinholderswithstakeholders, setCoinHoldersWithStakeHolders] =
+    useState([]);
   const [dummy, setDummy] = useState([]);
   const [overview, setOverview] = useState([]);
 
@@ -75,31 +76,6 @@ const Page = () => {
     OverviewData();
   }, []);
 
-  // const fetchDummyData = async () => {
-  //   try {
-  //     const token = localStorage.getItem("accessToken");
-  //     if (!token) {
-  //       window.location.href = "/auth/login/modern"; // Redirect to login if token is not available
-  //       return;
-  //     }
-  //     const headers = {
-  //       Authorization: token,
-  //     };
-
-  //     const response = await axios.get(`${BASEURL}/api/Dummy/getDummyData`, {
-  //       headers: headers,
-  //     });
-
-  //     setDummy(response.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchDummyData();
-  // }, []);
-  
   const CoinHolders = async () => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -111,11 +87,14 @@ const Page = () => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/admin/countMembersWithCoins`, {
-        headers: headers,
-      });
+      const response = await axios.get(
+        `${BASEURL}/admin/countMembersWithCoins`,
+        {
+          headers: headers,
+        }
+      );
 
-      setCoinHolders(response.data.data);
+      setCoinHolders(response.data.data.count);
       console.log(response.data.data.count);
     } catch (error) {
       console.error(error);
@@ -133,11 +112,14 @@ const Page = () => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/admin/countMemberWithStakeCoins`, {
-        headers: headers,
-      });
+      const response = await axios.get(
+        `${BASEURL}/admin/countMemberWithStakeCoins`,
+        {
+          headers: headers,
+        }
+      );
 
-      setCoinHoldersWithStakeHolders(response.data.data);
+      setCoinHoldersWithStakeHolders(response.data.data.count);
       console.log(response.data.data.totalStakeCoins);
     } catch (error) {
       console.error(error);
@@ -192,13 +174,13 @@ const Page = () => {
               </Grid>
               <Grid item xs={6} md={4}>
                 <OverviewCoinHolders
-                  amount={coinholders.count}
+                  amount={coinholders}
                   // fetchDummyData={fetchDummyData}
                 />
               </Grid>
               <Grid item xs={6} md={4}>
                 <OverviewStakeCoins
-                  amount={coinholderswithstakeholders.totalStakeCoins}
+                  amount={coinholderswithstakeholders}
                   // fetchDummyData={fetchDummyData}
                 />
               </Grid>
@@ -297,5 +279,3 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
-

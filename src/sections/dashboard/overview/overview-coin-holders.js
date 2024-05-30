@@ -1,6 +1,3 @@
-
-
-
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import {
@@ -51,7 +48,7 @@ export const OverviewCoinHolders = (props) => {
   };
 
   // Check if amount is null or undefined before accessing totalCoinHolders
-  const totalCoinHolders = amount ? amount.totalCoinHolders : 0;
+  const totalCoinHolders = amount ? amount : 0;
 
   return (
     <Card>
@@ -106,8 +103,7 @@ export const OverviewCoinHolders = (props) => {
 };
 
 OverviewCoinHolders.propTypes = {
-  amount: PropTypes.object, // Adjust the prop type accordingly
-  fetchDummyData: PropTypes.func.isRequired,
+  amount: PropTypes.number, // Adjust the prop type accordingly
 };
 
 export default OverviewCoinHolders;
