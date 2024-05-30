@@ -248,6 +248,115 @@ const updateOrder = async (req, res) => {
     }
 };
 
+// const getAAllOrder = async (req, res) => {
+//     const Schema = Joi.object({
+//         page_number: Joi.number(),
+//         count: Joi.number(),
+//     });
+
+//     const { error, value } = Schema.validate(req.params);
+
+//     if (error) {
+//         return res.status(400).json({ status: false, error: error.details[0].message });
+//     }
+
+//     try {
+//         const page_number = value.page_number || 1;
+//         const count = value.count || 10;
+//         const offset = (page_number - 1) * count;
+
+//         // Fetch total count of orders
+//         const totalOrders = await Order.countDocuments();
+
+//         // Fetch orders for the specified page with sorting and pagination
+//         const orders = await Order.find()
+//             .sort({ createdAt: -1 })
+//             .skip(offset)
+//             .limit(count);
+
+//         if (!orders || orders.length === 0) {
+//             return res.status(200).json({
+//                 status: false,
+//                 message: "No order ",
+//                 totalOrders: totalOrders,
+//                 order: [],
+//             });
+//         }
+
+//         return res.status(200).json({
+//             status: true,
+//             message: "Orders Found",
+//             totalOrders: totalOrders,
+//             order: orders,
+//         });
+//     } catch (error) {
+//         console.error('Error fetching orders:', error);
+//         res.status(500).json({ error: 'Failed to fetch orders' });
+//     }
+// };
+
+
+const getAAllOrder = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+
+    try {
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+
+        // Fetch total count of orders
+        const totalOrders = await Order.countDocuments();
+
+        // Fetch orders for the specified page with sorting and pagination
+        let orders = await Order.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No order ",
+                totalOrders: totalOrders,
+                order: [],
+            });
+        }
+
+        // Fetch member names for each order
+        const userIds = orders.map(order => order.userId);
+        const users = await Member.find({ member_user_id: { $in: userIds } });
+        const memberNameMap = new Map(users.map(user => [user.member_user_id, user.member_name]));
+
+        // Add member name to each order
+        orders = orders.map(order => {
+            const memberName = memberNameMap.get(order.userId);
+            return {
+                ...order.toObject(),
+                member_name: memberName || null
+            };
+        });
+
+        return res.status(200).json({
+            status: true,
+            message: "Orders Found",
+            totalOrders: totalOrders,
+            order: orders,
+        });
+    } catch (error) {
+        console.log('Error fetching orders:', error);
+        return res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
 const getAllOrder = async (req, res) => {
     const Schema = Joi.object({
         page_number: Joi.number(),
@@ -1169,6 +1278,112 @@ const createBuyOrder = async (req, res) => {
 };
 
 
+// const getAAllBuyOrder = async (req, res) => {
+//     const Schema = Joi.object({
+//         page_number: Joi.number(),
+//         count: Joi.number(),
+//     });
+
+//     const { error, value } = Schema.validate(req.params);
+
+//     if (error) {
+//         return res.status(400).json({ status: false, error: error.details[0].message });
+//     }
+
+//     try {
+//         const page_number = value.page_number || 1;
+//         const count = value.count || 10;
+//         const offset = (page_number - 1) * count;
+
+//         // Fetch total count of orders
+//         const totalBuyOrders = await BuyOrder.countDocuments();
+
+//         // Fetch orders for the specified page with sorting and pagination
+//         const orders = await BuyOrder.find()
+//             .sort({ createdAt: -1 })
+//             .skip(offset)
+//             .limit(count);
+
+//         if (!orders || orders.length === 0) {
+//             return res.status(200).json({
+//                 status: false,
+//                 message: "No Buy order ",
+//                 totalOrders: totalBuyOrders,
+//                 order: [],
+//             });
+//         }
+
+//         return res.status(200).json({
+//             status: true,
+//             message: "Buy Orders Found",
+//             totalOrders: totalBuyOrders,
+//             order: orders,
+//         });
+//     } catch (error) {
+//         console.error('Error fetching orders:', error);
+//         res.status(500).json({ error: 'Failed to fetch orders' });
+//     }
+// };
+
+const getAAllBuyOrder = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+
+    try {
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+
+        // Fetch total count of buy orders
+        const totalBuyOrders = await BuyOrder.countDocuments();
+
+        // Fetch buy orders for the specified page with sorting and pagination
+        let orders = await BuyOrder.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No Buy order ",
+                totalOrders: totalBuyOrders,
+                order: [],
+            });
+        }
+
+        // Fetch member names for each order using map method
+        const userIds = orders.map(order => order.userId);
+        const users = await Member.find({ member_user_id: { $in: userIds } });
+        const userIdToNameMap = new Map(users.map(user => [user.member_user_id, user.member_name]));
+
+        // Add member names to each order
+        orders = orders.map(order => {
+            const memberName = userIdToNameMap.get(order.userId) || null;
+            return { ...order.toObject(), member_name: memberName };
+        });
+
+        return res.status(200).json({
+            status: true,
+            message: "Buy Orders Found",
+            totalOrders: totalBuyOrders,
+            order: orders,
+        });
+    } catch (error) {
+        console.error('Error fetching buy orders:', error);
+        res.status(500).json({ error: 'Failed to fetch buy orders' });
+    }
+};
+
+
 const getAllBuyOrder = async (req, res) => {
     const Schema = Joi.object({
         page_number: Joi.number(),
@@ -1315,6 +1530,25 @@ const getBuyOrdersForAdminForOneUser = async (req, res) => {
 };
 
 
+
+const findMemberOrder = async (req, res) => {
+    try {
+        const { userId } = req.body
+        if (userId.length < 3) {
+          return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+        }
+        const member = await Order.find({ userId: { $regex: userId, $options: "i" } });
+    
+        if (member.length == 0) {
+          return res.status(404).json({ status: false, message: "Member not found" });
+        }
+        return res.status(200).json({ status: true, message: "Member found", data: member });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ status: false, message: "Internal server error" });
+      }
+}
+
 module.exports = {
-    createOrder, updateOrder, getAllOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder, getAllBuyOrder, getAllBuyOrderForOneUSer, getBuyOrdersForAdminForOneUser
+    createOrder, updateOrder, getAllOrder, getAAllOrder, getAAllBuyOrder, getAllOrderForOneUSer, getOrdersForAdminForOneUser, deleteOrder, createBuyOrder, updateBuyOrder, getAllBuyOrder, getAllBuyOrderForOneUSer, getBuyOrdersForAdminForOneUser,findMemberOrder
 };
