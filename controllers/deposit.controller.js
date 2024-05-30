@@ -414,11 +414,24 @@ async function convertHistoryAdmin(req, res) {
   }
 }
 
+async function findMemberDeposit(req, res) {
+  try {
+    const { name } = req.body
+    if (name.length < 3) {
+      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    }
+    const member = await Deposit.find({ name: { $regex: name, $options: "i" } });
 
+    if (member.length == 0) {
+      return res.status(404).json({ status: false, message: "Member not found" });
+    }
+    return res.status(200).json({ status: true, message: "Member found", data: member });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
 module.exports = {
-  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins, convertHistoryUser, convertHistoryAdmin
+  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins, convertHistoryUser, convertHistoryAdmin,findMemberDeposit
 };
-
-
-
 

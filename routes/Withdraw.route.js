@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ValidMember, isAdmin } = require("../middleware/Auth.middleware");
-const { withdrawRequest,getWithdrawByUserId,verifyOTP, getWithdrawRequests, updateWithdrawalStatus,getUserWithdraws,getWithdrawApproved,getWithdrawRejected,getWithdrawPending } = require("../controllers/Withdraw.controller");
+const { withdrawRequest,getWithdrawByUserId,verifyOTP, getWithdrawRequests, updateWithdrawalStatus,getUserWithdraws,getWithdrawApproved,getWithdrawRejected,getWithdrawPending,findMemberWithdraw } = require("../controllers/Withdraw.controller");
 
 router.route('/Request').post(ValidMember, withdrawRequest); //
 router.route('/verifyOTP').post(ValidMember, verifyOTP); //
@@ -14,6 +14,8 @@ router.route('/getUserWithdraws/:page_number?/:count?').get(ValidMember, getUser
 
   
 router.route('/getWithdrawByUserId/:with_referrance').get(isAdmin, getWithdrawByUserId);
+
+router.route('/findMemberWithdraw').post(isAdmin, findMemberWithdraw);
 
 module.exports = router;
 

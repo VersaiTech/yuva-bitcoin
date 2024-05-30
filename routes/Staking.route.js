@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
     stakingSummary, transferToStaking, transferToWallet, stakingSummaryForAdmin, get3MonthsStake, get6MonthsStake,
-    get12MonthsStake, getTotalInvestmentByUserId, get3MonthsUser, get6MonthsUser, get12MonthsUser, getStaked, getUnstaked, calculate } = require("../controllers/Staking.controller");
+    get12MonthsStake, getTotalInvestmentByUserId, get3MonthsUser, get6MonthsUser, get12MonthsUser, getStaked, getUnstaked, calculate, findMemberStake } = require("../controllers/Staking.controller");
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 // router.route("/").get(getStakingData).post(ValidMember, stakingRequest);
@@ -28,5 +28,7 @@ router.route('/getUnstaked').get(ValidMember, getUnstaked);
 
 
 router.route('/calculateInterest').post(calculate);
+
+router.route("/findMemberStake").post(isAdmin,findMemberStake)
 
 module.exports = router;

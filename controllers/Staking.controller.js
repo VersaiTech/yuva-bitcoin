@@ -611,6 +611,25 @@ const calculate = async (req, res) => {
 }
 
 
+const findMemberStake = async (req, res) => {
+  try {
+    const { member_name } = req.body
+    if (member_name.length < 3) {
+      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    }
+    const member = await StakeHistory.find({ member_name: { $regex: member_name, $options: "i" } });
+
+    if (member.length == 0) {
+      return res.status(404).json({ status: false, message: "Member not found" });
+    }
+    return res.status(200).json({ status: true, message: "Member found", data: member });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+
 module.exports = {
   stakingSummary,
   transferToStaking,
@@ -624,7 +643,9 @@ module.exports = {
 
   getStaked, getUnstaked,
 
-  calculate
+  calculate,
+
+  findMemberStake
 };
 
 
