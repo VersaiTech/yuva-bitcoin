@@ -80,6 +80,7 @@ export const CustomerListTable = (props) => {
     onPageChange,
     onRowsPerPageChange,
     page,
+    onRowClick,
     rowsPerPage,
     ...other
   } = props;
@@ -205,6 +206,7 @@ export const CustomerListTable = (props) => {
                   hover
                   key={customer.member_user_id}
                   selected={isSelected}
+                  onClick={() => onRowClick(customer)}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -249,7 +251,7 @@ export const CustomerListTable = (props) => {
                     {customer.twitterId}
                   </Link>
                   </TableCell>
-                  <TableCell>{customer.coins}</TableCell>
+                  <TableCell>{customer.coins.toFixed(4)}</TableCell>
                   <TableCell>
                     <Typography
                       variant="subtitle2"
