@@ -80,7 +80,11 @@ const UserDrawer = ({ open, onClose, user, onEdit }) => {
         disableGutters
         divider
         label="Registered Date"
-        value={user.registration_date}
+        value={new Date(user.registration_date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
       />
       <PropertyListItem
         align={align}
