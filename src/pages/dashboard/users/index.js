@@ -124,6 +124,7 @@ const Page = () => {
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
+  const [drawer, setDrawer] = useState({ isOpen: false, user: null });
 
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
 
