@@ -136,6 +136,7 @@ export const EarningListSearch = (props) => {
             )}
           />
         </Box>
+      </Stack>
     </div>
   );
 };

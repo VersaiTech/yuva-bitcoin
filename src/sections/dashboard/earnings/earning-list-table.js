@@ -359,23 +359,30 @@ export const EarningListTable = (props) => {
                   </TableCell>
                   <TableCell>{customer.description}</TableCell>
                   <TableCell>
-                    {customer.link ? (
-                      <Link
-                        color="inherit"
-                        href={customer.link}
-                        target="_blank"
-                        variant="subtitle2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          router.push(customer.link);
-                        }}
-                      >
-                        {customer.link}
-                      </Link>
-                    ) : (
-                      <Typography variant="subtitle2">N/A</Typography>
-                    )}
-                  </TableCell>
+  {customer.link ? (
+    <Link
+      color="inherit"
+      href={customer.link}
+      target="_blank"
+      variant="subtitle2"
+      onClick={(e) => {
+        e.preventDefault();
+        router.push(customer.link);
+      }}
+      sx={{
+        display: "inline-block",
+        maxWidth: "195px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {customer.link}
+    </Link>
+  ) : (
+    <Typography variant="subtitle2">N/A</Typography>
+  )}
+</TableCell>
                   {/* <TableCell>{customer.name}</TableCell> */}
 
                   <TableCell>
