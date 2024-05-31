@@ -124,11 +124,9 @@ const Page = () => {
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
-<<<<<<< HEAD
-  const [searchResults, setSearchResults] = useState([]);
-=======
+
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
->>>>>>> f9cd6fdf62e06c473f67f3a0959b77a5ba69f607
+
 
   useEffect(() => {
     console.log(customers);
