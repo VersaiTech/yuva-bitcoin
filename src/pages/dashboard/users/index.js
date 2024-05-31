@@ -19,6 +19,7 @@ import { usePageView } from "../../../hooks/use-page-view";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
+import UserDrawer from "./userDrawer/UserDrawer";
 
 import axios from "axios";
 import { customer } from "../../../api/customers/data";
@@ -123,7 +124,11 @@ const Page = () => {
   const { search, updateSearch } = useSearch();
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
+<<<<<<< HEAD
   const [searchResults, setSearchResults] = useState([]);
+=======
+  const [drawer, setDrawer] = useState({ isOpen: false, user: null });
+>>>>>>> f9cd6fdf62e06c473f67f3a0959b77a5ba69f607
 
   useEffect(() => {
     console.log(customers);
@@ -174,6 +179,20 @@ const Page = () => {
     [updateSearch]
   );
 
+  const handleRowClick = (user) => {
+    setDrawer({
+      isOpen: true,
+      user,
+    });
+  };
+
+  const handleDrawerClose = () => {
+    setDrawer({
+      isOpen: false,
+      user: null,
+    });
+  };
+
   return (
     <>
       <Head>
@@ -223,11 +242,17 @@ const Page = () => {
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
                 page={search.page}
+                onRowClick={handleRowClick}
               />
             </Card>
           </Stack>
         </Container>
       </Box>
+      <UserDrawer
+      open={drawer.isOpen}
+      onClose={handleDrawerClose}
+      user={drawer.user}
+    />
     </>
   );
 };
