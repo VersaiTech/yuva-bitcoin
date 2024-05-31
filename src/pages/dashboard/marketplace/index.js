@@ -99,7 +99,11 @@ const CryptoMarketplacePage = () => {
       enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseForm();
     } catch (error) {
-      enqueueSnackbar("Error placing order", { variant: "error" });
+      if (error.response && error.response.data && error.response.data.error) {
+        enqueueSnackbar(error.response.data.error, { variant: "error" });
+      } else {
+        enqueueSnackbar("Error placing order", { variant: "error" });
+      }
       console.error("Error placing order:", error);
     }
   };
