@@ -1,4 +1,3 @@
-
 import {
   Typography,
   Box,
@@ -16,17 +15,15 @@ import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { paths } from "../../../paths";
 import Link from "next/link";
-import NextLink from 'next/link';
+import NextLink from "next/link";
 import { WithdrawalsCreateForm } from "../../../sections/dashboard/withdrawals/withdrawals-create-form";
 // import { useCustomer } from "./useCustomer"; // Import the useCustomer hook from the new file
 import Head from "next/head";
-import Image from 'next/image'
-import { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
+import Image from "next/image";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
 
-
-
-const imageURL = '/assets/logos/yuvalogo2.png'; 
+const imageURL = "/assets/logos/yuvalogo2.png";
 
 const Page = () => {
   // const customer = useCustomer();
@@ -34,17 +31,22 @@ const Page = () => {
 
   const getCustomerBalance = useCallback(async () => {
     try {
-      const BASEURL =process.env.NEXT_PUBLIC_BASE_URL;
-      const token = localStorage.getItem('accessToken');
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
       if (!token) {
         window.location.href = "/auth/login/modern";
         return;
       }
       const headers = {
-        Authorization: token
+        Authorization: token,
       };
-      console.log(`Making API call to ${BASEURL}/admin/getuserbalance with headers`, headers);
-      const response = await axios.get(`${BASEURL}/admin/getuserbalance`, { headers });
+      console.log(
+        `Making API call to ${BASEURL}/admin/getuserbalance with headers`,
+        headers
+      );
+      const response = await axios.get(`${BASEURL}/admin/getuserbalance`, {
+        headers,
+      });
       console.log("API response:", response.data);
       setCustomerBalance(response.data.balance);
     } catch (err) {
@@ -56,8 +58,6 @@ const Page = () => {
     getCustomerBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getCustomerBalance]);
-
-
 
   return (
     <>
@@ -74,79 +74,55 @@ const Page = () => {
         <Container maxWidth="lg">
           <Stack spacing={4}>
             <Stack spacing={4}>
-              <div
-              >
+              <div>
                 <Link
-                  style={{ display: "flex", alignItems: "center", textDecoration: "none", }
-                  }
-
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    textDecoration: "none",
+                  }}
                   component={NextLink}
                   href={paths.dashboard.withdraw.index}
 
-                // underline="hover"
+                  // underline="hover"
                 >
                   <SvgIcon sx={{ mr: 1, color: "text.primary" }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2" color={"text.primary"}>Withdrawals</Typography>
+                  <Typography variant="subtitle2" color={"text.primary"}>
+                    Withdrawals
+                  </Typography>
                 </Link>
               </div>
               <div>
                 <Container maxWidth="sm" sx={{ textAlign: "center" }}>
-                  <Card>
+                  <Card >
                     <CardHeader
                       subheader={
                         <Typography variant="h3" color="text.primary">
-  {imageURL && <Image src={imageURL} alt="Image" width={30} height={30} />} {/* Render image if imageURL is available */}
-  {(customerBalance !== null ? customerBalance : 0)} 
-</Typography>
-                      }
-                      sx={{ pb: 0 }}
-                      title={
-                        <Typography color="text.primary" variant="overline">
-                          Total balance
+                          {imageURL && (
+                            <Image
+                              src={imageURL}
+                              alt="Image"
+                              width={30}
+                              height={30}
+                            />
+                          )}{" "}
+                          {/* Render image if imageURL is available */}
+                          {customerBalance !== null
+                            ? customerBalance.toFixed(4)
+                            : 0}
                         </Typography>
                       }
+                      sx={{ pb: 0 , marginBottom: 3 }}
+                      title={
+                        <>
+                          <Typography color="text.primary" variant="overline">
+                            Total balance
+                          </Typography>
+                        </>
+                      }
                     />
-                    <CardContent>
-                      <Divider sx={{ mb: 2 }} />
-                      <Typography color="text.secondary" variant="overline">
-                        Available currency
-                      </Typography>
-                      <Divider />
-                      <Stack alignItems="flex-start" spacing={1} sx={{ mt: 2 }}>
-                        <Link
-                          component={NextLink}
-                          href={paths.dashboard.deposits.index}
-                        >
-                          <Button
-                            color="inherit"
-                            endIcon={
-                              <SvgIcon>
-                                <ArrowRightIcon />
-                              </SvgIcon>
-                            }
-                          >
-                            Add money
-                          </Button>
-                        </Link>
-                        <Link
-                          component={NextLink}
-                          href={paths.dashboard.withdraw.create}
-                        >
-                          <Button
-                            color="inherit"
-                            endIcon={
-                              <SvgIcon>
-                                <ArrowRightIcon />
-                              </SvgIcon>
-                            }
-                          >
-                            Withdraw funds
-                          </Button>
-                        </Link>
-                      </Stack>
-                    </CardContent>
                   </Card>
                 </Container>
               </div>

@@ -222,7 +222,9 @@ const Page = () => {
                                 ) : (
                                   // Render user balance when data is available
                                   <Typography variant="h4">
-                                    {overview && parseFloat(overview.coins) + " Yuva Bitcoin" || "0 Yuva Bitcoin"}
+                                    {
+                                      overview && parseFloat(overview.coins) + " Yuva Bitcoin" || "0 Yuva Bitcoin"
+                                    }
                                   </Typography>
                                 )}
                                   <Typography variant="h6">
