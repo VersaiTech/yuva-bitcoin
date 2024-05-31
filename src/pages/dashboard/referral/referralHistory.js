@@ -35,6 +35,7 @@ const useReferrals = () => {
             headers: headers,
           }
         );
+        console.log(response.data);
         setReferrals(response.data.referrals);
       } catch (error) {
         console.error("Error fetching referrals:", error);
