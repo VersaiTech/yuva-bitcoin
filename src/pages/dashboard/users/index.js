@@ -68,12 +68,12 @@ const useCustomers = (search) => {
 
       console.log(response.data)
       let activeUsersResponse = await axios.get(
-        `${BASEURL}/admin/getActiveMembers`,
+        `${BASEURL}/admin/getActiveMembers/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
       let blockedUsersResponse = await axios.get(
-        `${BASEURL}/admin/getBlockedMembers`,
+        `${BASEURL}/admin/getBlockedMembers/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
@@ -121,10 +121,9 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, activeUsers, blockedUsers } =
-    useCustomers(search);
-
+  const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     console.log(customers);
@@ -192,43 +191,8 @@ const Page = () => {
             <Stack direction="row" justifyContent="center" spacing={4}>
               <Stack spacing={1}>
                 <Typography variant="h4">All Users</Typography>
-                {/* <Stack alignItems="center" direction="row" spacing={1}>
-                  <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={
-                      <SvgIcon>
-                        <Upload01Icon />
-                      </SvgIcon>
-                    }
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={
-                      <SvgIcon>
-                        <Download01Icon />
-                      </SvgIcon>
-                    }
-                  >
-                    Export
-                  </Button>
-                </Stack> */}
               </Stack>
-              <Stack alignItems="center" direction="row" spacing={3}>
-                {/* <Button
-                  startIcon={
-                    <SvgIcon>
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                >
-                  Add
-                </Button> */}
-              </Stack>
+              <Stack alignItems="center" direction="row" spacing={3}></Stack>
             </Stack>
             <Card>
               <CustomerListSearch
@@ -240,12 +204,11 @@ const Page = () => {
                 blockedUsers={blockedUsers}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <CustomerListTable
-                // customers={customers}
-                // customersCount={customersCount}
-                // customersCount={0}
                 customers={
+                  searchResults.length > 0 ? searchResults :
                   currentTab === "all"
                     ? customers
                     : currentTab === "hasAcceptedMarketing"
@@ -254,7 +217,8 @@ const Page = () => {
                     ? blockedUsers
                     : customers
                 }
-                customersCount={currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                customersCount={searchResults.length > 0 ? searchResults.length :
+                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
@@ -271,3 +235,4 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
+
