@@ -202,15 +202,6 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <DepositListSearch
-                onFiltersChange={handleFiltersChange}
-                onSortChange={handleSortChange}
-                sortDir={search.sortDir}
-                completed={completed}
-                pending={pending}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-              />
               <DepositListTable
                 // customers={customers}
                 // customersCount={customersCount}

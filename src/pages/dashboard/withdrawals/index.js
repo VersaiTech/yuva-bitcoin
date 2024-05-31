@@ -462,17 +462,6 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <WithdrawalsListSearch
-                onFiltersChange={handleFiltersChange}
-                onSortChange={handleSortChange}
-                sortBy={search.sortBy}
-                sortDir={search.sortDir}
-                // completed={completed}
-                // pending={pending}
-                // rejected={rejected}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-              />
               <WithdrawalsListTable
                 customers={customers}
                 // customersCount={customersCount}
