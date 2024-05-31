@@ -1885,7 +1885,7 @@ const withdrawRToday = async (req, res) => {
       }
     });
     const totalwithdrawR = await withdraw.length
-    return res.status(200).json({ status: true, message: "Withdraw Rejected today", counts: totalWithdrawR, data: withdraw });
+    return res.status(200).json({ status: true, message: "Withdraw Rejected today", counts: totalwithdrawR, data: withdraw });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });

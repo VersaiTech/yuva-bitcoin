@@ -52,17 +52,17 @@ async function getOverview(req, res) {
 
 
     const withdrawSToday = await Withdraw.aggregate([
-      { $match: { processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $match: { status: 'Approved', processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
       { $group: { _id: null, count: { $sum: 1 }, }, },
     ]);
 
     const withdrawRToday = await Withdraw.aggregate([
-      { $match: { processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $match: { status: 'Rejected', processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
       { $group: { _id: null, count: { $sum: 1 }, }, },
     ]);
 
     const withdrawPToday = await Withdraw.aggregate([
-      { $match: { with_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $match: { status: 'Pending', with_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
       { $group: { _id: null, count: { $sum: 1 }, }, },
     ]);
 
@@ -72,43 +72,43 @@ async function getOverview(req, res) {
     ]);
 
     const referralToday = await ReferralHistory.aggregate([
-      { $match: { createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
-      { $group: { _id: null, count: { $sum: 1 }, }, },
+      { $match: { referral_user_isRefered: true,createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+  { $group: { _id: null, count: { $sum: 1 }, }, },
     ]);
 
-    return res.status(200).json({
-      status: true,
-      message: "Overview for admin panel",
-      overview: {
-        allMembers: allMembers.length,
-        activeMembers: activeMembers.length,
-        inactiveMembers: inactiveMembers.length,
-        allTasks: allTasks.length,
-        completedTasks: completedTasksCount,
-        pendingTasks: pendingTasksCount,
-        totalTaskCoins: totalTaskCoins.length > 0 ? totalTaskCoins[0].totalCoins : 0,
-        totalStakesInvestment,
-        totalMemberCoins,
-        totalDepositAmount,
-        totalReferralEarned: totalReferralEarned.length > 0 ? totalReferralEarned[0].totalCoins : 0,
-        yuva: adminData.yuva,
-        usdt: adminData.usdt,
-        userRegToday: userRegToday.length > 0 ? userRegToday[0].count : 0,
-        stakeToday: stakeToday.length > 0 ? stakeToday[0].count : 0,
-        withdrawSToday: withdrawSToday.length > 0 ? withdrawSToday[0].count : 0,
-        withdrawRToday: withdrawRToday.length > 0 ? withdrawRToday[0].count : 0,
-        withdrawPToday: withdrawPToday.length > 0 ? withdrawPToday[0].count : 0,
-        usdtDepositToday: usdtDepositToday.length > 0 ? usdtDepositToday[0].count : 0,
-        referralToday: referralToday.length > 0 ? referralToday[0].count : 0,
-      },
-    });
-  } catch (error) {
-    console.error("Error fetching overview data:", error);
-    return res.status(500).json({
-      status: false,
-      message: "Internal server error",
-    });
-  }
+  return res.status(200).json({
+    status: true,
+    message: "Overview for admin panel",
+    overview: {
+      allMembers: allMembers.length,
+      activeMembers: activeMembers.length,
+      inactiveMembers: inactiveMembers.length,
+      allTasks: allTasks.length,
+      completedTasks: completedTasksCount,
+      pendingTasks: pendingTasksCount,
+      totalTaskCoins: totalTaskCoins.length > 0 ? totalTaskCoins[0].totalCoins : 0,
+      totalStakesInvestment,
+      totalMemberCoins,
+      totalDepositAmount,
+      totalReferralEarned: totalReferralEarned.length > 0 ? totalReferralEarned[0].totalCoins : 0,
+      yuva: adminData.yuva,
+      usdt: adminData.usdt,
+      userRegToday: userRegToday.length > 0 ? userRegToday[0].count : 0,
+      stakeToday: stakeToday.length > 0 ? stakeToday[0].count : 0,
+      withdrawSToday: withdrawSToday.length > 0 ? withdrawSToday[0].count : 0,
+      withdrawRToday: withdrawRToday.length > 0 ? withdrawRToday[0].count : 0,
+      withdrawPToday: withdrawPToday.length > 0 ? withdrawPToday[0].count : 0,
+      usdtDepositToday: usdtDepositToday.length > 0 ? usdtDepositToday[0].count : 0,
+      referralToday: referralToday.length > 0 ? referralToday[0].count : 0,
+    },
+  });
+} catch (error) {
+  console.error("Error fetching overview data:", error);
+  return res.status(500).json({
+    status: false,
+    message: "Internal server error",
+  });
+}
 }
 
 
