@@ -192,7 +192,7 @@ const ContactPage = () => {
               fontWeight: "bold",
             }}
           >
-            Our team will respond you shortly. 
+            Our team will respond you shortly on your registered Email id. 
           </Alert>
           </Container>
         </Box>

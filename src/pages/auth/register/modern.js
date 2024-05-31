@@ -285,7 +285,7 @@ const Page = () => {
           />
           <Typography color="text.secondary" variant="body2">
             I have read the{" "}
-            <Link component="a" href="#">
+            <Link component="a" href="/terms">
               Terms and Conditions
             </Link>
           </Typography>

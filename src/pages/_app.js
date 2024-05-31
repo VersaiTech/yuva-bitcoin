@@ -16,6 +16,8 @@ import { gtm } from '../libs/gtm';
 import { store } from '../store';
 import { createTheme } from '../theme';
 import { createEmotionCache } from '../utils/create-emotion-cache';
+import "../../public/styles/globals.css"
+
 // Remove if nprogress is not used
 import '../libs/nprogress';
 // Remove if mapbox is not used

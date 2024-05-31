@@ -132,6 +132,7 @@ import {
   Alert
 } from '@mui/material';
 import ReferralIntro from './referralIntro';
+import Cardd from "../../components/card.jsx"
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -192,6 +193,7 @@ export const ReferralPage = () => {
                 <Typography variant="subtitle2">
                   Invite your friends to trade an Bitmax and share up to 30% of trading fee for referral reward
                 </Typography>
+                
               </Stack>
               <img
                 src="/referral.png"
@@ -200,7 +202,7 @@ export const ReferralPage = () => {
               />
             </CardContent>
           </Card>
-        </Grid>
+          </Grid>
 
         <Grid item xs={12} md={6} spacing={2}>
           <Card spacing={2}>
