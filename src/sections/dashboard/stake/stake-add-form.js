@@ -174,10 +174,12 @@ export const CustomerEditForm = (props) => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Confirm Stake</DialogTitle>
         <DialogContent> 
-          <DialogContentText style={{ color: "red" }}>
-            Please stake coins carefully. Once you stake coins, you cannot
+          <Alert severity="warning" sx={{ p: 3 }}>
+          <Typography variant="body2">
+            Warning: Please stake coins carefully. Once you stake coins, you cannot
             withdraw them until the staking duration ends.
-          </DialogContentText>
+          </Typography>
+        </Alert>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="error" variant="outlined" >
