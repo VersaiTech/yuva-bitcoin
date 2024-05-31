@@ -2,6 +2,9 @@ const { Task, CompletedTask } = require('../models/Task');
 const Member = require('../models/memberModel');
 const Stake = require('../models/stake');
 const Joi = require('joi');
+const Withdraw = require('../models/withdrawModel');
+const Deposit = require('../models/deposit');
+const ReferralHistory = require('../models/referralModel');
 
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
@@ -1783,7 +1786,6 @@ const userRegToday = async (req, res) => {
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
 
-    // Assuming Member model is imported and defined appropriately
     const users = await Member.find({
       createdAt: {
         $gte: startOfToday,
@@ -1793,9 +1795,128 @@ const userRegToday = async (req, res) => {
 
     return res.status(200).json({ status: true, message: "Users registered today", data: users });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
   }
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday }; 
+const stakeToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const stake = await Stake.find({
+      sys_date: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Stake today", data: stake });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+const withdrawSToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const withdraw = await Withdraw.find({
+      status: 'Approved',
+      processing_date: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Withdraw Approved today", data: withdraw });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+const withdrawRToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+    const withdraw = await Withdraw.find({
+      status: 'Rejected',
+      processing_date: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Withdraw Rejected today", data: withdraw });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+const withdrawPToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const withdraw = await Withdraw.find({
+      status: 'Pending',
+      with_date: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: withdraw });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+
+  }
+}
+const usdtDepositToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const deposit = await Deposit.find({
+      deposit_type: 'usdt',
+      createdAt: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: deposit });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+
+  }
+}
+const referralToday = async (req, res) => {
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const referral = await ReferralHistory.find({
+      referral_user_isRefered: true,
+      createdAt: {
+        $gte: startOfToday,
+        $lt: endOfToday
+      }
+    });
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: referral });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+
+  }
+}
+
+
+
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday }; 

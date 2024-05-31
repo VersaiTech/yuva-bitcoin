@@ -4,6 +4,7 @@ const Deposit = require("../models/deposit");
 const Admin = require("../models/AdminModel");
 const { Task, CompletedTask } = require("../models/Task");
 const StakeHistory = require("../models/stakingHistory");
+const ReferralHistory = require("../models/referralModel");
 
 async function getOverview(req, res) {
   try {
@@ -17,18 +18,51 @@ async function getOverview(req, res) {
 
     const adminData = await Admin.findOne()
 
-    // Count completed tasks separately
     const completedTasksCount = await CompletedTask.countDocuments({ status: 'confirmed' });
     const pendingTasksCount = await CompletedTask.countDocuments({ status: 'pending' });
-
-    // Count pending tasks separately
-    // const pendingTasksCount = allTasks.length - completedTasksCount;
 
     const totalStakesInvestment = allStakes.reduce((total, stake) => total + stake.investment, 0);
     const totalMemberCoins = allCoin.reduce((total, member) => total + member.coins, 0);
     const totalDepositAmount = allDeposits.reduce((total, deposit) => total + deposit.amount, 0);
 
-    console.log(adminData.yuva)
+    const totalTaskCoins = await CompletedTask.aggregate([
+      {
+        $match: { status: 'confirmed' },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCoins: { $sum: "$coins" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalCoins: 1,
+        },
+      },
+    ]);
+
+    const totalReferralEarned = await ReferralHistory.aggregate([
+      {
+        $match: { referral_user_isRefered: true },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCoins: { $sum: "$user_earned" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalCoins: 1,
+        },
+      },
+    ])
+
+
+
     return res.status(200).json({
       status: true,
       message: "Overview for admin panel",
@@ -39,9 +73,11 @@ async function getOverview(req, res) {
         allTasks: allTasks.length,
         completedTasks: completedTasksCount,
         pendingTasks: pendingTasksCount,
+        totalTaskCoins: totalTaskCoins.length > 0 ? totalTaskCoins[0].totalCoins : 0,
         totalStakesInvestment,
         totalMemberCoins,
         totalDepositAmount,
+        totalReferralEarned: totalReferralEarned.length > 0 ? totalReferralEarned[0].totalCoins : 0,
         yuva: adminData.yuva,
         usdt: adminData.usdt
       },
