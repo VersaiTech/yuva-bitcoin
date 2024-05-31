@@ -115,23 +115,7 @@ export const ItemSearch = (props) => {
             </SvgIcon>
           </ToggleButton>
         </ToggleButtonGroup>
-        <TextField
-          label="Sort By"
-          name="sort"
-          onChange={handleSortChange}
-          select
-          SelectProps={{ native: true }}
-          value={sortDir}
-        >
-          {sortOptions.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          ))}
-        </TextField>
+        
       </Stack>
     </Card>
   );
