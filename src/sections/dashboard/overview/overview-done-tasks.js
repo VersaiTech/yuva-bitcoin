@@ -46,7 +46,7 @@ export const OverviewDoneTasks = (props) => {
       <Divider />
       <CardActions>
         {/* Use Link component from Next.js to navigate to the desired route */}
-        <Link  href={paths.dashboard.tasks.index}> 
+        <Link href={`${paths.dashboard.tasks.index}?s=completed`}>
           <Button
             color="inherit"
             endIcon={(

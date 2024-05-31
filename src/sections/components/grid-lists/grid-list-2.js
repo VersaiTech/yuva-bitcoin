@@ -94,7 +94,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                             : "0.9rem",
                         }}
                       >
-                        {coin}
+                      {coin === "yuva" ? "YB" : coin}
                       </Typography>
                     </Box>
                     <Badge

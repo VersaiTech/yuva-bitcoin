@@ -58,7 +58,9 @@ const validationSchema = Yup.object({
     .matches(/^[a-zA-Z0-9_]+$/, 'Please enter a valid Twitter username without "@"')
     .max(60, 'Must be at most 60 characters')
     .required('Twitter ID is required'),
-  wallet_address: Yup.string().required("Wallet Address is required"),
+  wallet_address: Yup.string()
+  .required("Wallet Address is required")
+  .min(15,"Must be atleast 15 characters"),
   referralCode: Yup.string(),
   policy: Yup.boolean()
     .oneOf([true], 'Terms and Conditions must be accepted')
