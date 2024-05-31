@@ -5,6 +5,9 @@ const Admin = require("../models/AdminModel");
 const { Task, CompletedTask } = require("../models/Task");
 const StakeHistory = require("../models/stakingHistory");
 const ReferralHistory = require("../models/referralModel");
+const Withdraw = require("../models/withdrawModel");
+
+const { userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday } = require("../controllers/AdminController");
 
 async function getOverview(req, res) {
   try {
@@ -26,42 +29,52 @@ async function getOverview(req, res) {
     const totalDepositAmount = allDeposits.reduce((total, deposit) => total + deposit.amount, 0);
 
     const totalTaskCoins = await CompletedTask.aggregate([
-      {
-        $match: { status: 'confirmed' },
-      },
-      {
-        $group: {
-          _id: null,
-          totalCoins: { $sum: "$coins" },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          totalCoins: 1,
-        },
-      },
+      { $match: { status: 'confirmed' } },
+      { $group: { _id: null, totalCoins: { $sum: "$coins" }, }, },
+      { $project: { _id: 0, totalCoins: 1, }, },
     ]);
 
     const totalReferralEarned = await ReferralHistory.aggregate([
-      {
-        $match: { referral_user_isRefered: true },
-      },
-      {
-        $group: {
-          _id: null,
-          totalCoins: { $sum: "$user_earned" },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          totalCoins: 1,
-        },
-      },
+      { $match: { referral_user_isRefered: true }, },
+      { $group: { _id: null, totalCoins: { $sum: "$user_earned" }, }, },
+      { $project: { _id: 0, totalCoins: 1, }, },
     ])
 
+    const userRegToday = await Member.aggregate([
+      { $match: { createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
 
+    const stakeToday = await Stake.aggregate([
+      { $match: { sys_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+
+    const withdrawSToday = await Withdraw.aggregate([
+      { $match: { processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+    const withdrawRToday = await Withdraw.aggregate([
+      { $match: { processing_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+    const withdrawPToday = await Withdraw.aggregate([
+      { $match: { with_date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+    const usdtDepositToday = await Deposit.aggregate([
+      { $match: { deposit_type: 'usdt', createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+    const referralToday = await ReferralHistory.aggregate([
+      { $match: { createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
 
     return res.status(200).json({
       status: true,
@@ -79,7 +92,14 @@ async function getOverview(req, res) {
         totalDepositAmount,
         totalReferralEarned: totalReferralEarned.length > 0 ? totalReferralEarned[0].totalCoins : 0,
         yuva: adminData.yuva,
-        usdt: adminData.usdt
+        usdt: adminData.usdt,
+        userRegToday: userRegToday.length > 0 ? userRegToday[0].count : 0,
+        stakeToday: stakeToday.length > 0 ? stakeToday[0].count : 0,
+        withdrawSToday: withdrawSToday.length > 0 ? withdrawSToday[0].count : 0,
+        withdrawRToday: withdrawRToday.length > 0 ? withdrawRToday[0].count : 0,
+        withdrawPToday: withdrawPToday.length > 0 ? withdrawPToday[0].count : 0,
+        usdtDepositToday: usdtDepositToday.length > 0 ? usdtDepositToday[0].count : 0,
+        referralToday: referralToday.length > 0 ? referralToday[0].count : 0,
       },
     });
   } catch (error) {
@@ -152,17 +172,6 @@ async function getUserOverview(req, res) {
     });
   }
 }
-
-
-
-
-
-
 module.exports = {
-  getOverview, getUserOverview
+  getOverview, getUserOverview,
 }
-
-
-// Count the tasks added by the user
-// const userTasksCount = await Task.countDocuments({ userId });
-// userTasks: userTasksCount,

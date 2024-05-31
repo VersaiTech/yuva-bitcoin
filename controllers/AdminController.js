@@ -1816,9 +1816,12 @@ const userRegToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    })
 
-    return res.status(200).json({ status: true, message: "Users registered today", data: users });
+    const totalUsers = await users.length
+
+    return res.status(200).json({ status: true, message: "Users registered today", counts: totalUsers, data: users });
+    // return { status: true, message: "Users registered today", counts: totalUsers, data: users };
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1837,7 +1840,9 @@ const stakeToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Stake today", data: stake });
+
+    const totalStake = await stake.length
+    return res.status(200).json({ status: true, message: "Stake today", counts: totalStake, data: stake });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1857,7 +1862,9 @@ const withdrawSToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Withdraw Approved today", data: withdraw });
+
+    const totalwithdrawS = await withdraw.length
+    return res.status(200).json({ status: true, message: "Withdraw Approved today", counts: totalWithdrawS, data: withdraw });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1877,7 +1884,8 @@ const withdrawRToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Withdraw Rejected today", data: withdraw });
+    const totalwithdrawR = await withdraw.length
+    return res.status(200).json({ status: true, message: "Withdraw Rejected today", counts: totalWithdrawR, data: withdraw });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1896,7 +1904,8 @@ const withdrawPToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: withdraw });
+    const totalwithdrawP = await withdraw.length
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalwithdrawP, data: withdraw });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1915,7 +1924,8 @@ const usdtDepositToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: deposit });
+    const totalDeposit = await deposit.length
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalDeposit, data: deposit });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1934,7 +1944,8 @@ const referralToday = async (req, res) => {
         $lt: endOfToday
       }
     });
-    return res.status(200).json({ status: true, message: "Withdraw Pending today", data: referral });
+    const totalReferral = await referral.length
+    return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalReferral, data: referral });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
