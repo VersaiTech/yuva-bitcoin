@@ -1,4 +1,197 @@
 
+// import { useCallback, useEffect, useState } from 'react';
+// import NextLink from 'next/link';
+// import Head from 'next/head';
+// import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
+// import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
+// import { customersApi } from '../../../../api/customers';
+// import { useMounted } from '../../../../hooks/use-mounted';
+// import { usePageView } from '../../../../hooks/use-page-view';
+// import { Layout as DashboardLayout } from '../../../../layouts/dashboard';
+// import { paths } from '../../../../paths';
+// import { NewTaskEditForm } from '../../../../sections/dashboard/newtask/newtask-edit-form';
+// import { getInitials } from '../../../../utils/get-initials';
+// import axios from 'axios';
+// import { useRouter } from 'next/router';
+// import { WorkTaskEditForm } from '../../../../sections/dashboard/work-task/work-task-edit-form';
+// import { customer } from '../../../../api/customers/data';
+
+
+// const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+// const useCustomer = () => {
+
+//   //need to get member_user_id from params
+
+//   const router = useRouter();
+//   const {taskId} = router.query;
+
+//   console.log(taskId)
+
+//   const isMounted = useMounted();
+//   const [customer, setCustomer] = useState(null);
+
+//   const getCustomer = useCallback(async () => {
+//     try {
+//       // const response = await customersApi.getCustomer();
+//       const token = localStorage.getItem('accessToken');
+//       const headers = {
+//         'Authorization': token
+//       }
+
+//       const response = await axios.get(`${BASEURL}/admin/getOneTask/${taskId}`, {
+//         headers: headers
+//       })
+
+//       console.log(response.data);    
+
+//       if (isMounted()) {
+//         setCustomer(response.data);
+//       }
+//     } catch (err) {
+//       console.error(err.response.data.error);
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [isMounted]);
+
+//   useEffect(() => {
+//     getCustomer();
+//   },
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//     []);
+
+//   return customer;
+// };
+
+// console.log(customer.name)
+
+// // const handleSubmit = async (values) => {
+// //   try{
+// //     console.log('Form values:', values);
+// //     const token = localStorage.getItem('token');
+// //     const headers = {
+// //       'Authorization': token
+// //     }
+
+// //     const response = await axios.post(`${BASEURL}/admin/updateMemberStatus/:${customer.member_user_id}`,values, { headers: headers })
+
+// //     console.log(response);
+// //   }
+// //   catch(err){
+// //     console.log(err);
+// //   }
+// // }
+
+// const Page = () => {
+//   const customer = useCustomer();
+//   const router = useRouter();
+//   const {userId} = router.query;
+
+//   usePageView();
+
+//   if (!customer) {
+//     return null;
+//   }
+
+//   return (
+//     <>
+//       <Head>
+//         <title>
+//           Dashboard: Task Edit | YuvaBitcoin
+//         </title>
+//       </Head>
+//       <Box
+//         component="main"
+//         sx={{
+//           flexGrow: 1,
+//           py: 4
+//         }}
+//       >
+//         <Container maxWidth="lg">
+//           <Stack spacing={4}>
+//             <Stack spacing={4}>
+//               <div>
+//                 <Link
+//                   color="text.primary"
+//                   component={NextLink}
+//                   href={paths.dashboard.taskwork.index}
+//                   sx={{
+//                     alignItems: 'center',
+//                     display: 'inline-flex'
+//                   }}
+//                   underline="hover"
+//                 >
+//                   <SvgIcon sx={{ mr: 1 }}>
+//                     <ArrowLeftIcon />
+//                   </SvgIcon>
+//                   <Typography variant="subtitle2">
+//                     Tasks
+//                   </Typography>
+//                 </Link>
+//               </div>
+//               <Stack
+//                 alignItems="flex-start"
+//                 direction={{
+//                   xs: 'column',
+//                   md: 'row'
+//                 }}
+//                 justifyContent="space-between"
+//                 spacing={4}
+//               >
+//                 <Stack
+//                   alignItems="center"
+//                   direction="row"
+//                   spacing={2}
+//                 >
+//                   <Avatar
+//                     src={customer.avatar}
+//                     sx={{
+//                       height: 64,
+//                       width: 64
+//                     }}
+//                   >
+//                     {getInitials(customer.taskName)}
+//                   </Avatar>
+//                   <Stack spacing={1}>
+//                     <Typography variant="h4">
+//                       {customer.email}
+//                     </Typography>
+//                     <Stack
+//                       alignItems="center"
+//                       direction="row"
+//                       spacing={1}
+//                     >
+//                       <Typography variant="subtitle2">
+//                         userId:
+//                       </Typography>
+//                       <Chip
+//                         label={userId}
+//                         size="small"
+//                       />
+//                     </Stack>
+//                   </Stack>
+//                 </Stack>
+//               </Stack>
+//             </Stack>
+//              <WorkTaskEditForm customer={customer} /> {/* handleSubmit={handleSubmit} */}
+//           </Stack>
+//         </Container>
+//       </Box>
+//     </>
+//   );
+// };
+
+// Page.getLayout = (page) => (
+//   <DashboardLayout>
+//     {page}
+//   </DashboardLayout>
+// );
+
+// export default Page;
+
+
+
+
 import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
