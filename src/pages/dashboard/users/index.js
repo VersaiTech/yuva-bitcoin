@@ -15,7 +15,6 @@ import {
 import { customersApi } from "../../../api/customers";
 import { useMounted } from "../../../hooks/use-mounted";
 import { usePageView } from "../../../hooks/use-page-view";
-// import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
 import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
@@ -24,6 +23,7 @@ import UserDrawer from "./userDrawer/UserDrawer";
 import axios from "axios";
 import { customer } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -125,9 +125,7 @@ const Page = () => {
   const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
-
-  const [drawer, setDrawer] = useState({ isOpen: false, user: null });
-
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     console.log(customers);
@@ -248,10 +246,10 @@ const Page = () => {
         </Container>
       </Box>
       <UserDrawer
-      open={drawer.isOpen}
-      onClose={handleDrawerClose}
-      user={drawer.user}
-    />
+        open={drawer.isOpen}
+        onClose={handleDrawerClose}
+        user={drawer.user}
+      />
     </>
   );
 };
@@ -259,4 +257,3 @@ const Page = () => {
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;
-
