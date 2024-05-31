@@ -281,10 +281,19 @@ const path = require('path');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // Function to generate a random number
+// function generateRandomNumber() {
+//   const prefix = "YBM";
+//   const randomNumber = Math.floor(100000 + Math.random() * 900000); // Generate random 4-digit number
+//   return `${prefix}${randomNumber}`;
+// }
+
+let serialNumberCounter = 1;
+
 function generateRandomNumber() {
   const prefix = "YBM";
-  const randomNumber = Math.floor(100000 + Math.random() * 900000); // Generate random 4-digit number
-  return `${prefix}${randomNumber}`;
+  const serialNumber = String(serialNumberCounter).padStart(7, "0"); // Ensure 6 digits with leading zeros
+  serialNumberCounter++; // Increment serial number counter for next call
+  return `${prefix}${serialNumber}`;
 }
 
 
