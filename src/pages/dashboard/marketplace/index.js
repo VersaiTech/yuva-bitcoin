@@ -1,5 +1,3 @@
-
-
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -13,6 +11,7 @@ import {
   Select,
   MenuItem,
   Button,
+  Alert,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import { GridList2 } from "../../../sections/components/grid-lists/grid-list-2";
@@ -21,15 +20,15 @@ import axios from "axios";
 import OrderForm from "./Orderform";
 import BuyForm from "./buyform";
 import UpdateForm from "./updateForm";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 
 const CryptoMarketplacePage = () => {
   const [status, setStatus] = useState("Listed");
   const [listings, setListings] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [buyForm, setBuyForm] = useState(false);
-  const [updateForm,setUpdateForm]=useState(false);
-  const [currentdata , setCurrentData] = useState({});
+  const [updateForm, setUpdateForm] = useState(false);
+  const [currentdata, setCurrentData] = useState({});
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -90,7 +89,11 @@ const CryptoMarketplacePage = () => {
         Authorization: token,
       };
 
-      const response = await axios.post(`${BASEURL}/api/Order/createOrder`, formData, { headers });
+      const response = await axios.post(
+        `${BASEURL}/api/Order/createOrder`,
+        formData,
+        { headers }
+      );
       const responseData = response.data;
 
       enqueueSnackbar("Order placed successfully", { variant: "success" });
@@ -114,7 +117,11 @@ const CryptoMarketplacePage = () => {
         amount: rowdata.amount,
       };
 
-      const response = await axios.post(`${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`, data, { headers });
+      const response = await axios.post(
+        `${BASEURL}/api/Order/createBuyOrder/${rowdata._id}`,
+        data,
+        { headers }
+      );
       const responseData = response.data;
 
       enqueueSnackbar("Order placed successfully", { variant: "success" });
@@ -122,7 +129,7 @@ const CryptoMarketplacePage = () => {
     } catch (error) {
       console.error("Error placing order:", error.response.data);
       enqueueSnackbar(error.response.data.error, {
-        variant: 'error',
+        variant: "error",
       });
     }
   };
@@ -134,7 +141,7 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
-  
+
       const data = {
         orderId: rowdata._id,
         userId: rowdata.userId,
@@ -143,26 +150,30 @@ const CryptoMarketplacePage = () => {
         exchange_currency: rowdata.exchange_currency,
         payment_method: rowdata.payment_method,
       };
-  
-      const response = await axios.post(`${BASEURL}/api/Order/updateOrder`, data, { headers });
+
+      const response = await axios.post(
+        `${BASEURL}/api/Order/updateOrder`,
+        data,
+        { headers }
+      );
       const responseData = response.data;
-  
+
       enqueueSnackbar("Order updated successfully", { variant: "success" });
-  
+
       // Update the listings state
       updateListings((prevListings) =>
         prevListings.map((listing) =>
-          listing._id === rowdata._id ? { ...listing, ...responseData } : listing
+          listing._id === rowdata._id
+            ? { ...listing, ...responseData }
+            : listing
         )
       );
-  
+
       handleCloseUpdateForm();
     } catch (error) {
       console.error("Error updating order:", error.response?.data);
     }
   };
-  
-  
 
   const handleDeleteOrder = async (_id, userId) => {
     try {
@@ -171,30 +182,32 @@ const CryptoMarketplacePage = () => {
       const headers = {
         Authorization: token,
       };
-  
+
       const response = await axios.delete(`${BASEURL}/api/Order/deleteOrder`, {
         headers,
         data: { orderId: _id, userId: userId },
       });
-  
+
       const responseData = response.data;
-      console.log(`DELETE order with data: ${JSON.stringify({ orderId: _id, userId })}`);
+      console.log(
+        `DELETE order with data: ${JSON.stringify({ orderId: _id, userId })}`
+      );
       console.log(`DELETE order response: ${JSON.stringify(responseData)}`);
-  
+
       enqueueSnackbar("Order deleted successfully", { variant: "success" });
-  
+
       // After successful deletion, fetch updated data
       fetchData();
     } catch (error) {
       console.error("Error deleting order:", error.response?.data);
-  
+
       // Provide a default error message if error.response?.data?.error is not available
-      const errorMessage = error.response?.data?.error || "An error occurred while deleting the order.";
+      const errorMessage =
+        error.response?.data?.error ||
+        "An error occurred while deleting the order.";
       enqueueSnackbar(errorMessage, { variant: "error" });
     }
   };
-  
-  
 
   const handleBuyButtonClick = (data) => {
     setCurrentData(data);
@@ -211,7 +224,6 @@ const CryptoMarketplacePage = () => {
     handleDeleteOrder(orderId, userId);
   };
 
-
   return (
     <>
       <Head>
@@ -222,8 +234,15 @@ const CryptoMarketplacePage = () => {
           <Stack spacing={2}>
             <Typography variant="h3">Crypto Marketplace</Typography>
             <Breadcrumbs separator="›">
-            <Link href={paths.dashboard.index} passHref style={{ textDecoration: "none" }}>
-                <Typography color="text.primary" style={{ cursor: "pointer", textDecoration: "none" }}>
+              <Link
+                href={paths.dashboard.index}
+                passHref
+                style={{ textDecoration: "none" }}
+              >
+                <Typography
+                  color="text.primary"
+                  style={{ cursor: "pointer", textDecoration: "none" }}
+                >
                   Dashboard
                 </Typography>
               </Link>
@@ -260,10 +279,18 @@ const CryptoMarketplacePage = () => {
                 <Typography variant="body1">Ordered</Typography>
               </MenuItem>
             </Select>
-            <Button variant="contained" size="medium" onClick={handleCreateOrder}>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={handleCreateOrder}
+            >
               Create Order
             </Button>
           </Box>
+          <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
+            Minimum coin value : <br />
+            Minimum number of coins :
+          </Alert>
           <Divider sx={{ my: 3 }} />
           <GridList2
             projects={listings}
@@ -274,9 +301,25 @@ const CryptoMarketplacePage = () => {
           />
         </Container>
       </Box>
-      <OrderForm open={openForm} handleClose={handleCloseForm} handlePlaceOrder={handlePlaceOrder} />
-      <BuyForm currentdata={currentdata} open={buyForm} handleCloseBuyForm={handleCloseBuyForm} handleBuyOrder={handleBuyOrder} />
-      <UpdateForm currentdata={currentdata} open={updateForm} handleCloseUpdateForm={handleCloseUpdateForm} handleUpdateOrder={(rowData, userId) => handleUpdateOrder(rowData, userId)} />
+      <OrderForm
+        open={openForm}
+        handleClose={handleCloseForm}
+        handlePlaceOrder={handlePlaceOrder}
+      />
+      <BuyForm
+        currentdata={currentdata}
+        open={buyForm}
+        handleCloseBuyForm={handleCloseBuyForm}
+        handleBuyOrder={handleBuyOrder}
+      />
+      <UpdateForm
+        currentdata={currentdata}
+        open={updateForm}
+        handleCloseUpdateForm={handleCloseUpdateForm}
+        handleUpdateOrder={(rowData, userId) =>
+          handleUpdateOrder(rowData, userId)
+        }
+      />
     </>
   );
 };
