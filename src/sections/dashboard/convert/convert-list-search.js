@@ -16,14 +16,9 @@ import { useUpdateEffect } from '../../../hooks/use-update-effect';
 
 const tabs = [
   {
-    label: 'All Converstions',
+    label: 'All Conversions',
     value: 'all',
   }
-  // ,
-  // {
-  //   label: 'Returning',
-  //   value: 'isReturning'
-  // }
 ];
 
 const sortOptions = [

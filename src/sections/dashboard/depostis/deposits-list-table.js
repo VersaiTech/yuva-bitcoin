@@ -161,7 +161,7 @@ export const DepositListTable = (props) => {
                 <TableCell>
                   <Stack alignItems="center" direction="row" spacing={1}>
                     <Avatar
-                      src={customer.member_name || ""}
+                      src="/assets/logos/logo-usdt.svg"
                       sx={{
                         height: 42,
                         width: 42,
@@ -179,10 +179,10 @@ export const DepositListTable = (props) => {
                     ? new Date(customer.createdAt).toLocaleDateString()
                     : "N/A"}
                 </TableCell>
-                <TableCell>{customer.deposit_method || "N/A"}</TableCell>
+                <TableCell>{(customer.deposit_type.toUpperCase())|| "N/A"}</TableCell>
                 <TableCell>
                   <Typography variant="subtitle2">
-                    {customer.transaction_id || "N/A"}
+                    {customer.transaction_hash || "N/A"}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
