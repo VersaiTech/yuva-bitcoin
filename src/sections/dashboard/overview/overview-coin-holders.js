@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import DownloadIcon from '@mui/icons-material/Download';
 import {
   Box,
   Button,
@@ -22,6 +23,35 @@ export const OverviewCoinHolders = (props) => {
 
   const handleClick = () => {
     setOpenDataForm(true);
+  };
+
+  const handleExportToExcel = async () => {
+    try {
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = { Authorization: token };
+
+      const response = await axios.post(
+        `${BASEURL}/api/Dummy/exportToExcel`,
+        {},
+        { headers, responseType: 'blob' }
+      );
+
+      if (response.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'coin_holders.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
+      } else {
+        enqueueSnackbar("Failed to download Excel file", { variant: "error" });
+      }
+    } catch (error) {
+      enqueueSnackbar("Error downloading Excel file", { variant: "error" });
+      console.error("Error downloading Excel file:", error);
+    }
   };
 
   const handleDataSubmit = async (data) => {
@@ -47,7 +77,6 @@ export const OverviewCoinHolders = (props) => {
     }
   };
 
-  // Check if amount is null or undefined before accessing totalCoinHolders
   const totalCoinHolders = amount ? amount : 0;
 
   return (
@@ -69,7 +98,7 @@ export const OverviewCoinHolders = (props) => {
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">
-            Coin Holders
+            USDT BUYER
           </Typography>
           <Typography color="text.primary" variant="h4">
             {totalCoinHolders}
@@ -88,22 +117,35 @@ export const OverviewCoinHolders = (props) => {
           }
           onClick={handleClick}
         >
-          Set Coin Holders
+          Today Buyer
+        </Button>
+        <Button
+          color="inherit"
+          size="small"
+          endIcon={
+            <SvgIcon>
+              <DownloadIcon />
+            </SvgIcon>
+          }
+          onClick={handleExportToExcel}
+        >
+          Export to Excel
         </Button>
       </CardActions>
-      {openDataForm && (
+      {/* {openDataForm && (
         <SetDummyData
           handleDataSubmit={handleDataSubmit}
           onClose={() => setOpenDataForm(false)}
           label="totalCoinHolders"
         />
-      )}
+      )} */}
     </Card>
   );
 };
 
 OverviewCoinHolders.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
+  fetchDummyData: PropTypes.func.isRequired,
 };
 
 export default OverviewCoinHolders;

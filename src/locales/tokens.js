@@ -5,7 +5,9 @@ export const tokens = {
   nav: {
     academy: 'nav.academy',
     account: 'nav.account',
+    admincontrol  : 'nav.admincontrol',
     portfolio: 'nav.portfolio',
+    admincontrol: 'nav.admincontrol',
     newtask: 'nav.newtask',
     createtask: 'nav.createtask',
     approvetask: 'nav.approvetask',

@@ -40,8 +40,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { TotalMemberCoins } from "../../sections/dashboard/crypto/totalMemberCoins";
 import { TotalStakesInvestment } from "../../sections/dashboard/crypto/totalStakesInvestment";
-import  { OverviewTodayRefferal } from "../../sections/dashboard/overview/overview-today-refferal";
-import OverviewTodayWithdrawal from "../../sections/dashboard/overview/overview-today-withdrawalcoin copy 2";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -70,7 +68,7 @@ const Page = () => {
       headers: headers,
     });
 
-    console.log(response.data);
+    // console.log(response.data.overview);
     setOverview(response.data.overview);
   };
 
@@ -136,7 +134,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Admin COntrol | Yuva Bitcoin </title>
+        <title>Dashboard: Overview | Yuva Bitcoin </title>
       </Head>
       <Box
         component="main"
@@ -170,34 +168,28 @@ const Page = () => {
 
               <Grid item xs={6} md={4}>
                 <OverviewRegisteredMembers
-                  amount={overview.userRegToday}
+                  amount={overview.allMembers}
                   // fetchDummyData={overview.allMembers}
                 />
               </Grid>
               <Grid item xs={6} md={4}>
                 <OverviewCoinHolders
-                  amount={overview.usdtDepositToday}
+                  amount={coinholders}
                   // fetchDummyData={fetchDummyData}
                 />
               </Grid>
               <Grid item xs={6} md={4}>
                 <OverviewStakeCoins
-                  amount={overview.stakeToday}
-                  // fetchDummyData={fetchDummyData}
-                />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <OverviewTodayRefferal
-                  amount={overview.referralToday}
-                  // fetchDummyData={fetchDummyData}
-                />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <OverviewTodayWithdrawal
                   amount={coinholderswithstakeholders}
                   // fetchDummyData={fetchDummyData}
                 />
               </Grid>
+              {/* <Grid item xs={6} md={3}>
+                <OverviewTotalYuvaBuy
+                  amount={dummy}
+                  fetchDummyData={fetchDummyData}
+                />
+              </Grid> */}
             </Grid>
             <Grid xs={12}>
               <Stack direction="row" justifyContent="space-between" spacing={4}>

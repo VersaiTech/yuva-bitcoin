@@ -25,6 +25,15 @@ export const getSections = (t) => [
         ),
       },
       {
+        title: t(tokens.nav.admincontrol),
+        path: paths.dashboard.admincontrol,
+        icon: (
+          <SvgIcon fontSize="small">
+            <CryptoIcon />
+          </SvgIcon>
+        ),
+      },
+      {
         title: t(tokens.nav.newtask),
         icon: (
           <SvgIcon fontSize="small">

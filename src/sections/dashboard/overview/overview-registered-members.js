@@ -1,5 +1,3 @@
-
-
 import PropTypes from "prop-types";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
 import {
@@ -20,9 +18,10 @@ import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
+import DownloadIcon from '@mui/icons-material/Download';
 
 export const OverviewRegisteredMembers = (props) => {
-  const { amount} = props;
+  const { amount, fetchDummyData } = props;
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
@@ -31,12 +30,8 @@ export const OverviewRegisteredMembers = (props) => {
     setOpenDataForm(true);
   };
 
-  console.log(amount)
-
-  const handleDataSubmit = async (data) => {
+  const handleExportToExcel = async () => {
     try {
-      console.log("Entered Data --> ", data);
-
       const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
       const token = localStorage.getItem("accessToken");
       const headers = {
@@ -44,23 +39,29 @@ export const OverviewRegisteredMembers = (props) => {
       };
 
       const response = await axios.post(
-        `${BASEURL}/api/Dummy/createDummyData`,
-        data,
-        { headers }
+        `${BASEURL}/api/Dummy/exportToExcel`,
+        {},
+        { headers, responseType: 'blob' }
       );
-      console.log(response.data);
 
       if (response.status === 200) {
-        enqueueSnackbar("Data Set Successful", { variant: "success" });
-        // Trigger hard refresh after displaying the snackbar
-        await fetchDummyData();
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'registered_members.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
       } else {
-        enqueueSnackbar(response, { variant: "error" });
+        enqueueSnackbar("Failed to download Excel file", { variant: "error" });
       }
     } catch (error) {
-      // console.error("Error placing order:", error);
+      enqueueSnackbar("Error downloading Excel file", { variant: "error" });
+      console.error("Error downloading Excel file:", error);
     }
   };
+
+  console.log(amount);
 
   // Check if amount is null or undefined before accessing totalRegisteredMembers
   const totalRegisteredMembers = amount ? amount.totalRegisteredMembers : 0;
@@ -93,7 +94,6 @@ export const OverviewRegisteredMembers = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={
@@ -104,16 +104,21 @@ export const OverviewRegisteredMembers = (props) => {
           size="small"
           onClick={handleClick}
         >
-          Set Registered Members
+          Today Members
+        </Button>
+        <Button
+          color="inherit"
+          endIcon={
+            <SvgIcon>
+              <DownloadIcon />
+            </SvgIcon>
+          }
+          size="small"
+          onClick={handleExportToExcel}
+        >
+          Export to Excel
         </Button>
       </CardActions>
-      {openDataForm && (
-        <SetDummyData
-          handleDataSubmit={handleDataSubmit}
-          onClose={() => setOpenDataForm(false)}
-          label="totalRegisteredMembers"
-        />
-      )}
     </Card>
   );
 };

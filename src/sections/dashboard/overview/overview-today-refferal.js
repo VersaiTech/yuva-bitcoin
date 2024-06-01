@@ -7,7 +7,7 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 
-export const OverviewStakeCoins = (props) => {
+export const OverviewTodayRefferal = (props) => {
   const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
   const [openDataForm, setOpenDataForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -91,7 +91,7 @@ export const OverviewStakeCoins = (props) => {
             color="text.secondary"
             variant="body2"
           >
-            Staked Coins
+             Refferal
           </Typography>
           <Typography
             color="text.primary"
@@ -113,7 +113,7 @@ export const OverviewStakeCoins = (props) => {
           size="small"
           onClick={handleClick}
         >
-          Today Staked User 
+          Today Refferals 
         </Button>
         <Button
           color="inherit"
@@ -139,9 +139,9 @@ export const OverviewStakeCoins = (props) => {
   );
 };
 
-OverviewStakeCoins.propTypes = {
+OverviewTodayRefferal.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
   fetchDummyData: PropTypes.func.isRequired,
 };
 
-export default OverviewStakeCoins;
+export default OverviewTodayRefferal;

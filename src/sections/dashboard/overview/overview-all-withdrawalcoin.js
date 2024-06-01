@@ -7,7 +7,7 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 
-export const OverviewStakeCoins = (props) => {
+export const OverviewAllWithdrawal = (props) => {
   const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
   const [openDataForm, setOpenDataForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -139,9 +139,9 @@ export const OverviewStakeCoins = (props) => {
   );
 };
 
-OverviewStakeCoins.propTypes = {
+OverviewAllWithdrawal.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
   fetchDummyData: PropTypes.func.isRequired,
 };
 
-export default OverviewStakeCoins;
+export default OverviewAllWithdrawal;
