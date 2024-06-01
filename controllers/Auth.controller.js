@@ -271,6 +271,7 @@ const Admin = require('../models/AdminModel');
 const TemporaryRegistration = require('../models/TemporaryRegistration');
 const TemporaryPasswordReset = require('../models/TemporaryPasswordReset');
 const TemporaryAdminOTP = require('../models/TemporaryAdminOTP');
+const Permission = require('../models/permission.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
@@ -977,6 +978,7 @@ async function getRegister(req, res) {
 async function adminRegister(req, res) {
   const schema = Joi.object({
     admin_name: Joi.string().required(),
+    userType: Joi.string(),
     password: Joi.string().min(6).required(),
     email: Joi.string().email().required(),
   });
@@ -990,7 +992,7 @@ async function adminRegister(req, res) {
       });
     }
     // Extract data from validated request body
-    const { admin_name, password, email } = value;
+    const { admin_name, password, email, userType } = value;
 
     // Check if email is already registered
     const existingAdmin = await Admin.findOne({ email });
@@ -1011,13 +1013,41 @@ async function adminRegister(req, res) {
       admin_user_id,
       admin_name,
       password,
+      userType: userType ? userType : 'admin',
       email,
     });
 
     // Save the admin to the database
     const response = await newAdmin.save();
 
+    //if userType is agent then create Permission Data for that agent
+    if (userType === "agent") {
+      const permission = new Permission({
+        admin_user_id: admin_user_id,
+        setCoinValueMarketUsdt: false,
+        setMinimumAmountMarketUsdt: false,
+        setMinimumWithdrawal: false,
+        setMaximumWithdrawal: false,
+        setRegisterCoinValue: false,
+        setReferralCoinValue: false,
+        setStakeMonth1: false,
+        setStakeMonth2: false,
+        setStakeMonth3: false,
+        setStakePercent1: false,
+        setStakePercent2: false,
+        setStakePercent3: false,
+        isActive: true
+      })
+      await permission.save();
+    }
+
     console.log(response);
+    if (userType === "agent") {
+      return res.status(200).send({
+        status: true,
+        message: "Agent Registration successful",
+      });
+    }
     return res.status(200).send({
       status: true,
       message: "Admin registration successful",
@@ -1025,10 +1055,18 @@ async function adminRegister(req, res) {
 
   } catch (err) {
     console.log("Error in admin registration", err);
-    return res.status(500).send({
-      status: false,
-      message: "Admin registration failed",
-    });
+    if (userType === "agent") {
+      return res.status(500).send({
+        status: false,
+        message: "Agent registration failed",
+        error: err
+      });
+    } else {
+      return res.status(500).send({
+        status: false,
+        message: "Admin registration failed",
+      });
+    }
   }
 }
 
@@ -1163,6 +1201,16 @@ async function adminLogin(req, res) {
     }
 
     const { email, password } = value;
+
+    // check user_type if it is agent . if it is agent then check isActive is true then procced further
+    if (value.userType === "agent") {
+      if (value.isActive === false) {
+        return res.status(400).send({
+          status: false,
+          message: "Agent is not active",
+        });
+      }
+    }
 
     // Find admin by email
     const admin = await Admin.findOne({ email });
