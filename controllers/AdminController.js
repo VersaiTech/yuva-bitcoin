@@ -1897,11 +1897,12 @@ const withdrawPToday = async (req, res) => {
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    console.log("today", today, "startOfToday", startOfToday, "endOfToday", endOfToday);
     const withdraw = await Withdraw.find({
       status: 'Pending',
       with_date: {
         $gte: startOfToday,
-        $lt: endOfToday
+        $lt: new Date(endOfToday.getTime() - 1) // subtract 1 millisecond to ensure the end date is exclusive
       }
     });
     const totalwithdrawP = await withdraw.length

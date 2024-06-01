@@ -8,7 +8,8 @@ const adminSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   registration_date: { type: Date, default: Date.now },
-  userType: { type: String, default: 'admin' } ,
+  userType: { type: String, default: 'admin' } , //  agent or admin
+  isActive: { type: Boolean, default: true },
   yuva: { type: Number, default: 0 },
   usdt:{type: Number, default: 0},
 });
