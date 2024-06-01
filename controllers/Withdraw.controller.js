@@ -466,13 +466,13 @@ async function getWithdrawByUserId(req, res) {
 //           convertedAmount = withdrawal.with_amt / coinPrices.price.usdt;
 //           member.coins_usdt -= withdrawal.with_amt; // Deduct from usdt balance
 //           break;
-//         case 'btc':
-//           convertedAmount = withdrawal.with_amt / coinPrices.price.btc;
-//           member.coins_btc -= withdrawal.with_amt; // Deduct from btc balance
+//         case 'bnb':
+//           convertedAmount = withdrawal.with_amt / coinPrices.price.bnb;
+//           member.coins_bnb -= withdrawal.with_amt; // Deduct from bnb balance
 //           break;
-//         case 'ethereum':
-//           convertedAmount = withdrawal.with_amt / coinPrices.price.ethereum;
-//           member.coins_ethereum -= withdrawal.with_amt; // Deduct from ethereum balance
+//         case 'matic':
+//           convertedAmount = withdrawal.with_amt / coinPrices.price.matic;
+//           member.coins_matic -= withdrawal.with_amt; // Deduct from matic balance
 //           break;
 //         default:
 //           return res.status(400).json({ error: 'Invalid conversion type' });
@@ -504,7 +504,7 @@ const updateWithdrawalStatus = async (req, res) => {
     status: Joi.string().valid('Approved', 'Rejected').required(),
     processed_by: Joi.string().required(),
     remarks: Joi.string().allow('').optional(),
-    conversion_type: Joi.string().valid('usdt', 'btc', 'ethereum').optional(),
+    conversion_type: Joi.string().valid('usdt', 'bnb', 'matic').optional(),
     transection_hash: Joi.string().allow('').optional()
   });
   try {
@@ -556,13 +556,13 @@ const updateWithdrawalStatus = async (req, res) => {
           convertedAmount = withdrawal.with_amt / coinPrices.price.usdt;
           member.coins_usdt -= withdrawal.with_amt; // Deduct from usdt balance
           break;
-        case 'btc':
-          convertedAmount = withdrawal.with_amt / coinPrices.price.btc;
-          member.coins_btc -= withdrawal.with_amt; // Deduct from btc balance
+        case 'bnb':
+          convertedAmount = withdrawal.with_amt / coinPrices.price.bnb;
+          member.coins_bnb -= withdrawal.with_amt; // Deduct from bnb balance
           break;
-        case 'ethereum':
-          convertedAmount = withdrawal.with_amt / coinPrices.price.ethereum;
-          member.coins_ethereum -= withdrawal.with_amt; // Deduct from ethereum balance
+        case 'matic':
+          convertedAmount = withdrawal.with_amt / coinPrices.price.matic;
+          member.coins_matic -= withdrawal.with_amt; // Deduct from matic balance
           break;
         default:
           return res.status(400).json({ error: 'Invalid conversion type' });

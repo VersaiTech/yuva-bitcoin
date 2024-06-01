@@ -18,8 +18,8 @@ const setCoinPrices = async (req, res) => {
 const schema = Joi.object({
   // inr: Joi.number().required(),
   usdt: Joi.number().required(),
-  ethereum: Joi.number().required(),
-  btc: Joi.number().required(),
+  matic: Joi.number().required(),
+  bnb: Joi.number().required(),
 });
 
 
@@ -31,7 +31,7 @@ const schema = Joi.object({
     return res.status(400).json({ error: error.details[0].message });
   }
 
-  const {  usdt, ethereum, btc } = value;
+  const {  usdt, matic, bnb } = value;
 
     let coin = await Coin.findOne();
 
@@ -39,14 +39,14 @@ const schema = Joi.object({
       coin = new Coin({
         price: {
           usdt,
-          ethereum,
-          btc,
+          matic,
+          bnb,
         },
       });
     } else {
       coin.price.usdt = usdt;
-      coin.price.ethereum = ethereum;
-      coin.price.btc = btc;
+      coin.price.matic = matic;
+      coin.price.bnb = bnb;
     }
 
     await coin.save();

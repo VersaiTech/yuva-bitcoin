@@ -19,7 +19,7 @@ const withdrawSchema = new mongoose.Schema({
   processing_date: { type: Date },
   processed_by: { type: String },
   remarks: { type: String },
-  conversion_type: { type: String, enum: ['usdt', 'btc', 'ethereum'], ref:'Coin' },
+  conversion_type: { type: String, enum: ['usdt', 'bnb', 'matic'], ref:'Coin' },
   converted_amount: { type: Number },
 });
 

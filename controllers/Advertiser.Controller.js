@@ -45,11 +45,11 @@ const Deposit = require('../models/deposit');
 //             case 'usdt':
 //                 newAdvertiser.member_usdt = amount_currency / coin.price.usdt;
 //                 break;
-//             case 'btc':
-//                 newAdvertiser.member_btc = amount_currency / coin.price.btc;
+//             case 'bnb':
+//                 newAdvertiser.member_bnb = amount_currency / coin.price.bnb;
 //                 break;
-//             case 'ethereum':
-//                 newAdvertiser.member_ethereum = amount_currency / coin.price.ethereum;
+//             case 'matic':
+//                 newAdvertiser.member_matic = amount_currency / coin.price.matic;
 //                 break;
 //             default:
 //                 throw new Error('Invalid selected coin');
@@ -139,7 +139,7 @@ const getAllOrdersUser = async (req, res) => {
 const Joi = require('joi')
 const createOrder = async (req, res) => {
     const createOrderSchema = Joi.object({
-        select_coin: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+        select_coin: Joi.string().valid('usdt', 'bnb', 'matic').required(),
         amount_currency: Joi.number().positive().required(),
         select_currency: Joi.string().required(),
         payment_method: Joi.string().required(), // Update this line
@@ -194,11 +194,11 @@ const createOrder = async (req, res) => {
             case 'usdt':
                 newAdvertiser.member_usdt = amount_currency / coin.price.usdt;
                 break;
-            case 'btc':
-                newAdvertiser.member_btc = amount_currency / coin.price.btc;
+            case 'bnb':
+                newAdvertiser.member_bnb = amount_currency / coin.price.bnb;
                 break;
-            case 'ethereum':
-                newAdvertiser.member_ethereum = amount_currency / coin.price.ethereum;
+            case 'matic':
+                newAdvertiser.member_matic = amount_currency / coin.price.matic;
                 break;
             default:
                 throw new Error('Invalid selected coin');

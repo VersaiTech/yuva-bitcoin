@@ -21,11 +21,11 @@ const memberSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  deposit_btc: {
+  deposit_bnb: {
     type: Number,
     default: 0,
   },
-  deposit_ethereum: {
+  deposit_matic: {
     type: Number,
     default: 0,
   },

@@ -11,11 +11,11 @@ const coinSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
-    ethereum: {
+    matic: {
       type: Number,
       default: 0,
     },
-    btc: {
+    bnb: {
       type: Number,
       default: 0,
     }

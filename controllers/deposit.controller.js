@@ -18,7 +18,7 @@ function generateTransactionId() {
 //     amount: Joi.number().positive().required(),
 //     transaction_hash: Joi.string().required(),
 //     wallet_address: Joi.string().required(),
-//     deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+//     deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
 //   });
 //   try {
 //     const { error, value } = schema.validate(req.body);
@@ -55,11 +55,11 @@ function generateTransactionId() {
 //       case 'usdt':
 //         member.deposit_usdt += value.amount;
 //         break;
-//       case 'btc':
-//         member.deposit_btc += value.amount;
+//       case 'bnb':
+//         member.deposit_bnb += value.amount;
 //         break;
-//       case 'ethereum':
-//         member.deposit_ethereum += value.amount;
+//       case 'matic':
+//         member.deposit_matic += value.amount;
 //         break;
 //       default:
 //         return res.status(400).json({ error: 'Invalid deposit type' });
@@ -84,7 +84,7 @@ const createDeposit = async (req, res) => {
       amount: Joi.number().positive().required(),
       transaction_hash: Joi.string().required(),
       wallet_address: Joi.string().required(),
-      deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+      deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
     });
 
     const { error, value } = schema.validate(req.body);
@@ -142,11 +142,11 @@ const createDeposit = async (req, res) => {
       case 'usdt':
         member.deposit_usdt += value.amount;
         break;
-      case 'btc':
-        member.deposit_btc += value.amount;
+      case 'bnb':
+        member.deposit_bnb += value.amount;
         break;
-      case 'ethereum':
-        member.deposit_ethereum += value.amount;
+      case 'matic':
+        member.deposit_matic += value.amount;
         break;
       default:
         return res.status(400).json({ error: 'Invalid deposit type' });
@@ -269,7 +269,7 @@ async function getDepositsForUser(req, res) {
 
 async function convertDepositToCoins(req, res) {
   const schema = Joi.object({
-    deposit_type: Joi.string().valid('usdt', 'btc', 'ethereum').required(),
+    deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
     amount: Joi.number().positive().required(),
   });
   try {
@@ -304,11 +304,11 @@ async function convertDepositToCoins(req, res) {
       case 'usdt':
         coinAmount = req.body.amount / coinPrices.price.usdt;
         break;
-      case 'btc':
-        coinAmount = req.body.amount / coinPrices.price.btc;
+      case 'bnb':
+        coinAmount = req.body.amount / coinPrices.price.bnb;
         break;
-      case 'ethereum':
-        coinAmount = req.body.amount / coinPrices.price.ethereum;
+      case 'matic':
+        coinAmount = req.body.amount / coinPrices.price.matic;
         break;
     }
 

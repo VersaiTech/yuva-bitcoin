@@ -43,11 +43,11 @@ const Deposit = require('./deposit');
 //         type: Number,
 //         default: 0,
 //     },
-//     member_btc: {
+//     member_bnb: {
 //         type: Number,
 //         default: 0,
 //     },
-//     member_ethereum: {
+//     member_matic: {
 //         type: Number,
 //         default: 0,
 //     },
@@ -102,11 +102,11 @@ const advertiserSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
-    member_btc: {
+    member_bnb: {
         type: Number,
         default: 0,
     },
-    member_ethereum: {
+    member_matic: {
         type: Number,
         default: 0,
     },
@@ -123,11 +123,11 @@ advertiserSchema.methods.convertToCoin = async function () {
         case 'USDT':
             this.member_usdt = this.price / coin.usdtPrice;
             break;
-        case 'BTC':
-            this.member_btc = this.price / coin.btcPrice;
+        case 'BNB':
+            this.member_bnb = this.price / coin.bnbPrice;
             break;
-        case 'Ethereum':
-            this.member_ethereum = this.price / coin.ethereumPrice;
+        case 'MATIC':
+            this.member_matic = this.price / coin.maticPrice;
             break;
         default:
             throw new Error('Invalid selected coin');
