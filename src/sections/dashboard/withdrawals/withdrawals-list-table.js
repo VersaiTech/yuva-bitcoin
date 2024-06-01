@@ -482,7 +482,7 @@ const useSelectionModel = (customers) => {
 
 export const WithdrawalsListTable = (props) => {
   const {
-    customers= [], 
+    customers = [],
     customersCount,
     onPageChange,
     onRowsPerPageChange,
@@ -515,7 +515,7 @@ export const WithdrawalsListTable = (props) => {
 
   return (
     <Box sx={{ position: "relative" }}
-{...other}>
+      {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
@@ -540,11 +540,11 @@ export const WithdrawalsListTable = (props) => {
             onChange={handleToggleAll}
           />
           <Button color="inherit"
-size="small">
+            size="small">
             Delete
           </Button>
           <Button color="inherit"
-size="small">
+            size="small">
             Edit
           </Button>
         </Stack>
@@ -564,54 +564,66 @@ size="small">
               // const statusColor = statusMap[customer.status] || 'warning';
 
               return (
-                <TableRow
-                  hover
-                  key={customer.with_referrance}
-                  selected={isSelected}
-                >
-                  <TableCell>
-                    <Stack alignItems="center"
-direction="row"
-spacing={1}>
-                      <Avatar
-                        src={customer.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        <div>
-                          {/* Icon wrapped in a container with green color */}
-                          <span style={{ color: "green" }}>
-                            <TrendUp02Icon />
-                          </span>
-                        </div>
-                        {/* {getInitials(customer.member_name)} */}
-                      </Avatar>
-                      <div>
-                        <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.stake.index}
-                          variant="subtitle2"
+                <>
+                  <TableRow
+                    hover
+                    key={customer.with_referrance}
+                    selected={isSelected}
+                  >
+                    <TableCell>
+                      <Stack alignItems="center"
+                        direction="row"
+                        spacing={1}>
+                        <Avatar
+                          src={customer.avatar}
+                          sx={{
+                            height: 42,
+                            width: 42,
+                          }}
                         >
-                        <h3>  {customer.with_amt}</h3>
-                        </Link>
-                        {/* <Typography color="text.secondary" variant="body2">
+                          <div>
+                            {/* Icon wrapped in a container with green color */}
+                            <span style={{ color: "green" }}>
+                              <TrendUp02Icon />
+                            </span>
+                          </div>
+                          {/* {getInitials(customer.member_name)} */}
+                        </Avatar>
+                        <div>
+                          <Link
+                            color="inherit"
+                            component={NextLink}
+                            href={paths.dashboard.stake.index}
+                            variant="subtitle2"
+                          >
+                            <h3>  {customer.with_amt}</h3>
+                          </Link>
+                          {/* <Typography color="text.secondary" variant="body2">
                           {customer.member_user_id}
                         </Typography> */}
-                      </div>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>
-                    <SeverityPill
-                      color={statusMap[customer.status] || "warning"}
+                        </div>
+                      </Stack>
+                    </TableCell>
+                    <TableCell>
+                      <SeverityPill
+                        color={statusMap[customer.status] || "warning"}
                       >
-                      {customer.status}
-                    </SeverityPill>
-                  </TableCell>
-                  <TableCell>{format(new Date(customer.with_date), 'MMMM dd, yyyy hh:mm a')}</TableCell>
-                </TableRow>
+                        {customer.status}
+                      </SeverityPill>
+                    </TableCell>
+                    <TableCell>{format(new Date(customer.with_date), 'MMMM dd, yyyy hh:mm a')}</TableCell>
+                    <TableCell align="right">{customer.reason} </TableCell>
+                  </TableRow>
+                  {customer.status === "rejected" && customer.reason && (
+                    <TableRow key={`${customer.with_referrance}-reason`}>
+                      <TableCell colSpan={3}>
+                        <Typography variant="body2">
+                          Reason: {customer.reason}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </>
               );
             })}
           </TableBody>
