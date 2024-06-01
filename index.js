@@ -39,6 +39,7 @@ app.use('/api/Support', require('./routes/Support.route'));
 app.use('/api/Dummy', require('./routes/Dummy.route'));
 app.use('/api/Referral', require('./routes/Referral.route'));
 app.use('/api/ExternalSwap', require('./routes/ExternalSwap.route'));
+app.use('/api/Permission', require('./routes/Permission.route'));
 // Create an API endpoint to manually trigger the cron job
 
 
