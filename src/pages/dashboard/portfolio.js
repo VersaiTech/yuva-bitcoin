@@ -41,7 +41,12 @@ import axios from "axios";
 import { TotalMemberCoins } from "../../sections/dashboard/crypto/totalMemberCoins";
 import { TotalStakesInvestment } from "../../sections/dashboard/crypto/totalStakesInvestment";
 import  { OverviewTodayRefferal } from "../../sections/dashboard/overview/overview-today-refferal";
-import OverviewTodayWithdrawal from "../../sections/dashboard/overview/overview-today-withdrawalcoin copy 2";
+import OverviewTodayWithdrawal, { OverviewWithdrawApproveToday } from "../../sections/dashboard/overview/overview-today-approve-withdrawalcoin";
+import OverviewWithdrawPendingToday from "../../sections/dashboard/overview/overview-today-pending-withdrawalcoin";
+import OverviewWithdrawRejectToday from "../../sections/dashboard/overview/overview-today-reject-withdrawalcoin";
+import OverviewWalletUseTask from "../../sections/dashboard/overview/overview-walletuse-task";
+import OverviewWalletUseRefferal from "../../sections/dashboard/overview/overview-walletuse-refferal";
+import OverviewWalletUseStake from "../../sections/dashboard/overview/overview-walletuse-stake";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -70,7 +75,7 @@ const Page = () => {
       headers: headers,
     });
 
-    console.log(response.data);
+    console.log(response.data.overview);
     setOverview(response.data.overview);
   };
 
@@ -164,7 +169,7 @@ const Page = () => {
             >
               <Grid item xs={12}>
                 <Typography variant="h4">
-                  Yuva Bitcoin Daily Insights
+                  Yuva Bitcoin Today Insights
                 </Typography>
               </Grid>
 
@@ -193,11 +198,57 @@ const Page = () => {
                 />
               </Grid>
               <Grid item xs={6} md={4}>
-                <OverviewTodayWithdrawal
-                  amount={coinholderswithstakeholders}
+                <OverviewWithdrawApproveToday
+                  amount={overview.withdrawSToday}
                   // fetchDummyData={fetchDummyData}
                 />
               </Grid>
+              <Grid item xs={6} md={4}>
+                <OverviewWithdrawPendingToday
+                  amount={overview.withdrawPToday}
+                  // fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <OverviewWithdrawRejectToday
+                  amount={overview.withdrawRToday}
+                  // fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              disableGutters
+              spacing={{
+                xs: 3,
+                lg: 4,
+              }}
+            >
+              <Grid item xs={12}>
+                <Typography variant="h4">
+                  Yuva Bitcoin Wallet Insights
+                </Typography>
+              </Grid>
+
+              <Grid item xs={6} md={4}>
+                <OverviewWalletUseTask
+                  amount={overview.totalTaskCoins}
+                  // fetchDummyData={overview.allMembers}
+                />
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <OverviewWalletUseStake
+                  amount={overview.totalStakesInvestment}
+                  // fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <OverviewWalletUseRefferal
+                  amount={overview.totalReferralEarned}
+                  // fetchDummyData={fetchDummyData}
+                />
+              </Grid>
+             
             </Grid>
             <Grid xs={12}>
               <Stack direction="row" justifyContent="space-between" spacing={4}>
