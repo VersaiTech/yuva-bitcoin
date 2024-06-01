@@ -185,6 +185,17 @@ const adminSetValue = async (req, res) => {
         // Fetch permissions for the admin
         const permission = await Permission.findOne({ admin_user_id: adminId });
         if (!permission) return res.status(400).json({ error: 'Permission not granted for the admin' });
+   
+        // // Only agents can proceed further
+        // if (req.user.userType !== 'agent') {
+        //     return res.status(400).json({ error: 'Only agents can perform this action' });
+        // }
+
+        // // Fetch permissions for the admin
+        // const permission = await Permission.findOne({ admin_user_id: adminId });
+        // if (!permission) {
+        //     return res.status(400).json({ error: 'Admin not found' });
+        // }
 
         const invalidFields = [];
 
