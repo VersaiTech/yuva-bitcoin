@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import DownloadIcon from '@mui/icons-material/Download';
-import { Box, Button, Card, CardActions, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, Divider,  Stack, SvgIcon, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useSnackbar } from "notistack";
+import Link from "next/link";
+
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 
@@ -82,7 +84,7 @@ export const OverviewTodayRefferal = (props) => {
       >
         <div>
           <img
-            src="/assets/logos/staking.png"
+            src="/assets/connections.png"
             width={48}
           />
         </div>
@@ -103,6 +105,7 @@ export const OverviewTodayRefferal = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link color="inherit" href="/dashboard/refferal" >
         <Button
           color="inherit"
           endIcon={(
@@ -115,6 +118,7 @@ export const OverviewTodayRefferal = (props) => {
         >
           Today Refferals 
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={(

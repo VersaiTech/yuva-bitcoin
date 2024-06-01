@@ -18,7 +18,6 @@ import axios from 'axios';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-
 const tabs = [
   {
     label: 'All Users',
@@ -31,12 +30,11 @@ const tabs = [
   {
     label: 'Blocked Users',
     value: 'isProspect'
+  },
+  {
+    label: 'Registered Today',
+    value: 'registeredToday'
   }
-  // ,
-  // {
-  //   label: 'Returning',
-  //   value: 'isReturning'
-  // }
 ];
 
 export const CustomerListSearch = (props) => {

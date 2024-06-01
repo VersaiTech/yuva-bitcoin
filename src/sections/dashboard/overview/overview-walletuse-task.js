@@ -19,6 +19,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 import DownloadIcon from '@mui/icons-material/Download';
+// import Link from "next/link";
+
 
 export const OverviewWalletUseTask = (props) => {
   const { amount, fetchDummyData } = props;
@@ -81,7 +83,7 @@ export const OverviewWalletUseTask = (props) => {
         }}
       >
         <div>
-          <img src="/assets/iconly/team.svg" width={46} />
+          <img src="/planning.png" width={46} />
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">
@@ -94,6 +96,7 @@ export const OverviewWalletUseTask = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="/dashboard/overview/task">
         <Button
           color="inherit"
           endIcon={
@@ -106,6 +109,7 @@ export const OverviewWalletUseTask = (props) => {
         >
           See Task
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={

@@ -15,6 +15,9 @@ import SetDummyData from "./set-dummy-data";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import axios from "axios";
+import Image from 'next/image';
+import Link from "next/link";
+
 
 export const OverviewCoinHolders = (props) => {
   const { amount, fetchDummyData } = props;
@@ -94,7 +97,14 @@ export const OverviewCoinHolders = (props) => {
         }}
       >
         <div>
-          <img src="/assets/logos/yuvalogo.png" width={46} />
+          <Image
+            src="/logo-usdt.svg"
+            alt="Logo USDT"
+            width={46}
+            height={46}
+            quality={100}
+            priority
+          />
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">
@@ -107,6 +117,7 @@ export const OverviewCoinHolders = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link  color="primary" textDecoration="none" size="small" href="/dashboard/coin-holders">
         <Button
           color="inherit"
           size="small"
@@ -119,6 +130,7 @@ export const OverviewCoinHolders = (props) => {
         >
           Today Buyer
         </Button>
+        </Link>
         <Button
           color="inherit"
           size="small"

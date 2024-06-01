@@ -49,6 +49,9 @@ const useCustomers = (search) => {
   const [state, setState] = useState({
     customers: [],
     customersCount: 0,
+    activeUsers: [],
+    blockedUsers: [],
+    registeredToday: [],
   });
   const { page, rowsPerPage } = search;
   console.log(search);
@@ -56,7 +59,6 @@ const useCustomers = (search) => {
   const getCustomers = useCallback(async () => {
     try {
       console.log("called api");
-      // const response = await customersApi.getCustomers(search);
       const token = localStorage.getItem("accessToken");
 
       const headers = {
@@ -67,7 +69,7 @@ const useCustomers = (search) => {
         headers: headers,
       });
 
-      console.log(response.data)
+      console.log(response.data);
       let activeUsersResponse = await axios.get(
         `${BASEURL}/admin/getActiveMembers/${page + 1}/${rowsPerPage}`,
         { headers: headers }
@@ -78,15 +80,16 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      if (!response) {
-        response = [];
-      }
-      if (!activeUsersResponse) {
-        activeUsersResponse = [];
-      }
-      if (!blockedUsersResponse) {
-        blockedUsersResponse = [];
-      }
+      let registeredTodayResponse = await axios.get(
+        `${BASEURL}/admin/registeredToday`,
+        { headers: headers }
+      );
+
+      if (!response) response = [];
+      if (!activeUsersResponse) activeUsersResponse = [];
+      if (!blockedUsersResponse) blockedUsersResponse = [];
+      if (!registeredTodayResponse) registeredTodayResponse = [];
+
       console.log(activeUsersResponse);
       if (isMounted()) {
         setState({
@@ -94,10 +97,11 @@ const useCustomers = (search) => {
           customersCount: response.data.members.length,
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
+          registeredToday: registeredTodayResponse.data.members || [],
         });
 
         console.log(blockedUsersResponse.data.members);
-        console.log(response.data.members)
+        console.log(response.data.members);
       }
     } catch (err) {
       setState({
@@ -105,6 +109,7 @@ const useCustomers = (search) => {
         customersCount: 0,
         activeUsers: [],
         blockedUsers: [],
+        registeredToday: [],
       });
 
       console.error(err.response.data.message);
@@ -119,6 +124,7 @@ const useCustomers = (search) => {
 
   return state;
 };
+
 
 const Page = () => {
   const { search, updateSearch } = useSearch();

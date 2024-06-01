@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
+import Link from "next/link";
 
 export const OverviewStakeCoins = (props) => {
   const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
@@ -103,6 +104,7 @@ export const OverviewStakeCoins = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="/dashboard/stake-coins">
         <Button
           color="inherit"
           endIcon={(
@@ -113,8 +115,9 @@ export const OverviewStakeCoins = (props) => {
           size="small"
           onClick={handleClick}
         >
-          Today Staked User 
+          Today Staked 
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={(

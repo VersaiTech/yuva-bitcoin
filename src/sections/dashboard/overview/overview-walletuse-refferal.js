@@ -81,7 +81,7 @@ export const OverviewWalletUseRefferal = (props) => {
         }}
       >
         <div>
-          <img src="/assets/iconly/team.svg" width={46} />
+          <img src="/earnings.png" width={46} />
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">

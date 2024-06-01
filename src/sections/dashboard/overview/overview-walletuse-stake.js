@@ -81,7 +81,7 @@ export const OverviewWalletUseStake = (props) => {
         }}
       >
         <div>
-          <img src="/assets/iconly/team.svg" width={46} />
+          <img src="/stake.png" width={46} />
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">
@@ -94,6 +94,7 @@ export const OverviewWalletUseStake = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="/stake" passHref>
         <Button
           color="inherit"
           endIcon={
@@ -106,6 +107,7 @@ export const OverviewWalletUseStake = (props) => {
         >
           See Stake
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={

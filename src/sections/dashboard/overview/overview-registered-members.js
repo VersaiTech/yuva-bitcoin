@@ -94,6 +94,7 @@ export const OverviewRegisteredMembers = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="dashboard/users"> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={
@@ -106,6 +107,7 @@ export const OverviewRegisteredMembers = (props) => {
         >
           Today Members
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={

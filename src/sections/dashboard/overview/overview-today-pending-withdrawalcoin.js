@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
+import Link from "next/link";
+
 
 export const OverviewWithdrawPendingToday = (props) => {
   const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
@@ -82,7 +84,7 @@ export const OverviewWithdrawPendingToday = (props) => {
       >
         <div>
           <img
-            src="/assets/logos/staking.png"
+            src="/assets/pending.png"
             width={48}
           />
         </div>
@@ -103,6 +105,7 @@ export const OverviewWithdrawPendingToday = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href="/dashboard/withdrawal-pending" passHref>
         <Button
           color="inherit"
           endIcon={(
@@ -115,6 +118,7 @@ export const OverviewWithdrawPendingToday = (props) => {
         >
            Withdrawal Pending 
         </Button>
+        </Link>
         <Button
           color="inherit"
           endIcon={(
