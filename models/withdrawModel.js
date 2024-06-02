@@ -21,7 +21,6 @@ const withdrawSchema = new mongoose.Schema({
   remarks: { type: String },
   conversion_type: { type: String, enum: ['usdt', 'bnb', 'matic'], ref: 'Coin' },
   converted_amount: { type: Number },
-  reason: { type: String }
 });
 
 const Withdraw = mongoose.model('Withdraw', withdrawSchema);
