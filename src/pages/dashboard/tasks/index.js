@@ -55,7 +55,7 @@ const useOrders = (search) => {
 
     // Initialize an object to hold the API responses
     const tasks = {
-      // orders: [],
+      orders: [],
       ordersCount: 0,
       pending: [],
       completed: [],
@@ -306,7 +306,7 @@ const Page = () => {
                       ? completed.length
                       : currentTab === 'rejected'
                         ? rejected.length
-                        : 0
+                        : ordersCount
               }
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
