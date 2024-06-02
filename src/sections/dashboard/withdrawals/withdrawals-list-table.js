@@ -612,13 +612,13 @@ export const WithdrawalsListTable = (props) => {
                       </SeverityPill>
                     </TableCell>
                     <TableCell>{format(new Date(customer.with_date), 'MMMM dd, yyyy hh:mm a')}</TableCell>
-                    <TableCell align="right">{customer.reason} </TableCell>
+                    {/* <TableCell>{customer.remarks} </TableCell> */}
                   </TableRow>
-                  {customer.status === "rejected" && customer.reason && (
-                    <TableRow key={`${customer.with_referrance}-reason`}>
+                  {customer.status === "Rejected" && customer.remarks && (
+                    <TableRow key={`${customer.with_referrance}-remarks`}>
                       <TableCell colSpan={3}>
                         <Typography variant="body2">
-                          Reason: {customer.reason}
+                          Reason: {customer.remarks}
                         </Typography>
                       </TableCell>
                     </TableRow>
