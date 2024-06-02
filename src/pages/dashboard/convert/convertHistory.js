@@ -217,22 +217,8 @@ const Page = () => {
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                customers={
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "hasAcceptedMarketing"
-                    ? pending
-                    : currentTab === "isProspect"
-                    ? completed
-                    : []
-                }
-                customersCount={
-                  currentTab === 'all' ? customersCount :
-                    currentTab === 'pending' ? pending.length :
-                      currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                        currentTab === 'isProspect' ? completed.length :
-                          0
-                }
+                customers={customers}
+                customersCount={customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
