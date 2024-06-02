@@ -94,11 +94,20 @@ const Page = () => {
           values.referralCode
         );
         console.log(values);
+         // Store values in local storage
+      localStorage.setItem("email", values.email);
+      localStorage.setItem("member_name", values.member_name);
+      localStorage.setItem("contactNo", values.contactNo);
+      localStorage.setItem("twitterId", fullTwitterId);
+      localStorage.setItem("wallet_address", values.wallet_address);
+      localStorage.setItem("referralCode", values.referralCode);
+
 
         if (isMounted()) {
           enqueueSnackbar("Please Verify", {
             variant: "success",
           });
+          
           router.push(paths.auth.verifyCode.modern);
         }
       } catch (err) {
