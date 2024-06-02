@@ -40,10 +40,8 @@ const logoMap = {
 
 const Page = () => {
   const [hasProvider, setHasProvider] = useState(null);
-  // const [provider, setProvider] = useState(null);
-
   const [rate, setRate] = useState(0);
-
+  const [coin, setCoin] = useState("USDT");
   const [wallet, setWallet] = useState([]);
 
   useEffect(() => {
@@ -214,7 +212,7 @@ const Page = () => {
         }}
       >
         <CardHeader
-          title="Buy Yuva Bitcoin"
+          title="Swap USDT To Yuva Bitcoin"
           action={
             <>
               {hasProvider ? (

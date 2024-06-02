@@ -54,13 +54,9 @@ const useOrders = (search) => {
     const headers = { Authorization: token };
 
     // Initialize an object to hold the API responses
-    const tasks = {
-      // orders: [],
-      ordersCount: 0,
-      pending: [],
-      completed: [],
-      rejected: [],
-    };
+    // const tasks = {
+
+    // };
 
     try {
       const response = await axios.get(
@@ -69,7 +65,7 @@ const useOrders = (search) => {
       );
       console.log(response.data.tasks);
       tasks.orders = response.data.tasks;
-      tasks.ordersCount = response.data.tasks.length; // Assuming 'count' is directly on 'data'
+      tasks.ordersCount = 10; // Assuming 'count' is directly on 'data'
     } catch (err) {
       console.error("Error fetching all tasks:", err);
     }
@@ -110,7 +106,11 @@ const useOrders = (search) => {
     // Update state if component is still mounted
     if (isMounted()) {
       setState({
-        ...tasks,
+        orders: [],
+        ordersCount: 0,
+        pending: [],
+        completed: [],
+        rejected: [],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -306,7 +306,7 @@ const Page = () => {
                       ? completed.length
                       : currentTab === 'rejected'
                         ? rejected.length
-                        : 0
+                        : ordersCount
               }
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
