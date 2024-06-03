@@ -25,6 +25,9 @@ export const paths = {
     }
   },
   auth: {
+    terms:{
+      modern: '/auth/terms/modern'
+    },
     forgotPassword: {
       classic: '/auth/forgot-password/classic',
       modern: '/auth/forgot-password/modern'

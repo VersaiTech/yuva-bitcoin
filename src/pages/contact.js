@@ -5,7 +5,6 @@ import Mail01Icon from '@untitled-ui/icons-react/build/esm/Mail01';
 import { Avatar, Box, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
 import { usePageView } from '../hooks/use-page-view';
 import { paths } from '../paths';
-
 import { Layout as DashboardLayout } from '../layouts/dashboard';
 import { ContactForm } from '../sections/contact/contact-form';
 import { useState } from 'react';

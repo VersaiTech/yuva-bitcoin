@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
+import NextLink from 'next/link';
 import Head from "next/head";
+import { paths } from '../../../paths.js';
 import {
   Box,
   Container,
@@ -14,8 +16,8 @@ import {
   Alert,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { usePageView } from "../../../hooks/use-page-view";
+// import { Layout as DashboardLayout } from "../../../layouts/dashboard/index.js";
+import { usePageView } from "../../../hooks/use-page-view.js";
 import Cardd from "../../components/card.jsx";
 
 const TermsAndConditionsPage = () => {
@@ -66,7 +68,15 @@ const TermsAndConditionsPage = () => {
                   <DescriptionIcon />
                 </SvgIcon>
               </Avatar>
-              <Typography variant="overline">Terms and Conditions</Typography>
+              <Link
+              component={NextLink}
+              href={paths.auth.register.modern}
+              underline="hover"
+              variant="subtitle2"
+              sx={{ color: theme.palette.mode === 'dark' ? 'white' : 'black' }}
+            >
+              Home
+            </Link>
             </Stack>
             
             <Typography sx={{ mb: 3 ,textAlign:"center"}} variant="h1">
@@ -171,8 +181,6 @@ const TermsAndConditionsPage = () => {
   );
 };
 
-TermsAndConditionsPage.getLayout = (page) => (
-  <DashboardLayout>{page}</DashboardLayout>
-);
+
 
 export default TermsAndConditionsPage;

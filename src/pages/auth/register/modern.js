@@ -129,6 +129,7 @@ const Page = () => {
     },
   });
 
+
   useEffect(() => {
     if (router.query.code) {
       formik.setFieldValue("referralCode", router.query.code);
@@ -294,9 +295,14 @@ const Page = () => {
           />
           <Typography color="text.secondary" variant="body2">
             I have read the{" "}
-            <Link component="a" href="/terms">
-              Terms and Conditions
-            </Link>
+            <Link
+            component={NextLink}
+            href={paths.auth.terms.modern}
+            underline="hover"
+            variant="subtitle2"
+          >
+            Terms & Conditions
+          </Link>
           </Typography>
         </Box>
         {!!(formik.touched.policy && formik.errors.policy) && (
