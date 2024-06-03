@@ -108,6 +108,7 @@ const { v4: uuidv4 } = require('uuid');
 const Stake = require("../models/stake");
 const Joi = require('joi');
 const StakeHistory = require('../models/stakingHistory');
+const AdminControl = require("../models/AdminControl.Model");
 
 
 const stakingSummaryForAdmin = async (req, res) => {
@@ -323,6 +324,14 @@ async function transferToStaking(req, res) {
     }
 
     const { investment, stakingDuration } = value;
+
+
+    const acontrol = await AdminControl.findOne({});
+    //select stakingDuration will be from acontrol.setStakeMonth1 , acontrol.setStakeMonth2, acontrol.setStakeMonth3,
+    if (stakingDuration !== acontrol.setStakeMonth1 && stakingDuration !== acontrol.setStakeMonth2 && stakingDuration !== acontrol.setStakeMonth3) {
+      return res.status(400).json({ error: 'Staking duration is not valid' });
+    }
+
 
     // Check if the member exists
     const member = await Member.findOne({ member_user_id: userId });
