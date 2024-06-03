@@ -9,9 +9,9 @@ function getCurrentDate() {
 
 const withdrawSchema = new mongoose.Schema({
   member_user_id: { type: String, required: true, ref: 'Member' },
-  member_name: { type: String ,ref: 'Member', required: true},
+  member_name: { type: String, ref: 'Member', required: true },
   wallet_address: { type: String, required: true, ref: 'Member' },
-  transection_hash: { type: String},
+  transection_hash: { type: String },
   with_amt: { type: Number, required: true },
   with_date: { type: Date, default: getCurrentDate },
   with_referrance: { type: String, required: true, unique: true },
@@ -19,7 +19,7 @@ const withdrawSchema = new mongoose.Schema({
   processing_date: { type: Date },
   processed_by: { type: String },
   remarks: { type: String },
-  conversion_type: { type: String, enum: ['usdt', 'bnb', 'matic'], ref:'Coin' },
+  conversion_type: { type: String, enum: ['usdt', 'bnb', 'matic'], ref: 'Coin' },
   converted_amount: { type: Number },
 });
 
