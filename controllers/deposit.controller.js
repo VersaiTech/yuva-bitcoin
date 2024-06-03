@@ -6,6 +6,7 @@ const ReferralHistory = require('../models/referralModel');
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
 const { log } = require('util');
+const AdminControl = require('../models/AdminControl.Model')
 
 
 function generateTransactionId() {
@@ -101,6 +102,7 @@ const createDeposit = async (req, res) => {
       return res.status(404).json({ error: 'Member not found' });
     }
 
+    const acontrol = await AdminControl.find({});
     // Check if the provided wallet_address matches the member's wallet_address
     // if (wallet_address !== value.wallet_address) {
     //   return res.status(400).json({ error: 'Invalid wallet address' });
@@ -432,6 +434,6 @@ async function findMemberDeposit(req, res) {
   }
 }
 module.exports = {
-  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins, convertHistoryUser, convertHistoryAdmin,findMemberDeposit
+  createDeposit, getAllDepositsForAdmin, getDepositsForUser, convertDepositToCoins, convertHistoryUser, convertHistoryAdmin, findMemberDeposit
 };
 

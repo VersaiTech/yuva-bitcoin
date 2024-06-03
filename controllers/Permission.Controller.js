@@ -53,6 +53,8 @@ const grantPermission = async (req, res) => {
         admin_user_id: Joi.string().required(),
         setCoinValueMarketUsdt: Joi.boolean(),
         setMinimumAmountMarketUsdt: Joi.boolean(),
+        setCoinValueMarketYUVA: Joi.boolean(),
+        setMinimumAmountMarketYUVA: Joi.boolean(),
         setMinimumWithdrawal: Joi.boolean(),
         setMaximumWithdrawal: Joi.boolean(),
         setRegisterCoinValue: Joi.boolean(),
@@ -164,6 +166,8 @@ const adminSetValue = async (req, res) => {
         admin_user_id: Joi.string(),
         setCoinValueMarketUsdt: Joi.number(),
         setMinimumAmountMarketUsdt: Joi.number(),
+        setMinimumAmountMarketYUVA: Joi.number(),
+        setCoinValueMarketYUVA: Joi.number().precision(2),
         setMinimumWithdrawal: Joi.number(),
         setMaximumWithdrawal: Joi.number(),
         setRegisterCoinValue: Joi.number(),
@@ -185,17 +189,21 @@ const adminSetValue = async (req, res) => {
         // Fetch permissions for the admin
         const permission = await Permission.findOne({ admin_user_id: adminId });
         if (!permission) return res.status(400).json({ error: 'Permission not granted for the admin' });
-   
-        // // Only agents can proceed further
+
+        // Only agents can proceed further
         // if (req.user.userType !== 'agent') {
         //     return res.status(400).json({ error: 'Only agents can perform this action' });
         // }
 
-        // // Fetch permissions for the admin
+        // Fetch permissions for the admin
         // const permission = await Permission.findOne({ admin_user_id: adminId });
         // if (!permission) {
         //     return res.status(400).json({ error: 'Admin not found' });
         // }
+
+        if (req.user.isActive === false) {
+            return res.status(400).json({ error: 'Agent is not Active' });
+        }
 
         const invalidFields = [];
 
@@ -206,6 +214,8 @@ const adminSetValue = async (req, res) => {
                 $set: {
                     setCoinValueMarketUsdt: permission.setCoinValueMarketUsdt ? value.setCoinValueMarketUsdt : undefined,
                     setMinimumAmountMarketUsdt: permission.setMinimumAmountMarketUsdt ? value.setMinimumAmountMarketUsdt : undefined,
+                    setCoinValueMarketYUVA: permission.setCoinValueMarketYUVA ? value.setCoinValueMarketYUVA : undefined,
+                    setMinimumAmountMarketYUVA: permission.setMinimumAmountMarketYUVA ? value.setMinimumAmountMarketYUVA : undefined,
                     setMinimumWithdrawal: permission.setMinimumWithdrawal ? value.setMinimumWithdrawal : undefined,
                     setMaximumWithdrawal: permission.setMaximumWithdrawal ? value.setMaximumWithdrawal : undefined,
                     setRegisterCoinValue: permission.setRegisterCoinValue ? value.setRegisterCoinValue : undefined,
@@ -224,6 +234,8 @@ const adminSetValue = async (req, res) => {
         // Check for invalid fields
         if (!permission.setCoinValueMarketUsdt && value.setCoinValueMarketUsdt !== undefined) invalidFields.push('setCoinValueMarketUsdt');
         if (!permission.setMinimumAmountMarketUsdt && value.setMinimumAmountMarketUsdt !== undefined) invalidFields.push('setMinimumAmountMarketUsdt');
+        if (!permission.setCoinValueMarketYUVA && value.setCoinValueMarketYUVA !== undefined) invalidFields.push('setCoinValueMarketYUVA');
+        if (!permission.setMinimumAmountMarketYUVA && value.setMinimumAmountMarketYUVA !== undefined) invalidFields.push('setMinimumAmountMarketYUVA');
         if (!permission.setMinimumWithdrawal && value.setMinimumWithdrawal !== undefined) invalidFields.push('setMinimumWithdrawal');
         if (!permission.setMaximumWithdrawal && value.setMaximumWithdrawal !== undefined) invalidFields.push('setMaximumWithdrawal');
         if (!permission.setRegisterCoinValue && value.setRegisterCoinValue !== undefined) invalidFields.push('setRegisterCoinValue');

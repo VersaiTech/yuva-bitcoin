@@ -2,6 +2,7 @@ const { Order, BuyOrder } = require('../models/Order');
 const Member = require('../models/memberModel');
 const Admin = require('../models/AdminModel');
 const TransactionHistory = require('../models/Transaction');
+const AdminControl = require('../models/AdminControl.Model');
 // const BuyOrder = require('../models/Order');
 const Joi = require('joi');
 
@@ -34,13 +35,22 @@ const createOrder = async (req, res) => {
         }
 
         //minimum yuva amount is 100
-        if (coin === 'yuva' && amount < 100) {
-            return res.status(400).json({ error: 'Minimum amount is 500' });
+        const acontrol = await AdminControl.findOne({});
+        if (coin === 'yuva' && amount < acontrol.setMinimumAmountMarketYUVA) {
+            return res.status(400).json({ error: 'Minimum amount is ' + acontrol.setMinimumAmountMarketYUVA + ' YUVA' });
         }
 
         //if coin is yuva exchange_currency is minimum 0.1
-        if (coin === 'yuva' && exchange_currency < 0.1) {
-            return res.status(400).json({ error: 'Minimum exchange currency is 0.1' });
+        if (coin === 'yuva' && exchange_currency < acontrol.setCoinValueMarketUsdt) {
+            return res.status(400).json({ error: 'Minimum exchange currency is ' + acontrol.setCoinValueMarketUsdt + ' USDT' });
+        }
+
+        if (coin === 'usdt' && exchange_currency < acontrol.setCoinValueMarketYUVA) {
+            return res.status(400).json({ error: 'Minimum exchange currency is ' + acontrol.setCoinValueMarketYUVA + ' YUVA' });
+        }
+
+        if (coin === 'usdt' && amount < acontrol.setMinimumAmountMarketUsdt) {
+            return res.status(400).json({ error: 'Minimum amount is ' + acontrol.setMinimumAmountMarketUsdt + ' USDT' });
         }
 
         // Set payment method based on coin type

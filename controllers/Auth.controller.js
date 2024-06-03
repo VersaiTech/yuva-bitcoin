@@ -277,6 +277,7 @@ const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
 const fs = require('fs');
 const path = require('path');
+const AdminControl = require('../models/AdminControl.Model');
 
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -530,6 +531,16 @@ async function verifyOTP(req, res) {
         message: "OTP and email are required"
       });
     }
+    const acontrol = await AdminControl.find({});
+    // Check if AdminControl document exists
+    if (!acontrol) {
+      return res.status(400).json({
+        status: false,
+        message: "Admin control settings not found"
+      });
+    }
+    // Log the fetched value of acontrol.setRegisterCoinValue
+    console.log("acontrol.setRegisterCoinValue:", acontrol.setRegisterCoinValue);
 
     // Find temporary registration data by OTP and email
     const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });
@@ -564,6 +575,9 @@ async function verifyOTP(req, res) {
       existingMember.twitterId = twitterId;
       existingMember.isActive = true;
 
+      // Set coins value to acontrol.setRegisterCoinValue
+      existingMember.coins = acontrol.setRegisterCoinValue;
+
       await existingMember.save();
     } else {
       // Create new member instance using registration data
@@ -582,7 +596,7 @@ async function verifyOTP(req, res) {
         registration_date: reg_date,
         twitterId,
         isActive: true,
-        coins: 1, // Give 2 coins as bonus
+        coins: acontrol.setRegisterCoinValue,
         referralCode
       });
 

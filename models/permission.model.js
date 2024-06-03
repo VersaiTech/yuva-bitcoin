@@ -4,6 +4,8 @@ const PermissionSchema = new mongoose.Schema({
     admin_user_id: { type: String, required: true, ref: 'Admin' },
     setCoinValueMarketUsdt: { type: Boolean, default: false },
     setMinimumAmountMarketUsdt: { type: Boolean, default: false },
+    setCoinValueMarketYUVA: { type: Boolean, default: false },
+    setMinimumAmountMarketYUVA: { type: Boolean, default: false },
     setMinimumWithdrawal: { type: Boolean, default: false },
     setMaximumWithdrawal: { type: Boolean, default: false },
     setRegisterCoinValue: { type: Boolean, default: false },

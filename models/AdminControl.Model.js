@@ -5,6 +5,8 @@ const AdminControlSchema = new mongoose.Schema({
     admin_user_id: { type: String, required: true, ref: 'Admin' },
     setCoinValueMarketUsdt: { type: Number, required: true },
     setMinimumAmountMarketUsdt: { type: Number, required: true },
+    setCoinValueMarketYUVA: { type: Number, required: true },
+    setMinimumAmountMarketYUVA: { type: Number, required: true },
     setMinimumWithdrawal: { type: Number, required: true },
     setMaximumWithdrawal: { type: Number, required: true },
     setRegisterCoinValue: { type: Number, required: true },

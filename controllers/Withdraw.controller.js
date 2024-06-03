@@ -7,6 +7,7 @@ const Coin = require('../models/Coin');
 const Joi = require('joi');
 const fs = require('fs');
 const path = require('path');
+const AdminControl = require('../models/AdminControl.Model')
 
 
 //===================================================================================================
@@ -177,14 +178,6 @@ const withdrawRequest = async (req, res) => {
       });
     }
 
-    // it is taking Yuva as withdrawal  currancy
-    if (amount < 10) {
-      return res.status(400).json({
-        status: false,
-        message: 'Minimum withdrawal amount is 10',
-      });
-    }
-
     // Check if the withdrawal amount is greater than the available amount in the member's schema
     if (amount > member.coins) {
       return res.status(400).json({
@@ -192,6 +185,24 @@ const withdrawRequest = async (req, res) => {
         message: 'Withdrawal amount exceeds available balance',
       });
     }
+
+
+    const acontrol = await AdminControl.findOne({});
+    // it is taking Yuva as withdrawal  currancy
+    if (amount < acontrol.setMinimumWithdrawal) {
+      return res.status(400).json({
+        status: false,
+        message: 'Minimum withdrawal amount is ' + acontrol.setMinimumWithdrawal,
+      });
+    }
+
+    if (amount > acontrol.setMaximumWithdrawal) {
+      return res.status(400).json({
+        status: false,
+        message: 'Maximum withdrawal amount is ' + acontrol.setMaximumWithdrawal,
+      });
+    }
+
 
 
     // Check if there's an existing temporary registration for the same email
@@ -862,7 +873,7 @@ const generateReferenceID = () => {
 };
 
 
-const findMemberWithdraw = async(req,res) =>{
+const findMemberWithdraw = async (req, res) => {
   try {
     const { member_name } = req.body
     if (member_name.length < 3) {
