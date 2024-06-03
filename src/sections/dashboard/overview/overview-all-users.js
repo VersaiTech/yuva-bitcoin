@@ -23,7 +23,7 @@ export const AllUsers = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-user.svg"
+            src="/assets/iconly/man.png"
             alt="User Icon"
             width={48}
           />

@@ -29,7 +29,7 @@ export const TotalStakesInvestment = (props) => {
 
   return (
     <Card>
-      <CardHeader title="Total Stake Investment" />
+      <CardHeader title="Total Stake Investment by Users" />
 
       <Stack
         display={'flex'}
@@ -48,7 +48,7 @@ export const TotalStakesInvestment = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-deposit-coin.svg"
+            src="/assets/iconly/equity.png"
             alt="User Icon"
             width={48}
           />

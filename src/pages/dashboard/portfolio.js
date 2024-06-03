@@ -304,7 +304,7 @@ const Page = () => {
             <Grid xs={12} md={4}>
               <OverviewOpenTickets amount={5} />
             </Grid> */}
-
+{/* 
             <Grid xs={12} md={12}>
               <Stack
                 spacing={{
@@ -317,7 +317,7 @@ const Page = () => {
                   labels={["Task", "Bonus", "Referral"]}
                 />
               </Stack>
-            </Grid>
+            </Grid> */}
             {/* <Grid xs={12} md={4}>
               <Stack
                 spacing={{

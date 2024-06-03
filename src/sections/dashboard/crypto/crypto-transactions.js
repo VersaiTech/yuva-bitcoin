@@ -29,7 +29,7 @@ export const CryptoTransactions = (props) => {
 
   return (
     <Card>
-      <CardHeader title="All Users Deposit" />
+      <CardHeader title="Total Users Deposit Usdt " />
 
       <Stack
         display={'flex'}
@@ -48,7 +48,7 @@ export const CryptoTransactions = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-deposit-coin.svg"
+            src="/assets/iconly/deposit.png"
             alt="User Icon"
             width={48}
           />

@@ -24,7 +24,7 @@ export const BlockUsers = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-users.svg"
+            src="/assets/iconly/block.png"
             alt= "User Icon"
             width={48}
           />

@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, Card, Divider, Grid, Typography, Switch, FormControlLabel, Paper } from '@mui/material';
+import { Box, Button, Card, Divider, Stack, Typography, Switch, FormControlLabel, Grid, Paper } from '@mui/material';
 import axios from 'axios';
-// import DashboardLayout from '../layouts/DashboardLayout'; // Adjust the import according to your project structure
-import { Layout as DashboardLayout } from "../../layouts/dashboard";
-
 
 const permissions = [
-  'USDT Market Value',
+  'setCoinValueMarketUsdt',
   'setMinimumAmountMarketUsdt',
   'setCoinValueMarketYUVA',
   'setMinimumAmountMarketYUVA',
@@ -59,35 +56,25 @@ const PermissionSettingsPage = () => {
     }
   };
 
-  const half = Math.ceil(permissions.length / 2);
-  const leftPermissions = permissions.slice(0, half);
-  const rightPermissions = permissions.slice(half);
-
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-      <Card sx={{ width: 800, padding: 4 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', }}>
+      <Card sx={{ width: 600, padding: 4 }}>
         <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
           Set Permission
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Typography variant="subtitle1" align="center">Permisson Name</Typography>
+          <Grid item xs={6}>
+            <Typography variant="subtitle1" align="center">PERMISSION NAME</Typography>
           </Grid>
-          <Grid item xs={3}>
-            <Typography variant="subtitle1" align="center">Status</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography variant="subtitle1" align="center">Permisson Name</Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography variant="subtitle1" align="center">Status</Typography>
+          <Grid item xs={6}>
+            <Typography variant="subtitle1" align="center">STATUS</Typography>
           </Grid>
         </Grid>
         <Divider sx={{ marginY: 2 }} />
         <Grid container spacing={2}>
-          <Grid item xs={6}>
-            {leftPermissions.map((permission) => (
-              <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }} key={permission}>
+          {permissions.map((permission) => (
+            <Grid item xs={12} key={permission}>
+              <Paper elevation={3} sx={{ padding: 2 }}>
                 <Grid container alignItems="center">
                   <Grid item xs={8}>
                     <Typography variant="body2">{permission}</Typography>
@@ -106,31 +93,8 @@ const PermissionSettingsPage = () => {
                   </Grid>
                 </Grid>
               </Paper>
-            ))}
-          </Grid>
-          <Grid item xs={6}>
-            {rightPermissions.map((permission) => (
-              <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }} key={permission}>
-                <Grid container alignItems="center">
-                  <Grid item xs={8}>
-                    <Typography variant="body2">{permission}</Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={state[permission]}
-                          onChange={handleChange}
-                          name={permission}
-                          color="primary"
-                        />
-                      }
-                    />
-                  </Grid>
-                </Grid>
-              </Paper>
-            ))}
-          </Grid>
+            </Grid>
+          ))}
         </Grid>
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 4 }}>
           <Button
@@ -146,7 +110,5 @@ const PermissionSettingsPage = () => {
     </Box>
   );
 };
-
-PermissionSettingsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default PermissionSettingsPage;

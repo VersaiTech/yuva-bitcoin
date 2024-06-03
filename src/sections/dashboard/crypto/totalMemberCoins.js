@@ -27,7 +27,7 @@ export const TotalMemberCoins = (props) => {
 
   return (
     <Card>
-      <CardHeader title="Total Member Coin" />
+      <CardHeader title="Total Yuva Coin in Users Wallet" />
 
       <Stack
         display={'flex'}
@@ -46,7 +46,7 @@ export const TotalMemberCoins = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-deposit-coin.svg"
+            src="/assets/iconly/purse.png"
             alt="User Icon"
             width={48}
           />

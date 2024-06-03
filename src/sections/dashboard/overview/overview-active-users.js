@@ -24,7 +24,7 @@ export const ActiveUsers = (props) => {
       >
         <div>
           <img
-            src="/assets/iconly/icon-glass-activeuser.svg"
+            src="/assets/iconly/verified-user.png"
             alt='Active User Icon'
             width={48}
           />
