@@ -13,71 +13,6 @@ function generateTransactionId() {
   return uuidv4(); // Using just UUID for simplicity, feel free to customize it further
 }
 
-// async function createDeposit(req, res) {
-//   // Define a schema for request body validation
-//   const schema = Joi.object({
-//     amount: Joi.number().positive().required(),
-//     transaction_hash: Joi.string().required(),
-//     wallet_address: Joi.string().required(),
-//     deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
-//   });
-//   try {
-//     const { error, value } = schema.validate(req.body);
-
-//     if (error) {
-//       return res.status(400).json({ error: error.details[0].message });
-//     }
-//     // Retrieve member information based on member_user_id
-//     const { member_user_id, member_name, wallet_address } = req.user;
-//     const member = await Member.findOne({ member_user_id, wallet_address });
-
-//     if (!member) {
-//       return res.status(404).json({ error: 'Member not found' });
-//     }
-
-//     // Check if the provided wallet_address matches the member's wallet_address
-//     if (wallet_address !== value.wallet_address) {
-//       return res.status(400).json({ error: 'Invalid wallet address' });
-//     }
-
-//     // Create a new deposit
-//     const newDeposit = new Deposit({
-//       member: member_user_id,
-//       name: member_name,
-//       amount: value.amount,
-//       transaction_hash: value.transaction_hash,
-//       // wallet_address: req.body.wallet_address,
-//       wallet_address: wallet_address,
-//       deposit_type: value.deposit_type,
-//     });
-
-//     // Update the total deposit for the specific deposit type in the Member schema
-//     switch (req.body.deposit_type) {
-//       case 'usdt':
-//         member.deposit_usdt += value.amount;
-//         break;
-//       case 'bnb':
-//         member.deposit_bnb += value.amount;
-//         break;
-//       case 'matic':
-//         member.deposit_matic += value.amount;
-//         break;
-//       default:
-//         return res.status(400).json({ error: 'Invalid deposit type' });
-//     }
-
-//     // Save the updated member object to the database
-//     await member.save();
-
-//     // Save the deposit to the database
-//     const savedDeposit = await newDeposit.save();
-
-//     res.status(201).json(savedDeposit);
-//   } catch (error) {
-//     console.error('Error creating deposit:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// }
 const createDeposit = async (req, res) => {
   try {
     // Define a schema for request body validation
@@ -95,14 +30,16 @@ const createDeposit = async (req, res) => {
     }
 
     // Retrieve member information based on member_user_id
-    const { member_user_id, member_name, wallet_address } = req.user;
+    const { member_user_id, member_name, wallet_address, referralCode } = req.user;
     const member = await Member.findOne({ member_user_id });
 
     if (!member) {
       return res.status(404).json({ error: 'Member not found' });
     }
 
-    const acontrol = await AdminControl.find({});
+    // Fetch referral settings from AdminControl
+    const acontrol = await AdminControl.findOne({});
+
     // Check if the provided wallet_address matches the member's wallet_address
     // if (wallet_address !== value.wallet_address) {
     //   return res.status(400).json({ error: 'Invalid wallet address' });
@@ -114,19 +51,13 @@ const createDeposit = async (req, res) => {
       return res.status(400).json({ error: 'Transaction hash already exists' });
     }
 
-    //minimum amount is 50
-    // if (value.amount < 50) {
-    //   return res.status(400).json({ error: 'Minimum deposit amount is 50' });
-    // }
-
-
-    // check that amount has only 4 decimal in body
+    // Ensure that amount has maximum 4 decimal places
     const [integer, decimal] = value.amount.toString().split('.');
     if (decimal && decimal.length > 4) {
       return res.status(400).json({ error: 'Amount should have maximum 4 decimal places' });
     }
 
-    // while adding amount only 4 decimal is allowed
+    // Limit amount to 4 decimal places
     value.amount = decimal ? Number(integer + '.' + decimal.slice(0, 4)) : value.amount;
 
     // Create a new deposit
@@ -154,30 +85,38 @@ const createDeposit = async (req, res) => {
         return res.status(400).json({ error: 'Invalid deposit type' });
     }
 
-    // deposit_usdthave 4 decimals
+    // Ensure deposit_usdt has 4 decimal places
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
-
+    // Check if member has referred someone and the referral code is valid
     if (member.deposit_usdt >= 10 && member.referralCode) {
+      // Mark member as referred
       member.isReferred = true;
       const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
       if (referralUserId) {
+        // Find the member who referred this member
         const referralMember = await Member.findOne({ member_user_id: member.referralCode });
         if (referralMember) {
-          referralMember.coins += 5;
-          await referralMember.save();
-          if (member.isReferred === true) {
-            const referralHistory = new ReferralHistory({
-              user_id: referralMember.member_user_id,
-              user_name: referralMember.member_name,
-              // user_earned: referralMember.coins,
-              user_earned: 5,
-              referral_code: member.referralCode,
-              referral_user_name: member.member_name,
-              referral_user: member.member_user_id,
-              referral_user_isRefered: member.isReferred
-            })
-            await referralHistory.save();
+          // Ensure referralMember exists
+          // Add referral coins to the referring member's coins
+          if (typeof acontrol.setReferralCoinValue === 'number' && !isNaN(acontrol.setReferralCoinValue)) {
+            referralMember.coins += acontrol.setReferralCoinValue;
+            await referralMember.save();
+            // Create a referral history entry
+            if (member.isReferred === true) {
+              const referralHistory = new ReferralHistory({
+                user_id: referralMember.member_user_id,
+                user_name: referralMember.member_name,
+                user_earned: acontrol.setReferralCoinValue,
+                referral_code: member.referralCode,
+                referral_user_name: member.member_name,
+                referral_user: member.member_user_id,
+                referral_user_isRefered: true
+              });
+              await referralHistory.save();
+            } else {
+              console.error('Invalid setReferralCoinValue:', acontrol.setReferralCoinValue);
+            }
           }
         }
       }
@@ -195,6 +134,125 @@ const createDeposit = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+// const createDeposit = async (req, res) => {
+//   try {
+//     // Define a schema for request body validation
+//     const schema = Joi.object({
+//       amount: Joi.number().positive().required(),
+//       transaction_hash: Joi.string().required(),
+//       wallet_address: Joi.string().required(),
+//       deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
+//     });
+
+//     const { error, value } = schema.validate(req.body);
+
+//     if (error) {
+//       return res.status(400).json({ error: error.details[0].message });
+//     }
+
+//     // Retrieve member information based on member_user_id
+//     const { member_user_id, member_name, wallet_address } = req.user;
+//     const member = await Member.findOne({ member_user_id });
+
+//     if (!member) {
+//       return res.status(404).json({ error: 'Member not found' });
+//     }
+
+//     const acontrol = await AdminControl.find({});
+//     // Check if the provided wallet_address matches the member's wallet_address
+//     // if (wallet_address !== value.wallet_address) {
+//     //   return res.status(400).json({ error: 'Invalid wallet address' });
+//     // }
+
+//     // Check if the transaction hash already exists
+//     const existingDeposit = await Deposit.findOne({ transaction_hash: value.transaction_hash });
+//     if (existingDeposit) {
+//       return res.status(400).json({ error: 'Transaction hash already exists' });
+//     }
+
+//     //minimum amount is 50
+//     // if (value.amount < 50) {
+//     //   return res.status(400).json({ error: 'Minimum deposit amount is 50' });
+//     // }
+
+
+//     // check that amount has only 4 decimal in body
+//     const [integer, decimal] = value.amount.toString().split('.');
+//     if (decimal && decimal.length > 4) {
+//       return res.status(400).json({ error: 'Amount should have maximum 4 decimal places' });
+//     }
+
+//     // while adding amount only 4 decimal is allowed
+//     value.amount = decimal ? Number(integer + '.' + decimal.slice(0, 4)) : value.amount;
+
+//     // Create a new deposit
+//     const newDeposit = new Deposit({
+//       member: member_user_id,
+//       name: member_name,
+//       amount: value.amount,
+//       transaction_hash: value.transaction_hash,
+//       wallet_address: value.wallet_address,
+//       deposit_type: value.deposit_type,
+//     });
+
+//     // Update the total deposit for the specific deposit type in the Member schema
+//     switch (value.deposit_type) {
+//       case 'usdt':
+//         member.deposit_usdt += value.amount;
+//         break;
+//       case 'bnb':
+//         member.deposit_bnb += value.amount;
+//         break;
+//       case 'matic':
+//         member.deposit_matic += value.amount;
+//         break;
+//       default:
+//         return res.status(400).json({ error: 'Invalid deposit type' });
+//     }
+
+//     // deposit_usdthave 4 decimals
+//     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
+
+
+// if (member.deposit_usdt >= 10 && member.referralCode) {
+//   member.isReferred = true;
+//   const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
+//   if (referralUserId) {
+//     const referralMember = await Member.findOne({ member_user_id: member.referralCode });
+//     if (referralMember) {
+//       referralMember.coins += 5;
+//       await referralMember.save();
+//       if (member.isReferred === true) {
+//         const referralHistory = new ReferralHistory({
+//           user_id: referralMember.member_user_id,
+//           user_name: referralMember.member_name,
+//           // user_earned: referralMember.coins,
+//           user_earned: 5,
+//           referral_code: member.referralCode,
+//           referral_user_name: member.member_name,
+//           referral_user: member.member_user_id,
+//           referral_user_isRefered: member.isReferred
+//         })
+//         await referralHistory.save();
+//       }
+//     }
+//   }
+// }
+
+//     // Save the updated member object to the database
+//     await member.save();
+
+//     // Save the deposit to the database
+//     const savedDeposit = await newDeposit.save();
+
+//     return res.status(201).json(savedDeposit);
+//   } catch (error) {
+//     console.error('Error creating deposit:', error);
+//     return res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 
 
 

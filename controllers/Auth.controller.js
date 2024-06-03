@@ -521,6 +521,105 @@ async function register(req, res) {
   }
 }
 
+// async function verifyOTP(req, res) {
+//   const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
+
+//   try {
+//     if (!otpFromBody || !email) { // Check if OTP or email is missing
+//       return res.status(400).json({
+//         status: false,
+//         message: "OTP and email are required"
+//       });
+//     }
+//     const acontrol = await AdminControl.find({});
+//     // Check if AdminControl document exists
+//     if (!acontrol) {
+//       return res.status(400).json({
+//         status: false,
+//         message: "Admin control settings not found"
+//       });
+//     }
+//     // Log the fetched value of acontrol.setRegisterCoinValue
+//     console.log("acontrol.setRegisterCoinValue:", acontrol.setRegisterCoinValue);
+
+//     // Find temporary registration data by OTP and email
+//     const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody, email: email }).sort({ createdAt: -1 });
+
+//     if (!temporaryRegistrationFromBody) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "Invalid OTP or email"
+//       });
+//     }
+
+//     // Verify that the OTP matches
+//     if (temporaryRegistrationFromBody.otp !== otpFromBody) {
+//       return res.status(400).send({
+//         status: false,
+//         message: "OTP does not match"
+//       });
+//     }
+
+//     // Find member by email
+//     let existingMember = await Member.findOne({ email });
+//     // If member exists, update the data, otherwise create a new member
+//     if (existingMember) {
+//       // Update existing member data
+//       const { contactNo, member_name, password, twitterId, wallet_address, referralCode } = temporaryRegistrationFromBody.registrationData;
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPassword = await bcrypt.hash(password, salt);
+//       existingMember.member_name = member_name;
+//       existingMember.contactNo = contactNo;
+//       existingMember.wallet_address = wallet_address;
+//       existingMember.password = hashedPassword;
+//       existingMember.twitterId = twitterId;
+//       existingMember.isActive = true;
+
+//       // Set coins value to acontrol.setRegisterCoinValue
+//       existingMember.coins = acontrol.setRegisterCoinValue;
+
+//       await existingMember.save();
+//     } else {
+//       // Create new member instance using registration data
+//       const { contactNo, member_name, password, twitterId, wallet_address, referralCode } = temporaryRegistrationFromBody.registrationData;
+//       const reg_date = new Date();
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPassword = await bcrypt.hash(password, salt);
+
+//       const newMember = new Member({
+//         member_user_id: generateRandomNumber(),
+//         member_name,
+//         contactNo,
+//         wallet_address,
+//         email,
+//         password: hashedPassword,
+//         registration_date: reg_date,
+//         twitterId,
+//         isActive: true,
+//         coins: acontrol.setRegisterCoinValue,
+//         referralCode
+//       });
+
+//       // Save the member to the database
+//       await newMember.save();
+//     }
+
+//     // Delete temporary registration data
+//     await temporaryRegistrationFromBody.deleteOne();
+
+//     return res.status(200).send({
+//       status: true,
+//       message: "Registration successful"
+//     });
+//   } catch (err) {
+//     console.log("Error in OTP verification", err);
+//     return res.status(400).send({
+//       status: false,
+//       message: "OTP verification failed"
+//     });
+//   }
+// }
+
 async function verifyOTP(req, res) {
   const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
 
@@ -531,7 +630,9 @@ async function verifyOTP(req, res) {
         message: "OTP and email are required"
       });
     }
-    const acontrol = await AdminControl.find({});
+
+    // Find AdminControl document
+    const acontrol = await AdminControl.findOne({});
     // Check if AdminControl document exists
     if (!acontrol) {
       return res.status(400).json({
@@ -619,104 +720,6 @@ async function verifyOTP(req, res) {
     });
   }
 }
-
-
-// async function verifyOTP(req, res) {
-//   const { otp: otpFromBody } = req.body; // Extract OTP from request body
-
-//   try {
-//     if (!otpFromBody) { // Check if OTP is missing in the request body
-//       return res.status(400).json({
-//         status: false,
-//         message: "OTP is required"
-//       });
-//     }
-
-//     // Find temporary registration data by OTP from request body
-//     const temporaryRegistrationFromBody = await TemporaryRegistration.findOne({ otp: otpFromBody });
-
-//     if (!temporaryRegistrationFromBody) {
-//       return res.status(400).send({
-//         status: false,
-//         message: "Invalid OTP"
-//       });
-//     }
-
-//     // Extract email from temporary registration data
-//     const { email } = temporaryRegistrationFromBody;
-
-//     // Find member by email
-//     let existingMember = await Member.findOne({ email });
-
-//     // If member exists, update the data, otherwise create a new member
-//     if (existingMember) {
-//       // Update existing member data
-//       const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
-//       const salt = await bcrypt.genSalt(10);
-//       const hashedPassword = await bcrypt.hash(password, salt);
-
-//       existingMember.member_name = member_name;
-//       existingMember.contactNo = contactNo;
-//       existingMember.wallet_address = wallet_address;
-//       existingMember.password = hashedPassword;
-//       existingMember.twitterId = twitterId;
-//       existingMember.isActive = true;
-
-//       await existingMember.save();
-//     } else {
-//       // Create new member instance using registration data
-//       const { contactNo, member_name, password, twitterId, wallet_address } = temporaryRegistrationFromBody.registrationData;
-//       const reg_date = new Date();
-//       const salt = await bcrypt.genSalt(10);
-//       const hashedPassword = await bcrypt.hash(password, salt);
-
-//       const newMember = new Member({
-//         member_user_id: generateRandomNumber(),
-//         member_name,
-//         contactNo,
-//         wallet_address,
-//         email,
-//         password: hashedPassword,
-//         registration_date: reg_date,
-//         twitterId,
-//         isActive: true,
-//       });
-
-//       // Save the member to the database
-//       await newMember.save();
-//     }
-
-//     // Delete temporary registration data
-//     await temporaryRegistrationFromBody.deleteOne();
-
-//     return res.status(200).send({
-//       status: true,
-//       message: "Registration successful"
-//     });
-//   } catch (err) {
-//     console.log("Error in OTP verification", err);
-//     return res.status(400).send({
-//       status: false,
-//       message: "OTP verification failed"
-//     });
-//   }
-// }
-
-
-
-
-
-
-//==========================================================================================================================
-
-
-
-// function generateRandomNumber() {
-//   const min = 1000000; // Minimum 7-digit number (inclusive)
-//   const max = 9999999; // Maximum 7-digit number (inclusive)
-
-//   return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
 
 function phoneValidation(phone) {
   phone = testInput(phone);
