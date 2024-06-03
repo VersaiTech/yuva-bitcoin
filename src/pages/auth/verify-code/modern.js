@@ -176,20 +176,24 @@ const referralCode = localStorage.getItem("referralCode");
         {verificationError && (
           <FormHelperText error>{verificationError}</FormHelperText>
         )}
-        <div>
-          {/* Your verify page UI */}
-          <Button
-            fullWidth
-            size="large"
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleResendOTP}
-            disabled={isResending || isButtonDisabled}
-          >
-            {isResending ? "Resending..." : "Resend OTP"}
-            {isButtonDisabled && <span> ({countdown}s)</span>}
-          </Button>
-        </div>
+        <Box 
+        sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}
+      >
+        <Typography
+          variant="body2"
+          onClick={handleResendOTP}
+          sx={{
+            cursor: isResending || isButtonDisabled ? 'not-allowed' : 'pointer',
+            color: isResending || isButtonDisabled ? 'grey' : 'primary.main',
+            textDecoration: 'underline',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          {isResending ? "Resending..." : "Resend OTP"}
+          {isButtonDisabled && <span> ({countdown}s)</span>}
+        </Typography>
+      </Box>
         <Button
           fullWidth
           size="large"
