@@ -58,6 +58,14 @@ const useOrders = (search) => {
 
     // };
 
+    const tasks = {
+      orders: [],
+      ordersCount: 0,
+      pending: [],
+      completed: [],
+      rejected: [],
+    };
+
     try {
       const response = await axios.get(
         `${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`,
@@ -65,7 +73,8 @@ const useOrders = (search) => {
       );
       console.log(response.data.tasks);
       tasks.orders = response.data.tasks;
-      tasks.ordersCount = 10; // Assuming 'count' is directly on 'data'
+      tasks.ordersCount = response.data.tasks.length;
+      // tasks.ordersCount = 10; // Assuming 'count' is directly on 'data'
     } catch (err) {
       console.error("Error fetching all tasks:", err);
     }
@@ -106,11 +115,12 @@ const useOrders = (search) => {
     // Update state if component is still mounted
     if (isMounted()) {
       setState({
-        orders: [],
-        ordersCount: 0,
-        pending: [],
-        completed: [],
-        rejected: [],
+        ...tasks,
+        // orders: [],
+        // ordersCount: 0,
+        // pending: [],
+        // completed: [],
+        // rejected: [],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
