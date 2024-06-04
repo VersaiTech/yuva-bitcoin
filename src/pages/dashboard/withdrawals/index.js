@@ -324,7 +324,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Stack, SvgIcon, Typography, TextField } from "@mui/material";
 import axios from "axios";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
@@ -363,6 +363,9 @@ const useCustomers = (search) => {
   });
 
   const { page, rowsPerPage } = search;
+
+
+
 
   const fetchData = async (endpoint) => {
     try {
@@ -405,8 +408,32 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
+  const { customers: originalCustomers, customersCount: originalCustomersCount, completed, rejected, pending } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
+  const [search2, setSearch2] = useState("");
+  const [searchedCustomers, setSearchedCustomers] = useState([]);
+  const [searchedCustomersCount, setSearchedCustomersCount] = useState(0);
+
+
+  const handleSearch = async () => {
+    try {
+      const accessToken = window.localStorage.getItem("accessToken");
+      const headers = { authorization: accessToken };
+      const data = { member_name: search2 };
+      const response = await axios.post(`${BASEURL}/admin/findMember`, data, { headers });
+      setSearchedCustomers(response.data.data || []);
+      setSearchedCustomersCount(response.data.data.length);
+    } catch (error) {
+      console.error("Error searching data: ", error);
+    }
+  };
+
+  // Function to handle clearing search
+  const clearSearch = () => {
+    setSearch2("");
+    setSearchedCustomers([]);
+    setSearchedCustomersCount(0);
+  };
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -448,7 +475,6 @@ const Page = () => {
     },
     [updateSearch]
   );
-
   return (
     <>
       <Head>
@@ -468,6 +494,32 @@ const Page = () => {
                 >
                   Add
                 </Button>
+                <Stack className="form-group d-flex align-items-center">
+                <TextField
+                  type="text"
+                  label="Type to search..."
+                  value={search2}
+                  onChange={(e) => setSearch2(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSearch}
+                  sx={{ ml: 1, height: "54px" }}
+                >
+                  Search
+                </Button>
+                {search2 && (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={clearSearch}
+                    sx={{ ml: 1, height: "54px" }}
+                  >
+                    Clear
+                  </Button>
+                )}
+              </Stack>
               </Stack>
             </Stack>
             <Card>
@@ -483,18 +535,8 @@ const Page = () => {
                 setCurrentTab={setCurrentTab}
               />
               <WithdrawalsListTable
-                customers={
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "pending"
-                    ? pending
-                    : currentTab === "hasAcceptedMarketing"
-                    ? rejected
-                    : currentTab === "isProspect"
-                    ? completed
-                    : []
-                }
-                customersCount={currentTab === "all" ? customersCount :  currentTab === "pending" ? pending.length :  currentTab === "hasAcceptedMarketing" ? rejected.length : currentTab === "isProspect" ? completed.length : customersCount}
+                customers={search2 ? searchedCustomers : originalCustomers}
+                customersCount={search2 ? searchedCustomersCount : originalCustomersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
