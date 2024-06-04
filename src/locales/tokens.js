@@ -6,6 +6,7 @@ export const tokens = {
     academy: 'nav.academy',
     account: 'nav.account',
     admincontrol  : 'nav.admincontrol',
+    addagent: 'nav.addagent',
     portfolio: 'nav.portfolio',
     admincontrol: 'nav.admincontrol',
     newtask: 'nav.newtask',
