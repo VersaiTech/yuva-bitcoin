@@ -57,6 +57,7 @@ export const paths = {
     account: "/dashboard/account",
     portfolio: "/dashboard/portfolio",
     admincontrol: "/dashboard/admincontrol",
+    addagent: "/dashboard/addagent",
     analytics: "/dashboard/analytics",
     demo: "/dashboard/demo",
     blank: "/dashboard/blank",
