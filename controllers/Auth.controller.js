@@ -1341,6 +1341,18 @@ async function verifyOTPAdmin(req, res) {
 }
 
 
+
+const getAllAgent = async (req, res) => {
+  try {
+    const agents = await Admin.find({ userType: 'agent' });
+    return res.status(200).json({ status: true, data: agents });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: false, message: 'Internal server error' });
+  }
+}
+
+
 const OTP_EXPIRY_TIME = 5 * 60 * 1000;
 async function forgotPassword(req, res) {
   const schema = Joi.object({
@@ -1564,5 +1576,6 @@ module.exports = {
   forgotPassword,
   verifyOTPForResetPassword,
   changePassword,
-  verifyOTPAdmin
+  verifyOTPAdmin,
+  getAllAgent
 };

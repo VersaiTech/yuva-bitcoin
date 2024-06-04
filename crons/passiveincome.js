@@ -138,7 +138,7 @@ const { Task, CompletedTask } = require('../models/Task');
 const AdminControl = require("../models/AdminControl.Model")
 
 // Cron job to calculate interest
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('0 0 */12 * *', async () => {
   console.log('Running the daily 1 cron job...');
 
   try {
