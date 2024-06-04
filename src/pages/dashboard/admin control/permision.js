@@ -3,7 +3,7 @@ import { Box, Button, Card, Divider, Stack, Typography, Switch, FormControlLabel
 import axios from 'axios';
 
 const permissions = [
-  'setCoinValueMarketUsdt',
+  'Set Coin Value Market Usdt',
   'setMinimumAmountMarketUsdt',
   'setCoinValueMarketYUVA',
   'setMinimumAmountMarketYUVA',
@@ -48,7 +48,13 @@ const PermissionSettingsPage = () => {
 
   const handleApplyChanges = async () => {
     try {
-      const response = await axios.post('/api/update-permissions', state);
+      const BASEURL = process.env.PUBLIC_NEXT_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+         Authorization: token 
+        };
+
+      const response = await axios.post(`${BASEURL}/api/Permission/grantPermission`, state,{headers: headers});
       console.log('Permissions updated successfully', response.data);
       setIsChanged(false);
     } catch (error) {
@@ -60,7 +66,7 @@ const PermissionSettingsPage = () => {
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', }}>
       <Card sx={{ width: 600, padding: 4 }}>
         <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
-          Set Permission
+          SET PERMISSION
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -103,7 +109,7 @@ const PermissionSettingsPage = () => {
             sx={{ bgcolor: isChanged ? '#00ff00' : '#d5e8d4', color: isChanged ? 'black' : 'grey' }}
             disabled={!isChanged}
           >
-            APPLY CHANGES
+            Apply Changes
           </Button>
         </Box>
       </Card>
