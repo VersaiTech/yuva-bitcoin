@@ -17,17 +17,18 @@ const agentHandler = async (req, res) => {
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
+        const admin = req.user;
+
+        if (admin.userType !== 'admin') {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
+
 
         const { admin_user_id } = value;
 
         const { isActive } = req.body;
         if (!isActive) {
             return res.status(400).json({ error: 'isActive field is required' });
-        }
-        const admin = req.user;
-
-        if (admin.userType !== 'admin') {
-            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
         }
 
         const checkAgent = await Admin.findOne({ admin_user_id: admin_user_id });
@@ -70,7 +71,11 @@ const grantPermission = async (req, res) => {
     if (error) { return res.status(400).json({ error: error.details[0].message }) };
 
     try {
-        //first check in admin that value.admin_user_id existsor not then check that admin_user_id is isActive is true then procced further else give error
+
+        const checkAdmin = req.user
+        if (checkAdmin.userType !== 'admin') {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
 
         if (!value.admin_user_id) { return res.status(400).json({ error: 'Admin user id is required' }) };
 
@@ -258,8 +263,27 @@ const adminSetValue = async (req, res) => {
     }
 }
 
-module.exports = adminSetValue;
+
+
+const getPermission = async (req, res) => {
+    try {
+        const admin = req.user;
+
+        if (admin.userType !== 'admin') {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
+        const permission = await Permission.findOne({});
+        if (!permission) {
+            return res.status(400).json({ error: 'Permission not found' });
+        }
+
+        return res.status(200).json({ status: 'success', message: 'Permission fetched successfully', data: permission });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 
 
-module.exports = { grantPermission, agentHandler, adminSetValue }
+module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getPermission }
