@@ -24,12 +24,16 @@ import axios from "axios";
 import OrderForm from "./agent/create";
 // import { customer, customers } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+import { useAuth } from "../../hooks/use-auth";
+
 
 
 
 
 const Page = () => {
   const [openForm , setOpenForm] = useState(false);
+  const { user } = useAuth();
+
   
 
   // usePageView();
@@ -52,6 +56,7 @@ const Page = () => {
       <Head>
         <title>Dashboard: Task List | Yuva Bitcoin</title>
       </Head>
+      {user?.data?.data?.userType === "admin" ? (
       <Box
         component="main"
         sx={{
@@ -108,6 +113,11 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
+       ) : (
+        <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
+          You are not an admin
+        </Typography>
+      )}
     </>
   );
 };

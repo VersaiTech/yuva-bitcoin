@@ -408,32 +408,33 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers: originalCustomers, customersCount: originalCustomersCount, completed, rejected, pending } = useCustomers(search);
+  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
-  const [search2, setSearch2] = useState("");
-  const [searchedCustomers, setSearchedCustomers] = useState([]);
-  const [searchedCustomersCount, setSearchedCustomersCount] = useState(0);
+  // const [search2, setSearch2] = useState("");
+  // const [searchedCustomers, setSearchedCustomers] = useState([]);
+  // const [searchedCustomersCount, setSearchedCustomersCount] = useState(0);
+  const [searchResults, setSearchResults] = useState([]);
 
 
-  const handleSearch = async () => {
-    try {
-      const accessToken = window.localStorage.getItem("accessToken");
-      const headers = { authorization: accessToken };
-      const data = { member_name: search2 };
-      const response = await axios.post(`${BASEURL}/admin/findMember`, data, { headers });
-      setSearchedCustomers(response.data.data || []);
-      setSearchedCustomersCount(response.data.data.length);
-    } catch (error) {
-      console.error("Error searching data: ", error);
-    }
-  };
+  // const handleSearch = async () => {
+  //   try {
+  //     const accessToken = window.localStorage.getItem("accessToken");
+  //     const headers = { authorization: accessToken };
+  //     const data = { member_name: search2 };
+  //     const response = await axios.post(`${BASEURL}/admin/findMember`, data, { headers });
+  //     setSearchedCustomers(response.data.data || []);
+  //     setSearchedCustomersCount(response.data.data.length);
+  //   } catch (error) {
+  //     console.error("Error searching data: ", error);
+  //   }
+  // };
 
-  // Function to handle clearing search
-  const clearSearch = () => {
-    setSearch2("");
-    setSearchedCustomers([]);
-    setSearchedCustomersCount(0);
-  };
+  // // Function to handle clearing search
+  // const clearSearch = () => {
+  //   setSearch2("");
+  //   setSearchedCustomers([]);
+  //   setSearchedCustomersCount(0);
+  // };
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -494,7 +495,7 @@ const Page = () => {
                 >
                   Add
                 </Button>
-                <Stack className="form-group d-flex align-items-center">
+                {/* <Stack className="form-group d-flex align-items-center">
                 <TextField
                   type="text"
                   label="Type to search..."
@@ -519,7 +520,7 @@ const Page = () => {
                     Clear
                   </Button>
                 )}
-              </Stack>
+              </Stack> */}
               </Stack>
             </Stack>
             <Card>
@@ -533,10 +534,22 @@ const Page = () => {
                 rejected={rejected}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <WithdrawalsListTable
-                customers={search2 ? searchedCustomers : originalCustomers}
-                customersCount={search2 ? searchedCustomersCount : originalCustomersCount}
+                customers={
+                  searchResults.length > 0 ? searchResults :
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "pending"
+                    ? pending
+                    : currentTab === "hasAcceptedMarketing"
+                    ? rejected
+                    : currentTab === "isProspect"
+                    ? completed
+                    : []
+                }
+                customersCount={searchResults.length > 0 ? searchResults.length : currentTab === "all" ? customersCount :  currentTab === "pending" ? pending.length :  currentTab === "hasAcceptedMarketing" ? rejected.length : currentTab === "isProspect" ? completed.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

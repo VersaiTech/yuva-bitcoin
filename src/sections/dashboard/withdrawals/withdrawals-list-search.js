@@ -1,12 +1,14 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   Box,
   Divider,
   InputAdornment,
   OutlinedInput,
   Stack,
+  IconButton,
   SvgIcon,
   Tab,
   Tabs,
@@ -61,7 +63,7 @@ const sortOptions = [
 ];
 
 export const WithdrawalListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
@@ -110,13 +112,50 @@ export const WithdrawalListSearch = (props) => {
     });
   }, [setCurrentTab]);
 
-  const handleQueryChange = useCallback((event) => {
+  // const handleQueryChange = useCallback((event) => {
+  //   event.preventDefault();
+  //   setFilters((prevState) => ({
+  //     ...prevState,
+  //     query: queryRef.current?.value
+  //   }));
+  // }, []);
+
+  
+  const handleQueryChange = useCallback(async (event) => {
     event.preventDefault();
-    setFilters((prevState) => ({
-      ...prevState,
-      query: queryRef.current?.value
-    }));
-  }, []);
+    const query = queryRef.current?.value;
+
+    if (query.length < 3) {
+      alert("Minimum 3 characters required");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.post(`${BASEURL}/api/Withdraw/findMemberWithdraw`, { member_name: query }, { headers });
+
+      console.log(response);
+      if (response.data.status) {
+        setSearchResults(response.data.data);
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error(error.response.data);
+      alert("An error occurred while searching for members");
+    }
+  }, [setSearchResults]);
+
+  const handleRefresh = useCallback(() => {
+    queryRef.current.value = "";
+    setSearchResults([]);
+    setFilters({});
+    setCurrentTab('all');
+  }, [setSearchResults, setFilters, setCurrentTab]);
 
   const handleSortChange = useCallback((event) => {
     const [sortBy, sortDir] = event.target.value.split('|');
@@ -171,6 +210,13 @@ export const WithdrawalListSearch = (props) => {
                 </SvgIcon>
               </InputAdornment>
             )}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton onClick={handleRefresh}>
+                  <RefreshIcon />
+                </IconButton>
+              </InputAdornment>
+            }
           />
         </Box>
       </Stack>

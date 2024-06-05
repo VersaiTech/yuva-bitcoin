@@ -106,6 +106,7 @@ const Page = () => {
   console.log(customers);
 
   const [currentTab, setCurrentTab] = useState("all");
+  const [searchResults, setSearchResults] = useState([]);
 
   console.log(currentTab);
 
@@ -219,11 +220,13 @@ const Page = () => {
                 blockedUsers={blockedUsers}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <DepositListTable
                 // customers={customers}
                 // customersCount={customersCount}
                 customers={
+                  searchResults.length > 0 ? searchResults :
                   currentTab === "all"
                     ? customers
                     : currentTab === "hasAcceptedMarketing"
@@ -233,6 +236,7 @@ const Page = () => {
                     : customers
                 }
                 customersCount={
+                  searchResults.length > 0 ? searchResults.length :
                   currentTab === "all"
                     ? customersCount
                     : currentTab === "hasAcceptedMarketing"

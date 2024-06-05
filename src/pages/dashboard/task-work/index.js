@@ -108,6 +108,7 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState("pending");
 
   const [currentData, setCurrentData] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   usePageView();
 
@@ -237,12 +238,13 @@ const Page = () => {
                 rejected={rejected}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <WorkListTable
-                customersCount={currentTab === "all" ? customersCount : currentTab === "pending" ? pending.length : currentTab === "completed" ? completed.length : currentTab === "rejected" ? rejected.length : 0}
+                customersCount={searchResults.length > 0 ? searchResults.length : currentTab === "all" ? customersCount : currentTab === "pending" ? pending.length : currentTab === "completed" ? completed.length : currentTab === "rejected" ? rejected.length : 0}
 
                 currentTab={currentTab}
-                customers={currentData ? currentData : []}
+                customers={searchResults.length > 0 ? searchResults : currentData ? currentData : []}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
