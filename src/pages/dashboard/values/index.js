@@ -15,17 +15,17 @@ const Page = () => {
   usePageView();
 
   const [initialValues, setInitialValues] = useState({
-    marketPlaceCurrentValueUSDT: '',
-    marketPlaceCurrentValueYUVA: '',
-    marketPlaceMinimumAmountUSDT: '',
-    marketPlaceMinimumAmountYUVA: '',
-    withdrawalMinimum: '',
-    withdrawalMaxValue: '1000',
+    setCoinValueMarketUsdt: '',
+    setCoinValueMarketYUVA: '',
+    setMinimumAmountMarketUsdt: '',
+    setMinimumAmountMarketYUVA: '',
+    setMinimumWithdrawal: '',
+    setMaximumWithdrawal: '1000',
     setStakePercent1:'',
     setStakePercent2:'',
     setStakePercent3:'',
-    registerCoinValue: '',
-    referralCoinValue: '',
+    setRegisterCoinValue: '',
+    setReferralCoinValue: '',
     setStakeMonth1:'',
     setStakeMonth2:'',
     setStakeMonth3:'',
@@ -53,21 +53,20 @@ const Page = () => {
           if (data.status === 'success') {
             console.log('Setting initial values:', data.data);
             setInitialValues({
-              marketPlaceCurrentValueUSDT: data.data.setCoinValueMarketUsdt.toString(),
-              marketPlaceCurrentValueYUVA: data.data.setCoinValueMarketYUVA.toString(),
-              marketPlaceMinimumAmountUSDT: data.data.setMinimumAmountMarketUsdt.toString(),
-              marketPlaceMinimumAmountYUVA: data.data.setMinimumAmountMarketYUVA.toString(),
-              withdrawalMinimum: data.data.setMinimumWithdrawal.toString(),
-              withdrawalMaxValue: '1000', // Assuming this value remains constant for now
-              stakePercentage: data.data.setStakePercent1.toString(), // Assuming you want to use setStakePercent1
+              setCoinValueMarketUsdt: data.data.setCoinValueMarketUsdt.toString(),
+              setCoinValueMarketYUVA: data.data.setCoinValueMarketYUVA.toString(),
+              setMinimumAmountMarketUsdt: data.data.setMinimumAmountMarketUsdt.toString(),
+              setMinimumAmountMarketYUVA: data.data.setMinimumAmountMarketYUVA.toString(),
+              setMinimumWithdrawal: data.data.setMinimumWithdrawal.toString(),
+              setMaximumWithdrawal: data.data.setMaximumWithdrawal.toString(),// Assuming you want to use setStakePercent1
               setStakeMonth1: data.data.setStakeMonth1.toString(), // Assuming you want to use setStakeMonth1
               setStakeMonth2: data.data.setStakeMonth2.toString(), // Assuming you want to use setStakeMonth1
               setStakeMonth3: data.data.setStakeMonth3.toString(), // Assuming you want to use setStakeMonth1
               setStakePercent3:data.data.setStakePercent3.toString(),
               setStakePercent2:data.data.setStakePercent2.toString(),
               setStakePercent1:data.data.setStakePercent1.toString(),
-              registerCoinValue: data.data.setRegisterCoinValue.toString(),
-              referralCoinValue: data.data.setReferralCoinValue.toString()
+              setRegisterCoinValue: data.data.setRegisterCoinValue.toString(),
+              setReferralCoinValue: data.data.setReferralCoinValue.toString()
             });
             setLoading(false);
           } else {
@@ -86,6 +85,7 @@ const Page = () => {
   
  const handleSubmit = async (values, { setSubmitting }) => {
   try {
+    values.admin_user_id = '8761087';
     const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
     const token = localStorage.getItem("accessToken");
     const headers = {
@@ -128,7 +128,7 @@ const Page = () => {
                     label="Current Value"
                     fullWidth
                     margin="normal"
-                    value={values.marketPlaceCurrentValueUSDT}
+                    value={values.setCoinValueMarketUsdt}
                     onChange={handleChange}
                   />
                   <Field
@@ -137,7 +137,7 @@ const Page = () => {
                     label="Minimum Amount"
                     fullWidth
                     margin="normal"
-                    value={values.marketPlaceMinimumAmountUSDT}
+                    value={values.setMinimumAmountMarketUsdt}
                     onChange={handleChange}
                   />
                   <Button type="submit" variant="contained" color="primary" fullWidth>
@@ -157,7 +157,7 @@ const Page = () => {
                     label="Current Value"
                     fullWidth
                     margin="normal"
-                    value={values.marketPlaceCurrentValueYUVA}
+                    value={values.setCoinValueMarketYUVA}
                     onChange={handleChange}
                   />
                   <Field
@@ -166,7 +166,7 @@ const Page = () => {
                     label="Minimum Amount"
                     fullWidth
                     margin="normal"
-                    value={values.marketPlaceMinimumAmountYUVA}
+                    value={values.setMinimumAmountMarketYUVA}
                     onChange={handleChange}
                   />
                   <Button type="submit" variant="contained" color="primary" fullWidth>
@@ -273,21 +273,21 @@ const Page = () => {
                     Withdrawal Value
                   </Typography>
                   <Field
-                    name="withdrawalMinimum"
+                    name="setMinimumWithdrawal"
                     as={TextField}
                     label="Minimum"
                     fullWidth
                     margin="normal"
-                    value={values.withdrawalMinimum}
+                    value={values.setMinimumWithdrawal}
                     onChange={handleChange}
                   />
                   <Field
-                    name="withdrawalMaxValue"
+                    name="setMaximumWithdrawal"
                     as={TextField}
                     label="Max Value"
                     fullWidth
                     margin="normal"
-                    value={values.withdrawalMaxValue}
+                    value={values.setMaximumWithdrawal}
                     onChange={handleChange}
                   />
                   <Button type="submit" variant="contained" color="primary" fullWidth>
@@ -302,12 +302,12 @@ const Page = () => {
                     Register Coin Value
                   </Typography>
                   <Field
-                    name="registerCoinValue"
+                    name="setRegisterCoinValue"
                     as={TextField}
                     label="Current"
                     fullWidth
                     margin="normal"
-                    value={values.registerCoinValue}
+                    value={values.setRegisterCoinValue}
                     onChange={handleChange}
                   />
                   <Button type="submit" variant="contained" color="primary" fullWidth>
@@ -322,12 +322,12 @@ const Page = () => {
                     Referral Coin Value
                   </Typography>
                   <Field
-                    name="referralCoinValue"
+                    name="setReferralCoinValue"
                     as={TextField}
                     label="Current"
                     fullWidth
                     margin="normal"
-                    value={values.referralCoinValue}
+                    value={values.setReferralCoinValue}
                     onChange={handleChange}
                   />
                   <Button type="submit" variant="contained" color="primary" fullWidth>

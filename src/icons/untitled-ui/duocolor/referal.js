@@ -5,7 +5,7 @@ function ReferalIcon(props) {
   return (
     <svg
       viewBox="0 0 640 512"
-      fill="currentColor"
+      fill="#ffffff"
       height="1.3em"
       width="1.3em"
       {...props}

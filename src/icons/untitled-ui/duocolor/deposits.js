@@ -5,7 +5,7 @@ function DepositsIcon(props) {
   return (
     <svg
       viewBox="0 0 1024 1024"
-      fill="currentColor"
+      fill="#ffffff"
       height="1.3em"
       width="1.3em"
       {...props}
