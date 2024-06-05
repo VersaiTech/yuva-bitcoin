@@ -10,9 +10,29 @@ import { paths } from '../../../paths';
 import { usePageView } from '../../../hooks/use-page-view';
 import { useEffect, useState } from 'react';
 import axios from "axios";
+import { useSnackbar } from 'notistack';
+import * as Yup from 'yup';
 
 const Page = () => {
   usePageView();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const validationSchema = Yup.object().shape({
+    setCoinValueMarketUsdt: Yup.number().nullable(),
+    setCoinValueMarketYUVA: Yup.number().nullable(),
+    setMinimumAmountMarketUsdt: Yup.number().nullable(),
+    setMinimumAmountMarketYUVA: Yup.number().nullable(),
+    setMinimumWithdrawal: Yup.number().nullable(),
+    setMaximumWithdrawal: Yup.number().nullable(),
+    setStakePercent1: Yup.number().nullable(),
+    setStakePercent2: Yup.number().nullable(),
+    setStakePercent3: Yup.number().nullable(),
+    setRegisterCoinValue: Yup.number().nullable(),
+    setReferralCoinValue: Yup.number().nullable(),
+    setStakeMonth1: Yup.number().nullable(),
+    setStakeMonth2: Yup.number().nullable(),
+    setStakeMonth3: Yup.number().nullable(),
+  });
 
   const [initialValues, setInitialValues] = useState({
     setCoinValueMarketUsdt: '',
@@ -85,7 +105,7 @@ const Page = () => {
   
  const handleSubmit = async (values, { setSubmitting }) => {
   try {
-    values.admin_user_id = '8761087';
+    values.admin_user_id = 'YBSA1345';
     const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
     const token = localStorage.getItem("accessToken");
     const headers = {
@@ -98,8 +118,10 @@ const Page = () => {
 
     if (response.status === 200) {
       console.log("Values Updated");
+      enqueueSnackbar('Values Updated', { variant: 'success' }); // Show success snackbar
     } else {
       console.error('Failed to update values:', response.statusText);
+      enqueueSnackbar(response.error, { variant: 'error' }); // Show error snackbar with response.error message
     }
   } catch (error) {
     console.error('Error updating values:', error.message);
@@ -113,7 +135,7 @@ const Page = () => {
 
   return (
     <Container maxWidth="md">
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {({ values, handleChange }) => (
           <Form>
             <Grid container spacing={3}>
@@ -123,7 +145,7 @@ const Page = () => {
                     Market Place Coin Value (USDT)
                   </Typography>
                   <Field
-                    name="marketPlaceCurrentValue"
+                    name="setCoinValueMarketUsdt"
                     as={TextField}
                     label="Current Value"
                     fullWidth
@@ -132,7 +154,7 @@ const Page = () => {
                     onChange={handleChange}
                   />
                   <Field
-                    name="marketPlaceMinimumAmount"
+                    name="setMinimumAmountMarketUsdt"
                     as={TextField}
                     label="Minimum Amount"
                     fullWidth
@@ -152,7 +174,7 @@ const Page = () => {
                     Market Place Coin Value (YUVA BITCOIN)
                   </Typography>
                   <Field
-                    name="marketPlaceCurrentValue"
+                    name="setCoinValueMarketYUVA"
                     as={TextField}
                     label="Current Value"
                     fullWidth
@@ -161,7 +183,7 @@ const Page = () => {
                     onChange={handleChange}
                   />
                   <Field
-                    name="marketPlaceMinimumAmount"
+                    name="setMinimumAmountMarketYUVA"
                     as={TextField}
                     label="Minimum Amount"
                     fullWidth
