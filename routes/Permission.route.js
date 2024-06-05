@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
-const { grantPermission, agentHandler,adminSetValue,getPermission ,getSetValue,getSetValueLatest} = require('../controllers/Permission.Controller');
+const { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest, getAgentSetData } = require('../controllers/Permission.Controller');
 //yaha bhavesh ko data dikh q nii rha h 
 router.route('/grantPermission').post(isAdmin, grantPermission);
 router.route('/agentHandler/:admin_user_id').post(isAdmin, agentHandler);
