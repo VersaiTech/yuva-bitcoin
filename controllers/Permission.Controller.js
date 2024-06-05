@@ -320,6 +320,21 @@ const getSetValueLatest = async (req, res) => {
     }
 }
 
+const getAgentSetData = async (req, res) => {
+    try {
+        const admin = req.user.admin_user_id
+        if (!admin) {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
+        const data = await AdminControl.findOne({ admin_user_id: admin });
+        if (!data) {
+            return res.status(400).json({ error: 'Agent set data not found' });
+        }
+        return res.status(200).json({ status: 'success', message: 'Agent set data fetched successfully', data: data });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
-
-module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue,getSetValueLatest }
+module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest,getAgentSetData }
