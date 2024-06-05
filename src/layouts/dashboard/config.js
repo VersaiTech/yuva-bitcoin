@@ -43,6 +43,15 @@ export const getSections = (t) => [
         ),
       },
       {
+        title: t(tokens.nav.values),
+        path: paths.dashboard.values.index,
+        icon: (
+          <SvgIcon fontSize="small">
+            <CryptoIcon />
+          </SvgIcon>
+        ),
+      },
+      {
         title: t(tokens.nav.newtask),
         icon: (
           <SvgIcon fontSize="small">

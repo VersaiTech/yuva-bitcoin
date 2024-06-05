@@ -41,6 +41,10 @@ const Page = () => {
     setOpenForm(false);
   }  
 
+  const handleSubmit =()=>{
+    
+  }
+
 
  
   return (
@@ -98,6 +102,7 @@ const Page = () => {
             <OrderForm 
             open={openForm}
             handleClose={handleformclose}
+            onSubmit = {handleSubmit}
             />
            
           </Stack>

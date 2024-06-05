@@ -3,6 +3,7 @@ import { tokens } from '../tokens';
 export const en = {
   [tokens.common.languageChanged]: 'Language changed',
   [tokens.nav.academy]: 'Academy',
+  
   [tokens.nav.admincontrol]: 'Admin Control',
   [tokens.nav.addagent]: 'Add Agent',
   [tokens.nav.account]: 'Account',
@@ -79,5 +80,6 @@ export const en = {
   [tokens.nav.register]: 'Register',
   [tokens.nav.resetPassword]: 'Reset Password',
   [tokens.nav.socialMedia]: 'Social Media',
-  [tokens.nav.verifyCode]: 'Verify Code'
+  [tokens.nav.verifyCode]: 'Verify Code',
+  [tokens.nav.values]: 'Set Values'
 };
