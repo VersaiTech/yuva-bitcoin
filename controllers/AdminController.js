@@ -1792,7 +1792,8 @@ async function findTaskByName(req, res) {
     if (taskName.length < 3) {
       return res.status(400).json({ status: false, message: "Minimum 3 character required" });
     }
-    const task = await Task.find({ taskName: { $regex: taskName, $options: "i" } });
+    // const task = await Task.find({ taskName: { $regex: taskName, $options: "i" } });
+    const task = await Task.find({ taskName: { $regex: taskName, $options: "i" } }).lean();
     if (task.length == 0) {
       return res.status(404).json({ status: false, message: "Task not found" });
     }

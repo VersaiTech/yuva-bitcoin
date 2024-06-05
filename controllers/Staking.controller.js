@@ -626,7 +626,8 @@ const findMemberStake = async (req, res) => {
     if (member_name.length < 3) {
       return res.status(400).json({ status: false, message: "Minimum 3 character required" });
     }
-    const member = await StakeHistory.find({ member_name: { $regex: member_name, $options: "i" } });
+    // const member = await StakeHistory.find({ member_name: { $regex: member_name, $options: "i" } });
+    const member = await StakeHistory.find({ member_name: { $regex: member_name, $options: "i" } }).lean();;
 
     if (member.length == 0) {
       return res.status(404).json({ status: false, message: "Member not found" });
