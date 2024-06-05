@@ -35,7 +35,9 @@ export const AccountButton = () => {
         headers: headers
       })
 
+
       console.log(response.data.data);
+      console.log(response.data);
       setAdmin(response.data.data)
     }
     catch (err) {

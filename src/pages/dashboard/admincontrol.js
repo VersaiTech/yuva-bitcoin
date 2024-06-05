@@ -14,6 +14,8 @@ import axios from "axios";
 import { useAuth } from "../../hooks/use-auth";
 // import DashboardLayout from '../layouts/DashboardLayout'; // Adjust the import according to your project structure
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
+import { useSnackbar } from "notistack";
+
 
 const permissions = [
   "USDT Market Value",
@@ -33,7 +35,7 @@ const permissions = [
 ];
 
 const initialState = {
-  admin_user_id: "admin123", // Replace with actual admin user ID as needed
+  admin_user_id: '8761087',  // Replace with actual admin user ID as needed
   setCoinValueMarketUsdt: false,
   setMinimumAmountMarketUsdt: false,
   setCoinValueMarketYUVA: false,
@@ -53,8 +55,8 @@ const initialState = {
 const PermissionSettingsPage = () => {
   const [state, setState] = useState(initialState);
   const [isChanged, setIsChanged] = useState(false);
-  const { user } = useAuth();
-  console.log(user.data.data);
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
     setIsChanged(true);
@@ -62,8 +64,17 @@ const PermissionSettingsPage = () => {
 
   const handleApplyChanges = async () => {
     try {
-      const response = await axios.post("/api/update-permissions", state);
-      console.log("Permissions updated successfully", response.data);
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const token = localStorage.getItem("accessToken");
+      const headers = { Authorization: token };
+
+      const response = await axios.post(`${BASEURL}/api/Permission/grantPermission`, state,{headers:headers});
+      if (response.status === 200) {
+        enqueueSnackbar("Permissions Set Successful", { variant: "success" });
+        console.log('Permissions updated successfully', response.data);
+      } else {
+        
+      }
       setIsChanged(false);
     } catch (error) {
       console.error("Error updating permissions", error);
