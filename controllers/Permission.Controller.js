@@ -272,7 +272,7 @@ const getPermission = async (req, res) => {
         if (admin.userType !== 'admin') {
             return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
         }
-        const permission = await Permission.findOne({});
+        const permission = await Permission.find({});
         if (!permission) {
             return res.status(400).json({ error: 'Permission not found' });
         }
@@ -285,5 +285,41 @@ const getPermission = async (req, res) => {
 }
 
 
+const getSetValue = async (req, res) => {
+    try {
+        const admin = req.user;
+        if (admin.userType !== 'admin') {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
+        const adminControl = await AdminControl.find({});
+        if (!adminControl) {
+            return res.status(400).json({ error: 'Admin control not found' });
+        }
+        return res.status(200).json({ status: 'success', message: 'Admin control fetched successfully', data: adminControl });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
-module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getPermission }
+
+const getSetValueLatest = async (req, res) => {
+    try {
+        const admin = req.user;
+        if (admin.userType !== 'admin') {
+            return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        }
+        const adminControl = await AdminControl.findOne({}, {}, { sort: { _id: -1 } });
+        if (!adminControl) {
+            return res.status(400).json({ error: 'Admin control not found' });
+        }
+        return res.status(200).json({ status: 'success', message: 'Admin control fetched successfully', data: adminControl });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+
+module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue,getSetValueLatest }
