@@ -675,7 +675,7 @@ async function verifyOTP(req, res) {
       existingMember.password = hashedPassword;
       existingMember.twitterId = twitterId;
       existingMember.isActive = true;
-
+      // For D
       // Set coins value to acontrol.setRegisterCoinValue
       existingMember.coins = acontrol.setRegisterCoinValue;
 
