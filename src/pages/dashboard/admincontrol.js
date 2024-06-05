@@ -56,6 +56,8 @@ const PermissionSettingsPage = () => {
   const [state, setState] = useState(initialState);
   const [isChanged, setIsChanged] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuth();
+
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
