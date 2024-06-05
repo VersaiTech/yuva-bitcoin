@@ -108,6 +108,7 @@ const Page = () => {
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
+  const [searchResults, setSearchResults] = useState([]);
 
   usePageView();
 
@@ -222,11 +223,12 @@ const Page = () => {
                 // pending={pending}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <NewtaskListTable
                 // customers={customers}
-                customersCount={customersCount}
-                customers={currentTab === "all" ? customers : []}
+                customersCount={ searchResults.length > 0 ? searchResults.length : customersCount}
+                customers={searchResults.length > 0 ? searchResults : currentTab === "all" ? customers : []}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

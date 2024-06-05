@@ -110,6 +110,7 @@ const Page = () => {
   console.log(customers);
 
   const [currentTab, setCurrentTab] = useState("all");
+  const [searchResults, setSearchResults] = useState([]);
 
   console.log(currentTab);
 
@@ -223,12 +224,14 @@ const Page = () => {
                 blockedUsers={blockedUsers}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <External_DepositListTable
                 // customers={customers}
-                customersCount={customersCount}
+                customersCount={searchResults.length > 0 ? searchResults.length : customersCount}
                 // customersCount={customersCount}
                 customers={
+                  searchResults.length > 0 ? searchResults :
                   currentTab === "all"
                     ? customers
                     : currentTab === "hasAcceptedMarketing"
