@@ -53,6 +53,7 @@ export const DepositOperations = (props) => {
   }, []);
 
   const updateWallet = async (accounts) => {
+    console.log({ accounts });
     setWallet({ accounts });
   };
 
@@ -195,10 +196,12 @@ export const DepositOperations = (props) => {
       const provider = await detectEthereumProvider({ silent: true });
       const web3 = new Web3(provider);
 
+      let response = "";
+
       if (coin === "USDT") {
         const contract = new web3.eth.Contract(USDTABI, USDT_CONTRACT_ADDRESS);
 
-        const response = await contract.methods
+        response = await contract.methods
           .transfer(
             ADMIN_WALLET_ADDRESS,
             web3.utils.toWei(values.amount, "ether")
