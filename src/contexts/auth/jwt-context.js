@@ -101,7 +101,7 @@ export const AuthProvider = (props) => {
         });
       } else {
         dispatch({
-          type: ActionType.INITIALIZE,
+          type: ActionType.INITIALIZE,    
           payload: {
             isAuthenticated: false,
             user: null
