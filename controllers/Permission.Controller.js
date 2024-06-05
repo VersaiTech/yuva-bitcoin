@@ -305,10 +305,13 @@ const getSetValue = async (req, res) => {
 
 const getSetValueLatest = async (req, res) => {
     try {
-        const admin = req.user;
-        if (admin.userType !== 'admin') {
+        const admin = req.user.admin_user_id;
+        if(!admin){
             return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
         }
+        // if (admin.userType !== 'admin') {
+        //     return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
+        // }
         const adminControl = await AdminControl.findOne({}, {}, { sort: { _id: -1 } });
         if (!adminControl) {
             return res.status(400).json({ error: 'Admin control not found' });
@@ -337,4 +340,4 @@ const getAgentSetData = async (req, res) => {
     }
 }
 
-module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest,getAgentSetData }
+module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest, getAgentSetData }
