@@ -1808,7 +1808,22 @@ async function findTaskByName(req, res) {
 
 
 const userRegToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1818,7 +1833,13 @@ const userRegToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    })
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+    if (!users || users.length === 0) {
+      return res.status(200).json({ status: false, message: "No users found", counts: 0, data: [] });
+    }
 
     const totalUsers = await users.length
 
@@ -1831,7 +1852,21 @@ const userRegToday = async (req, res) => {
 }
 
 const stakeToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1841,9 +1876,14 @@ const stakeToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
 
     const totalStake = await stake.length
+    if(!stake || stake.length === 0){
+      return res.status(200).json({ status: false, message: "No stake found", counts: 0, data: [] });
+    }
     return res.status(200).json({ status: true, message: "Stake today", counts: totalStake, data: stake });
   } catch (error) {
     console.log(error);
@@ -1852,7 +1892,21 @@ const stakeToday = async (req, res) => {
 }
 
 const withdrawSToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1863,10 +1917,15 @@ const withdrawSToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+      if(!withdraw || withdraw.length === 0){
+        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+      }
 
     const totalwithdrawS = await withdraw.length
-    return res.status(200).json({ status: true, message: "Withdraw Approved today", counts: totalWithdrawS, data: withdraw });
+    return res.status(200).json({ status: true, message: "Withdraw Approved today", counts: totalwithdrawS, data: withdraw });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ status: false, message: "Internal server error" });
@@ -1874,7 +1933,21 @@ const withdrawSToday = async (req, res) => {
 }
 
 const withdrawRToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1885,7 +1958,12 @@ const withdrawRToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+      if(!withdraw || withdraw.length === 0){
+        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+      }
     const totalwithdrawR = await withdraw.length
     return res.status(200).json({ status: true, message: "Withdraw Rejected today", counts: totalwithdrawR, data: withdraw });
   } catch (error) {
@@ -1895,7 +1973,22 @@ const withdrawRToday = async (req, res) => {
 }
 
 const withdrawPToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
+
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1906,7 +1999,13 @@ const withdrawPToday = async (req, res) => {
         $gte: startOfToday,
         $lt: new Date(endOfToday.getTime() - 1) // subtract 1 millisecond to ensure the end date is exclusive
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+
+      if(!withdraw || withdraw.length === 0){
+        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+      }
     const totalwithdrawP = await withdraw.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalwithdrawP, data: withdraw });
   } catch (error) {
@@ -1916,7 +2015,21 @@ const withdrawPToday = async (req, res) => {
   }
 }
 const usdtDepositToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1926,7 +2039,12 @@ const usdtDepositToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+      if(!deposit || deposit.length === 0){
+        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+      }
     const totalDeposit = await deposit.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalDeposit, data: deposit });
   } catch (error) {
@@ -1936,7 +2054,21 @@ const usdtDepositToday = async (req, res) => {
   }
 }
 const referralToday = async (req, res) => {
+  const schema = Joi.object({
+    page_number: Joi.number(),
+    count: Joi.number(),
+  });
+
+  const { error, value } = schema.validate(req.params);
+
+  if (error) {
+    return res.status(400).json({ status: false, error: error.details[0].message });
+  }
   try {
+    const page_number = value.page_number || 1;
+    const count = value.count || 10;
+    const offset = (page_number - 1) * count;
+
     const today = new Date();
     const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
@@ -1946,7 +2078,12 @@ const referralToday = async (req, res) => {
         $gte: startOfToday,
         $lt: endOfToday
       }
-    });
+    }).sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(count);
+      if(!referral || referral.length === 0){
+        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+      }
     const totalReferral = await referral.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalReferral, data: referral });
   } catch (error) {

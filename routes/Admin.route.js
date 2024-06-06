@@ -68,12 +68,12 @@ router.route('/findMember').post(isAdmin, findMember);
 router.route('/findMemberInTask').post(isAdmin, findMemberInTask);
 router.route('/findTaskByName').post(ValidMember, findTaskByName);
 
-router.route("/registeredToday").get(isAdmin, userRegToday);
-router.route("/stackedToday").get(isAdmin, stakeToday);
-router.route("/withdrawSToday").get(isAdmin, withdrawSToday);
-router.route("/withdrawRToday").get(isAdmin, withdrawRToday);
-router.route("/withdrawPToday").get(isAdmin, withdrawPToday);
-router.route("/usdtDepositToday").get(isAdmin, usdtDepositToday);
-router.route("/referralToday").get(isAdmin, referralToday);
+router.route("/registeredToday/:page_number?/:count?").get(isAdmin, userRegToday);
+router.route("/stackedToday/:page_number?/:count?").get(isAdmin, stakeToday);
+router.route("/withdrawSToday/:page_number?/:count?").get(isAdmin, withdrawSToday);
+router.route("/withdrawRToday/:page_number?/:count?").get(isAdmin, withdrawRToday);
+router.route("/withdrawPToday/:page_number?/:count?").get(isAdmin, withdrawPToday);
+router.route("/usdtDepositToday/:page_number?/:count?").get(isAdmin, usdtDepositToday);
+router.route("/referralToday/:page_number?/:count?").get(isAdmin, referralToday);
 
 module.exports = router;
