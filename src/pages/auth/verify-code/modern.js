@@ -170,6 +170,7 @@ const Page = () => {
           email: email,
         });
         localStorage.setItem("accessToken", response.data.token);
+        
         enqueueSnackbar("OTP verified successfully", { variant: "success" });
         // Redirect admin to the appropriate page after successful verification
         router.push(paths.dashboard.index); // Adjust the path as needed
