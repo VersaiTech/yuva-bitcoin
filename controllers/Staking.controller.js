@@ -326,7 +326,7 @@ async function transferToStaking(req, res) {
     const { investment, stakingDuration } = value;
 
 
-    const acontrol = await AdminControl.findOne({});
+    const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
     //select stakingDuration will be from acontrol.setStakeMonth1 , acontrol.setStakeMonth2, acontrol.setStakeMonth3,
     if (stakingDuration !== acontrol.setStakeMonth1 && stakingDuration !== acontrol.setStakeMonth2 && stakingDuration !== acontrol.setStakeMonth3) {
       return res.status(400).json({ error: 'Staking duration is not valid' });

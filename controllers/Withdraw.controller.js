@@ -156,6 +156,7 @@ function generateOTP() {
 const withdrawRequest = async (req, res) => {
   // Define a schema for request body validation
   const schema = Joi.object({
+    conversion_type: Joi.string().valid('usdt', 'yuva').required(),
     amount: Joi.number().positive().required()
   });
 
@@ -168,7 +169,7 @@ const withdrawRequest = async (req, res) => {
       return res.status(400).json({ status: false, message: error.details[0].message });
     }
 
-    const { amount } = value;
+    const { amount, conversion_type } = value;
     // Check if the member exists
     const member = await Member.findOne({ member_user_id });
     if (!member) {
@@ -179,30 +180,51 @@ const withdrawRequest = async (req, res) => {
     }
 
     // Check if the withdrawal amount is greater than the available amount in the member's schema
-    if (amount > member.coins) {
-      return res.status(400).json({
-        status: false,
-        message: 'Withdrawal amount exceeds available balance',
-      });
+    if (conversion_type === 'yuva') {
+      if (amount > member.coins) {
+        return res.status(400).json({
+          status: false,
+          message: 'Withdrawal amount exceeds available balance of YUVA',
+        });
+      }
+    } else if (conversion_type === 'usdt') {
+      if (amount > member.deposit_usdt) {
+        return res.status(400).json({
+          status: false,
+          message: 'Withdrawal amount exceeds available balance of USDT',
+        });
+      }
     }
 
-
-    const acontrol = await AdminControl.findOne({});
-    // it is taking Yuva as withdrawal  currancy
-    if (amount < acontrol.setMinimumWithdrawal) {
-      return res.status(400).json({
-        status: false,
-        message: 'Minimum withdrawal amount is ' + acontrol.setMinimumWithdrawal,
-      });
+    const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
+   
+    if (conversion_type === 'yuva') {
+      if (amount < acontrol.setMinimumWithdrawal) {
+        return res.status(400).json({
+          status: false,
+          message: 'Minimum withdrawal amount is ' + acontrol.setMinimumWithdrawal,
+        });
+      }
+      if (amount > acontrol.setMaximumWithdrawal) {
+        return res.status(400).json({
+          status: false,
+          message: 'Maximum withdrawal amount is ' + acontrol.setMaximumWithdrawal,
+        });
+      }
+    } else if (conversion_type === 'usdt') {
+      if (amount < acontrol.setMinimumWithdrawalusdt) {
+        return res.status(400).json({
+          status: false,
+          message: 'Minimum withdrawal amount is ' + acontrol.setMinimumWithdrawalusdt,
+        });
+      }
+      if (amount > acontrol.setMaximumWithdrawalusdt) {
+        return res.status(400).json({
+          status: false,
+          message: 'Maximum withdrawal amount is ' + acontrol.setMaximumWithdrawalusdt,
+        });
+      }
     }
-
-    if (amount > acontrol.setMaximumWithdrawal) {
-      return res.status(400).json({
-        status: false,
-        message: 'Maximum withdrawal amount is ' + acontrol.setMaximumWithdrawal,
-      });
-    }
-
 
 
     // Check if there's an existing temporary registration for the same email
@@ -216,11 +238,13 @@ const withdrawRequest = async (req, res) => {
       // Update existing temporary registration data
       existingTemporaryWithdrawal.ref_id = ref_id;
       existingTemporaryWithdrawal.otp = otp;
+      existingTemporaryWithdrawal.conversion_type = conversion_type;
       existingTemporaryWithdrawal.temporaryWithdraw = {
         email: member.email,
         otp,
         withdrawData: {
           amount,
+          conversion_type,
           ref_id
         }
       };
@@ -247,6 +271,7 @@ const withdrawRequest = async (req, res) => {
       otp,
       withdrawData: {
         amount,
+        conversion_type,
         ref_id
       }
     });
@@ -269,6 +294,7 @@ const withdrawRequest = async (req, res) => {
     });
   }
 };
+
 
 //Working OTP verification
 async function verifyOTP(req, res) {
@@ -294,7 +320,7 @@ async function verifyOTP(req, res) {
     }
 
     // Extract amount from temporary registration data
-    const { amount } = temporaryWithdrawFromBody.withdrawData;
+    const { amount, conversion_type } = temporaryWithdrawFromBody.withdrawData;
 
     // Generate a unique reference ID
     const ref_id = generateReferenceID();
@@ -318,6 +344,7 @@ async function verifyOTP(req, res) {
       const newWithdraw = new Withdraw({
         with_referrance: ref_id, // Required field
         with_amt: amount, // Required field
+        conversion_type: conversion_type, // Required field
         wallet_address: member.wallet_address, // Example of a required field from member
         member_name: member.member_name, // Example of a required field from member
         member_user_id: member_user_id // Example of a required field from member
@@ -515,7 +542,7 @@ const updateWithdrawalStatus = async (req, res) => {
     status: Joi.string().valid('Approved', 'Rejected').required(),
     processed_by: Joi.string().required(),
     remarks: Joi.string().allow('').optional(),
-    conversion_type: Joi.string().valid('usdt', 'bnb', 'matic').optional(),
+    conversion_type: Joi.string().valid('usdt', 'bnb', 'matic', 'yuva').required(),
     transection_hash: Joi.string().allow('').optional()
   });
   try {
@@ -535,6 +562,9 @@ const updateWithdrawalStatus = async (req, res) => {
       return res.status(400).json({ error: 'Withdrawal request not found' });
     }
 
+    if(withdrawal.conversion_type !== conversion_type){
+      return res.status(400).json({ error: 'Conversion type does not match' });
+    }
     // Check if the withdrawal request has already been processed
     if (withdrawal.status !== 'Pending') {
       return res.status(400).json({ error: `Withdrawal request has already been ${withdrawal.status.toLowerCase()}` });
@@ -557,35 +587,14 @@ const updateWithdrawalStatus = async (req, res) => {
         return res.status(404).json({ error: 'Member not found' });
       }
 
-      // Retrieve the current coin prices
-      const coinPrices = await Coin.findOne(); // Assuming there's only one document for coin prices
-
-      // Convert the withdrawal amount to the specified crypto (default to usdt)
-      let convertedAmount;
-      switch (withdrawal.conversion_type || 'usdt') {
-        case 'usdt':
-          convertedAmount = withdrawal.with_amt / coinPrices.price.usdt;
-          member.coins_usdt -= withdrawal.with_amt; // Deduct from usdt balance
-          break;
-        case 'bnb':
-          convertedAmount = withdrawal.with_amt / coinPrices.price.bnb;
-          member.coins_bnb -= withdrawal.with_amt; // Deduct from bnb balance
-          break;
-        case 'matic':
-          convertedAmount = withdrawal.with_amt / coinPrices.price.matic;
-          member.coins_matic -= withdrawal.with_amt; // Deduct from matic balance
-          break;
-        default:
-          return res.status(400).json({ error: 'Invalid conversion type' });
+      // Deduct the withdrawal amount from the member's coin balance based on the conversion_type
+      if (conversion_type === 'yuva') {
+        member.coins -= withdrawal.with_amt;
+      } else if (conversion_type === 'usdt') {
+        member.deposit_usdt -= withdrawal.with_amt;
+      } else {
+        return res.status(400).json({ error: 'Invalid conversion type' });
       }
-
-      // Save the converted amount details to the Withdraw schema
-      withdrawal.converted_amount = convertedAmount;
-      withdrawal.conversion_date = new Date();
-      withdrawal.withdrawal_referrance = withdrawal.with_referrance;
-
-      // Deduct the withdrawal amount from the member's coin balance
-      member.coins -= withdrawal.with_amt;
 
       // Save the updated withdrawal object to the database
       await withdrawal.save();
@@ -661,7 +670,6 @@ const getWithdrawRequests = async (req, res) => {
     });
   }
 };
-
 const getWithdrawPending = async (req, res) => {
   // const { member_user_id } = req.user;
   const Schema = Joi.object({

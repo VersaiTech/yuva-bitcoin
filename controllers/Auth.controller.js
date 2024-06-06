@@ -633,7 +633,7 @@ async function verifyOTP(req, res) {
     }
 
     // Find AdminControl document
-    const acontrol = await AdminControl.findOne({});
+    const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
     // Check if AdminControl document exists
     if (!acontrol) {
       return res.status(400).json({

@@ -35,7 +35,7 @@ const createOrder = async (req, res) => {
         }
 
         //minimum yuva amount is 100
-        const acontrol = await AdminControl.findOne({});
+        const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
         if (coin === 'yuva' && amount < acontrol.setMinimumAmountMarketYUVA) {
             return res.status(400).json({ error: 'Minimum amount is ' + acontrol.setMinimumAmountMarketYUVA + ' YUVA' });
         }

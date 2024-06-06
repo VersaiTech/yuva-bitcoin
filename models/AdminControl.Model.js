@@ -9,6 +9,8 @@ const AdminControlSchema = new mongoose.Schema({
     setMinimumAmountMarketYUVA: { type: Number, required: true },
     setMinimumWithdrawal: { type: Number, required: true },
     setMaximumWithdrawal: { type: Number, required: true },
+    setMinimumWithdrawalusdt: { type: Number, required: true },
+    setMaximumWithdrawalusdt: { type: Number, required: true },
     setRegisterCoinValue: { type: Number, required: true },
     setReferralCoinValue: { type: Number, required: true },
     setStakeMonth1: { type: Number, required: true },

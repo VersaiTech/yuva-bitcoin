@@ -58,6 +58,8 @@ const grantPermission = async (req, res) => {
         setMinimumAmountMarketYUVA: Joi.boolean(),
         setMinimumWithdrawal: Joi.boolean(),
         setMaximumWithdrawal: Joi.boolean(),
+        setMinimumWithdrawalusdt: Joi.boolean(),
+        setMaximumWithdrawalusdt: Joi.boolean(),
         setRegisterCoinValue: Joi.boolean(),
         setReferralCoinValue: Joi.boolean(),
         setStakeMonth1: Joi.boolean(),
@@ -177,6 +179,8 @@ const adminSetValue = async (req, res) => {
         setMaximumWithdrawal: Joi.number(),
         setRegisterCoinValue: Joi.number(),
         setReferralCoinValue: Joi.number(),
+        setMinimumWithdrawalusdt: Joi.number(),
+        setMaximumWithdrawalusdt: Joi.number(),
         setStakeMonth1: Joi.number(),
         setStakeMonth2: Joi.number(),
         setStakeMonth3: Joi.number(),
@@ -195,6 +199,10 @@ const adminSetValue = async (req, res) => {
         const permission = await Permission.findOne({ admin_user_id: adminId });
         if (!permission) return res.status(400).json({ error: 'Permission not granted for the admin' });
 
+
+        if (adminId !== req.user.admin_user_id) {
+            return res.status(400).json({ error: 'You can not perform this action' });
+        }
         // Only agents can proceed further
         // if (req.user.userType !== 'agent') {
         //     return res.status(400).json({ error: 'Only agents can perform this action' });
@@ -223,6 +231,8 @@ const adminSetValue = async (req, res) => {
                     setMinimumAmountMarketYUVA: permission.setMinimumAmountMarketYUVA ? value.setMinimumAmountMarketYUVA : undefined,
                     setMinimumWithdrawal: permission.setMinimumWithdrawal ? value.setMinimumWithdrawal : undefined,
                     setMaximumWithdrawal: permission.setMaximumWithdrawal ? value.setMaximumWithdrawal : undefined,
+                    setMinimumWithdrawalusdt: permission.setMinimumWithdrawalusdt ? value.setMinimumWithdrawalusdt : undefined,
+                    setMaximumWithdrawalusdt: permission.setMaximumWithdrawalusdt ? value.setMaximumWithdrawalusdt : undefined,
                     setRegisterCoinValue: permission.setRegisterCoinValue ? value.setRegisterCoinValue : undefined,
                     setReferralCoinValue: permission.setReferralCoinValue ? value.setReferralCoinValue : undefined,
                     setStakeMonth1: permission.setStakeMonth1 ? value.setStakeMonth1 : undefined,
@@ -243,6 +253,8 @@ const adminSetValue = async (req, res) => {
         if (!permission.setMinimumAmountMarketYUVA && value.setMinimumAmountMarketYUVA !== undefined) invalidFields.push('setMinimumAmountMarketYUVA');
         if (!permission.setMinimumWithdrawal && value.setMinimumWithdrawal !== undefined) invalidFields.push('setMinimumWithdrawal');
         if (!permission.setMaximumWithdrawal && value.setMaximumWithdrawal !== undefined) invalidFields.push('setMaximumWithdrawal');
+        if (!permission.setMinimumWithdrawalusdt && value.setMinimumWithdrawalusdt !== undefined) invalidFields.push('setMinimumWithdrawalusdt');
+        if (!permission.setMaximumWithdrawalusdt && value.setMaximumWithdrawalusdt !== undefined) invalidFields.push('setMaximumWithdrawalusdt');
         if (!permission.setRegisterCoinValue && value.setRegisterCoinValue !== undefined) invalidFields.push('setRegisterCoinValue');
         if (!permission.setReferralCoinValue && value.setReferralCoinValue !== undefined) invalidFields.push('setReferralCoinValue');
         if (!permission.setStakeMonth1 && value.setStakeMonth1 !== undefined) invalidFields.push('setStakeMonth1');
@@ -306,13 +318,10 @@ const getSetValue = async (req, res) => {
 const getSetValueLatest = async (req, res) => {
     try {
         const admin = req.user.admin_user_id;
-        if(!admin){
+        if (!admin) {
             return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
         }
-        // if (admin.userType !== 'admin') {
-        //     return res.status(403).json({ error: 'Permission denied. Only admin can access this route.' });
-        // }
-        const adminControl = await AdminControl.findOne({}, {}, { sort: { _id: -1 } });
+        const adminControl = await AdminControl.find({}, {}, { sort: { updatedAt: -1 } }).limit(1);
         if (!adminControl) {
             return res.status(400).json({ error: 'Admin control not found' });
         }

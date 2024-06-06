@@ -214,7 +214,7 @@ function calculateInterest(investment, interestRate) {
 
 
 async function getInterestRate(stakingDuration) {
-  const acontrol = await AdminControl.findOne({});
+  const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
   if (stakingDuration === acontrol.setStakeMonth1) {
     return acontrol.setStakePercent1; // 5% per annum
   } else if (stakingDuration === acontrol.setStakeMonth2) {

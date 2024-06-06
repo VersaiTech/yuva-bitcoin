@@ -8,6 +8,8 @@ const PermissionSchema = new mongoose.Schema({
     setMinimumAmountMarketYUVA: { type: Boolean, default: false },
     setMinimumWithdrawal: { type: Boolean, default: false },
     setMaximumWithdrawal: { type: Boolean, default: false },
+    setMinimumWithdrawalusdt: { type: Boolean, default: false },
+    setMaximumWithdrawalusdt: { type: Boolean, default: false },
     setRegisterCoinValue: { type: Boolean, default: false },
     setReferralCoinValue: { type: Boolean, default: false },
     setStakeMonth1: { type: Boolean, default: false },

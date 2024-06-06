@@ -38,7 +38,7 @@ const createDeposit = async (req, res) => {
     }
 
     // Fetch referral settings from AdminControl
-    const acontrol = await AdminControl.findOne({});
+    const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
 
     // Check if the provided wallet_address matches the member's wallet_address
     // if (wallet_address !== value.wallet_address) {

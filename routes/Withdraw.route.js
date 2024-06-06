@@ -12,7 +12,6 @@ router.route('/getWithdrawPending/:page_number?/:count?').get(isAdmin, getWithdr
 router.route('/getWithdrawRejected/:page_number?/:count?').get(isAdmin, getWithdrawRejected);
 router.route('/getUserWithdraws/:page_number?/:count?').get(ValidMember, getUserWithdraws);
 
-  
 router.route('/getWithdrawByUserId/:with_referrance').get(isAdmin, getWithdrawByUserId);
 
 router.route('/findMemberWithdraw').post(isAdmin, findMemberWithdraw);

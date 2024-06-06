@@ -10,5 +10,5 @@ router.route('/getPermission').get(isAdmin, getPermission);
 router.route('/getSetValue').get(isAdmin, getSetValue);
 router.route('/getSetValueLatest').get(isAdmin, getSetValueLatest);
 router.route('/getAgentSetData').get(isAdmin, getAgentSetData);
-// .
+
 module.exports = router
