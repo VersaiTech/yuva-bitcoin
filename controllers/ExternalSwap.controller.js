@@ -482,6 +482,10 @@ async function adminApproval(req, res) {
       return res.status(400).json({ error: error.details[0].message });
     }
     const { status, reason } = value;
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
 
     const isOrderIdExist = await ExternalSwap.findOne({
       orderId: req.params.orderId,

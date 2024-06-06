@@ -3,6 +3,10 @@ const Admin = require('../models/AdminModel');
 
 const createDummyData = async (req, res) => {
     try {
+        const admins = req.user;
+        if (admins.userType !== 'admin') {
+            return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+        }
 
         const admin = await Admin.find();
         if (!admin) {
@@ -67,4 +71,4 @@ const getDummyData = async (req, res) => {
     }
 }
 
-module.exports = { createDummyData,getDummyData }
+module.exports = { createDummyData, getDummyData }

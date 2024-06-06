@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const { getOverview, getUserOverview } = require('../controllers/Overview.controller');
-const { getuserbalance, getAllStakes, getAllStake, addTask, editTask, getOneTaskforAdminConfirmationTask,getAllTasksforAdminWithoutStatus, updateMemberDetails, getMemberDetails, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser,countMembersWithCoins,countMemberWithStakeCoins,findMember,findMemberInTask ,userRegToday,stakeToday,withdrawSToday,withdrawRToday,withdrawPToday,usdtDepositToday,referralToday,findTaskByName} = require('../controllers/AdminController');
+const { getuserbalance, getAllStakes, getAllStake, addTask, editTask, getOneTaskforAdminConfirmationTask,confirmMultipleTaskCompletions,getAllTasksforAdminWithoutStatus, updateMemberDetails, getMemberDetails, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser,countMembersWithCoins,countMemberWithStakeCoins,findMember,findMemberInTask ,userRegToday,stakeToday,withdrawSToday,withdrawRToday,withdrawPToday,usdtDepositToday,referralToday,findTaskByName} = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask); //
@@ -41,6 +41,7 @@ router.route('/getRejectedTasks/:page_number?/:count?').get(isAdmin, getRejected
 
 router.route('/completeTask').post(ValidMember, completeTask); //
 router.route('/confirmTaskCompletion').post(isAdmin, confirmTaskCompletion); //
+router.route('/confirmMultipleTaskCompletions').post(isAdmin, confirmMultipleTaskCompletions); //
 
 router.route('/updateMemberStatus/:member_user_id').post(isAdmin, updateMemberStatus); //
 router.route('/deleteUser/:member_user_id').delete(isAdmin, deleteUser); //

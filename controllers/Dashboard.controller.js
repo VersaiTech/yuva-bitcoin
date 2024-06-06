@@ -2,12 +2,12 @@ const Member = require("../models/memberModel");
 const Admin = require("../models/AdminModel");
 
 const getDashboardData = async (req, res) => {
-  const {member_user_id} = req.user;
+  const { member_user_id } = req.user;
 
   console.log(member_user_id);
 
   try {
-    const user = await Member.findOne({member_user_id: member_user_id});
+    const user = await Member.findOne({ member_user_id: member_user_id });
 
     if (!user) {
       return res.status(400).send({
@@ -75,10 +75,14 @@ const getDashboardData = async (req, res) => {
 };
 
 const getAdminDashboardData = async (req, res) => {
-  const {admin_user_id} = req.user; 
+  const { admin_user_id } = req.user;
 
   try {
-    const admin = await Admin.findOne({admin_user_id: admin_user_id });
+    const admins = req.user;
+    if (admins.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
+    const admin = await Admin.findOne({ admin_user_id: admin_user_id });
 
     if (!admin) {
       return res.status(400).send({

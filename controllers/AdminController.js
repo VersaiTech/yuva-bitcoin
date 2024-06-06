@@ -233,6 +233,74 @@ const confirmTaskCompletion = async (req, res) => {
   }
 };
 
+const confirmMultipleTaskCompletions = async (req, res) => {
+  const confirmTaskCompletionSchema = Joi.object({
+    taskId: Joi.string().required(),
+    userIds: Joi.array().items(Joi.string().required()).required(), // Accept an array of userIds
+    status: Joi.string().valid('confirmed', 'rejected').required(),
+    reason: Joi.string().required(),
+  });
+
+  try {
+    // Validate request body
+    const { error, value } = confirmTaskCompletionSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can confirm task completion.' });
+    }
+
+    const { taskId, userIds, status, reason } = value;
+
+    // Loop through each userId and confirm task completion
+    for (const userId of userIds) {
+      const completedTask = await CompletedTask.findOne({ userId, taskId });
+      if (!completedTask) {
+        return res.status(404).json({ message: `Pending task completion not found for userId: ${userId}` });
+      }
+
+      // Check if the status is already confirmed or rejected
+      if (completedTask.status === 'confirmed' || completedTask.status === 'rejected') {
+        return res.status(400).json({ message: `Task completion is already ${completedTask.status} for userId: ${userId}` });
+      }
+
+      // Update status
+      completedTask.status = status;
+      await completedTask.save();
+
+      if (status === 'confirmed') {
+        // Fetch task details to get the reward amount
+        const task = await Task.findOne({ taskId });
+        if (!task) {
+          return res.status(404).json({ message: `Task not found for taskId: ${taskId}` });
+        }
+
+        // Reward the user
+        const user = await Member.findOne({ member_user_id: userId });
+        if (!user) {
+          return res.status(404).json({ message: `User not found for userId: ${userId}` });
+        }
+
+        // Update user's coins balance with the reward from the task
+        user.coins += task.coins; // Assuming task.reward contains the reward amount
+        await user.save();
+      } else if (status === 'rejected') {
+        completedTask.reason = reason; // Save the reason for rejection
+        await completedTask.save();
+      } else {
+        return res.status(400).json({ message: 'Invalid status' });
+      }
+    }
+
+    return res.status(200).json({ message: `Task completion ${status} for all users.` });
+  } catch (error) {
+    console.error('Error confirming task completions:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 const getAllTasksUser = async (req, res) => {
   const Schema = Joi.object({
@@ -366,6 +434,8 @@ const getAllTasksforAdminWithoutStatus = async (req, res) => {
   if (error) {
     return res.status(400).json({ status: false, error: error.details[0].message });
   }
+
+
   try {
     // Set default values if not provided
     const page_number = value.page_number || 1;
@@ -970,6 +1040,11 @@ const addTask = async (req, res) => {
     completionTime: Joi.date().iso().required(),
   });
   try {
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
+
     // Check if the user making the request is an admin
     const isAdmin = req.user.userType === 'admin';
 
@@ -1098,7 +1173,10 @@ const editTask = async (req, res) => {
     const { taskId } = req.params;
     const { scheduledTime, completionTime } = req.body; // Add this line to extract scheduledTime and completionDateTime
 
-
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
     const { error, value } = editTaskSchema.validate({ scheduledTime, completionTime });
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
@@ -1159,7 +1237,10 @@ const deleteTask = async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
-
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
     // Extract taskId from request parameters
     const { taskId } = value;
 
@@ -1189,6 +1270,11 @@ const deleteManyTasks = async (req, res) => {
     const { error, value } = deleteManyTasksSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
     }
     // Extract taskIds from request body
     const { taskIds } = value;
@@ -1595,6 +1681,10 @@ const updateMemberStatus = async (req, res) => {
     if (!req.user || req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Permission denied. Only admin can update member status.' });
     }
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
 
     const { member_user_id } = req.params;
     const { error, value } = updateMemberStatusSchema.validate(req.body);
@@ -1639,6 +1729,10 @@ const deleteUser = async (req, res) => {
     member_user_id: Joi.string().required(),
   });
   try {
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    }
     // Check if the user making the request is an admin
     if (!req.user || req.user.userType !== 'admin') {
       return res.status(403).json({ error: 'Permission denied. Only admin can delete a user.' });
@@ -2101,4 +2195,4 @@ const referralToday = async (req, res) => {
 
 
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday, findTaskByName }; 
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday, findTaskByName,confirmMultipleTaskCompletions }; 
