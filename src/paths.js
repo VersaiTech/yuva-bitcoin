@@ -55,6 +55,9 @@ export const paths = {
       courseDetails: "/dashboard/academy/courses/:courseId",
     },
     account: "/dashboard/account",
+    values: {
+      index: "/dashboard/values"
+    },
     portfolio: "/dashboard/portfolio",
     admincontrol: "/dashboard/admincontrol",
     addagent: "/dashboard/addagent",

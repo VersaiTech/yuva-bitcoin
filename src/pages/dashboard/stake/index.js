@@ -101,6 +101,7 @@ const Page = () => {
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
+  const [searchResults, setSearchResults] = useState([]);
 
   usePageView();
 
@@ -211,9 +212,10 @@ const Page = () => {
                 // rejected={rejected}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
+                setSearchResults={setSearchResults}
               />
               <StakeListTable
-                customers={customers}
+                customers={searchResults.length > 0 ? searchResults : customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
@@ -222,6 +224,7 @@ const Page = () => {
                 //     ? customers
                 // }
                 customersCount={
+                  searchResults.length > 0 ? searchResults.length :
                   currentTab === 'all' ? customersCount :
                     currentTab === 'pending' ? pending.length :
                       currentTab === 'hasAcceptedMarketing' ? rejected.length :

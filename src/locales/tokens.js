@@ -17,6 +17,7 @@ export const tokens = {
     referralRecord: 'nav.referralRecord',
     analytics: 'nav.analytics',
     demo: 'nav.demo',
+    values: 'nav.values',
     blog: 'nav.blog',
     browse: 'nav.browse',
     calendar: 'nav.calendar',

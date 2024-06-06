@@ -6,7 +6,7 @@ function CryptoIcon(props) {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill="currentColor"
+      fill="#ffffff"
       height="1.4em"
       width="1.4em"
       {...props}
