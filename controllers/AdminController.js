@@ -179,6 +179,12 @@ const confirmTaskCompletion = async (req, res) => {
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
+
+    const admin = req.user;
+    if (admin.userType !== 'admin') {
+      return res.status(403).json({ message: 'Permission Denied. Only admin can confirm task completion.' });
+    }
+
     const { taskId, userId, status, reason } = value;
 
     const completedTask = await CompletedTask.findOne({ userId: userId, taskId: taskId });
@@ -1881,7 +1887,7 @@ const stakeToday = async (req, res) => {
       .limit(count);
 
     const totalStake = await stake.length
-    if(!stake || stake.length === 0){
+    if (!stake || stake.length === 0) {
       return res.status(200).json({ status: false, message: "No stake found", counts: 0, data: [] });
     }
     return res.status(200).json({ status: true, message: "Stake today", counts: totalStake, data: stake });
@@ -1920,9 +1926,9 @@ const withdrawSToday = async (req, res) => {
     }).sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-      if(!withdraw || withdraw.length === 0){
-        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
-      }
+    if (!withdraw || withdraw.length === 0) {
+      return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+    }
 
     const totalwithdrawS = await withdraw.length
     return res.status(200).json({ status: true, message: "Withdraw Approved today", counts: totalwithdrawS, data: withdraw });
@@ -1961,9 +1967,9 @@ const withdrawRToday = async (req, res) => {
     }).sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-      if(!withdraw || withdraw.length === 0){
-        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
-      }
+    if (!withdraw || withdraw.length === 0) {
+      return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+    }
     const totalwithdrawR = await withdraw.length
     return res.status(200).json({ status: true, message: "Withdraw Rejected today", counts: totalwithdrawR, data: withdraw });
   } catch (error) {
@@ -2003,9 +2009,9 @@ const withdrawPToday = async (req, res) => {
       .skip(offset)
       .limit(count);
 
-      if(!withdraw || withdraw.length === 0){
-        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
-      }
+    if (!withdraw || withdraw.length === 0) {
+      return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+    }
     const totalwithdrawP = await withdraw.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalwithdrawP, data: withdraw });
   } catch (error) {
@@ -2042,9 +2048,9 @@ const usdtDepositToday = async (req, res) => {
     }).sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-      if(!deposit || deposit.length === 0){
-        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
-      }
+    if (!deposit || deposit.length === 0) {
+      return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+    }
     const totalDeposit = await deposit.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalDeposit, data: deposit });
   } catch (error) {
@@ -2081,9 +2087,9 @@ const referralToday = async (req, res) => {
     }).sort({ createdAt: -1 })
       .skip(offset)
       .limit(count);
-      if(!referral || referral.length === 0){
-        return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
-      }
+    if (!referral || referral.length === 0) {
+      return res.status(200).json({ status: false, message: "No withdraw found", counts: 0, data: [] });
+    }
     const totalReferral = await referral.length
     return res.status(200).json({ status: true, message: "Withdraw Pending today", counts: totalReferral, data: referral });
   } catch (error) {
