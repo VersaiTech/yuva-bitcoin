@@ -21,8 +21,10 @@
 
 const mongoose = require('mongoose');
 const Connection = (username, password) => {
-
+    //testing database
     // const URL = `mongodb+srv://${username}:${password}@cluster0.wp4chqh.mongodb.net/yuvabitcoin`
+
+    //production database
     const URL = `mongodb+srv://${username}:${password}@yuvabitcoin.x9wljy5.mongodb.net/YuvaBitCoin`
 
     try {
