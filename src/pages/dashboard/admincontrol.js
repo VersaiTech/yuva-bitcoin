@@ -51,6 +51,8 @@ const initialState = {
   setStakePercent2: false,
   setStakePercent3: false,
 };
+// const { enqueueSnackbar } = useSnackbar();
+
 
 const PermissionSettingsPage = () => {
   const [state, setState] = useState(initialState);
