@@ -1,9 +1,6 @@
 
-
-// ***********************************************************
-
-
-import { Box, Button, Container, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+// **************************************
+import { Box, Button, Container, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { Layout as DashboardLayout } from '../../../layouts/dashboard';
 import { paths } from '../../../paths';
@@ -40,7 +37,7 @@ const Page = () => {
     setMinimumAmountMarketUsdt: '',
     setMinimumAmountMarketYUVA: '',
     setMinimumWithdrawal: '',
-    setMaximumWithdrawal: '1000',
+    setMaximumWithdrawal: '',
     setStakePercent1:'',
     setStakePercent2:'',
     setStakePercent3:'',
@@ -52,6 +49,7 @@ const Page = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [section, setSection] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,22 +69,23 @@ const Page = () => {
         if (response.status === 200) {
           const data = response.data;
           if (data.status === 'success') {
-            console.log('Setting initial values:', data.data);
+            console.log('Setting initial values:', data.data[0]);
+            const initialValuesFromAPI = data.data[0];
             setInitialValues({
-              setCoinValueMarketUsdt: data.data.setCoinValueMarketUsdt.toString(),
-              setCoinValueMarketYUVA: data.data.setCoinValueMarketYUVA.toString(),
-              setMinimumAmountMarketUsdt: data.data.setMinimumAmountMarketUsdt.toString(),
-              setMinimumAmountMarketYUVA: data.data.setMinimumAmountMarketYUVA.toString(),
-              setMinimumWithdrawal: data.data.setMinimumWithdrawal.toString(),
-              setMaximumWithdrawal: data.data.setMaximumWithdrawal.toString(),// Assuming you want to use setStakePercent1
-              setStakeMonth1: data.data.setStakeMonth1.toString(), // Assuming you want to use setStakeMonth1
-              setStakeMonth2: data.data.setStakeMonth2.toString(), // Assuming you want to use setStakeMonth1
-              setStakeMonth3: data.data.setStakeMonth3.toString(), // Assuming you want to use setStakeMonth1
-              setStakePercent3:data.data.setStakePercent3.toString(),
-              setStakePercent2:data.data.setStakePercent2.toString(),
-              setStakePercent1:data.data.setStakePercent1.toString(),
-              setRegisterCoinValue: data.data.setRegisterCoinValue.toString(),
-              setReferralCoinValue: data.data.setReferralCoinValue.toString()
+              setCoinValueMarketUsdt: initialValuesFromAPI.setCoinValueMarketUsdt,
+              setCoinValueMarketYUVA: initialValuesFromAPI.setCoinValueMarketYUVA,
+              setMinimumAmountMarketUsdt: initialValuesFromAPI.setMinimumAmountMarketUsdt,
+              setMinimumAmountMarketYUVA: initialValuesFromAPI.setMinimumAmountMarketYUVA,
+              setMinimumWithdrawal: initialValuesFromAPI.setMinimumWithdrawal,
+              setMaximumWithdrawal: initialValuesFromAPI.setMaximumWithdrawal,
+              setStakeMonth1: initialValuesFromAPI.setStakeMonth1,
+              setStakeMonth2: initialValuesFromAPI.setStakeMonth2,
+              setStakeMonth3: initialValuesFromAPI.setStakeMonth3,
+              setStakePercent3: initialValuesFromAPI.setStakePercent3,
+              setStakePercent2: initialValuesFromAPI.setStakePercent2,
+              setStakePercent1: initialValuesFromAPI.setStakePercent1,
+              setRegisterCoinValue: initialValuesFromAPI.setRegisterCoinValue,
+              setReferralCoinValue: initialValuesFromAPI.setReferralCoinValue
             });
             setLoading(false);
           } else {
@@ -103,31 +102,98 @@ const Page = () => {
     fetchData();
   }, []);
   
- const handleSubmit = async (values, { setSubmitting }) => {
-  try {
-    values.admin_user_id = 'YBSA1345';
-    const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-    const token = localStorage.getItem("accessToken");
-    const headers = {
-      Authorization: token,
-    };
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+      const admin_user_id = localStorage.getItem('admin_user_id');
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
 
-    const response = await axios.post(`${BASEURL}/api/Permission/setValue`, values, {
-      headers: headers,
-    });
+      // Filter the values based on the section
+      let filteredValues = {};
+      switch (section) {
+        case 'marketUsdt':
+          filteredValues = {
+            setCoinValueMarketUsdt: values.setCoinValueMarketUsdt,
+            setMinimumAmountMarketUsdt: values.setMinimumAmountMarketUsdt
+          };
+          break;
+        case 'marketYUVA':
+          filteredValues = {
+            setCoinValueMarketYUVA: values.setCoinValueMarketYUVA,
+            setMinimumAmountMarketYUVA: values.setMinimumAmountMarketYUVA
+          };
+          break;
+        case 'withdrawal':
+          filteredValues = {
+            setMinimumWithdrawal: values.setMinimumWithdrawal,
+            setMaximumWithdrawal: values.setMaximumWithdrawal
+          };
+          break;
+        case 'registerCoin':
+          filteredValues = {
+            setRegisterCoinValue: values.setRegisterCoinValue
+          };
+          break;
+        case 'referralCoin':
+          filteredValues = {
+            setReferralCoinValue: values.setReferralCoinValue
+          };
+          break;
+        case 'stake1':
+          filteredValues = {
+            setStakePercent1: values.setStakePercent1,
+            setStakeMonth1: values.setStakeMonth1
+          };
+          break;
+        case 'stake2':
+          filteredValues = {
+            setStakePercent2: values.setStakePercent2,
+            setStakeMonth2: values.setStakeMonth2
+          };
+          break;
+        case 'stake3':
+          filteredValues = {
+            setStakePercent3: values.setStakePercent3,
+            setStakeMonth3: values.setStakeMonth3
+          };
+          break;
+        default:
+          break;
+      }
 
-    if (response.status === 200) {
-      console.log("Values Updated");
-      enqueueSnackbar('Values Updated', { variant: 'success' }); // Show success snackbar
-    } else {
-      console.error('Failed to update values:', response.statusText);
-      enqueueSnackbar(response.error, { variant: 'error' }); // Show error snackbar with response.error message
+      // Add admin_user_id to filtered values
+      filteredValues.admin_user_id = admin_user_id;
+
+      console.log("Filtered Values Areee :",filteredValues);
+      const response = await axios.post(`${BASEURL}/api/Permission/setValue`, filteredValues, {
+        headers: headers,
+      });
+
+      if (response.status === 200) {
+        console.log("Values Updated");
+        enqueueSnackbar('Values Updated', { variant: 'success' });
+      } else {
+        console.error('Failed to update values:', response.statusText);
+        enqueueSnackbar(response.data.error, { variant: 'error' });
+      }
+    } catch (error) {
+      console.error('Error updating values:', error.message);
+      if (error.response && error.response.data && error.response.data.error) {
+        const errorMessage = error.response.data.error;
+        const match = errorMessage.match(/field\(s\): (.+)/);
+        const fields = match ? match[1] : 'unknown fields';
+        enqueueSnackbar(`Not authorized to change this section`, { variant: 'error' });
+        // enqueueSnackbar(`Not authorized to change ${fields}`, { variant: 'error' });
+      
+      } else {
+        enqueueSnackbar('An unexpected error occurred', { variant: 'error' });
+      }
     }
-  } catch (error) {
-    console.error('Error updating values:', error.message);
-  }
-  setSubmitting(false);
-};
+    setSubmitting(false);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -135,8 +201,12 @@ const Page = () => {
 
   return (
     <Container maxWidth="md">
-      <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-        {({ values, handleChange }) => (
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ values, handleChange, submitForm }) => (
           <Form>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
@@ -162,7 +232,16 @@ const Page = () => {
                     value={values.setMinimumAmountMarketUsdt}
                     onChange={handleChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('marketUsdt');
+                      submitForm();
+                    }}
+                  >
                     Set Value
                   </Button>
                 </Box>
@@ -191,103 +270,140 @@ const Page = () => {
                     value={values.setMinimumAmountMarketYUVA}
                     onChange={handleChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('marketYUVA');
+                      submitForm();
+                    }}
+                  >
                     Set Value
                   </Button>
                 </Box>
               </Grid>
 
-              
+              <Grid item xs={12}>
+                <Box border={1} borderColor="grey.300" borderRadius={2} p={2} marginBottom={2}>
+                  <Typography variant="h6" gutterBottom>
+                    Stake Percentage
+                  </Typography>
+                  <Grid container spacing={2}>
+                    {/* First Column */}
+                    <Grid item xs={12} sm={4} lg={4}>
+                      <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
+                        <Typography variant="h6" gutterBottom>
+                          Month 1
+                        </Typography>
+                        <InputLabel>% Value</InputLabel>
+                        <TextField
+                          name="setStakePercent1"
+                          fullWidth
+                          value={values.setStakePercent1}
+                          onChange={handleChange}
+                        />
+                        <InputLabel>Month</InputLabel>
+                        <TextField
+                          name="setStakeMonth1"
+                          fullWidth
+                          value={values.setStakeMonth1}
+                          onChange={handleChange}
+                        />
+                        {/* Set Value Button */}
+                        <Button
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          sx={{ marginTop: "15px" }}
+                          onClick={() => {
+                            setSection('stake1');
+                            submitForm();
+                          }}
+                        >
+                          Set Value
+                        </Button>
+                      </Box>
+                    </Grid>
 
-              <Grid item xs={12} sm={12} lg={12}>
-              <Box border={1} borderColor="grey.300" borderRadius={2} p={2} marginBottom={2}>
-                <Typography variant="h6" gutterBottom>
-                  Stake Percentage
-                </Typography>
-                <Grid container spacing={2}>
-                  {/* First Column */}
-                  <Grid item xs={12} sm={4} lg={4}>
-                    <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
-                      <Typography variant="h6" gutterBottom>
-                        Month 1
-                      </Typography>
-                      <InputLabel>% Value</InputLabel>
-                      <TextField
-                        name="setStakePercent1"
-                        fullWidth
-                        value={values.setStakePercent1}
-                        onChange={handleChange}
-                      />
-                      <InputLabel>Month</InputLabel>
-                      <TextField
-                        name="setStakeMonth1"
-                        fullWidth
-                        value={values.setStakeMonth1}
-                        onChange={handleChange}
-                      />
-                      {/* Set Value Button */}
-                      <Button type="submit" variant="contained" color="primary" fullWidth sx={{marginTop:"15px"}}>
-                        Set Value
-                      </Button>
-                    </Box>
+                    {/* Second Column */}
+                    <Grid item xs={12} sm={4} lg={4}>
+                      <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
+                        <Typography variant="h6" gutterBottom>
+                          Month 2
+                        </Typography>
+                        <InputLabel>% Value</InputLabel>
+                        <TextField
+                          name="setStakePercent2"
+                          fullWidth
+                          value={values.setStakePercent2}
+                          onChange={handleChange}
+                        />
+                        <InputLabel>Month</InputLabel>
+                        <TextField
+                          name="setStakeMonth2"
+                          fullWidth
+                          value={values.setStakeMonth2}
+                          onChange={handleChange}
+                        />
+                        {/* Set Value Button */}
+                        <Button
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          sx={{ marginTop: "15px" }}
+                          onClick={() => {
+                            setSection('stake2');
+                            submitForm();
+                          }}
+                        >
+                          Set Value
+                        </Button>
+                      </Box>
+                    </Grid>
+
+                    {/* Third Column */}
+                    <Grid item xs={12} sm={4} lg={4}>
+                      <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
+                        <Typography variant="h6" gutterBottom>
+                          Month 3
+                        </Typography>
+                        <InputLabel>% Value</InputLabel>
+                        <TextField
+                          name="setStakePercent3"
+                          fullWidth
+                          value={values.setStakePercent3}
+                          onChange={handleChange}
+                        />
+                        <InputLabel>Month</InputLabel>
+                        <TextField
+                          name="setStakeMonth3"
+                          fullWidth
+                          value={values.setStakeMonth3}
+                          onChange={handleChange}
+                        />
+                        {/* Set Value Button */}
+                        <Button
+                          type="button"
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          sx={{ marginTop: "15px" }}
+                          onClick={() => {
+                            setSection('stake3');
+                            submitForm();
+                          }}
+                        >
+                          Set Value
+                        </Button>
+                      </Box>
+                    </Grid>
                   </Grid>
-          
-                  {/* Second Column */}
-                  <Grid item xs={12} sm={4} lg={4}>
-                    <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
-                      <Typography variant="h6" gutterBottom>
-                        Month 2
-                      </Typography>
-                      <InputLabel>% Value</InputLabel>
-                      <TextField
-                        name="setStakePercent2"
-                        fullWidth
-                        value={values.setStakePercent2}
-                        onChange={handleChange}
-                      />
-                      <InputLabel>Month</InputLabel>
-                      <TextField
-                        name="setStakeMonth2"
-                        fullWidth
-                        value={values.setStakeMonth2}
-                        onChange={handleChange}
-                      />
-                      {/* Set Value Button */}
-                      <Button type="submit" variant="contained" color="primary" fullWidth sx={{marginTop:"15px"}}>
-                        Set Value
-                      </Button>
-                    </Box>
-                  </Grid>
-          
-                  {/* Third Column */}
-                  <Grid item xs={12} sm={4} lg={4}>
-                    <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
-                      <Typography variant="h6" gutterBottom>
-                        Month 3
-                      </Typography>
-                      <InputLabel>% Value</InputLabel>
-                      <TextField
-                        name="setStakePercent3"
-                        fullWidth
-                        value={values.setStakePercent3}
-                        onChange={handleChange}
-                      />
-                      <InputLabel>Month</InputLabel>
-                      <TextField
-                        name="setStakeMonth3"
-                        fullWidth
-                        value={values.setStakeMonth3}
-                        onChange={handleChange}
-                      />
-                      {/* Set Value Button */}
-                      <Button type="submit" variant="contained" color="primary" fullWidth sx={{marginTop:"15px"}}>
-                        Set Value
-                      </Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Grid>
+                </Box>
+              </Grid>
 
               <Grid item xs={12} sm={6}>
                 <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
@@ -312,7 +428,16 @@ const Page = () => {
                     value={values.setMaximumWithdrawal}
                     onChange={handleChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('withdrawal');
+                      submitForm();
+                    }}
+                  >
                     Set Value
                   </Button>
                 </Box>
@@ -332,14 +457,23 @@ const Page = () => {
                     value={values.setRegisterCoinValue}
                     onChange={handleChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('registerCoin');
+                      submitForm();
+                    }}
+                  >
                     Set Now
                   </Button>
                 </Box>
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <Box border={1} borderColor="grey.300" borderRadius={2} p={2} sx={{marginBottom:"30px"}}>
+                <Box border={1} borderColor="grey.300" borderRadius={2} p={2} sx={{ marginBottom: "30px" }}>
                   <Typography variant="h6" gutterBottom>
                     Referral Coin Value
                   </Typography>
@@ -352,7 +486,16 @@ const Page = () => {
                     value={values.setReferralCoinValue}
                     onChange={handleChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('referralCoin');
+                      submitForm();
+                    }}
+                  >
                     Set Now
                   </Button>
                 </Box>

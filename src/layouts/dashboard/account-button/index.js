@@ -34,9 +34,10 @@ export const AccountButton = () => {
       const response = await axios.get(`${BASEURL}/api/Dashboard/admin`, {
         headers: headers
       })
+      console.log("Admin data is ",response.data.data);
+      localStorage.setItem("admin_user_id", response.data.data.admin_user_id);
 
-
-      console.log(response.data.data);
+      
       console.log(response.data);
       setAdmin(response.data.data)
     }

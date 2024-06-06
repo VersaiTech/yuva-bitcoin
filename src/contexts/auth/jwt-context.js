@@ -132,9 +132,10 @@ export const AuthProvider = (props) => {
           password
         });
         
-          // console.log(response.data);
-          const { token, user } = response.data;
+          console.log(response.data);
+          const { token, user,admin_user_id } = response.data;
           localStorage.setItem(STORAGE_KEY, token);
+          localStorage.setItem('admin_user_id', admin_user_id);
 
           // console.log(token);
   
