@@ -69,22 +69,23 @@ const Page = () => {
         if (response.status === 200) {
           const data = response.data;
           if (data.status === 'success') {
-            console.log('Setting initial values:', data.data);
+            console.log('Setting initial values:', data.data[0]);
+            const initialValuesFromAPI = data.data[0];
             setInitialValues({
-              setCoinValueMarketUsdt: data.data.setCoinValueMarketUsdt.toString(),
-              setCoinValueMarketYUVA: data.data.setCoinValueMarketYUVA.toString(),
-              setMinimumAmountMarketUsdt: data.data.setMinimumAmountMarketUsdt.toString(),
-              setMinimumAmountMarketYUVA: data.data.setMinimumAmountMarketYUVA.toString(),
-              setMinimumWithdrawal: data.data.setMinimumWithdrawal.toString(),
-              setMaximumWithdrawal: data.data.setMaximumWithdrawal.toString(),
-              setStakeMonth1: data.data.setStakeMonth1.toString(),
-              setStakeMonth2: data.data.setStakeMonth2.toString(),
-              setStakeMonth3: data.data.setStakeMonth3.toString(),
-              setStakePercent3: data.data.setStakePercent3.toString(),
-              setStakePercent2: data.data.setStakePercent2.toString(),
-              setStakePercent1: data.data.setStakePercent1.toString(),
-              setRegisterCoinValue: data.data.setRegisterCoinValue.toString(),
-              setReferralCoinValue: data.data.setReferralCoinValue.toString()
+              setCoinValueMarketUsdt: initialValuesFromAPI.setCoinValueMarketUsdt,
+              setCoinValueMarketYUVA: initialValuesFromAPI.setCoinValueMarketYUVA,
+              setMinimumAmountMarketUsdt: initialValuesFromAPI.setMinimumAmountMarketUsdt,
+              setMinimumAmountMarketYUVA: initialValuesFromAPI.setMinimumAmountMarketYUVA,
+              setMinimumWithdrawal: initialValuesFromAPI.setMinimumWithdrawal,
+              setMaximumWithdrawal: initialValuesFromAPI.setMaximumWithdrawal,
+              setStakeMonth1: initialValuesFromAPI.setStakeMonth1,
+              setStakeMonth2: initialValuesFromAPI.setStakeMonth2,
+              setStakeMonth3: initialValuesFromAPI.setStakeMonth3,
+              setStakePercent3: initialValuesFromAPI.setStakePercent3,
+              setStakePercent2: initialValuesFromAPI.setStakePercent2,
+              setStakePercent1: initialValuesFromAPI.setStakePercent1,
+              setRegisterCoinValue: initialValuesFromAPI.setRegisterCoinValue,
+              setReferralCoinValue: initialValuesFromAPI.setReferralCoinValue
             });
             setLoading(false);
           } else {
