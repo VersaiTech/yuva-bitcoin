@@ -8,7 +8,7 @@ const supportSchema = new mongoose.Schema({
     userId: { type: String, required: true, ref: 'Member' },
     message: { type: String, required: true },
     replied: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 const Support = mongoose.model('Support', supportSchema);
 
@@ -22,7 +22,7 @@ const replySchema = new mongoose.Schema({
     userId: { type: String, required: true, ref: 'Support' },
     user_message: { type: String, required: true, ref: 'Support' },
     message: { type: String, required: true },
-})
+}, { timestamps: true });
 
 const Reply = mongoose.model('Reply', replySchema);
 module.exports = { Support, Reply };

@@ -358,6 +358,57 @@ async function sendOTP(email, otp, member_name) {
     throw new Error('Failed to send OTP.');
   }
 }
+async function sendOTPForgotPassword(email, otp, member_name) {
+  try {
+
+    const imagePath = path.resolve(__dirname, '../public/logo.png')
+    const images = fs.readFileSync(imagePath)
+
+    const base64Image = Buffer.from(images).toString('base64')
+
+    // Path to your HTML file
+    const templatePath = path.resolve(__dirname, '../template/emailTemplate/forgotPassword.html');
+    // Read the template file
+    let html = fs.readFileSync(templatePath, 'utf8');
+    // Replace placeholders with actual values
+    html = html.replace('[OTP_Code]', otp);
+
+
+    const memberName = await TemporaryRegistration.find({ email });
+    console.log(memberName);
+    if (memberName.length > 0) {
+      html = html.replace('[edgar]', memberName[0].registrationData.member_name);
+    }
+
+    // Replace the <img> src attribute with base64 encoded image
+    // html = html.replace('<img src="./images/yuva200px.png" alt="logo"', `<img src="data:image/png;base64,${base64Image}" alt="logo"`);
+
+
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // Set to true for a secure connection
+      auth: {
+        user: 'no-reply@yuvabitcoin.com', // Your Gmail email address
+        pass: 'Yuvabitcoin@1234' // Your Gmail password
+      }
+    });
+
+    const mailOptions = {
+      from: 'no-reply@yuvabitcoin.com',
+      to: email,
+      subject: 'OTP Verification',
+      // text: `Your OTP for registration is: ${otp}`
+      html: html
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log('OTP sent successfully.', email, otp);
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    throw new Error('Failed to send OTP.');
+  }
+}
 
 // Function to generate a random 6-digit OTP 
 function generateOTP() {
@@ -1426,6 +1477,7 @@ async function forgotPassword(req, res) {
     await temporaryData.save();
 
     // Send OTP to user via email or SMS (not implemented in this example)
+    await sendOTPForgotPassword(email, otp);
 
     return res.status(200).send({
       status: true,

@@ -226,7 +226,7 @@ const getAllSupport = async (req, res) => {
 
         const totalSupport = await Support.countDocuments();
         const supportMessages = await Support.find()
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: 1 }) // Add this line to sort by createdAt in descending order
             .skip(offset)
             .limit(count);
 

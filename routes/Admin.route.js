@@ -77,6 +77,6 @@ router.route("/withdrawPToday/:page_number?/:count?").get(isAdmin, withdrawPToda
 router.route("/usdtDepositToday/:page_number?/:count?").get(isAdmin, usdtDepositToday);
 router.route("/referralToday/:page_number?/:count?").get(isAdmin, referralToday);
 
-router.route("/smallData/:page_number?/:count?").get( smallData);
+router.route("/smallData/:page_number?/:count?").get(smallData);
 
 module.exports = router;
