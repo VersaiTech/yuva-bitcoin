@@ -1844,12 +1844,25 @@ async function countMemberWithStakeCoins(req, res) {
 async function findMember(req, res) {
   try {
 
-    const { member_name } = req.body;
-    //minimum 3 character
-    if (member_name.length < 3) {
-      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    const { member_name, contactNo, email } = req.body;
+    const query = {};
+    if (member_name) {
+      //minimum 3 character
+      if (member_name.length < 3) {
+        return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+      }
+      query.member_name = { $regex: member_name, $options: "i" };
     }
-    const member = await Member.find({ member_name: { $regex: member_name, $options: "i" } });
+    if (contactNo) {
+      query.contactNo = {$regex: contactNo, $options: "i"};
+    }
+    if (email) {
+      query.email ={$regex: email, $options: "i"};
+    }
+    if (Object.keys(query).length === 0) {
+      return res.status(400).json({ status: false, message: "At least one field is required" });
+    }
+    const member = await Member.find(query);
     if (member.length == 0) {
       return res.status(404).json({ status: false, message: "Member not found" });
     }

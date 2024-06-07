@@ -1730,7 +1730,7 @@ async function forgotPasswordAdmin(req, res) {
     await temporaryData.save();
 
     // Send OTP to user via email or SMS (not implemented in this example)
-
+await sendOTPForgotPassword(email, otp);
     return res.status(200).send({
       status: true,
       message: "OTP sent successfully",
