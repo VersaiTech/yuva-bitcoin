@@ -184,6 +184,18 @@ const Page = () => {
             </Stack>
             <Card>
               <WithdrawalListSearch
+              customers={
+                searchResults.length > 0 ? searchResults :
+                currentTab === "all"
+                  ? customers
+                  : currentTab === "pending"
+                  ? pending
+                  : currentTab === "hasAcceptedMarketing"
+                  ? rejected
+                  : currentTab === "isProspect"
+                  ? completed
+                  : []
+              }
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}

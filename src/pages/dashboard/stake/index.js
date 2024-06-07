@@ -104,8 +104,14 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending, todaystake } =
-    useCustomers(search);
+  const {
+    customers,
+    customersCount,
+    completed,
+    rejected,
+    pending,
+    todaystake,
+  } = useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
   const [searchResults, setSearchResults] = useState([]);
@@ -210,6 +216,15 @@ const Page = () => {
             </Stack>
             <Card>
               <StakeListSearch
+                customers={
+                  searchResults.length > 0
+                    ? searchResults
+                    : currentTab === "all"
+                    ? customers
+                    : currentTab === "pending"
+                    ? todaystake
+                    : customers
+                }
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
@@ -223,21 +238,27 @@ const Page = () => {
                 setSearchResults={setSearchResults}
               />
               <StakeListTable
-                customers={searchResults.length > 0 ? searchResults : currentTab === 'all' ? customers : currentTab === 'pending' ? todaystake : customers}
-                // customersCount={customersCount}
-                // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
-                // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
-                // customers={
-                //   currentTab === "all"
-                //     ? customers
-                // }
+                customers={
+                  searchResults.length > 0
+                    ? searchResults
+                    : currentTab === "all"
+                    ? customers
+                    : currentTab === "pending"
+                    ? todaystake
+                    : customers
+                }
                 customersCount={
-                  searchResults.length > 0 ? searchResults.length :
-                  currentTab === 'all' ? customersCount :
-                    currentTab === 'pending' ? pending :
-                      currentTab === 'hasAcceptedMarketing' ? rejected.length :
-                        currentTab === 'isProspect' ? completed.length :
-                          0
+                  searchResults.length > 0
+                    ? searchResults.length
+                    : currentTab === "all"
+                    ? customersCount
+                    : currentTab === "pending"
+                    ? pending
+                    : currentTab === "hasAcceptedMarketing"
+                    ? rejected.length
+                    : currentTab === "isProspect"
+                    ? completed.length
+                    : 0
                 }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}

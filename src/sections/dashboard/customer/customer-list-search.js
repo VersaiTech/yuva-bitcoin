@@ -2,6 +2,8 @@ import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useSnackbar } from 'notistack';
+import { ExportOptionsModal } from '../../../components/ExportOptions';
 import {
   Box,
   Divider,
@@ -41,9 +43,12 @@ const tabs = [
 ];
 
 export const CustomerListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults, customers} = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults, customers } = props;
   const queryRef = useRef(null);
   const [filters, setFilters] = useState({});
+  // Export Modal Opening 
+  const [exportModalOpen, setExportModalOpen] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
@@ -129,51 +134,70 @@ export const CustomerListSearch = (props) => {
     });
   }, [onSortChange]);
 
+
+// For opening the modal 
   const handleExportToExcel = () => {
-    try {
-      // Format customers data into an Excel-compatible format
-      const data = customers.map((customer) => ({
-        Name: customer.member_user_id,
-        TwitterId:customer.twitterId,
-        Email: customer.email,
-        Coins: customer.coins,
-        IsActive: customer.isActive,
-        Contact: customer.contactNo,
-        // Add more fields as needed
-      }));
-  
-      // Create a new workbook
-      const workbook = XLSX.utils.book_new();
-      const worksheet = XLSX.utils.json_to_sheet(data);
-  
-      // Add the worksheet to the workbook
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
-  
-      // Convert the workbook to a binary Excel file
-      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-  
-      // Create a Blob from the buffer
-      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-  
-      // Create a temporary URL for the Blob
-      const url = window.URL.createObjectURL(blob);
-  
-      // Create an anchor element and initiate the download
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'customers.xlsx');
-      document.body.appendChild(link);
-      link.click();
-  
-      // Clean up by revoking the URL
-      window.URL.revokeObjectURL(url);
-  
-      enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
-    } catch (error) {
-      enqueueSnackbar("Error exporting to Excel", { variant: "error" });
-      console.error("Error exporting to Excel:", error);
-    }
+    // Open the export options modal
+    setExportModalOpen(true);
   };
+
+// For handling the download logic of excel from modal option 
+  const handleExportOptionsSubmit = (option) => {
+    // Handle the submission of export options
+    console.log('Selected export option:', option);
+    // Perform export logic based on the selected option
+    // For now, just close the modal
+    setExportModalOpen(false);
+  };
+
+// For downloading all data directly
+
+
+const handleExportToExcelDownload = () => {
+  try {
+    // Format customers data into an Excel-compatible format
+    const data = customers.map((customer) => ({
+      Name: customer.member_user_id,
+      TwitterId:customer.twitterId,
+      Email: customer.email,
+      Coins: customer.coins,
+      IsActive: customer.isActive,
+      Contact: customer.contactNo,
+      // Add more fields as needed
+    }));
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
+
+    // Convert the workbook to a binary Excel file
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Create a Blob from the buffer
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+    // Create a temporary URL for the Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Create an anchor element and initiate the download
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Users.xlsx');
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up by revoking the URL
+    window.URL.revokeObjectURL(url);
+
+    enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
+  } catch (error) {
+    enqueueSnackbar("Error exporting to Excel", { variant: "error" });
+    console.error("Error exporting to Excel:", error);
+  }
+};
 
   return (
     <>
@@ -194,7 +218,92 @@ export const CustomerListSearch = (props) => {
           />
         ))}
       </Tabs>
-      <Button
+      <Divider />
+     {/* <Stack
+  alignItems="center"
+  direction="row"
+  flexWrap="wrap"
+  justifyContent="space-between" // Add this to align items at opposite ends
+  spacing={3}
+  sx={{ p: 3 }}
+>
+  <Box
+    component="form"
+    onSubmit={handleQueryChange}
+    sx={{ flexGrow: 1 }}
+  >
+    <OutlinedInput
+      defaultValue=""
+      fullWidth
+      inputProps={{ ref: queryRef }}
+      placeholder="Search Users"
+      startAdornment={(
+        <InputAdornment position="start">
+          <SvgIcon>
+            <SearchMdIcon />
+          </SvgIcon>
+        </InputAdornment>
+      )}
+      endAdornment={
+        <InputAdornment position="end">
+          <IconButton onClick={handleRefresh}>
+            <RefreshIcon />
+          </IconButton>
+        </InputAdornment>
+      }
+    />
+  </Box>
+  <Button
+    color="inherit"
+    endIcon={
+      <SvgIcon>
+        <DownloadIcon />
+      </SvgIcon>
+    }
+    size="small"
+    onClick={handleExportToExcel}
+  >
+    Export to Excel
+  </Button>
+  </Stack>*/}
+  <Stack
+  alignItems="center"
+  direction="row"
+  flexWrap="wrap"
+  justifyContent="space-between"
+  spacing={3}
+  sx={{ p: 3 }}
+>
+  {/* Search input */}
+  <Box
+  component="form"
+  onSubmit={handleQueryChange}
+  sx={{ flexGrow: 1 }}
+>
+  <OutlinedInput
+    defaultValue=""
+    fullWidth
+    inputProps={{ ref: queryRef }}
+    placeholder="Search Users"
+    startAdornment={(
+      <InputAdornment position="start">
+        <SvgIcon>
+          <SearchMdIcon />
+        </SvgIcon>
+      </InputAdornment>
+    )}
+    endAdornment={
+      <InputAdornment position="end">
+        <IconButton onClick={handleRefresh}>
+          <RefreshIcon />
+        </IconButton>
+      </InputAdornment>
+    }
+  />
+</Box>
+  {/* Export button */}
+  <Box>
+    <Button
       color="inherit"
       endIcon={
         <SvgIcon>
@@ -202,62 +311,18 @@ export const CustomerListSearch = (props) => {
         </SvgIcon>
       }
       size="small"
-      onClick={handleExportToExcel}
+      onClick={handleExportToExcelDownload}
     >
       Export to Excel
     </Button>
-      <Divider />
-      <Stack
-        alignItems="center"
-        direction="row"
-        flexWrap="wrap"
-        spacing={3}
-        sx={{ p: 3 }}
-      >
-        <Box
-          component="form"
-          onSubmit={handleQueryChange}
-          sx={{ flexGrow: 1 }}
-        >
-          <OutlinedInput
-            defaultValue=""
-            fullWidth
-            inputProps={{ ref: queryRef }}
-            placeholder="Search Users"
-            startAdornment={(
-              <InputAdornment position="start">
-                <SvgIcon>
-                  <SearchMdIcon />
-                </SvgIcon>
-              </InputAdornment>
-            )}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton onClick={handleRefresh}>
-                  <RefreshIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </Box>
-        {/* <TextField
-          label="Sort By"
-          name="sort"
-          onChange={handleSortChange}
-          select
-          SelectProps={{ native: true }}
-          value={`${sortBy}|${sortDir}`}
-        >
-          {sortOptions.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          ))}
-        </TextField> */}
-      </Stack>
+    {/* Export options modal */}
+    <ExportOptionsModal
+      open={exportModalOpen}
+      onClose={() => setExportModalOpen(false)}
+      onSubmit={handleExportOptionsSubmit}
+    />
+  </Box>
+</Stack>
     </>
   );
 };

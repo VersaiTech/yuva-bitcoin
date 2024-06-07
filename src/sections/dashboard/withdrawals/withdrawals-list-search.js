@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import DownloadIcon from '@mui/icons-material/Download';
+import * as XLSX from 'xlsx';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {
@@ -12,10 +14,13 @@ import {
   SvgIcon,
   Tab,
   Tabs,
-  TextField
+  TextField,
+  Button
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
+import { ExportOptionsModal } from '../../../components/ExportOptions';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -63,10 +68,14 @@ const sortOptions = [
 ];
 
 export const WithdrawalListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults,customers } = props;
   const queryRef = useRef(null);
+  const { enqueueSnackbar } = useSnackbar();
   // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
+
+  // Export Modal Opening 
+  const [exportModalOpen, setExportModalOpen] = useState(false);
 
   // const [activeUsers, setActiveUsers] = useState([]);
   const urlParams = new URLSearchParams(window.location.search);
@@ -166,6 +175,73 @@ export const WithdrawalListSearch = (props) => {
     });
   }, [onSortChange]);
 
+
+  
+// For opening the modal 
+const handleExportToExcel = () => {
+  // Open the export options modal
+  setExportModalOpen(true);
+};
+
+// For handling the download logic of excel from modal option 
+const handleExportOptionsSubmit = (option) => {
+  // Handle the submission of export options
+  console.log('Selected export option:', option);
+  // Perform export logic based on the selected option
+  // For now, just close the modal
+  setExportModalOpen(false);
+};
+
+// For downloading all data directly
+
+
+const handleExportToExcelDownload = () => {
+try {
+  // Format customers data into an Excel-compatible format
+  const data = customers.map((customer) => ({
+    MemberId: customer.member_user_id,
+    Name:customer.member_name,
+    Date: customer.with_date,
+    Wallet: customer.wallet_address,
+    Amount: customer.with_amt,
+    Referance: customer.with_referrance,
+    Status: customer.status,
+    // Add more fields as needed
+  }));
+
+  // Create a new workbook
+  const workbook = XLSX.utils.book_new();
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // Add the worksheet to the workbook
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
+
+  // Convert the workbook to a binary Excel file
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+  // Create a Blob from the buffer
+  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+  // Create a temporary URL for the Blob
+  const url = window.URL.createObjectURL(blob);
+
+  // Create an anchor element and initiate the download
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'Withdrawals.xlsx');
+  document.body.appendChild(link);
+  link.click();
+
+  // Clean up by revoking the URL
+  window.URL.revokeObjectURL(url);
+
+  enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
+} catch (error) {
+  enqueueSnackbar("Error exporting to Excel", { variant: "error" });
+  console.error("Error exporting to Excel:", error);
+}
+};
+
   return (
     <>
       <Tabs
@@ -219,6 +295,27 @@ export const WithdrawalListSearch = (props) => {
             }
           />
         </Box>
+         {/* Export button */}
+  <Box>
+  <Button
+    color="inherit"
+    endIcon={
+      <SvgIcon>
+        <DownloadIcon />
+      </SvgIcon>
+    }
+    size="small"
+    onClick={handleExportToExcelDownload}
+  >
+    Export to Excel
+  </Button>
+  {/* Export options modal */}
+  <ExportOptionsModal
+    open={exportModalOpen}
+    onClose={() => setExportModalOpen(false)}
+    onSubmit={handleExportOptionsSubmit}
+  />
+</Box>
       </Stack>
     </>
   );
