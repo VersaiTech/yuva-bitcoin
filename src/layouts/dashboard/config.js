@@ -152,14 +152,14 @@ export const getSections = (t) => [
             title: t(tokens.nav.pendingWithdrawal),
             path: paths.dashboard.withdrawal.pending,
           },
-          {
-            title: t(tokens.nav.rejectedWithdrawal),
-            path: paths.dashboard.withdrawal.rejected,
-          },
-          {
-            title: t(tokens.nav.completedWithdrawal),
-            path: paths.dashboard.withdrawal.completed,
-          },
+          // {
+          //   title: t(tokens.nav.rejectedWithdrawal),
+          //   path: paths.dashboard.withdrawal.rejected,
+          // },
+          // {
+          //   title: t(tokens.nav.completedWithdrawal),
+          //   path: paths.dashboard.withdrawal.completed,
+          // },
         ],
       },
       {

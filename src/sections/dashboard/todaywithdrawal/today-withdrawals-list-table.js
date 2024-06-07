@@ -72,7 +72,7 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const WithdrawalsListTable = (props) => {
+export const TodayWithdrawalsListTable = (props) => {
   const {
     customers,
     customersCount,
@@ -240,7 +240,7 @@ export const WithdrawalsListTable = (props) => {
   );
 };
 
-WithdrawalsListTable.propTypes = {
+TodayWithdrawalsListTable.propTypes = {
   customers: PropTypes.array.isRequired,
   customersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,

@@ -155,7 +155,7 @@ export const paths = {
     },
     withdrawal: {
       index: "/dashboard/withdrawals",
-      pending:"/dashboard/withdrawals?status=pending",
+      pending:"/dashboard/todaywithdrawals/today",
       details: "/dashboard/withdrawals/:withdrawalId",
       rejected: "/dashboard/withdrawals?status=hasAcceptedMarketing",
       completed: "/dashboard/withdrawals?status=isProspect",
