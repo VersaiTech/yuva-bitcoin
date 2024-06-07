@@ -13,6 +13,7 @@ const AdminControlSchema = new mongoose.Schema({
     setMaximumWithdrawalusdt: { type: Number, required: true },
     setRegisterCoinValue: { type: Number, required: true },
     setReferralCoinValue: { type: Number, required: true },
+    setMinimumReferralamount: { type: Number, required: true },
     setStakeMonth1: { type: Number, required: true },
     setStakeMonth2: { type: Number, required: true },
     setStakeMonth3: { type: Number, required: true },

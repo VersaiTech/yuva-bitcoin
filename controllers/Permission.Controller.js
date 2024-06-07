@@ -62,6 +62,7 @@ const grantPermission = async (req, res) => {
         setMaximumWithdrawalusdt: Joi.boolean(),
         setRegisterCoinValue: Joi.boolean(),
         setReferralCoinValue: Joi.boolean(),
+        setMinimumReferralamount: Joi.boolean(),
         setStakeMonth1: Joi.boolean(),
         setStakeMonth2: Joi.boolean(),
         setStakeMonth3: Joi.boolean(),
@@ -179,6 +180,7 @@ const adminSetValue = async (req, res) => {
         setMaximumWithdrawal: Joi.number(),
         setRegisterCoinValue: Joi.number(),
         setReferralCoinValue: Joi.number(),
+        setMinimumReferralamount: Joi.number(),
         setMinimumWithdrawalusdt: Joi.number(),
         setMaximumWithdrawalusdt: Joi.number(),
         setStakeMonth1: Joi.number(),
@@ -235,6 +237,7 @@ const adminSetValue = async (req, res) => {
                     setMaximumWithdrawalusdt: permission.setMaximumWithdrawalusdt ? value.setMaximumWithdrawalusdt : undefined,
                     setRegisterCoinValue: permission.setRegisterCoinValue ? value.setRegisterCoinValue : undefined,
                     setReferralCoinValue: permission.setReferralCoinValue ? value.setReferralCoinValue : undefined,
+                    setMinimumReferralamount: permission.setMinimumReferralamount ? value.setMinimumReferralamount : undefined,
                     setStakeMonth1: permission.setStakeMonth1 ? value.setStakeMonth1 : undefined,
                     setStakeMonth2: permission.setStakeMonth2 ? value.setStakeMonth2 : undefined,
                     setStakeMonth3: permission.setStakeMonth3 ? value.setStakeMonth3 : undefined,
@@ -257,6 +260,7 @@ const adminSetValue = async (req, res) => {
         if (!permission.setMaximumWithdrawalusdt && value.setMaximumWithdrawalusdt !== undefined) invalidFields.push('setMaximumWithdrawalusdt');
         if (!permission.setRegisterCoinValue && value.setRegisterCoinValue !== undefined) invalidFields.push('setRegisterCoinValue');
         if (!permission.setReferralCoinValue && value.setReferralCoinValue !== undefined) invalidFields.push('setReferralCoinValue');
+        if (!permission.setMinimumReferralamount && value.setMinimumReferralamount !== undefined) invalidFields.push('setMinimumReferralamount');
         if (!permission.setStakeMonth1 && value.setStakeMonth1 !== undefined) invalidFields.push('setStakeMonth1');
         if (!permission.setStakeMonth2 && value.setStakeMonth2 !== undefined) invalidFields.push('setStakeMonth2');
         if (!permission.setStakeMonth3 && value.setStakeMonth3 !== undefined) invalidFields.push('setStakeMonth3');

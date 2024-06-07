@@ -89,7 +89,7 @@ const createDeposit = async (req, res) => {
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
     // Check if member has referred someone and the referral code is valid
-    if (member.deposit_usdt >= 10 && member.referralCode) {
+    if (member.deposit_usdt >= acontrol.setMinimumReferralamount && member.referralCode) {
       // Mark member as referred
       member.isReferred = true;
       const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');

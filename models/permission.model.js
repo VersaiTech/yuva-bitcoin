@@ -12,6 +12,7 @@ const PermissionSchema = new mongoose.Schema({
     setMaximumWithdrawalusdt: { type: Boolean, default: false },
     setRegisterCoinValue: { type: Boolean, default: false },
     setReferralCoinValue: { type: Boolean, default: false },
+    setMinimumReferralamount: { type: Boolean, default: false },
     setStakeMonth1: { type: Boolean, default: false },
     setStakeMonth2: { type: Boolean, default: false },
     setStakeMonth3: { type: Boolean, default: false },
