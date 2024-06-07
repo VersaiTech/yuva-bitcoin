@@ -28,34 +28,7 @@ export const OverviewCoinHolders = (props) => {
     setOpenDataForm(true);
   };
 
-  const handleExportToExcel = async () => {
-    try {
-      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-      const token = localStorage.getItem("accessToken");
-      const headers = { Authorization: token };
-
-      const response = await axios.post(
-        `${BASEURL}/api/Dummy/exportToExcel`,
-        {},
-        { headers, responseType: 'blob' }
-      );
-
-      if (response.status === 200) {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'coin_holders.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
-      } else {
-        enqueueSnackbar("Failed to download Excel file", { variant: "error" });
-      }
-    } catch (error) {
-      enqueueSnackbar("Error downloading Excel file", { variant: "error" });
-      console.error("Error downloading Excel file:", error);
-    }
-  };
+ 
 
   const handleDataSubmit = async (data) => {
     try {
@@ -131,18 +104,6 @@ export const OverviewCoinHolders = (props) => {
           Today Buyer
         </Button>
         </Link>
-        <Button
-          color="inherit"
-          size="small"
-          endIcon={
-            <SvgIcon>
-              <DownloadIcon />
-            </SvgIcon>
-          }
-          onClick={handleExportToExcel}
-        >
-          Export to Excel
-        </Button>
       </CardActions>
       {/* {openDataForm && (
         <SetDummyData
