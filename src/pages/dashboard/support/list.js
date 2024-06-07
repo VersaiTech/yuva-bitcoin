@@ -178,7 +178,7 @@ const Page = () => {
          
             <QueriesListTable 
             queries={queries}
-            queriesCount={queries.length }
+            queriesCount={queries.length}
             // queriesCount={currentTab === 'all' ? queriesCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : 0}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleRowsPerPageChange}

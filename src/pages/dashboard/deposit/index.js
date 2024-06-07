@@ -67,7 +67,7 @@ const useCustomers = (search) => {
 
       
       const TodayUsersResponse = await axios.get(
-        `${BASEURL}/admin/usdtDepositToday/`,
+        `${BASEURL}/admin/usdtDepositToday/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
@@ -82,7 +82,7 @@ const useCustomers = (search) => {
         setState({
           customers: response.data.allDeposits || [],
           customersCount: response.data.allDepositsTotal.length,
-          TodayUsersResponse: TodayUsersResponse.data.members || [],
+          TodayUsersResponse: TodayUsersResponse.data.data || [],
           // blockedUsers: blockedUsersResponse.data.members,
         });
       }

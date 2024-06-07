@@ -23,7 +23,7 @@ import { paths } from '../../../paths';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-export const WithdrawalEditForm = (props) => {
+export const TodayWithdrawalEditForm = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { customer, ...other } = props;
 
@@ -216,8 +216,8 @@ export const WithdrawalEditForm = (props) => {
   );
 };
 
-WithdrawalEditForm.propTypes = {
+TodayWithdrawalEditForm.propTypes = {
   customer: PropTypes.object.isRequired
 };
 
-export default WithdrawalEditForm;
+export default TodayWithdrawalEditForm;

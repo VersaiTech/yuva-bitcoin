@@ -6,8 +6,9 @@ import { Box, Button, Card, Container, Stack, SvgIcon, Typography, TextField } f
 import axios from "axios";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
-import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
+import { TodayWithdrawalsListSearch } from "../../../sections/dashboard/todaywithdrawal/today-withdrawals-list-search";
+import { TodayWithdrawalsListTable } from "../../../sections/dashboard/todaywithdrawal/today-withdrawals-list-table";
+
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -60,20 +61,20 @@ const useCustomers = (search) => {
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
       const promises = [
-        fetchData(`/api/Withdraw/getWithdrawRequests/${page + 1}/${rowsPerPage}`),
-        fetchData(`/api/Withdraw/getWithdrawRejected/${page + 1}/${rowsPerPage}`),
-        fetchData(`/api/Withdraw/getWithdrawApproved/${page + 1}/${rowsPerPage}`),
-        fetchData(`/api/Withdraw/getWithdrawPending/${page + 1}/${rowsPerPage}`),
+        // fetchData(`/api/Withdraw/getWithdrawRequests/${page + 1}/${rowsPerPage}`),
+        fetchData(`/admin/withdrawRToday/${page + 1}/${rowsPerPage}`),
+        fetchData(`/admin/withdrawSToday/${page + 1}/${rowsPerPage}`),
+        fetchData(`/admin/withdrawPToday/${page + 1}/${rowsPerPage}`),
       ];
 
-      const [customers, rejected, completed, pending] = await Promise.all(promises);
+      const [ rejected, completed, pending] = await Promise.all(promises);
 
       setState({
-        customers,
+        
         rejected,
         completed,
         pending,
-        customersCount: customers.length,
+        customersCount: rejected.length,
       });
     };
 
@@ -86,7 +87,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
+  const {  customersCount, completed, rejected, pending } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
   // const [search2, setSearch2] = useState("");
   // const [searchedCustomers, setSearchedCustomers] = useState([]);
@@ -145,7 +146,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Withdrawals</Typography>
+                <Typography variant="h4">All Today Withdrawals</Typography>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
                 {/* <Button
@@ -183,7 +184,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <WithdrawalListSearch
+              <TodayWithdrawalsListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
@@ -195,12 +196,10 @@ const Page = () => {
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
               />
-              <WithdrawalsListTable
+              <TodayWithdrawalsListTable
                 customers={
                   searchResults.length > 0 ? searchResults :
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "pending"
+                  currentTab === "pending"
                     ? pending
                     : currentTab === "hasAcceptedMarketing"
                     ? rejected

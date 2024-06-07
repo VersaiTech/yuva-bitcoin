@@ -14,7 +14,7 @@ export const en = {
   [tokens.nav.portfolio]: 'Portfolio',
   [tokens.nav.analytics]: 'Analytics',
   [tokens.nav.withdrawal]: 'Withdrawal',
-  [tokens.nav.pendingWithdrawal]: 'Pending Withdrawal',
+  [tokens.nav.pendingWithdrawal]: 'Today Withdrawal',
   [tokens.nav.rejectedWithdrawal]: 'Rejected Withdrawal',
   [tokens.nav.completedWithdrawal]: 'Completed Withdrawal',
   [tokens.nav.allwithdrawal]: 'All Withdrawal',
