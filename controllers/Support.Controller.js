@@ -3,6 +3,7 @@ const Member = require('../models/memberModel');
 const nodemailer = require('nodemailer');
 const Joi = require('joi')
 
+const AdminControl = require('../models/AdminControl.Model');
 
 // Function to generate a unique ticket ID starting with "#YB" and followed by 7 random numbers 
 function generateTicketId() {
@@ -308,6 +309,28 @@ const getUserSupport = async (req, res) => {
     }
 }
 
+
+//deleteSupport
+const deleteDeposit = async (req, res) => {
+    try {
+
+       const admins = req.user;
+       if (admins.userType !== 'admin') {
+           return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+       }
+        const { supportTicketId } = req.params;
+        const support = await Reply.find({ supportTicketId: supportTicketId });
+        if (!support) {
+            return res.status(404).json({ status: false, message: 'Support not found' });
+        }
+        await Reply.findOneAndDelete({ supportTicketId: supportTicketId });
+        res.status(200).json({ status: true, message: 'Support deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting support:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
-    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser, getUserSupport
+    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser, getUserSupport, deleteDeposit
 }

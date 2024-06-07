@@ -546,6 +546,11 @@ const updateWithdrawalStatus = async (req, res) => {
     transection_hash: Joi.string().allow('').optional()
   });
   try {
+
+    const admins = req.user;
+        if (admins.userType !== 'admin') {
+            return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+        }
     const { with_referrance } = req.params;
     const { status, processed_by, remarks, conversion_type, transection_hash } = req.body;
 

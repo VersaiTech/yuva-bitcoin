@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
-const { createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser,getUserSupport } = require("../controllers/Support.Controller");
+const { createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser,getUserSupport,deleteDeposit } = require("../controllers/Support.Controller");
 
 
 router.route('/createSupport').post(ValidMember, createSupport);
@@ -10,5 +10,6 @@ router.route('/adminReplyToUser/:supportTicketId').post(isAdmin, adminReplyToUse
 router.route('/getAllSupport/:page_number?/:count?').get(isAdmin, getAllSupport);
 router.route('/getSupportForOneUser/:userId/:page_number?/:count?').get(isAdmin, getSupportForOneUser);
 router.route('/getUserSupport/:page_number?/:count?').get(ValidMember, getUserSupport);
+router.route('/deleteSupport/:supportTicketId').post(isAdmin, deleteDeposit);
 module.exports = router;
  
