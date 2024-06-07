@@ -12,10 +12,13 @@ import {
   SvgIcon,
   Tab,
   Tabs,
-  TextField
+  TextField,
+  Button
 } from '@mui/material';
 import axios from 'axios';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
+import DownloadIcon from '@mui/icons-material/Download';
+import * as XLSX from 'xlsx';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
@@ -38,7 +41,7 @@ const tabs = [
 ];
 
 export const CustomerListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults, customers} = props;
   const queryRef = useRef(null);
   const [filters, setFilters] = useState({});
 
@@ -126,6 +129,52 @@ export const CustomerListSearch = (props) => {
     });
   }, [onSortChange]);
 
+  const handleExportToExcel = () => {
+    try {
+      // Format customers data into an Excel-compatible format
+      const data = customers.map((customer) => ({
+        Name: customer.member_user_id,
+        TwitterId:customer.twitterId,
+        Email: customer.email,
+        Coins: customer.coins,
+        IsActive: customer.isActive,
+        Contact: customer.contactNo,
+        // Add more fields as needed
+      }));
+  
+      // Create a new workbook
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(data);
+  
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
+  
+      // Convert the workbook to a binary Excel file
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  
+      // Create a Blob from the buffer
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+  
+      // Create a temporary URL for the Blob
+      const url = window.URL.createObjectURL(blob);
+  
+      // Create an anchor element and initiate the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'customers.xlsx');
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up by revoking the URL
+      window.URL.revokeObjectURL(url);
+  
+      enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("Error exporting to Excel", { variant: "error" });
+      console.error("Error exporting to Excel:", error);
+    }
+  };
+
   return (
     <>
       <Tabs
@@ -145,6 +194,18 @@ export const CustomerListSearch = (props) => {
           />
         ))}
       </Tabs>
+      <Button
+      color="inherit"
+      endIcon={
+        <SvgIcon>
+          <DownloadIcon />
+        </SvgIcon>
+      }
+      size="small"
+      onClick={handleExportToExcel}
+    >
+      Export to Excel
+    </Button>
       <Divider />
       <Stack
         alignItems="center"

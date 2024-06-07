@@ -225,8 +225,18 @@ const Page = () => {
                 activeUsers={activeUsers}
                 blockedUsers={blockedUsers}
                 currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
+                setCurrentTab={setCurrentTab} 
                 setSearchResults={setSearchResults}
+                customers={
+                  searchResults.length > 0 ? searchResults :
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "hasAcceptedMarketing"
+                    ? activeUsers
+                    : currentTab === "isProspect"
+                    ? blockedUsers
+                    : customers
+                }
               />
               <CustomerListTable
                 customers={

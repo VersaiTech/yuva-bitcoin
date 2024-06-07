@@ -108,18 +108,6 @@ export const OverviewRegisteredMembers = (props) => {
           Today Members
         </Button>
         </Link>
-        <Button
-          color="inherit"
-          endIcon={
-            <SvgIcon>
-              <DownloadIcon />
-            </SvgIcon>
-          }
-          size="small"
-          onClick={handleExportToExcel}
-        >
-          Export to Excel
-        </Button>
       </CardActions>
     </Card>
   );
