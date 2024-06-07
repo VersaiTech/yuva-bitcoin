@@ -24,10 +24,10 @@ const tabs = [
     label: 'All',
     value: 'all',
   },
-  // {
-  //   label: 'Pending',
-  //   value: 'pending'
-  // },
+  {
+    label: 'Today Staked',
+    value: 'pending'
+  },
   // {
   //   label: 'Rejected',
   //   value: 'hasAcceptedMarketing'
@@ -194,7 +194,7 @@ export const StakeListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search Withdrawals"
+            placeholder="Search Deposit"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>

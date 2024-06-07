@@ -51,6 +51,7 @@ const useCustomers = (search) => {
     customersCount: 0,
   });
 
+  const { page, rowsPerPage } = search;
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
@@ -60,13 +61,17 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin`,
+      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin/${page + 1}/${rowsPerPage}`,
       {headers: headers});
       console.log(response.data);
-      // const activeUsersResponse = await axios.get(
-      //   `${BASEURL}/admin/getActiveMembers`,
-      //   { headers: headers }
-      // );
+
+      
+      const TodayUsersResponse = await axios.get(
+        `${BASEURL}/admin/usdtDepositToday/`,
+        { headers: headers }
+      );
+
+      console.log(TodayUsersResponse.data.data);
 
       // const blockedUsersResponse = await axios.get(
       //   `${BASEURL}/admin/getBlockedMembers`,
@@ -76,8 +81,8 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.allDeposits || [],
-          customersCount: response.data.allDeposits.length,
-          // activeUsers: activeUsersResponse.data.members,
+          customersCount: response.data.allDepositsTotal.length,
+          TodayUsersResponse: TodayUsersResponse.data.members || [],
           // blockedUsers: blockedUsersResponse.data.members,
         });
       }
@@ -100,7 +105,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount,  activeUsers, blockedUsers } =
+  const { customers, customersCount, TodayUsersResponse } =
     useCustomers(search);
 
   console.log(customers);
@@ -216,8 +221,9 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                activeUsers={activeUsers}
-                blockedUsers={blockedUsers}
+                // activeUsers={activeUsers}
+                todayUsers={TodayUsersResponse}
+                // blockedUsers={blockedUsers}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
@@ -230,9 +236,8 @@ const Page = () => {
                   currentTab === "all"
                     ? customers
                     : currentTab === "hasAcceptedMarketing"
-                    ? activeUsers
-                    : currentTab === "isProspect"
-                    ? blockedUsers
+                    ? TodayUsersResponse
+                    
                     : customers
                 }
                 customersCount={
@@ -240,9 +245,8 @@ const Page = () => {
                   currentTab === "all"
                     ? customersCount
                     : currentTab === "hasAcceptedMarketing"
-                    ? activeUsers.length
-                    : currentTab === "isProspect"
-                    ? blockedUsers.length
+                    ? TodayUsersResponse
+                    
                     : customersCount
                 }
                 onPageChange={handlePageChange}

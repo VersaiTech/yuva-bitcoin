@@ -430,13 +430,7 @@ export const StakeListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={handleToggleAll}
-                />
-              </TableCell>
+              
               <TableCell>
                 Name
               </TableCell>
@@ -455,9 +449,7 @@ export const StakeListTable = (props) => {
               <TableCell>
               transaction_id
               </TableCell>
-              <TableCell align="right">
-                Actions
-              </TableCell>
+             
             </TableRow>
           </TableHead>
           <TableBody>
@@ -469,22 +461,9 @@ export const StakeListTable = (props) => {
                   hover
                   key={customer.with_referrance}
                   selected={isSelected}
+                 
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        const { checked } = event.target;
-
-                        if (checked) {
-                          selectOne(customer.member_user_id);
-                        } else {
-                          deselectOne(customer.member_user_id);
-                        }
-                      }}
-                      value={isSelected}
-                    />
-                  </TableCell>
+                 
                   <TableCell>
                     <Stack
                       alignItems="center"
@@ -501,14 +480,13 @@ export const StakeListTable = (props) => {
                         {getInitials(customer.member_name)}
                       </Avatar>
                       <div>
-                        <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.Stake.index}
-                          variant="subtitle2"
+                      
+                        <Typography
+                          color="text.secondary"
+                          variant="body2"
                         >
                           {customer.member_name}
-                        </Link>
+                        </Typography>
                         <Typography
                           color="text.secondary"
                           variant="body2"
@@ -540,24 +518,7 @@ export const StakeListTable = (props) => {
                   <TableCell>
                     {customer.transaction_id}
                   </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      component={NextLink}
-                      href={`${paths.dashboard.Stake.index}`}
-                    >
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    </IconButton>
-                    <IconButton
-                      component={NextLink}
-                      href={paths.dashboard.Stake.index}
-                    >
-                      <SvgIcon>
-                        <ArrowRightIcon />
-                      </SvgIcon>
-                    </IconButton>
-                  </TableCell>
+               
                 </TableRow>
               );
             })}

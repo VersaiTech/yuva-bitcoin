@@ -14,6 +14,7 @@ export const tokens = {
     approvetask: 'nav.approvetask',
     refer: 'nav.refer',
     referral: 'nav.referral',
+    todayreferral: 'nav.todayreferral',
     referralRecord: 'nav.referralRecord',
     analytics: 'nav.analytics',
     demo: 'nav.demo',

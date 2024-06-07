@@ -69,7 +69,7 @@ const useCustomers = (search) => {
         headers: headers,
       });
 
-      console.log(response.data);
+      console.log(response);
       let activeUsersResponse = await axios.get(
         `${BASEURL}/admin/getActiveMembers/${page + 1}/${rowsPerPage}`,
         { headers: headers }
@@ -83,7 +83,13 @@ const useCustomers = (search) => {
       let registeredTodayResponse = await axios.get(
         `${BASEURL}/admin/registeredToday`,
         { headers: headers }
+
       );
+
+      console.log(response.data);
+      console.log(activeUsersResponse.data);
+      console.log(blockedUsersResponse.data);
+      console.log(registeredTodayResponse.data.data);
 
       if (!response) response = [];
       if (!activeUsersResponse) activeUsersResponse = [];
@@ -94,10 +100,10 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.members,
-          customersCount: response.data.members.length,
+          customersCount: response.data.count.length,
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
-          registeredToday: registeredTodayResponse.data.members || [],
+          registeredToday: registeredTodayResponse.data.data,
         });
 
         console.log(blockedUsersResponse.data.members);
@@ -128,7 +134,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, activeUsers, blockedUsers } = useCustomers(search);
+  const { customers, customersCount, activeUsers, blockedUsers, registeredToday } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
   const [searchResults, setSearchResults] = useState([]);
@@ -224,6 +230,7 @@ const Page = () => {
                 sortDir={search.sortDir}
                 activeUsers={activeUsers}
                 blockedUsers={blockedUsers}
+                registeredToday={registeredToday}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab} 
                 setSearchResults={setSearchResults}
@@ -247,10 +254,13 @@ const Page = () => {
                     ? activeUsers
                     : currentTab === "isProspect"
                     ? blockedUsers
+                    : currentTab === "registeredToday"
+                    ? registeredToday
                     : customers
+                    
                 }
                 customersCount={searchResults.length > 0 ? searchResults.length :
-                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : customersCount}
+                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : currentTab === 'isRegisteredToday' ? registeredToday.length : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

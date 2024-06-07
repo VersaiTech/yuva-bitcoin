@@ -65,11 +65,18 @@ const useCustomers = (search) => {
 
       console.log(response.data.data);
 
+      const TodayUsersResponse = await axios.get(
+        `${BASEURL}/admin/stackedToday/`,
+        { headers: headers }
+      );
+
+      console.log(TodayUsersResponse.data.data);
+
       if (isMounted()) {
         setState({
           customers: response.data.data,
           customersCount: response.data.data.length,
-          // pending: PendingWithdrawals.data.data,
+          todaystake: TodayUsersResponse.data.data,
           // rejected: rejectedWithdrawals.data.data,
           // completed: completedWithdrawals.data.data,
         });
@@ -97,7 +104,7 @@ const Page = () => {
   const status = urlParams.get("status");
 
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } =
+  const { customers, customersCount, completed, rejected, pending, todaystake } =
     useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
@@ -210,12 +217,13 @@ const Page = () => {
                 // completed={completed}
                 // pending={pending}
                 // rejected={rejected}
+                todaystake={todaystake}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
               />
               <StakeListTable
-                customers={searchResults.length > 0 ? searchResults : customers}
+                customers={searchResults.length > 0 ? searchResults : currentTab === 'all' ? customers : currentTab === 'pending' ? todaystake : customers}
                 // customersCount={customersCount}
                 // customers={currentTab === 'all' ? customers : currentTab === 'pending' ? pending : currentTab === 'hasAcceptedMarketing' ? rejected : currentTab === 'isProspect' ? completed : customers}
                 // customersCount={currentTab === 'all' ? customersCount : currentTab === 'pending' ? pending.length :  currentTab === 'hasAcceptedMarketing' ? rejected.length : currentTab === 'isProspect' ? completed.length : customersCount}
@@ -226,7 +234,7 @@ const Page = () => {
                 customersCount={
                   searchResults.length > 0 ? searchResults.length :
                   currentTab === 'all' ? customersCount :
-                    currentTab === 'pending' ? pending.length :
+                    currentTab === 'pending' ? pending :
                       currentTab === 'hasAcceptedMarketing' ? rejected.length :
                         currentTab === 'isProspect' ? completed.length :
                           0
