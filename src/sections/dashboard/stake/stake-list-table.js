@@ -485,6 +485,12 @@ export const StakeListTable = (props) => {
                           color="text.secondary"
                           variant="body2"
                         >
+                          {customer.member_name}
+                        </Typography>
+                        <Typography
+                          color="text.secondary"
+                          variant="body2"
+                        >
                           {customer.member_user_id}
                         </Typography>
                       </div>

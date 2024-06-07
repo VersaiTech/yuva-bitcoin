@@ -17,6 +17,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Link,
   Box,
   TablePagination,
 } from "@mui/material";
@@ -29,6 +30,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NextLink from "next/link";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import { paths } from "../../../paths";
+
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -127,16 +129,7 @@ export const QueriesListTable = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" align="center">
-                <Checkbox
-                  indeterminate={
-                    selected.length > 0 && selected.length < queries.length
-                  }
-                  checked={selected.length === queries.length}
-                  onChange={handleSelectAllClick}
-                  inputProps={{ "aria-label": "select all queries" }}
-                />
-              </TableCell>
+             
               <TableCell align="center">User Name</TableCell>
               <TableCell align="center">Email</TableCell>
               <TableCell align="center">Twitter ID</TableCell>
@@ -155,17 +148,16 @@ export const QueriesListTable = (props) => {
                 key={query.id}
                 selected={isSelected(query.id)}
               >
-                <TableCell padding="checkbox" align="center">
-                  <Checkbox
-                    checked={isSelected(query.id)}
-                    inputProps={{ "aria-labelledby": `query-${query.id}` }}
-                  />
-                </TableCell>
+                
                 <TableCell align="center">
                   {query.name.charAt(0).toUpperCase() + query.name.slice(1)}
                 </TableCell>
                 <TableCell align="center">{query.email}</TableCell>
-                <TableCell align="center">{query.twitterId}</TableCell>
+                <TableCell align="center">
+                  <Link href={`${query.twitterId}`} target="_blank" rel="noopener noreferrer">
+                    {query.twitterId}
+                  </Link>
+                </TableCell>
                 <TableCell
                   sx={{ width: "50%", fontWeight: "500" }}
                   align="center"
