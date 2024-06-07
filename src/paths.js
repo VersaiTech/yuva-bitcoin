@@ -125,7 +125,8 @@ export const paths = {
     },
     refer : {
       index: '/dashboard/referral',
-      referRecord: '/dashboard/referral/referralRecord'
+      referRecord: '/dashboard/referral/referralRecord',
+      todayreffer: '/dashboard/referral/todayreffer'
     },
     news: {
       newsDetails: "/dashboard/news/",

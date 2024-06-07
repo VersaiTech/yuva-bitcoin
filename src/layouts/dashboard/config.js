@@ -35,7 +35,7 @@ export const getSections = (t) => [
         path: paths.dashboard.admincontrol,
         icon: (
           <SvgIcon fontSize="small">
-            <CustomSVG/>
+            <CustomSVG />
           </SvgIcon>
         ),
       },
@@ -75,7 +75,6 @@ export const getSections = (t) => [
           },
         ],
       },
-     
     ],
   },
   {
@@ -135,7 +134,6 @@ export const getSections = (t) => [
         ],
       },
 
-      
       {
         title: t(tokens.nav.withdrawal),
         icon: (
@@ -173,7 +171,6 @@ export const getSections = (t) => [
             <DepositsIcon />
           </SvgIcon>
         ),
-        
       },
       {
         title: t(tokens.nav.external_deposit),
@@ -184,7 +181,6 @@ export const getSections = (t) => [
             <DepositsIcon />
           </SvgIcon>
         ),
-        
       },
       {
         title: t(tokens.nav.Stake),
@@ -207,35 +203,45 @@ export const getSections = (t) => [
       },
 
       {
-        title: t(tokens.nav.referral),
-        path: paths.dashboard.refer.index,
+        title: t(tokens.nav.referralRecord),
+
         icon: (
           <SvgIcon fontSize="small">
             <ReferalIcon />
           </SvgIcon>
         ),
-          },
-          
+        items: [
           {
-            title: t(tokens.nav.news),
-            // path: paths.contact,
-            icon: (
-              <SvgIcon fontSize="small">
-                {/* <Mail04Icon /> */}
-                <NewssIcon />
-              </SvgIcon>
-            ),
-            items: [
-              {
-                title: t(tokens.nav.createnews),
-                path: paths.dashboard.news.create,
-              },
-              {
-                title: t(tokens.nav.newslist),
-                path: paths.dashboard.news.list,
-              },
-            ],
+            title: t(tokens.nav.todayreferral),
+            path: paths.dashboard.refer.todayreffer,
           },
+          {
+            title: t(tokens.nav.refer),
+            path: paths.dashboard.refer.index,
+          },
+        ],
+      },
+
+      {
+        title: t(tokens.nav.news),
+        // path: paths.contact,
+        icon: (
+          <SvgIcon fontSize="small">
+            {/* <Mail04Icon /> */}
+            <NewssIcon />
+          </SvgIcon>
+        ),
+        items: [
+          {
+            title: t(tokens.nav.createnews),
+            path: paths.dashboard.news.create,
+          },
+          {
+            title: t(tokens.nav.newslist),
+            path: paths.dashboard.news.list,
+          },
+        ],
+      },
     ],
   },
 ];

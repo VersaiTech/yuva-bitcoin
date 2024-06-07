@@ -20,7 +20,8 @@ export const en = {
   [tokens.nav.allwithdrawal]: 'All Withdrawal',
   [tokens.nav.refer]: 'All Referrals',
   [tokens.nav.referral]: 'Referrals',
-  [tokens.nav.referralRecord]: 'Particular User Referral',
+  [tokens.nav.todayreferral]: 'Today Referrals',
+  [tokens.nav.referralRecord]: 'Refferrals',
   [tokens.nav.deposit]: 'Deposit',
 
   [tokens.nav.alldeposit]: 'All Deposit',

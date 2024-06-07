@@ -489,12 +489,12 @@ const Page = () => {
                 <Typography variant="h4">All Withdrawals</Typography>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                <Button
+                {/* <Button
                   startIcon={<SvgIcon><PlusIcon /></SvgIcon>}
                   variant="contained"
                 >
                   Add
-                </Button>
+                </Button> */}
                 {/* <Stack className="form-group d-flex align-items-center">
                 <TextField
                   type="text"

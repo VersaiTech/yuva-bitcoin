@@ -24,10 +24,10 @@ const tabs = [
     label: 'All',
     value: 'all',
   },
-  // {
-  //   label: 'Pending',
-  //   value: 'hasAcceptedMarketing'
-  // },
+  {
+    label: 'Today Deposit',
+    value: 'hasAcceptedMarketing'
+  },
   // {
   //   label: 'Completed',
   //   value: 'isProspect'

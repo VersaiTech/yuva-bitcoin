@@ -468,7 +468,7 @@ export const CustomerEditForm = ({ customer, ...other }) => {
                 onChange={formik.handleChange}
               >
                 <MenuItem value={true}>Active</MenuItem>
-                <MenuItem value={false}>Inactive</MenuItem>
+                <MenuItem value={false}>Block</MenuItem>
               </Select>
             </Grid>
           </Grid>

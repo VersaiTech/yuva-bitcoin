@@ -31,9 +31,9 @@ export const Modal7 = () => (
           px: 3
         }}
       >
-        <Typography variant="h6">
+        {/* <Typography variant="h6">
           Settings
-        </Typography>
+        </Typography> */}
       </Box>
       <Stack
         sx={{ p: 3 }}

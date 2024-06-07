@@ -8,9 +8,9 @@ export const SettingsButton = (props) => (
          sx={{
            backgroundColor: 'background.paper',
            borderRadius: '50%',
-           bottom: 0,
+           top: 50,
            boxShadow: 16,
-           margin: (theme) => theme.spacing(4),
+           margin: (theme) => theme.spacing(2),
            position: 'fixed',
            right: 0,
            zIndex: (theme) => theme.zIndex.speedDial
@@ -21,7 +21,7 @@ export const SettingsButton = (props) => (
           backgroundColor: 'primary.main',
           borderRadius: '50%',
           color: 'primary.contrastText',
-          p: '10px'
+          p: '7px'
         }}
       >
         <SvgIcon>

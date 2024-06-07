@@ -24,6 +24,8 @@ import {
 import { Scrollbar } from "../../../components/scrollbar";
 import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
+import { green } from "@mui/material/colors";
+import { display } from "@mui/system";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
@@ -141,17 +143,11 @@ export const External_DepositListTable = (props) => {
       )}
       <Scrollbar>
         <Table sx={{ minWidth: 700 }}>
-          <TableHead>
+          <TableHead >
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={handleToggleAll}
-                />
-              </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Transaction id</TableCell>
+              
+              {/* <TableCell>Name</TableCell> */}
+              <TableCell>Transaction Detail</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Deposit Method</TableCell>
@@ -172,48 +168,18 @@ export const External_DepositListTable = (props) => {
                   key={customer.member_user_id}
                   selected={isSelected}
                 >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        const { checked } = event.target;
-
-                        if (checked) {
-                          selectOne(customer.member_user_id);
-                        } else {
-                          deselectOne(customer.member_user_id);
-                        }
-                      }}
-                      value={isSelected}
-                    />
-                  </TableCell>
+                  
+                 
                   <TableCell>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Avatar
-                        src={customer.avatar}
-                        sx={{
-                          height: 42,
-                          width: 42,
-                        }}
-                      >
-                        {getInitials(customer.name)}
-                      </Avatar>
-                      <div>
-                        <Link
-                          color="inherit"
-                          component={NextLink}
-                          href={paths.dashboard.customers.details}
-                          variant="subtitle2"
-                        >
-                          {customer.name}
-                        </Link>
-                        <Typography color="text.secondary" variant="body2">
-                          {customer.email}
-                        </Typography>
-                      </div>
-                    </Stack>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap' }} >
+                      <Typography variant="subtitle2" color={green[500]}>
+                        {"Wallet Address: " + customer.wallet_address}
+                      </Typography>
+                      <Typography variant="caption">
+                        {"Hash: " + customer.transaction_hash}
+                      </Typography>
+                    </Box>
                   </TableCell>
-                  <TableCell>{customer.transaction_hash}</TableCell>
                   <TableCell>{customer.amount}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
