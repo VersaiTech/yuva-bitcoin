@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 
 const Page = () => {
   usePageView();
-  const { enqueueSnackbar } = useSnackbar();
+  const { ueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object().shape({
     setCoinValueMarketUsdt: Yup.number().nullable(),

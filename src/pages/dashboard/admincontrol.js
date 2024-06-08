@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -12,10 +12,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useAuth } from "../../hooks/use-auth";
-// import DashboardLayout from '../layouts/DashboardLayout'; // Adjust the import according to your project structure
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
 import { useSnackbar } from "notistack";
-
 
 const permissions = [
   "USDT Market Value",
@@ -51,8 +49,6 @@ const initialState = {
   setStakePercent2: false,
   setStakePercent3: false,
 };
-// const { enqueueSnackbar } = useSnackbar();
-
 
 const PermissionSettingsPage = () => {
   const [state, setState] = useState(initialState);
@@ -60,6 +56,35 @@ const PermissionSettingsPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem("accessToken");
+        const headers = { Authorization: token };
+
+        const response = await axios.get(`${BASEURL}/api/Permission/getSetValue`, { headers });
+        console.log('Response from fetching permissions:', response);
+        if (response.status === 200) {
+          const permissionsData = response.data.data;
+          // Assuming the API returns an array of permissions with their statuses
+          const updatedState = { ...initialState, ...permissionsData };
+          setState(updatedState);
+        } else {
+          enqueueSnackbar("Failed to fetch permissions", { variant: "error" });
+        }
+      }
+
+     
+      
+      catch (error) {
+        enqueueSnackbar("Failed to fetch permissions", { variant: "error" });
+        console.error("Error fetching permissions", error);
+      }
+    };
+
+    fetchPermissions();
+  }, [enqueueSnackbar]);
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -72,15 +97,16 @@ const PermissionSettingsPage = () => {
       const token = localStorage.getItem("accessToken");
       const headers = { Authorization: token };
 
-      const response = await axios.post(`${BASEURL}/api/Permission/grantPermission`, state,{headers:headers});
-      if (response.status === 200) {
-        enqueueSnackbar("Permissions Set Successful", { variant: "success" });
+      const response = await axios.post(`${BASEURL}/api/Permission/grantPermission`, state, { headers });
+      if (response.status === 201) {
+        enqueueSnackbar("Permissions Set Successfully", { variant: "success" });
         console.log('Permissions updated successfully', response.data);
       } else {
-        
+        enqueueSnackbar("Failed to update permissions", { variant: "error" });
       }
       setIsChanged(false);
     } catch (error) {
+      enqueueSnackbar("Failed to update permissions", { variant: "error" });
       console.error("Error updating permissions", error);
     }
   };
@@ -106,7 +132,7 @@ const PermissionSettingsPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <Typography variant="subtitle1" align="center">
-                Permisson Name
+                Permission Name
               </Typography>
             </Grid>
             <Grid item xs={3}>
@@ -116,7 +142,7 @@ const PermissionSettingsPage = () => {
             </Grid>
             <Grid item xs={3}>
               <Typography variant="subtitle1" align="center">
-                Permisson Name
+                Permission Name
               </Typography>
             </Grid>
             <Grid item xs={3}>

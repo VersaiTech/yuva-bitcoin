@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 import DownloadIcon from '@mui/icons-material/Download';
+// import { paths } from "../../../paths";
 
 export const OverviewWalletUseStake = (props) => {
   const { amount, } = props;
@@ -65,7 +66,7 @@ export const OverviewWalletUseStake = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/stake" passHref>
+        <Link href={paths.dashboard.Stake}>
         <Button
           color="inherit"
           endIcon={
@@ -74,7 +75,7 @@ export const OverviewWalletUseStake = (props) => {
             </SvgIcon>
           }
           size="small"
-          onClick={handleClick}
+          // onClick={handleClick}
         >
           See Stake
         </Button>

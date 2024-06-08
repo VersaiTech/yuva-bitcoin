@@ -1,7 +1,8 @@
 import { useRouter } from "next/navigation";
 import { paths } from "../../../paths";
 import { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography , Input  } from '@mui/material';
+
 import { QuillEditor } from '../../../components/quill-editor';
 import Head from 'next/head';
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
@@ -78,6 +79,14 @@ const CreateNewsPage = () => {
           sx={{ height: 400 }}
           value={formData.content}
           onChange={(value) => setFormData({ ...formData, content: value })}
+        />
+        <Typography sx={{ mt: 3 }} variant="subtitle2">
+          File
+        </Typography>
+        <Input
+          type="file"
+          fullWidth
+          onChange={(e) => setFormData({...formData, file: e.target.files[0]})}
         />
         <Box sx={{ mt: 3 }}>
   <Button type="submit" variant="contained" color="primary">

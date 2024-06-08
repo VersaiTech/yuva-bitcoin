@@ -5,6 +5,7 @@ import { Box, Button, Card, CardActions, Divider,  Stack, SvgIcon, Typography } 
 import { useState } from 'react';
 import { useSnackbar } from "notistack";
 import Link from "next/link";
+import { paths } from '../../../paths';
 
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
@@ -78,7 +79,7 @@ export const OverviewTodayRefferal = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link color="inherit" href="/dashboard/refferal" >
+        <Link color="inherit" href={paths.dashboard.refer.todayreffer} >
         <Button
           color="inherit"
           endIcon={(
@@ -87,7 +88,7 @@ export const OverviewTodayRefferal = (props) => {
             </SvgIcon>
           )}
           size="small"
-          onClick={handleClick}
+         
         >
           Today Refferals 
         </Button>

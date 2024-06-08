@@ -7,7 +7,7 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 import Link from "next/link";
-
+import { paths } from '../../../paths';
 
 export const OverviewWithdrawPendingToday = (props) => {
   const { amount,} = props; // Receive the amount and fetchDummyData function as props
@@ -78,7 +78,9 @@ export const OverviewWithdrawPendingToday = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/dashboard/withdrawal-pending" passHref>
+        {/* <Link href="/dashboard/withdrawal-pending" passHref> */}
+        <Link href={paths.dashboard.withdrawal.pending}>
+
         <Button
           color="inherit"
           endIcon={(
@@ -87,7 +89,7 @@ export const OverviewWithdrawPendingToday = (props) => {
             </SvgIcon>
           )}
           size="small"
-          onClick={handleClick}
+          // onClick={handleClick}
         >
            Withdrawal Pending 
         </Button>

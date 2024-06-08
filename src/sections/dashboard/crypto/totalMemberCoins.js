@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 
 export const TotalMemberCoins = (props) => {
-  const { amount } = props;
+  const { amount = 0 } = props;
 
   return (
     <Card>
@@ -41,7 +41,6 @@ export const TotalMemberCoins = (props) => {
         sx={{
           px: 4,
           py: 3
-
         }}
       >
         <div>
@@ -57,7 +56,7 @@ export const TotalMemberCoins = (props) => {
             color="text.primary"
             variant="h4"
           >
-            {amount}
+            {amount.toFixed(4)}
           </Typography>
         </Box>
       </Stack>
@@ -83,3 +82,5 @@ export const TotalMemberCoins = (props) => {
 TotalMemberCoins.propTypes = {
   transactions: PropTypes.array
 };
+
+

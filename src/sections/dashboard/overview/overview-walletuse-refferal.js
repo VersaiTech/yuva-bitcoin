@@ -65,6 +65,7 @@ export const OverviewWalletUseRefferal = (props) => {
       </Stack>
       <Divider />
       <CardActions>
+        <Link href={paths.dashboard.refer.referRecord}>
         <Button
           color="inherit"
           endIcon={
@@ -73,10 +74,11 @@ export const OverviewWalletUseRefferal = (props) => {
             </SvgIcon>
           }
           size="small"
-          onClick={handleClick}
+          // onClick={handleClick}
         >
           See Refferal
         </Button>
+        </Link>
       </CardActions>
     </Card>
   );

@@ -53,59 +53,10 @@ export const QueriesListTable = (props) => {
   const isSelected = (queryId) => selected.indexOf(queryId) !== -1;
 
   // Function to handle selection
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = queries.map((query) => query.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
 
-  const handleClick = (event, queryId) => {
-    const selectedIndex = selected.indexOf(queryId);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, queryId);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
+ 
   // Function to handle delete operation
-  const handleDelete = async () => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const headers = {
-        Authorization: token,
-      };
-
-      const response = await axios.delete(
-        `${BASEURL}/api/Support/deleteSupportMessage/${selected.join(",")}`,
-        { headers: headers }
-      );
-
-      if (response.status === 200) {
-        enqueueSnackbar("Query deleted successfully", { variant: "success" });
-        // You might want to refresh the queries list or handle it as required
-      } else {
-        enqueueSnackbar("Something went wrong", { variant: "error" });
-      }
-    } catch (err) {
-      enqueueSnackbar(err.message, { variant: "error" });
-      console.error(err);
-    }
-  };
+ 
 
   // Handlers for delete dialog
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
