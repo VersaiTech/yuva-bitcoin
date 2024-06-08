@@ -21,7 +21,7 @@ import axios from "axios";
 import DownloadIcon from '@mui/icons-material/Download';
 
 export const OverviewWalletUseStake = (props) => {
-  const { amount, fetchDummyData } = props;
+  const { amount, } = props;
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
@@ -85,8 +85,8 @@ export const OverviewWalletUseStake = (props) => {
 };
 
 OverviewWalletUseStake.propTypes = {
-  amount: PropTypes.object, // Change the prop type according to your data structure
-  fetchDummyData: PropTypes.func.isRequired,
+  amount: PropTypes.number, // Change the prop type according to your data structure
+  
 };
 
 export default OverviewWalletUseStake;

@@ -64,7 +64,7 @@ export const AllUsers = (props) => {
 };
 
 AllUsers.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };
 
 export default AllUsers;

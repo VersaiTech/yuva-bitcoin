@@ -40,8 +40,9 @@ const tabs = [
   {
     label: 'Approved',
     value: 'isProspect'
-  }
-  ,
+  },
+
+  
   // {
   //   label: 'Returning',
   //   value: 'isReturning'

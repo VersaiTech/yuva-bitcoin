@@ -94,7 +94,7 @@ export const OverviewRegisteredMembers = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="dashboard/users"> {/* Use Next.js Link component */}
+        <Link href={paths.dashboard.users.index}> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={
@@ -114,8 +114,8 @@ export const OverviewRegisteredMembers = (props) => {
 };
 
 OverviewRegisteredMembers.propTypes = {
-  amount: PropTypes.object, // Change the prop type according to your data structure
-  fetchDummyData: PropTypes.func.isRequired,
+  amount: PropTypes.number, // Change the prop type according to your data structure
+  // fetchDummyData: PropTypes.func.isRequired,
 };
 
 export default OverviewRegisteredMembers;

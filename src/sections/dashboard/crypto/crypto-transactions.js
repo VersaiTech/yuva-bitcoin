@@ -85,5 +85,5 @@ export const CryptoTransactions = (props) => {
 };
 
 CryptoTransactions.propTypes = {
-  transactions: PropTypes.array.isRequired
+  transactions: PropTypes.array
 };

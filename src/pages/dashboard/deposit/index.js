@@ -71,7 +71,7 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(TodayUsersResponse.data.data);
+      console.log(TodayUsersResponse);
 
       // const blockedUsersResponse = await axios.get(
       //   `${BASEURL}/admin/getBlockedMembers`,

@@ -65,5 +65,5 @@ export const AllTask = (props) => {
 };
 
 AllTask.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };

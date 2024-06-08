@@ -65,5 +65,5 @@ export const BlockUsers = (props) => {
 };
 
 BlockUsers.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };

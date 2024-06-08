@@ -84,5 +84,5 @@ export const TotalStakesInvestment = (props) => {
 };
 
 TotalStakesInvestment.propTypes = {
-  transactions: PropTypes.array.isRequired
+  transactions: PropTypes.array
 };
