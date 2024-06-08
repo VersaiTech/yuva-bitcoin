@@ -15,6 +15,7 @@ import { useAuth } from "../../hooks/use-auth";
 // import DashboardLayout from '../layouts/DashboardLayout'; // Adjust the import according to your project structure
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
 import { useSnackbar } from "notistack";
+import SetCoin from "./setCoin";
 
 
 const permissions = [
@@ -180,6 +181,9 @@ const PermissionSettingsPage = () => {
                   </Grid>
                 </Paper>
               ))}
+            </Grid>
+            <Grid item xs={12} md={12}>
+            <SetCoin/>
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
