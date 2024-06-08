@@ -46,6 +46,8 @@ const useCustomers = (search) => {
     completed: [],
     rejected: [],
     customersCount: 0,
+    completedTasksCount: 0,
+    rejectedTasksCount: 0,
   });
   const { page, rowsPerPage } = search;
 
@@ -70,12 +72,9 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(pendingTasks.data.tasks);
-      console.log(completedTasks.data.tasks);
-      console.log(rejectedTasks.data.tasks);
-      console.log(pendingTasks)
-      console.log(completedTasks)
-      console.log(rejectedTasks)
+      console.log(pendingTasks.data);
+      console.log(completedTasks.data);
+      console.log(rejectedTasks.data);
 
 
       if (isMounted()) {
@@ -83,7 +82,9 @@ const useCustomers = (search) => {
           pending: pendingTasks.data.tasks,
           completed: completedTasks.data.tasks,
           rejected: rejectedTasks.data.tasks,
-          customersCount: pendingTasks.data.tasks.length,
+          customersCount: pendingTasks.data.totalPendingTasks,
+          completedTasksCount: completedTasks.data.totalCompletedTasks,
+          rejectedTasksCount: rejectedTasks.data.totalRejectedTasks,
           // totalPendingTasks + completedTasks.data.totalCompletedTasks + rejectedTasks.data.totalRejectedTasks,
         });
       }
@@ -103,7 +104,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { completed, rejected, pending ,customersCount } = useCustomers(search);
+  const { completed, rejected, pending ,customersCount, completedTasksCount, rejectedTasksCount } = useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("pending");
 
@@ -176,6 +177,21 @@ const Page = () => {
     [updateSearch]
   );
 
+  const getCurrentTabData = () => {
+    switch (currentTab) {
+      case "pending":
+        return { data: pending, count: customersCount };
+      case "completed":
+        return { data: completed, count: completedTasksCount };
+      case "rejected":
+        return { data: rejected, count: rejectedTasksCount };
+      default:
+        return { data: pending, count: customersCount };
+    }
+  };
+
+  const { data, count } = getCurrentTabData();
+
   return (
     <>
       <Head>
@@ -241,7 +257,7 @@ const Page = () => {
                 setSearchResults={setSearchResults}
               />
               <WorkListTable
-                customersCount={searchResults.length > 0 ? searchResults.length : currentTab === "all" ? customersCount : currentTab === "pending" ? pending.length : currentTab === "completed" ? completed.length : currentTab === "rejected" ? rejected.length : 0}
+                customersCount={count}
 
                 currentTab={currentTab}
                 customers={searchResults.length > 0 ? searchResults : currentData ? currentData : []}

@@ -80,7 +80,6 @@ export const WithdrawalListSearch = (props) => {
   // const [activeUsers, setActiveUsers] = useState([]);
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
-  console.log(sturl);
 
   useEffect(() => {
     if(sturl){

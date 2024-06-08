@@ -64,7 +64,7 @@ const useQueries = (search) => {
       let response = await axios.get(`${BASEURL}/api/Support/getAllSupport/${page + 1}/${rowsPerPage}`, { 
         headers: headers,
       });
-      console.log(response)
+      console.log(response.data)
 
       if (!response) {
         response = [];
@@ -72,7 +72,7 @@ const useQueries = (search) => {
     if (isMounted()) {
         setState({
           queries: response.data.supportMessages,
-          queriesCount: response.data.totalSupport.length,
+          queriesCount: response.data.totalSupport,
         });
         console.log(response.data.supportMessages)
       }
@@ -178,7 +178,7 @@ const Page = () => {
          
             <QueriesListTable 
             queries={queries}
-            queriesCount={queries.length}
+            queriesCount={queriesCount}
             // queriesCount={currentTab === 'all' ? queriesCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : 0}
             onPageChange={handlePageChange}
             onRowsPerPageChange={handleRowsPerPageChange}
