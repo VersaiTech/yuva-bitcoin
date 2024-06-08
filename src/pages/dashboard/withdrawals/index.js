@@ -38,6 +38,9 @@ const useCustomers = (search) => {
     completed: [],
     pending: [],
     customersCount: 0,
+    rejectedCount: 0,
+    completedCount: 0,
+    pendingCount: 0,
   });
 
   const { page, rowsPerPage } = search;
@@ -50,32 +53,39 @@ const useCustomers = (search) => {
       const token = localStorage.getItem("accessToken");
       const headers = { Authorization: token };
       const response = await axios.get(`${BASEURL}${endpoint}`, { headers });
-      return response.data.data || [];
+      return response.data;
     } catch (error) {
       console.error("Error fetching data:", error);
-      return [];
+      return { data: [], totalWithdrawRequests: 0 };
     }
   };
 
   useEffect(() => {
     const fetchDataAndUpdateState = async () => {
-      const promises = [
+      const [
+        customersData,
+        rejectedData,
+        completedData,
+        pendingData,
+      ] = await Promise.all([
         fetchData(`/api/Withdraw/getWithdrawRequests/${page + 1}/${rowsPerPage}`),
         fetchData(`/api/Withdraw/getWithdrawRejected/${page + 1}/${rowsPerPage}`),
         fetchData(`/api/Withdraw/getWithdrawApproved/${page + 1}/${rowsPerPage}`),
         fetchData(`/api/Withdraw/getWithdrawPending/${page + 1}/${rowsPerPage}`),
-      ];
-
-      const [customers, rejected, completed, pending] = await Promise.all(promises);
+      ]);
 
       setState({
-        customers,
-        rejected,
-        completed,
-        pending,
-        customersCount: customers.length,
+        customers: customersData.data,
+        customersCount: customersData.totalWithdrawRequests,
+        rejected: rejectedData.data,
+        rejectedCount: rejectedData.totalRejectedWithdrawRequests,
+        completed: completedData.data,
+        completedCount: completedData.totalApprovedWithdrawRequests,
+        pending: pendingData.data,
+        pendingCount: pendingData.totalPendingWithdrawRequests,
       });
     };
+
 
     fetchDataAndUpdateState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,7 +96,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, completed, rejected, pending } = useCustomers(search);
+  const { customers, customersCount, rejectedCount, pendingCount, completedCount, completed, rejected, pending } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
   // const [search2, setSearch2] = useState("");
   // const [searchedCustomers, setSearchedCustomers] = useState([]);
@@ -135,6 +145,24 @@ const Page = () => {
     },
     [updateSearch]
   );
+
+
+
+  const getCurrentTabData = () => {
+    switch (currentTab) {
+      case "pending":
+        return { data: pending, count: pendingCount };
+      case "hasAcceptedMarketing":
+        return { data: rejected, count: rejectedCount };
+      case "isProspect":
+        return { data: completed, count: completedCount };
+      default:
+        return { data: customers, count: customersCount };
+    }
+  };
+
+  const { data, count } = getCurrentTabData();
+
   return (
     <>
       <Head>
@@ -184,18 +212,7 @@ const Page = () => {
             </Stack>
             <Card>
               <WithdrawalListSearch
-              customers={
-                searchResults.length > 0 ? searchResults :
-                currentTab === "all"
-                  ? customers
-                  : currentTab === "pending"
-                  ? pending
-                  : currentTab === "hasAcceptedMarketing"
-                  ? rejected
-                  : currentTab === "isProspect"
-                  ? completed
-                  : []
-              }
+                customers={data}
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
@@ -208,19 +225,8 @@ const Page = () => {
                 setSearchResults={setSearchResults}
               />
               <WithdrawalsListTable
-                customers={
-                  searchResults.length > 0 ? searchResults :
-                  currentTab === "all"
-                    ? customers
-                    : currentTab === "pending"
-                    ? pending
-                    : currentTab === "hasAcceptedMarketing"
-                    ? rejected
-                    : currentTab === "isProspect"
-                    ? completed
-                    : []
-                }
-                customersCount={searchResults.length > 0 ? searchResults.length : currentTab === "all" ? customersCount :  currentTab === "pending" ? pending.length :  currentTab === "hasAcceptedMarketing" ? rejected.length : currentTab === "isProspect" ? completed.length : customersCount}
+                customers={data}
+                customersCount={count}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

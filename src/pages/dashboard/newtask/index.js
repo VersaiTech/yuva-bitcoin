@@ -78,7 +78,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.tasks,
-          customersCount: 10,
+          customersCount: response.data.allTasks,
         });
       }
       console.log(customers.data.tasks);
