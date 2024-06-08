@@ -8,15 +8,15 @@ const Joi = require('@hapi/joi');
 
 const agentHandler = async (req, res) => {
     const Schema = Joi.object({
-        admin_user_id: Joi.string().required(),
         isActive: Joi.boolean().required(),
     }).unknown();
 
     try {
-        const { error, value } = Schema.validate(req.params);
+        const { error, value } = Schema.validate(req.body);
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
+        const { isActive } = value;
         const admin = req.user;
 
         if (admin.userType !== 'admin') {
@@ -24,8 +24,11 @@ const agentHandler = async (req, res) => {
         }
 
 
-        const { admin_user_id } = value;
-
+        const { admin_user_id } = req.params;
+        //if there is nothing in params give error
+        if (!admin_user_id) {
+            return res.status(400).json({ error: 'Admin user id is required' });
+        }
 
         const checkAgent = await Admin.findOne({ admin_user_id: admin_user_id });
         if (!checkAgent) {
