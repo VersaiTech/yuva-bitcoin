@@ -65,7 +65,7 @@ export const ActiveUsers = (props) => {
 };
 
 ActiveUsers.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };
 
 export default ActiveUsers;

@@ -81,5 +81,5 @@ export const TotalMemberCoins = (props) => {
 };
 
 TotalMemberCoins.propTypes = {
-  transactions: PropTypes.array.isRequired
+  transactions: PropTypes.array
 };

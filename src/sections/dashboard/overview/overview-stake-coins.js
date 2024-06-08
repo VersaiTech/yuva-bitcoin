@@ -7,9 +7,11 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 import Link from "next/link";
+import { paths } from "../../../paths";
+
 
 export const OverviewStakeCoins = (props) => {
-  const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
+  const { amount,  } = props; // Receive the amount and fetchDummyData function as props
   const [openDataForm, setOpenDataForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -19,25 +21,7 @@ export const OverviewStakeCoins = (props) => {
 
  
 
-  const handleDataSubmit = async (data) => {
-    try {
-      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-      const token = localStorage.getItem("accessToken");
-      const headers = { Authorization: token };
-
-      const response = await axios.post(`${BASEURL}/api/Dummy/createDummyData`, data, { headers });
-      
-      if (response.status === 200) {
-        enqueueSnackbar("Data Set Successful", { variant: "success" });
-        await fetchDummyData();
-      } else {
-        enqueueSnackbar(response, { variant: "error" });
-      }
-    } catch (error) {
-      console.error("Error setting data:", error);
-    }
-  };
-
+  
   const totalCoinHolders = amount ? amount : 0;
 
   return (
@@ -77,7 +61,7 @@ export const OverviewStakeCoins = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/dashboard/stake-coins">
+        <Link href={paths.dashboard.deposit.index}> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={(
@@ -105,7 +89,7 @@ export const OverviewStakeCoins = (props) => {
 
 OverviewStakeCoins.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
-  fetchDummyData: PropTypes.func.isRequired,
+  
 };
 
 export default OverviewStakeCoins;
