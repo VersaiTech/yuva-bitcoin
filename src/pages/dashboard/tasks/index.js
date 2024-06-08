@@ -71,9 +71,9 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(response.data.tasks);
+      console.log(response.data);
       tasks.orders = response.data.tasks;
-      tasks.ordersCount = response.data.tasks.length;
+      tasks.ordersCount = response.data.allTasks;
       // tasks.ordersCount = 10; // Assuming 'count' is directly on 'data'
     } catch (err) {
       console.error("Error fetching all tasks:", err);
@@ -84,8 +84,9 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getConfirmedTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(completedTasks.data.tasks);
+      console.log(completedTasks.data);
       tasks.completed = completedTasks.data.tasks;
+      tasks.ordersCount = completedTasks.data.totalCompletedTasks;
     } catch (err) {
       console.error("Error fetching completed tasks:", err);
     }
@@ -95,8 +96,9 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getPendingTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(pendingTasks.data.tasks);
+      console.log(pendingTasks.data);
       tasks.pending = pendingTasks.data.tasks;
+      tasks.ordersCount = pendingTasks.data.totalPenidngTasks;
     } catch (err) {
       console.error("Error fetching pending tasks:", err);
     }
@@ -106,8 +108,9 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getRejectedTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(rejectedTasks.data.tasks);
+      console.log(rejectedTasks.data);
       tasks.rejected = rejectedTasks.data.tasks;
+      tasks.ordersCount = rejectedTasks.data.totalRejectedTasks;
     } catch (err) {
       console.error("Error fetching rejected tasks:", err);
     }

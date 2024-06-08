@@ -46,6 +46,7 @@ const useSearch = () => {
 
 const useCustomers = (search) => {
   const isMounted = useMounted();
+  const { page, rowsPerPage } = search;
   const [state, setState] = useState({
     customers: [],
     customersCount: 0,
@@ -61,7 +62,7 @@ const useCustomers = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/api/Deposit/convertHistoryUser`,
+        `${BASEURL}/api/Deposit/convertHistoryUser/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
       console.log(response.data);
@@ -69,7 +70,7 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.userDeposits,
-          customersCount: response.data.userDeposits.length,
+          customersCount: response.data.userDepositsTotal,
           // pending: pendingTasks.data,
           // completed: completedTasks.data,
         });

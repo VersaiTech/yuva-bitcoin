@@ -69,12 +69,12 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(response.data.data);
+      console.log(response.data);
 
       if (isMounted()) {
         setState({
           customers: response.data.data,
-          customersCount: response.data.data.length,
+          customersCount: response.data.totalUserWithdrawRequests,
           // pending: PendingWithdrawals.data.data,
           // rejected: rejectedWithdrawals.data.data,
           // completed: completedWithdrawals.data.data,

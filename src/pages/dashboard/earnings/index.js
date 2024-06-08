@@ -37,6 +37,7 @@ const useSearch = () => {
 
 const useOrders = (search) => {
   const isMounted = useMounted();
+  const { page, rowsPerPage } = search;
   const [state, setState] = useState({
     orders: [],
     ordersCount: 0
@@ -49,7 +50,7 @@ const useOrders = (search) => {
         Authorization: token,
       }
 
-      const response = await axios.get(`${BASEURL}/admin/getAllTasksUser`, { headers: headers });
+      const response = await axios.get(`${BASEURL}/admin/getAllTasksUser/${page + 1}/${rowsPerPage}`, { headers: headers });
 
       console.log(response.data);
 
