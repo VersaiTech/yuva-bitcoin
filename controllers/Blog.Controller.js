@@ -21,28 +21,7 @@ const createBlog = async (req, res) => {
         if (!req.user || req.user.userType !== 'admin') {
             return res.status(403).json({ error: 'Permission denied. Only admin can Create a Blog.' });
         }
-        const { title, content } = value;
-
-        
-   
-        const formData = new FormData();
-        if (req.files && req.files.length > 0) {
-            formData.append('image', req.files[0].path, { filename: req.files[0].originalname });
-        }
-
-
-        const responseimage = await axios.post('https://images.yuvabitcoin.com/upload', formData, 
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-        );
-        if (!responseimage) {
-            return res.status(400).json({ error: 'Image upload failed' });
-        }
-        console.log(responseimage.data);
-        return res.status(200).json(responseimage.data);
+        const { title, content, imageUrls } = value;
 
 
         const newBlog = new Blog({
