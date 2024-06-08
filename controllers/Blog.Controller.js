@@ -8,6 +8,7 @@ const createBlog = async (req, res) => {
     const schema = Joi.object({
         title: Joi.string().required(),
         content: Joi.string().required(),
+        imageUrls: Joi.array().items(Joi.string()).optional(),
     });
 
     try {
@@ -46,7 +47,8 @@ const createBlog = async (req, res) => {
 
         const newBlog = new Blog({
             title, content,
-            blogId: generateRandomString(), imageUrls: []
+            blogId: generateRandomString(),
+            imageUrls: imageUrls || []
         });
         const savedBlog = await newBlog.save();
         res.status(201).json(savedBlog);
