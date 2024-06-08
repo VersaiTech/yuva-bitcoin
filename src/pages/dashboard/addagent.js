@@ -30,6 +30,40 @@ const PermissionsModal = ({ open, onClose, adminUserId }) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      if (!adminUserId) return;
+
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        Authorization: token,
+      };
+
+      try {
+        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers :headers});
+        const permissionsData = response.data.data.find(item => item.admin_user_id === adminUserId);
+
+        if (permissionsData) {
+          const initialPermissions = Object.keys(permissions).reduce((acc, permission) => {
+            acc[permission] = permissionsData[permission] || false;
+            return acc;
+          }, {});
+
+          setPermissions(initialPermissions);
+        } else {
+          enqueueSnackbar("No permissions data found for this admin user", { variant: "warning" });
+        }
+      } catch (error) {
+        enqueueSnackbar("Error fetching permissions", { variant: "error" });
+        console.error("Error fetching permissions", error.response?.data || error.message);
+      }
+    };
+
+    if (open) {
+      fetchPermissions();
+    }
+  }, [adminUserId, open, enqueueSnackbar]);
+
   const handleSwitchChange = (e) => {
     const { name, checked } = e.target;
     setPermissions((prev) => ({ ...prev, [name]: checked }));
