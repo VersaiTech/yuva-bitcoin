@@ -20,7 +20,7 @@ import Link from "next/link";
 
 
 export const OverviewCoinHolders = (props) => {
-  const { amount, fetchDummyData } = props;
+  const { amount} = props;
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
 
@@ -30,28 +30,6 @@ export const OverviewCoinHolders = (props) => {
 
  
 
-  const handleDataSubmit = async (data) => {
-    try {
-      const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
-      const token = localStorage.getItem("accessToken");
-      const headers = { Authorization: token };
-
-      const response = await axios.post(
-        `${BASEURL}/api/Dummy/createDummyData`,
-        data,
-        { headers }
-      );
-
-      if (response.status === 200) {
-        enqueueSnackbar("Data Set Successful", { variant: "success" });
-        await fetchDummyData();
-      } else {
-        enqueueSnackbar(response, { variant: "error" });
-      }
-    } catch (error) {
-      console.error("Error setting data:", error);
-    }
-  };
 
   const totalCoinHolders = amount ? amount : 0;
 
@@ -118,7 +96,7 @@ export const OverviewCoinHolders = (props) => {
 
 OverviewCoinHolders.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
-  fetchDummyData: PropTypes.func.isRequired,
+  // fetchDummyData: PropTypes.func.isRequired,
 };
 
 export default OverviewCoinHolders;

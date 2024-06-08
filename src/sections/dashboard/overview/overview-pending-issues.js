@@ -64,5 +64,5 @@ export const OverviewPendingIssues = (props) => {
 };
 
 OverviewPendingIssues.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };

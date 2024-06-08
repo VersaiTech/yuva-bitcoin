@@ -63,20 +63,21 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(response.data.data);
+      console.log(response.data);
 
       const TodayUsersResponse = await axios.get(
         `${BASEURL}/admin/stackedToday/`,
         { headers: headers }
       );
 
-      console.log(TodayUsersResponse.data.data);
+      console.log(TodayUsersResponse.data);
 
       if (isMounted()) {
         setState({
           customers: response.data.data,
           customersCount: response.data.data.length,
           todaystake: TodayUsersResponse.data.data,
+          todaystakeCount: TodayUsersResponse.data.counts,
           // rejected: rejectedWithdrawals.data.data,
           // completed: completedWithdrawals.data.data,
         });
@@ -111,6 +112,7 @@ const Page = () => {
     rejected,
     pending,
     todaystake,
+    todaystakeCount,
   } = useCustomers(search);
 
   const [currentTab, setCurrentTab] = useState("all");
@@ -253,7 +255,7 @@ const Page = () => {
                     : currentTab === "all"
                     ? customersCount
                     : currentTab === "pending"
-                    ? pending
+                    ? todaystakeCount
                     : currentTab === "hasAcceptedMarketing"
                     ? rejected.length
                     : currentTab === "isProspect"

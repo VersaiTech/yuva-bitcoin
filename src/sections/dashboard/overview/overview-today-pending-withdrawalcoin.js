@@ -10,7 +10,7 @@ import Link from "next/link";
 
 
 export const OverviewWithdrawPendingToday = (props) => {
-  const { amount, fetchDummyData } = props; // Receive the amount and fetchDummyData function as props
+  const { amount,} = props; // Receive the amount and fetchDummyData function as props
   const [openDataForm, setOpenDataForm] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -106,7 +106,7 @@ export const OverviewWithdrawPendingToday = (props) => {
 
 OverviewWithdrawPendingToday.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
-  fetchDummyData: PropTypes.func.isRequired,
+  
 };
 
 export default OverviewWithdrawPendingToday;

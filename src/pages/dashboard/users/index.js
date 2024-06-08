@@ -49,6 +49,9 @@ const useCustomers = (search) => {
   const [state, setState] = useState({
     customers: [],
     customersCount: 0,
+    activeUsersCount: 0,
+    blockedUsersCount: 0,
+    registeredTodayCount: 0,
     activeUsers: [],
     blockedUsers: [],
     registeredToday: [],
@@ -100,7 +103,10 @@ const useCustomers = (search) => {
       if (isMounted()) {
         setState({
           customers: response.data.members,
-          customersCount: response.data.count.length,
+          customersCount: response.data.count,
+          activeUsersCount: activeUsersResponse.data.count,
+          blockedUsersCount: blockedUsersResponse.data.count,
+          registeredTodayCount: registeredTodayResponse.data.count,
           activeUsers: activeUsersResponse.data.members,
           blockedUsers: blockedUsersResponse.data.members,
           registeredToday: registeredTodayResponse.data.data,
@@ -134,7 +140,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount, activeUsers, blockedUsers, registeredToday } = useCustomers(search);
+  const { customers, customersCount, activeUsers, blockedUsers, registeredToday, activeUsersCount, blockedUsersCount, registeredTodayCount } = useCustomers(search);
   const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
   const [searchResults, setSearchResults] = useState([]);
@@ -202,6 +208,24 @@ const Page = () => {
     });
   };
 
+
+  const getCurrentTabData = () => {
+    switch (currentTab) {
+      case "all":
+        return { data: customers, count: customersCount };
+      case "hasAcceptedMarketing":
+        return { data: activeUsers, count: activeUsersCount };
+      case "isProspect":
+        return { data: blockedUsers, count: blockedUsersCount };
+      case "registeredToday":
+        return { data: registeredToday, count: registeredTodayCount };
+      default:
+        return { data: customers, count: customersCount };
+    }
+  };
+
+  const { data, count } = getCurrentTabData();
+
   return (
     <>
       <Head>
@@ -260,7 +284,7 @@ const Page = () => {
                     
                 }
                 customersCount={searchResults.length > 0 ? searchResults.length :
-                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : currentTab === 'isRegisteredToday' ? registeredToday.length : customersCount}
+                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsersCount : currentTab === 'isProspect' ? blockedUsersCount : currentTab === 'isRegisteredToday' ? registeredTodayCount : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

@@ -64,5 +64,5 @@ export const OverviewDoneTasks = (props) => {
 };
 
 OverviewDoneTasks.propTypes = {
-  amount: PropTypes.number.isRequired
+  amount: PropTypes.number
 };
