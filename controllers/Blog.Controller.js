@@ -5,6 +5,7 @@ const createBlog = async (req, res) => {
     const schema = Joi.object({
         title: Joi.string().required(),
         content: Joi.string().required(),
+        imageUrls: Joi.array().items(Joi.string()).optional(),
     });
     try {
         const { error, value } = schema.validate(req.body);
@@ -16,10 +17,11 @@ const createBlog = async (req, res) => {
         if (!req.user || req.user.userType !== 'admin') {
             return res.status(403).json({ error: 'Permission denied. Only admin can Create a Blog.' });
         }
-        const { title, content } = value;
+        const { title, content, imageUrls } = value;
         const newBlog = new Blog({
             title, content,
-            blogId: generateRandomString(), imageUrls: []
+            blogId: generateRandomString(),
+            imageUrls: imageUrls || []
         });
         const savedBlog = await newBlog.save();
         res.status(201).json(savedBlog);
