@@ -13,7 +13,7 @@ const temporaryAdminOTPSchema = new mongoose.Schema({
     expiry: {
         type: Date,
         default: Date.now,
-        index: { expires: 2 * 60 * 1000 } // expire in 2 minutes
+        index: { expires: 10 * 60 * 1000 } // expire in 10 minutes
     }
 });
 

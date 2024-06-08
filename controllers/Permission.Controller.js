@@ -9,7 +9,7 @@ const Joi = require('@hapi/joi');
 const agentHandler = async (req, res) => {
     const Schema = Joi.object({
         admin_user_id: Joi.string().required(),
-        isActive: Joi.boolean(),
+        isActive: Joi.boolean().required(),
     }).unknown();
 
     try {
@@ -26,10 +26,6 @@ const agentHandler = async (req, res) => {
 
         const { admin_user_id } = value;
 
-        const { isActive } = req.body;
-        if (!isActive) {
-            return res.status(400).json({ error: 'isActive field is required' });
-        }
 
         const checkAgent = await Admin.findOne({ admin_user_id: admin_user_id });
         if (!checkAgent) {
