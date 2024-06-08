@@ -1202,7 +1202,7 @@ async function adminRegister(req, res) {
 async function sendLoginOTP(email, otp) {
   try {
 
-    const imagePath = path.resolve(__dirname, '../public/logo.png')
+    const imagePath = path.resolve(__dirname, '../public/logo.jpeg')
     const images = fs.readFileSync(imagePath)
 
     const base64Image = Buffer.from(images).toString('base64')
