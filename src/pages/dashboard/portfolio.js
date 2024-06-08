@@ -45,6 +45,9 @@ const Page = () => {
         });
 
         setOverview(response.data.overview || {});
+        const deposit_usdt = response.deposit_usdt;
+    // Store deposit_usdt in local storage
+    localStorage.setItem('deposit_usdt', deposit_usdt);
         setLoading(false);
       } catch (error) {
         console.error(error);

@@ -9,6 +9,7 @@ import {
   CardContent,
   Divider,
   Button,
+  Grid,
 } from "@mui/material";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
@@ -24,10 +25,12 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const imageURL = "/assets/logos/yuvalogo2.png";
+const imageURL2 = "/assets/logos/logo-usdt.svg";
 
 const Page = () => {
   // const customer = useCustomer();
   const [customerBalance, setCustomerBalance] = useState(null);
+  const [customerUsdt, setCustomerUsdt] = useState(null);
 
   const getCustomerBalance = useCallback(async () => {
     try {
@@ -48,6 +51,7 @@ const Page = () => {
         headers,
       });
       console.log("API response:", response.data);
+      setCustomerUsdt(response.data.usdt);
       setCustomerBalance(response.data.balance);
     } catch (err) {
       console.error(err);
@@ -95,8 +99,10 @@ const Page = () => {
                 </Link>
               </div>
               <div>
-                <Container maxWidth="sm" sx={{ textAlign: "center" }}>
-                  <Card >
+              <Container maxWidth="sm" sx={{ textAlign: "center" }}>
+              <Grid container spacing={2} justifyContent="center">
+                <Grid item xs={12} sm={6}>
+                  <Card>
                     <CardHeader
                       subheader={
                         <Typography variant="h3" color="text.primary">
@@ -114,17 +120,49 @@ const Page = () => {
                             : 0}
                         </Typography>
                       }
-                      sx={{ pb: 0 , marginBottom: 3 }}
+                      sx={{ pb: 0, marginBottom: 3 }}
                       title={
                         <>
                           <Typography color="text.primary" variant="overline">
-                            Total balance
+                            Total Yuva Bitcoin
                           </Typography>
                         </>
                       }
                     />
                   </Card>
-                </Container>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Card>
+                    <CardHeader
+                      subheader={
+                        <Typography variant="h3" color="text.primary">
+                          {imageURL2 && (
+                            <Image
+                              src={imageURL2}
+                              alt="Image"
+                              width={30}
+                              height={30}
+                            />
+                          )}{" "}
+                          {/* Render image if imageURL is available */}
+                          {customerUsdt !== null
+                            ? customerUsdt.toFixed(4)
+                            : 0}
+                        </Typography>
+                      }
+                      sx={{ pb: 0, marginBottom: 3 }}
+                      title={
+                        <>
+                          <Typography color="text.primary" variant="overline">
+                            Total USDT
+                          </Typography>
+                        </>
+                      }
+                    />
+                  </Card>
+                </Grid>
+              </Grid>
+            </Container>
               </div>
             </Stack>
             <WithdrawalsCreateForm /> {/* handleSubmit={handleSubmit} */}

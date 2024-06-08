@@ -1,8 +1,12 @@
+
+
+
 import NextLink from "next/link";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import GenderSelector from "../../../pages/components/withdrawSelect";
 import {
   Button,
   Card,
@@ -15,6 +19,7 @@ import {
   Typography,
   MenuItem,
   Select,
+  FormControlLabel,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 import { paths } from "../../../paths";
@@ -36,23 +41,32 @@ export const WithdrawalsCreateForm = (props) => {
   const formik = useFormik({
     initialValues: {
       amount: "",
+      conversion_type: "usdt", // Default to USDT
     },
-    validationSchema: Yup.object({}),
+    validationSchema: Yup.object({
+      amount: Yup.number().required('Amount is required').positive('Amount must be positive'),
+    }),
     onSubmit: async (values, helpers) => {
       try {
         const token = localStorage.getItem("accessToken");
         const headers = {
           Authorization: token,
         };
-
+    
+        // Include conversion_type in the payload
+        const payload = {
+          amount: values.amount,
+          conversion_type: values.conversion_type,
+        };
+    
         const response = await axios.post(
           `${BASEURL}/api/Withdraw/Request`,
-          values,
+          payload, // Send payload instead of values
           { headers: headers }
         );
-
+    
         console.log(response.data.data);
-
+    
         if (response.status === 200) {
           enqueueSnackbar("Request sent successfully", { variant: "success" });
           console.log(response);
@@ -110,6 +124,19 @@ export const WithdrawalsCreateForm = (props) => {
                   value={formik.values.amount}
                 />
               </Grid>
+              <Grid xs={12} md={6}>
+              <FormControlLabel
+              control={
+                <Switch
+                  checked={formik.values.conversion_type === "yuva"}
+                  onChange={(event) =>
+                    formik.setFieldValue("conversion_type", event.target.checked ? "yuva" : "usdt")
+                  }
+                />
+              }
+              label={formik.values.conversion_type === "yuva" ? "Yuva" : "USDT"}
+            />
+              </Grid>
             </Grid>
           </CardContent>
 
@@ -123,7 +150,6 @@ export const WithdrawalsCreateForm = (props) => {
             sx={{ p: 3 }}
           >
             <Button
-              // disabled={formik.isSubmitting}
               type="submit"
               variant="contained"
             >
@@ -152,6 +178,6 @@ export const WithdrawalsCreateForm = (props) => {
 };
 
 WithdrawalsCreateForm.propTypes = {
-  // @ts-ignore
   customer: PropTypes.object.isRequired,
 };
+

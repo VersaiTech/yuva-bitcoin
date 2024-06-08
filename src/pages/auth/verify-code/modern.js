@@ -38,7 +38,7 @@ const Page = () => {
   const router = useRouter(); // Initialize useRouter
   const [isResending, setIsResending] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [countdown, setCountdown] = useState(10); // Initial countdown value in seconds
+  const [countdown, setCountdown] = useState(60); // Initial countdown value in seconds
   const email = localStorage.getItem("email");
 const member_name = localStorage.getItem("member_name");
 const contactNo = localStorage.getItem("contactNo");
