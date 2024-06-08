@@ -193,29 +193,70 @@ export const StakeListSearch = (props) => {
   };
 
   // For handling the download logic of excel from modal option
-  const handleExportOptionsSubmit = (option) => {
-    // Handle the submission of export options
-    console.log("Selected export option:", option);
-    // Perform export logic based on the selected option
-    // For now, just close the modal
-    setExportModalOpen(false);
+  const handleExportOptionsSubmit = (option,startDate,endDate) => {
+  console.log('Selected export option:', option);  
+  
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : null;
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : null;
+
+  
+  let dataToExport = [];
+
+  if (option === 'all') {
+    // Export all users data
+    dataToExport = customers.map((customer) => ({
+      member_user_id: customer.member_user_id,
+        member_name: customer.member_name,
+        investment: customer.investment,
+        transaction_id: customer.transaction_id,
+        stake_type: customer.stake_type,
+        stakingDuration: customer.stakingDuration,
+        interestCredited: customer.interestCredited,
+        sys_date: customer.sys_date,
+    }));
+  } else {
+    // Filter data based on date range
+    dataToExport = customers
+      .filter((customer) => {
+        // Assuming the customer object has a 'createdAt' field representing the creation date
+        return customer.sys_date >= formattedStartDate && customer.sys_date <= formattedEndDate;
+      })
+      .map((customer) => ({
+        member_user_id: customer.member_user_id,
+        member_name: customer.member_name,
+        investment: customer.investment,
+        transaction_id: customer.transaction_id,
+        stake_type: customer.stake_type,
+        stakingDuration: customer.stakingDuration,
+        interestCredited: customer.interestCredited,
+        sys_date: customer.sys_date,
+      }));
+  }
+
+  console.log("Data to be exported is ",dataToExport);
+  handleExportToExcelDownload(dataToExport)
+  setExportModalOpen(false);
   };
 
   // For downloading all data directly
 
-  const handleExportToExcelDownload = () => {
+  const handleExportToExcelDownload = (dataToExport) => {
     try {
+      console.log("Data To export inside  is ",dataToExport);
       // Format customers data into an Excel-compatible format
-      const data = customers.map((customer) => ({
-        "Member User ID": customer.member_user_id,
-        "Member Name": customer.member_name,
-        Investment: customer.investment,
-        "Transaction ID": customer.transaction_id,
-        "Stake Type": customer.stake_type,
-        "Staking Duration": customer.stakingDuration,
-        "Interest Credited": customer.interestCredited,
-        "System Date": customer.sys_date,
+      const data = dataToExport.map((customer) => ({
+        "Member User ID": customer.member_user_id || '' ,
+        "Member Name": customer.member_name || '' ,
+        Investment: customer.investment || '' ,
+        "Transaction ID": customer.transaction_id || '' ,
+        "Stake Type": customer.stake_type || '' ,
+        "Staking Duration": customer.stakingDuration || '' ,
+        "Interest Credited": customer.interestCredited || '' ,
+        "System Date": customer.sys_date || '' ,
       }));
+
+      console.log("Data now is ",data);
+
 
       // Create a new workbook
       const workbook = XLSX.utils.book_new();
@@ -313,7 +354,7 @@ export const StakeListSearch = (props) => {
               </SvgIcon>
             }
             size="small"
-            onClick={handleExportToExcelDownload}
+            onClick={handleExportToExcel}
           >
             Export to Excel
           </Button>
