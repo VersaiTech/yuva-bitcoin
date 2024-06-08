@@ -284,7 +284,7 @@ const Page = () => {
                     
                 }
                 customersCount={searchResults.length > 0 ? searchResults.length :
-                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsers.length : currentTab === 'isProspect' ? blockedUsers.length : currentTab === 'isRegisteredToday' ? registeredToday.length : customersCount}
+                  currentTab === 'all' ? customersCount : currentTab === 'hasAcceptedMarketing' ? activeUsersCount : currentTab === 'isProspect' ? blockedUsersCount : currentTab === 'isRegisteredToday' ? registeredTodayCount : customersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

@@ -36,7 +36,7 @@ const OrderForm = ({ open, handleClose }) => {
         .required('Required'),
     }),
     onSubmit: async (values) => {
-      const { confirmPassword, ...rest } = values; // Exclude confirmPassword from the values
+      const { confirmPassword, ...rest } = values; // Exclude confirmPassword from the valupathses
       try {
         const response = await axios.post(`${BASEURL}/api/Auth/admin-register`, rest);
         console.log('Agent added successfully', response.data);

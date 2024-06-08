@@ -1,45 +1,4 @@
-// // ExportOptionsModal.js
 
-// import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { Dialog, DialogActions, DialogContent, DialogTitle, Button, FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
-
-// export const ExportOptionsModal = ({ open, onClose, onSubmit }) => {
-//   const [selectedOption, setSelectedOption] = useState('all');
-
-//   const handleChange = (event) => {
-//     setSelectedOption(event.target.value);
-//   };
-
-//   const handleSubmit = () => {
-//     onSubmit(selectedOption);
-//     onClose();
-//   };
-
-//   return (
-//     <Dialog open={open} onClose={onClose}>
-//       <DialogTitle>Export Options</DialogTitle>
-//       <DialogContent>
-//         <FormControl component="fieldset">
-//           <RadioGroup value={selectedOption} onChange={handleChange}>
-//             <FormControlLabel value="all" control={<Radio />} label="All Data" />
-//             <FormControlLabel value="dateRange" control={<Radio />} label="Data Within Date Range" />
-//           </RadioGroup>
-//         </FormControl>
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={onClose}>Cancel</Button>
-//         <Button onClick={handleSubmit}>Done</Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
-// };
-
-// ExportOptionsModal.propTypes = {
-//   open: PropTypes.bool.isRequired,
-//   onClose: PropTypes.func.isRequired,
-//   onSubmit: PropTypes.func.isRequired,
-// };
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
@@ -54,6 +13,7 @@ import {
   RadioGroup,
   Radio,
   TextField,
+  Box, // Add Box component
 } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -98,13 +58,13 @@ export const ExportOptionsModal = ({ open, onClose, onSubmit }) => {
           </RadioGroup>
         </FormControl>
         {selectedOption === "dateRange" && (
-          <>
+          <Box display="flex" flexDirection="column"> {/* Container for alignment */}
             <DatePicker
               label="Start Date"
               value={startDate}
               onChange={handleStartDateChange}
-              renderInput={(params) => <TextField {...params} />}
               fullWidth
+              renderInput={(params) => <TextField {...params} />}
               sx={{ mt: 2 }}
             />
             <DatePicker
@@ -112,9 +72,10 @@ export const ExportOptionsModal = ({ open, onClose, onSubmit }) => {
               value={endDate}
               onChange={handleEndDateChange}
               fullWidth
+              renderInput={(params) => <TextField {...params} />}
               sx={{ mt: 2 }}
             />
-          </>
+          </Box>
         )}
       </DialogContent>
       <DialogActions>

@@ -142,29 +142,65 @@ export const CustomerListSearch = (props) => {
   };
 
 // For handling the download logic of excel from modal option 
-  const handleExportOptionsSubmit = (option) => {
-    // Handle the submission of export options
-    console.log('Selected export option:', option);
-    // Perform export logic based on the selected option
-    // For now, just close the modal
-    setExportModalOpen(false);
-  };
+  const handleExportOptionsSubmit = (option,startDate,endDate) => {
+  console.log('Selected export option:', option);
 
-// For downloading all data directly
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : null;
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : null;
+  
+  let dataToExport = [];
 
-
-const handleExportToExcelDownload = () => {
-  try {
-    // Format customers data into an Excel-compatible format
-    const data = customers.map((customer) => ({
+  if (option === 'all') {
+    // Export all users data
+    dataToExport = customers.map((customer) => ({
       Name: customer.member_user_id,
-      TwitterId:customer.twitterId,
+      TwitterId: customer.twitterId,
       Email: customer.email,
       Coins: customer.coins,
       IsActive: customer.isActive,
       Contact: customer.contactNo,
       // Add more fields as needed
     }));
+  } else {
+    // Filter data based on date range
+    dataToExport = customers
+      .filter((customer) => {
+        // Assuming the customer object has a 'createdAt' field representing the creation date
+        return customer.createdAt >= formattedStartDate && customer.createdAt <= formattedEndDate;
+      })
+      .map((customer) => ({
+        Name: customer.member_user_id,
+        TwitterId: customer.twitterId,
+        Email: customer.email,
+        Coins: customer.coins,
+        IsActive: customer.isActive,
+        Contact: customer.contactNo,
+        // Add more fields as needed
+      }));
+  }
+
+  console.log("Data to be exported is ",dataToExport);
+  handleExportToExcelDownload(dataToExport)
+  setExportModalOpen(false);
+  };
+
+// For downloading all data directly
+
+
+const handleExportToExcelDownload = (dataToExport) => {
+  try {
+    // Format customers data into an Excel-compatible format
+    console.log(dataToExport);
+    const data = dataToExport.map((customer) => ({
+      "Member Id": customer.Name || '', 
+      "Twitter Id": customer.TwitterId || '',
+      Email: customer.Email || '',
+      Coins: customer.Coins || '',
+      "Active Status": customer.IsActive || '',
+      Contact: customer.Contact || '',
+      // Add more fields as needed
+    }));
+    console.log("Data now is ",data);
 
     // Create a new workbook
     const workbook = XLSX.utils.book_new();
@@ -311,7 +347,8 @@ const handleExportToExcelDownload = () => {
         </SvgIcon>
       }
       size="small"
-      onClick={handleExportToExcelDownload}
+      // onClick={handleExportToExcelDownload}
+      onClick={handleExportToExcel}
     >
       Export to Excel
     </Button>

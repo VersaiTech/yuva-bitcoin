@@ -89,10 +89,6 @@ export const WithdrawalListSearch = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sturl]);
 
-  useEffect(() => {
-    console.log(currentTab);
-  })
-
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -184,28 +180,60 @@ const handleExportToExcel = () => {
 };
 
 // For handling the download logic of excel from modal option 
-const handleExportOptionsSubmit = (option) => {
-  // Handle the submission of export options
-  console.log('Selected export option:', option);
-  // Perform export logic based on the selected option
-  // For now, just close the modal
+const handleExportOptionsSubmit = (option,startDate,endDate) => {
+
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : null;
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : null;
+
+  
+  let dataToExport = [];
+
+  if (option === 'all') {
+    // Export all users data
+    dataToExport = customers.map((customer) => ({
+      member_user_id: customer.member_user_id,
+      member_name:customer.member_name,
+      with_date: customer.with_date,
+      wallet_address: customer.wallet_address,
+      with_amt: customer.with_amt,
+      with_referrance: customer.with_referrance,
+      status: customer.status,
+    }));
+  } else {
+    // Filter data based on date range
+    dataToExport = customers
+      .filter((customer) => {
+        // Assuming the customer object has a 'createdAt' field representing the creation date
+        return customer.with_date >= formattedStartDate && customer.with_date <= formattedEndDate;
+      })
+      .map((customer) => ({
+        member_user_id: customer.member_user_id,
+        member_name:customer.member_name,
+        with_date: customer.with_date,
+        wallet_address: customer.wallet_address,
+        with_amt: customer.with_amt,
+        with_referrance: customer.with_referrance,
+        status: customer.status,
+      }));
+  }
+
+  handleExportToExcelDownload(dataToExport)
   setExportModalOpen(false);
-};
+  };
 
 // For downloading all data directly
 
 
-const handleExportToExcelDownload = () => {
+const handleExportToExcelDownload = (dataToExport) => {
 try {
-  // Format customers data into an Excel-compatible format
-  const data = customers.map((customer) => ({
-    MemberId: customer.member_user_id,
-    Name:customer.member_name,
-    Date: customer.with_date,
-    Wallet: customer.wallet_address,
-    Amount: customer.with_amt,
-    Referance: customer.with_referrance,
-    Status: customer.status,
+  const data = dataToExport.map((customer) => ({
+    MemberId: customer.member_user_id || '',
+    Name:customer.member_name || '',
+    Date: customer.with_date || '',
+    Wallet: customer.wallet_address || '',
+    Amount: customer.with_amt || '',
+    Referance: customer.with_referrance || '',
+    Status: customer.status || '',
     // Add more fields as needed
   }));
 
@@ -305,7 +333,7 @@ try {
       </SvgIcon>
     }
     size="small"
-    onClick={handleExportToExcelDownload}
+    onClick={handleExportToExcel}
   >
     Export to Excel
   </Button>

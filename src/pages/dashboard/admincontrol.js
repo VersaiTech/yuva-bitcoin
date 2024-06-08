@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
 import {
   Box,
   Button,
@@ -14,6 +14,8 @@ import axios from "axios";
 import { useAuth } from "../../hooks/use-auth";
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
 import { useSnackbar } from "notistack";
+import SetCoin from "./setCoin";
+
 
 const permissions = [
   "USDT Market Value",
@@ -32,26 +34,12 @@ const permissions = [
   "setStakePercent3",
 ];
 
-const initialState = {
-  admin_user_id: '8761087',  // Replace with actual admin user ID as needed
-  setCoinValueMarketUsdt: false,
-  setMinimumAmountMarketUsdt: false,
-  setCoinValueMarketYUVA: false,
-  setMinimumAmountMarketYUVA: false,
-  setMinimumWithdrawal: false,
-  setMaximumWithdrawal: false,
-  setRegisterCoinValue: false,
-  setReferralCoinValue: false,
-  setStakeMonth1: false,
-  setStakeMonth2: false,
-  setStakeMonth3: false,
-  setStakePercent1: false,
-  setStakePercent2: false,
-  setStakePercent3: false,
-};
+
+// const { enqueueSnackbar } = useSnackbar();
+
 
 const PermissionSettingsPage = () => {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState({});
   const [isChanged, setIsChanged] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
@@ -61,30 +49,36 @@ const PermissionSettingsPage = () => {
       try {
         const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
         const token = localStorage.getItem("accessToken");
+        const adminUserId = localStorage.getItem("admin_user_id");
         const headers = { Authorization: token };
 
-        const response = await axios.get(`${BASEURL}/api/Permission/getSetValue`, { headers });
-        console.log('Response from fetching permissions:', response);
+        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers:headers });
+
         if (response.status === 200) {
-          const permissionsData = response.data.data;
-          // Assuming the API returns an array of permissions with their statuses
-          const updatedState = { ...initialState, ...permissionsData };
-          setState(updatedState);
+          const permissionsData = response.data.data.find(item => item.admin_user_id === adminUserId);
+          console.log("Particular row",permissionsData);
+          const initialPermissions = permissions.reduce((acc, permission) => {
+            acc[permission] = permissionsData[permission] || false;
+            return acc;
+          }, {});
+          
+          setState({
+            admin_user_id: adminUserId,
+            ...initialPermissions,
+          });
         } else {
           enqueueSnackbar("Failed to fetch permissions", { variant: "error" });
         }
-      }
-
-     
-      
-      catch (error) {
-        enqueueSnackbar("Failed to fetch permissions", { variant: "error" });
+      } catch (error) {
+        enqueueSnackbar("Error fetching permissions", { variant: "error" });
         console.error("Error fetching permissions", error);
       }
     };
 
     fetchPermissions();
   }, [enqueueSnackbar]);
+
+
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -206,6 +200,9 @@ const PermissionSettingsPage = () => {
                   </Grid>
                 </Paper>
               ))}
+            </Grid>
+            <Grid item xs={12} md={12}>
+            <SetCoin/>
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
