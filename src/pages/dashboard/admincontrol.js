@@ -108,6 +108,34 @@ const PermissionSettingsPage = () => {
   const half = Math.ceil(permissions.length / 2);
   const leftPermissions = permissions.slice(0, half);
   const rightPermissions = permissions.slice(half);
+  // Modify the permission names for better readability
+
+  const permissionNames = {
+    "setCoinValueMarketUsdt": "Set USDT Market Coin Value",
+    "setMinimumAmountMarketUsdt": "Set Minimum Amount for USDT Market",
+    "setCoinValueMarketYUVA": "Set YUVA Market Coin Value",
+    "setMinimumAmountMarketYUVA": "Set Minimum Amount for YUVA Market",
+    "setMinimumWithdrawal": "Set Minimum Withdrawal Amount",
+    "setMaximumWithdrawal": "Set Maximum Withdrawal Amount",
+    "setRegisterCoinValue": "Set Coin Value for Registration",
+    "setReferralCoinValue": "Set Coin Value for Referral",
+    "setStakeMonth1": "Set Stake for Month 1",
+    "setStakeMonth2": "Set Stake for Month 2",
+    "setStakeMonth3": "Set Stake for Month 3",
+    "setStakePercent1": "Set Stake Percentage for Month 1",
+    "setStakePercent2": "Set Stake Percentage for Month 2",
+    "setStakePercent3": "Set Stake Percentage for Month 3",
+    "setMinimumReferralamount": "Set Minimum Referral Amount",
+    "setMinimumWithdrawalusdt": "Set Minimum Withdrawal Amount for USDT",
+    "setMaximumWithdrawalusdt": "Set Maximum Withdrawal Amount for USDT",
+    // Add more permissions as needed
+  };
+  
+
+// Function to get a readable name for a permission
+const getReadablePermissionName = (permission) => {
+  return permissionNames[permission] || permission;
+};
 
   return (
     <Box
@@ -116,93 +144,67 @@ const PermissionSettingsPage = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
+        padding: "20px", // Add padding for better spacing
       }}
     >
       {user?.data?.data?.userType === "admin" ? (
-        <Card sx={{ width: 800, padding: 4 }}>
-          <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
+        <Card sx={{ maxWidth: 800 }}>
+          <Typography variant="h5" align="center" sx={{ marginY: 3 }}>
             Set Permission
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={3}>
-              <Typography variant="subtitle1" align="center">
-                Permission Name
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography variant="subtitle1" align="center">
-                Status
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography variant="subtitle1" align="center">
-                Permission Name
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography variant="subtitle1" align="center">
-                Status
-              </Typography>
-            </Grid>
-          </Grid>
-          <Divider sx={{ marginY: 2 }} />
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              {leftPermissions.map((permission) => (
-                <Paper
-                  elevation={3}
-                  sx={{ padding: 2, marginBottom: 2 }}
-                  key={permission}
-                >
-                  <Grid container alignItems="center">
-                    <Grid item xs={8}>
-                      <Typography variant="body2">{permission}</Typography>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={state[permission]}
-                            onChange={handleChange}
-                            name={permission}
-                            color="primary"
-                          />
-                        }
-                      />
-                    </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container direction="column" spacing={2}>
+                {permissions.slice(0, half).map((permission) => (
+                  <Grid item key={permission}>
+                    <Paper elevation={3} sx={{ padding: "10px" }}>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="body2" sx={{ flex: 1 }}>
+                          {getReadablePermissionName(permission)}
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={state[permission]}
+                              onChange={handleChange}
+                              name={permission}
+                              color="primary"
+                            />
+                          }
+                        />
+                      </Box>
+                    </Paper>
                   </Grid>
-                </Paper>
-              ))}
+                ))}
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              {rightPermissions.map((permission) => (
-                <Paper
-                  elevation={3}
-                  sx={{ padding: 2, marginBottom: 2 }}
-                  key={permission}
-                >
-                  <Grid container alignItems="center">
-                    <Grid item xs={8}>
-                      <Typography variant="body2">{permission}</Typography>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={state[permission]}
-                            onChange={handleChange}
-                            name={permission}
-                            color="primary"
-                          />
-                        }
-                      />
-                    </Grid>
+            <Grid item xs={12} md={6}>
+              <Grid container direction="column" spacing={2}>
+                {permissions.slice(half).map((permission) => (
+                  <Grid item key={permission}>
+                    <Paper elevation={3} sx={{ padding: "10px" }}>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Typography variant="body2" sx={{ flex: 1 }}>
+                        {getReadablePermissionName(permission)}
+                        </Typography>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={state[permission]}
+                              onChange={handleChange}
+                              name={permission}
+                              color="primary"
+                            />
+                          }
+                        />
+                      </Box>
+                    </Paper>
                   </Grid>
-                </Paper>
-              ))}
+                ))}
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={12}>
-            <SetCoin/>
+            <Grid item xs={12}>
+              <SetCoin />
             </Grid>
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
@@ -212,6 +214,9 @@ const PermissionSettingsPage = () => {
               sx={{
                 bgcolor: isChanged ? "#00ff00" : "#d5e8d4",
                 color: isChanged ? "black" : "grey",
+                "&:hover": {
+                  bgcolor: isChanged ? "#00cc00" : "#c5e5c4",
+                },
               }}
               disabled={!isChanged}
             >
@@ -220,7 +225,7 @@ const PermissionSettingsPage = () => {
           </Box>
         </Card>
       ) : (
-        <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
+        <Typography variant="h5" align="center" sx={{ marginY: 3 }}>
           You are not an admin
         </Typography>
       )}
