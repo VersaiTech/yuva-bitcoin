@@ -26,19 +26,26 @@ import { QuillEditor } from "../../../components/quill-editor";
 import { useRef, useEffect } from "react";
 import { TextFields } from "@mui/icons-material";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 
 const validationSchema = Yup.object({
   member_name: Yup.string().max(255),
-  // email: Yup.string()
-  //   .max(255)
-
-  contactNo: Yup.string()
-    .matches(/^\d{10}$/, "Invalid phone number")
-   ,
+  contactNo: Yup.string().matches(/^\d{10}$/, "Invalid phone number"),
   wallet_address: Yup.string()
+    .required("Wallet Address is required")
+    .min(15, "Must be atleast 15 characters"),
+  twitterId: Yup.string()
+    .matches(
+      /^[a-zA-Z0-9_]+$/,
+      'Please enter a valid Twitter username without "@"'
+    )
+    .max(60, "Must be at most 60 characters")
+    .required("Twitter ID is required"),
 });
 
 const ModalContent = ({ handleCloseModal, memberData }) => {
+  console.log(memberData);
+  const {enqueueSnackbar}=useSnackbar();
   const [submitting, setSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // State to track component mounting
 
@@ -52,15 +59,15 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
   const initialValues = memberData
     ? {
         member_name: memberData.member_name,
-        // email: memberData.email ,
         contactNo: memberData.contactNo,
         wallet_address: memberData.wallet_address,
+        twitterId: memberData.twitterId
       }
     : {
         member_name: "",
-        // email: "",
         contactNo: "",
         wallet_address: "",
+        twitterId:"",
       };
   const formik = useFormik({
     initialValues: initialValues,
@@ -81,9 +88,9 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
         // Prepare request body for posting new review
         const requestBody = {
           member_name: values.member_name,
-          // email: values.email,
           contactNo: values.contactNo,
           wallet_address: values.wallet_address,
+          twitterId:values.twitterId,
         };
         // Make POST request using Axios
         const response = await axios.post(
@@ -94,10 +101,17 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
           }
         );
         console.log("Form values:", response.data); // Log response data
-        handleCloseModal(); // Close modal on successful submission
-        if (isMounted) {
-          window.location.href = "/dashboard/social/profile";
+        if (response.status === 200) {
+          // Enqueue success notification
+          enqueueSnackbar("Updated Successfully", { variant: "success" });
+          handleCloseModal(); // Close modal on successful submission
+          // if (isMounted) {
+          //   window.location.href = "/dashboard/social/profile";
+          // }
         }
+        // if (isMounted) {
+        //   window.location.href = "/dashboard/social/profile";
+        // }
       } catch (error) {
         console.error("Error submitting form:", error);
       } finally {
@@ -170,6 +184,17 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
               formik.touched.wallet_address && formik.errors.wallet_address
             }
           />
+          <TextField
+            fullWidth
+            id="twitterId"
+            name="twitterId"
+            label="Twitter ID"
+            variant="outlined"
+            value={formik.values.twitterId}
+            onChange={formik.handleChange}
+            error={formik.touched.twitterId && Boolean(formik.errors.twitterId)}
+            helperText={formik.touched.twitterId && formik.errors.twitterId}
+          />
           <Button type="submit" variant="contained" fullWidth>
             Submit
           </Button>
@@ -181,7 +206,7 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
 
 export default ModalContent;
 
-export const Modal1 = ({ open, handleCloseModal }) => {
+export const Modal1 = ({ open, handleCloseModal,memberData }) => {
   const modalRef = useRef();
 
   // useEffect(() => {
@@ -246,7 +271,7 @@ export const Modal1 = ({ open, handleCloseModal }) => {
           padding: 3, // Add padding for better appearance
         }}
       >
-        <ModalContent handleCloseModal={handleCloseModal} />
+        <ModalContent handleCloseModal={handleCloseModal} memberData={memberData} />
       </Paper>
     </Box>
   );

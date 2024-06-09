@@ -19,7 +19,7 @@ import User01Icon from "@untitled-ui/icons-react/build/esm/User01";
 import { useCallback, useEffect, useState } from "react";
 import { useMounted } from "../../../hooks/use-mounted";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { Modal1 } from "../../../sections/components/modals/modal-1";
+import ModalContent, { Modal1 } from "../../../sections/components/modals/modal-1";
 import axios from "axios";
 import { SeverityPill } from "../../../components/severity-pill";
 import { display } from "@mui/system";
@@ -171,7 +171,7 @@ export const SocialProfile = () => {
                 </TableCell>
                 <TableCell>
                   <Typography color="text.secondary" variant="body2">
-                    {memberData.coins + " YB"}
+                    {(memberData.coins).toFixed(4) + " YB"}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -188,16 +188,6 @@ export const SocialProfile = () => {
             </TableBody>
           </Table>
           <Stack alignItems="flex-start" spacing={1} sx={{ p: 1 }}>
-            {/* <Button
-            color="inherit"
-            startIcon={
-              <SvgIcon>
-                <Lock01Icon />
-              </SvgIcon>
-            }
-          >
-            Delete Account
-          </Button> */}
             <Button
               color="inherit"
               startIcon={
@@ -210,7 +200,7 @@ export const SocialProfile = () => {
               Edit Profile
             </Button>
           </Stack>
-          {isModalOpen && (
+          {isModalOpen && memberData && (
             <Modal1
               isOpen={isModalOpen}
               handleCloseModal={handleCloseModal}
