@@ -1,4 +1,4 @@
-import { applyPagination } from '../../utils/apply-pagination';
+import { apply   } from '../../utils/apply-pagination';
 import { applySort } from '../../utils/apply-sort';
 import { deepCopy } from '../../utils/deep-copy';
 import { customer, customers, emails, invoices, logs } from './data';

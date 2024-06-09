@@ -22,7 +22,7 @@
 //   const [invitationLink, setInvitationLink] = useState(`https://yuvabitcoin.com/auth/register/modern?code=`);
 
 //   const handleCopyLink = () => {
-//     navigator.clipboard.writeText(invitationLink + invitationCode);
+//     navigator.clipboard.writeText(invitationLink + invitationCo  de);
 //   };
 
 
@@ -138,7 +138,7 @@ const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const ReferralPage = () => {
   const [invitationCode, setInvitationCode] = useState('');
-  const [invitationLink, setInvitationLink] = useState(`https://yuvabitcoin.com/auth/register/modern?code=`);
+  const [invitationLink, setInvitationLink] = useState(`https://user.yuvabitcoin.com/auth/register/modern?code=`);
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyLink = (link) => {
