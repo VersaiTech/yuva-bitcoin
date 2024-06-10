@@ -29,7 +29,7 @@ import { green } from "@mui/material/colors";
 
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.id);
+    return customers?.map((customer) => customer.id);
   }, [customers]);
   const [selected, setSelected] = useState([]);
 

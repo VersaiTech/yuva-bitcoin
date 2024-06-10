@@ -4,6 +4,8 @@ import numeral from 'numeral';
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import TrendUp02Icon from '@untitled-ui/icons-react/build/esm/TrendUp02';
 import TrendDown02Icon from '@untitled-ui/icons-react/build/esm/TrendDown02';
+import Link from 'next/link';
+
 import {
   Avatar,
   Button,
@@ -21,6 +23,7 @@ import {
   Box,
   Typography
 } from '@mui/material';
+import { paths } from '../../../paths';
 
 export const TotalMemberCoins = (props) => {
   const { amount = 0 } = props;
@@ -63,6 +66,7 @@ export const TotalMemberCoins = (props) => {
       <Divider />
 
       <CardActions>
+        <Link href= {paths.dashboard.users.index}  >
         <Button
           color="inherit"
           endIcon={(
@@ -74,6 +78,7 @@ export const TotalMemberCoins = (props) => {
         >
           See all
         </Button>
+        </Link>
       </CardActions>
     </Card>
   );

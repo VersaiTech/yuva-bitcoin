@@ -182,13 +182,13 @@ export const CustomerListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>Name</TableCell>
               <TableCell>Twitter Id</TableCell>
               <TableCell>Coins</TableCell>
@@ -208,7 +208,7 @@ export const CustomerListTable = (props) => {
                   selected={isSelected}
                   onClick={() => onRowClick(customer)}
                 >
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
@@ -222,7 +222,7 @@ export const CustomerListTable = (props) => {
                       }}
                       value={isSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar

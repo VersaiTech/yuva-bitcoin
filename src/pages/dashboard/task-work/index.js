@@ -62,6 +62,8 @@ const useCustomers = (search) => {
         headers: headers,
       });
 
+      console.log(pendingTasks.data);
+
       const completedTasks = await axios.get(
         `${BASEURL}/admin/getCompletedTasks/${page + 1}/${rowsPerPage}`,
         { headers: headers }

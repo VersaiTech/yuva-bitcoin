@@ -29,6 +29,8 @@ import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
 import axios from "axios";
 import { SeverityPill } from "../../../components/severity-pill";
+import Joi from 'joi';
+import { useSnackbar } from 'notistack';
 
 const statusMap = {
   complete: "success",
@@ -43,7 +45,9 @@ const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
     return customers.map((customer) => customer.taskId);
   }, [customers]);
+
   const [selected, setSelected] = useState([]);
+  
 
   useEffect(() => {
     setSelected([]);
@@ -81,7 +85,7 @@ export const WorkListTable = (props) => {
     customers,
     customersCount,
     onPageChange,
-    currentTab, //import from task-list-table
+    currentTab,
     onRowsPerPageChange,
     page,
     rowsPerPage,
@@ -91,6 +95,7 @@ export const WorkListTable = (props) => {
     useSelectionModel(customers);
 
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -110,36 +115,65 @@ export const WorkListTable = (props) => {
     selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
 
-  const handleDeleteConfirm = async () => {
+  const getTaskIdFromCustomers = () => {
+    return customers.length > 0 ? customers[0].taskId : null;
+  };
+
+  const handleBulkAction = async (status, reason) => {
+    const taskId = getTaskIdFromCustomers();
+    if (!taskId) {
+      console.error('No taskId found for the current tab');
+      return;
+    }
+  
+    // Map selected taskIds to userIds
+    const selectedUserIds = customers
+      .filter(customer => selected.includes(customer.taskId))
+      .map(customer => customer.userId);
+  
     try {
       const token = localStorage.getItem("accessToken");
       const headers = {
         Authorization: token,
       };
-
-      // Assuming your endpoint to delete tasks is DELETE /admin/deleteTasks
-      for (const taskId of selected) {
-        const response = await axios.delete(
-          `${BASEURL}/admin/deleteTask/${taskId}`,
-          {
-            headers: headers,
-          }
-        );
-
-        if (response.status === 200) {
-          console.log(response.data);
-        } else {
-          console.error("Error deleting task:", taskId, response.data);
-        }
+  
+      const payload = {
+        taskId: taskId,
+        userIds: selectedUserIds,
+        status: status,
+        reason: reason,
+      };
+  
+      const schema = Joi.object({
+        taskId: Joi.string().required(),
+        userIds: Joi.array().items(Joi.string().required()).required(),
+        status: Joi.string().valid('confirmed', 'rejected').required(),
+        reason: Joi.string().required(),
+      });
+  
+      const { error } = schema.validate(payload);
+      if (error) {
+        console.error('Validation error:', error.details[0].message);
+        enqueueSnackbar(`Validation error: ${error.details[0].message}`, { variant: 'error' });
+        return;
       }
-
-      // Assuming you want to reload the data after deletion
-      // Reload data or fetch the updated data
-      // reloadData();
-      // Close confirmation dialog
-      setConfirmDeleteDialogOpen(false);
+  
+      const response = await axios.post(`${BASEURL}/admin/confirmMultipleTaskCompletions`, payload, {
+        headers: headers,
+      });
+  
+      if (response.status === 200) {
+        console.log(response.data);
+        enqueueSnackbar(`Tasks ${status} successfully.`, { variant: 'success' });
+        getCustomers();
+        setConfirmDeleteDialogOpen(false);
+      } else {
+        console.error("Error confirming/rejecting tasks:", response.data);
+        enqueueSnackbar(`Error: ${response.data.message}`, { variant: 'error' });
+      }
     } catch (err) {
-      console.error("Error deleting tasks:", err);
+      console.error("Error confirming/rejecting tasks:", err);
+      enqueueSnackbar(`Error: ${err.message}`, { variant: 'error' });
     }
   };
 
@@ -168,7 +202,20 @@ export const WorkListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => handleBulkAction('confirmed', 'Task confirmed in bulk')}
+          >
+            Confirm Tasks
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleBulkAction('rejected', 'Task rejected in bulk')}
+          >
+            Reject Tasks
+          </Button>
         </Stack>
       )}
       <Scrollbar>
@@ -194,7 +241,7 @@ export const WorkListTable = (props) => {
           </TableHead>
           <TableBody>
             {customers.map((customer, index) => {
-              const isSelected = selected.includes(customer.userId);
+              const isSelected = selected.includes(customer.taskId);
 
               return (
                 <TableRow hover key={index} selected={isSelected}>
@@ -205,9 +252,9 @@ export const WorkListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(customer.userId);
+                          selectOne(customer.taskId);
                         } else {
-                          deselectOne(customer.userId);
+                          deselectOne(customer.taskId);
                         }
                       }}
                       value={isSelected}
@@ -286,8 +333,6 @@ export const WorkListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-
-     
     </Box>
   );
 };

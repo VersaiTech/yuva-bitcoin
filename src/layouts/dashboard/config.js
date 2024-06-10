@@ -82,56 +82,56 @@ export const getSections = (t) => [
     items: [
       {
         title: t(tokens.nav.users),
+        path: paths.dashboard.users.index,
         icon: (
           <SvgIcon fontSize="small">
             <ReferalIcon />
           </SvgIcon>
         ),
-        items: [
-          {
-            title: t(tokens.nav.allUsers),
-            path: paths.dashboard.users.index,
-            // icon: (
-            //   <SvgIcon fontSize="small">
-            //     <HomeSmileIcon />
-            //   </SvgIcon>
-            // ),
-          },
-          {
-            title: t(tokens.nav.activeUsers),
-            path: paths.dashboard.users.active,
-          },
-          {
-            title: t(tokens.nav.blockedUsers),
-            path: paths.dashboard.users.blocked,
-          },
-          // {
-          //   title: t(tokens.nav.resetPassword),
-          //   items: [
-          //     {
-          //       title: "Classic",
-          //       path: paths.auth.resetPassword.classic,
-          //     },
-          //     {
-          //       title: "Modern",
-          //       path: paths.auth.resetPassword.modern,
-          //     },
-          //   ],
-          // },
-          // {
-          //   title: t(tokens.nav.verifyCode),
-          //   items: [
-          //     {
-          //       title: "Classic",
-          //       path: paths.auth.verifyCode.classic,
-          //     },
-          //     {
-          //       title: "Modern",
-          //       path: paths.auth.verifyCode.modern,
-          //     },
-          //   ],
-          // },
-        ],
+        // items: [
+        //   {
+        //     title: t(tokens.nav.allUsers),
+        //     // icon: (
+        //     //   <SvgIcon fontSize="small">
+        //     //     <HomeSmileIcon />
+        //     //   </SvgIcon>
+        //     // ),
+        //   },
+        //   {
+        //     title: t(tokens.nav.activeUsers),
+        //     path: paths.dashboard.users.active,
+        //   },
+        //   {
+        //     title: t(tokens.nav.blockedUsers),
+        //     path: paths.dashboard.users.blocked,
+        //   },
+        //   // {
+        //   //   title: t(tokens.nav.resetPassword),
+        //   //   items: [
+        //   //     {
+        //   //       title: "Classic",
+        //   //       path: paths.auth.resetPassword.classic,
+        //   //     },
+        //   //     {
+        //   //       title: "Modern",
+        //   //       path: paths.auth.resetPassword.modern,
+        //   //     },
+        //   //   ],
+        //   // },
+        //   // {
+        //   //   title: t(tokens.nav.verifyCode),
+        //   //   items: [
+        //   //     {
+        //   //       title: "Classic",
+        //   //       path: paths.auth.verifyCode.classic,
+        //   //     },
+        //   //     {
+        //   //       title: "Modern",
+        //   //       path: paths.auth.verifyCode.modern,
+        //   //     },
+        //   //   ],
+        //   // },
+        // ],
       },
 
       {
