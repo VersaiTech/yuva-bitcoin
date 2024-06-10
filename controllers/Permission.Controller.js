@@ -361,6 +361,28 @@ const getSetValueLatest = async (req, res) => {
         return res.status(500).json({ error: 'Internal server error' });
     }
 }
+const getSetValueLatestForUser = async (req, res) => {
+    try {
+        const user = req.user.member_user_id;
+        if (!user) {
+            return res.status(403).json({ error: 'user not found' });
+        }
+        const userId = await Member.findOne({ member_user_id: user });
+
+        if (!userId) {
+            return res.status(403).json({ error: 'user not found' });
+        }
+
+        const adminControl = await AdminControl.find({}, {}, { sort: { updatedAt: -1 } }).limit(1);
+        if (!adminControl) {
+            return res.status(400).json({ error: 'Admin control not found' });
+        }
+        return res.status(200).json({ status: 'success', message: 'Admin control fetched successfully', data: adminControl });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
 
 const getAgentSetData = async (req, res) => {
     try {
@@ -379,4 +401,4 @@ const getAgentSetData = async (req, res) => {
     }
 }
 
-module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest, getAgentSetData }
+module.exports = { grantPermission, agentHandler, adminSetValue, getPermission, getSetValue, getSetValueLatest, getAgentSetData,getSetValueLatestForUser }

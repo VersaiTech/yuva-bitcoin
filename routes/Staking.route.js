@@ -31,4 +31,5 @@ router.route('/calculateInterest').post(calculate);
 
 router.route("/findMemberStake").post(isAdmin,findMemberStake)
 
+
 module.exports = router;

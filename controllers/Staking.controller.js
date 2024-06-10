@@ -654,7 +654,7 @@ module.exports = {
   getStaked, getUnstaked,
 
   calculate,
-
+  
   findMemberStake
 };
 
