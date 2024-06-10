@@ -19,6 +19,12 @@ const PermissionSchema = new mongoose.Schema({
     setStakePercent1: { type: Boolean, default: false },
     setStakePercent2: { type: Boolean, default: false },
     setStakePercent3: { type: Boolean, default: false },
+    setCreateBlog : { type: Boolean, default: false },
+    setWithdrawalApprove : { type: Boolean, default: false },
+    setTaskApprove: { type: Boolean, default: false },
+    setTaskCreate: { type: Boolean, default: false },
+    setUserBlock: { type: Boolean, default: false },
+    setAllTaskApprove: { type: Boolean, default: false },
 }, { timestamps: true });
 
 const Permission = mongoose.model('Permission', PermissionSchema);

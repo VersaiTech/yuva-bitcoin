@@ -20,6 +20,13 @@ const AdminControlSchema = new mongoose.Schema({
     setStakePercent1: { type: Number, required: true },
     setStakePercent2: { type: Number, required: true },
     setStakePercent3: { type: Number, required: true },
+
+    setCreateBlog: { type: Number, required: true },
+    setWithdrawalApprove: { type: Number, required: true },
+    setTaskApprove: { type: Number, required: true },
+    setTaskCreate: { type: Number, required: true },
+    setUserBlock: { type: Number, required: true },
+    setAllTaskApprove: { type: Number, required: true },
 }, {
     timestamps: true
 });

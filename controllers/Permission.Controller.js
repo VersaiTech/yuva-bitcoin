@@ -68,6 +68,12 @@ const grantPermission = async (req, res) => {
         setStakePercent1: Joi.boolean(),
         setStakePercent2: Joi.boolean(),
         setStakePercent3: Joi.boolean(),
+        setCreateBlog: Joi.boolean(),
+        setWithdrawalApprove: Joi.boolean(),
+        setTaskApprove: Joi.boolean(),
+        setTaskCreate: Joi.boolean(),
+        setUserBlock: Joi.boolean(),
+        setAllTaskApprove: Joi.boolean(),
     }).unknown()
     const { error, value } = Schema.validate(req.body);
     if (error) { return res.status(400).json({ error: error.details[0].message }) };
@@ -188,6 +194,13 @@ const adminSetValue = async (req, res) => {
         setStakePercent1: Joi.number(),
         setStakePercent2: Joi.number(),
         setStakePercent3: Joi.number(),
+
+        setCreateBlog: Joi.boolean(),
+        setWithdrawalApprove: Joi.boolean(),
+        setTaskApprove: Joi.boolean(),
+        setTaskCreate: Joi.boolean(),
+        setUserBlock: Joi.boolean(),
+        setAllTaskApprove: Joi.boolean(),
     }).optional();
 
     const { error, value } = Schema.validate(req.body);
@@ -243,6 +256,13 @@ const adminSetValue = async (req, res) => {
                     setStakePercent1: permission.setStakePercent1 ? value.setStakePercent1 : undefined,
                     setStakePercent2: permission.setStakePercent2 ? value.setStakePercent2 : undefined,
                     setStakePercent3: permission.setStakePercent3 ? value.setStakePercent3 : undefined,
+
+                    setCreateBlog: permission.setCreateBlog ? value.setCreateBlog : undefined,
+                    setWithdrawalApprove: permission.setWithdrawalApprove ? value.setWithdrawalApprove : undefined,
+                    setTaskApprove: permission.setTaskApprove ? value.setTaskApprove : undefined,
+                    setTaskCreate: permission.setTaskCreate ? value.setTaskCreate : undefined,
+                    setUserBlock: permission.setUserBlock ? value.setUserBlock : undefined,
+                    setAllTaskApprove: permission.setAllTaskApprove ? value.setAllTaskApprove : undefined,
                 }
             },
             { upsert: true, new: true }
@@ -266,6 +286,13 @@ const adminSetValue = async (req, res) => {
         if (!permission.setStakePercent1 && value.setStakePercent1 !== undefined) invalidFields.push('setStakePercent1');
         if (!permission.setStakePercent2 && value.setStakePercent2 !== undefined) invalidFields.push('setStakePercent2');
         if (!permission.setStakePercent3 && value.setStakePercent3 !== undefined) invalidFields.push('setStakePercent3');
+
+        if (!permission.setCreateBlog && value.setCreateBlog !== undefined) invalidFields.push('setCreateBlog');
+        if (!permission.setWithdrawalApprove && value.setWithdrawalApprove !== undefined) invalidFields.push('setWithdrawalApprove');
+        if (!permission.setTaskApprove && value.setTaskApprove !== undefined) invalidFields.push('setTaskApprove');
+        if (!permission.setTaskCreate && value.setTaskCreate !== undefined) invalidFields.push('setTaskCreate');
+        if (!permission.setUserBlock && value.setUserBlock !== undefined) invalidFields.push('setUserBlock');
+        if (!permission.setAllTaskApprove && value.setAllTaskApprove !== undefined) invalidFields.push('setAllTaskApprove');
 
         if (invalidFields.length > 0) {
             return res.status(400).json({ error: `Permission not granted to change the value for field(s): ${invalidFields.join(', ')}` });

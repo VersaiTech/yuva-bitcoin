@@ -2,6 +2,8 @@ const Blog = require('../models/Blog')
 const Joi = require('joi');
 const axios = require('axios');
 const FormData = require('form-data');
+const AdminControl = require('../models/AdminControl.Model');
+const Permission = require('../models/permission.model');
 
 const createBlog = async (req, res) => {
     // Define a schema for request body validation
@@ -17,11 +19,20 @@ const createBlog = async (req, res) => {
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
         }
-        // Check if the user making the request is an admin
-        if (!req.user || req.user.userType !== 'admin') {
-            return res.status(403).json({ error: 'Permission denied. Only admin can Create a Blog.' });
+
+        const user = req.user;
+        const adminCheck = await Admin.findOne({ admin_user_id: user });
+        if (!adminCheck) {
+            return res.status(403).json({ error: 'Permission denied. You are not authorized to create a blog.' });
         }
-        const { title, content, imageUrls } = value;
+        const permission = await Permission.findOne({ admin_user_id: user })
+
+        // if (permission.setCreateBlog ){
+
+        // }
+
+
+            const { title, content, imageUrls } = value;
 
 
         const newBlog = new Blog({

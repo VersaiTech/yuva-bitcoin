@@ -70,20 +70,33 @@ const createDeposit = async (req, res) => {
       deposit_type: value.deposit_type,
     });
 
+    const coinPrices = await Coin.findOne();
+    if (!coinPrices) {
+      return res.status(400).json({ error: 'Coin value not found' });
+    }
     // Update the total deposit for the specific deposit type in the Member schema
     switch (value.deposit_type) {
       case 'usdt':
         member.deposit_usdt += value.amount;
         break;
+      // case 'bnb':
+      //   member.deposit_bnb += value.amount;
+      //   break;
+      // case 'matic':
+      //   member.deposit_matic += value.amount;
+      //   break;
       case 'bnb':
-        member.deposit_bnb += value.amount;
+        coinAmount = value.amount / coinPrices.price.bnb;
+        member.coins += coinAmount;
         break;
       case 'matic':
-        member.deposit_matic += value.amount;
+        coinAmount = value.amount / coinPrices.price.matic;
+        member.coins += coinAmount;
         break;
       default:
         return res.status(400).json({ error: 'Invalid deposit type' });
     }
+
 
     // Ensure deposit_usdt has 4 decimal places
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
@@ -114,6 +127,7 @@ const createDeposit = async (req, res) => {
                 referral_user_isRefered: true
               });
               await referralHistory.save();
+              
             } else {
               console.error('Invalid setReferralCoinValue:', acontrol.setReferralCoinValue);
             }
