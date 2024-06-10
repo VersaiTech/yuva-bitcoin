@@ -6,6 +6,8 @@ const Withdraw = require('../models/withdrawModel');
 const Deposit = require('../models/deposit');
 const ReferralHistory = require('../models/referralModel');
 const AdminControl = require('../models/AdminControl.Model');
+const Permission = require('../models/permission.model');
+const Admin = require('../models/AdminModel');
 
 
 const { BlobServiceClient, StorageSharedKeyCredential } = require("@azure/storage-blob");
@@ -182,10 +184,24 @@ const confirmTaskCompletion = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const admin = req.user;
-    if (admin.userType !== 'admin') {
-      return res.status(403).json({ message: 'Permission Denied. Only admin can confirm task completion.' });
+
+    const user = req.user.admin_user_id;
+    const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+    if (!adminCheck) {
+      return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Task approval.' });
     }
+
+    if (adminCheck.userType === 'agent') {
+      if (adminCheck.isActive === false) {
+        return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+      }
+      const permission = await Permission.findOne({ admin_user_id: user })
+      if (permission.setTaskApprove === false) {
+        return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Task approval.' });
+      }
+    }
+
 
     const { taskId, userId, status, reason } = value;
 
@@ -250,9 +266,21 @@ const confirmMultipleTaskCompletions = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const admin = req.user;
-    if (admin.userType !== 'admin') {
-      return res.status(403).json({ message: 'Permission Denied. Only admin can confirm task completion.' });
+    const user = req.user.admin_user_id;
+    const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+    if (!adminCheck) {
+      return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Approve Multiple Task.' });
+    }
+
+    if (adminCheck.userType === 'agent') {
+      if (adminCheck.isActive === false) {
+        return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+      }
+      const permission = await Permission.findOne({ admin_user_id: user })
+      if (permission.setAllTaskApprove === false) {
+        return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Approve Multiple Task.' });
+      }
     }
 
     const { taskId, userIds, status, reason } = value;
@@ -277,18 +305,21 @@ const confirmMultipleTaskCompletions = async (req, res) => {
         // Fetch task details to get the reward amount
         const task = await Task.findOne({ taskId });
         if (!task) {
-          return res.status(404).json({ message: `Task not found for taskId: ${taskId}` });
+          // Skip to the next user and continue the loop
+          continue;
         }
 
         // Reward the user
-        const user = await Member.findOne({ member_user_id: userId });
+        const user = await Member.findOneAndUpdate(
+          { member_user_id: userId },
+          { $inc: { coins: task.coins } },
+          { new: true }
+        );
         if (!user) {
-          return res.status(404).json({ message: `User not found for userId: ${userId}` });
+          // Skip to the next user and continue the loop
+          continue;
         }
 
-        // Update user's coins balance with the reward from the task
-        user.coins += task.coins; // Assuming task.reward contains the reward amount
-        await user.save();
       } else if (status === 'rejected') {
         completedTask.reason = reason; // Save the reason for rejection
         await completedTask.save();
@@ -303,7 +334,6 @@ const confirmMultipleTaskCompletions = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 const getAllTasksUser = async (req, res) => {
   const Schema = Joi.object({
     page_number: Joi.number(),
@@ -1042,17 +1072,24 @@ const addTask = async (req, res) => {
     completionTime: Joi.date().iso().required(),
   });
   try {
-    const admin = req.user;
-    if (admin.userType !== 'admin') {
-      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+
+    const user = req.user.admin_user_id;
+    const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+    if (!adminCheck) {
+      return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Create Task.' });
     }
 
-    // Check if the user making the request is an admin
-    const isAdmin = req.user.userType === 'admin';
-
-    if (!isAdmin) {
-      return res.status(403).json({ error: 'Permission Denied. Only admin can set scheduled time.' });
+    if (adminCheck.userType === 'agent') {
+      if (adminCheck.isActive === false) {
+        return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+      }
+      const permission = await Permission.findOne({ admin_user_id: user })
+      if (permission.setTaskCreate === false) {
+        return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Create Task.' });
+      }
     }
+
     // Validate request body
     const { error, value } = addTaskSchema.validate(req.body);
     if (error) {
@@ -1679,13 +1716,21 @@ const updateMemberStatus = async (req, res) => {
   });
 
   try {
-    // Check if the user making the request is an admin
-    if (!req.user || req.user.userType !== 'admin') {
-      return res.status(403).json({ error: 'Permission denied. Only admin can update member status.' });
+    const user = req.user.admin_user_id;
+    const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+    if (!adminCheck) {
+      return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Block Member.' });
     }
-    const admin = req.user;
-    if (admin.userType !== 'admin') {
-      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+
+    if (adminCheck.userType === 'agent') {
+      if (adminCheck.isActive === false) {
+        return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+      }
+      const permission = await Permission.findOne({ admin_user_id: user })
+      if (permission.setUserBlock === false) {
+        return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to Block Member.' });
+      }
     }
 
     const { member_user_id } = req.params;

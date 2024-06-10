@@ -7,7 +7,9 @@ const Coin = require('../models/Coin');
 const Joi = require('joi');
 const fs = require('fs');
 const path = require('path');
+const Admin = require('../models/AdminModel');
 const AdminControl = require('../models/AdminControl.Model')
+const Permission = require('../models/permission.model');
 
 
 //===================================================================================================
@@ -197,7 +199,7 @@ const withdrawRequest = async (req, res) => {
     }
 
     const acontrol = await AdminControl.findOne({}, {}, { sort: { updatedAt: -1 } }).limit(1);
-   
+
     if (conversion_type === 'yuva') {
       if (amount < acontrol.setMinimumWithdrawal) {
         return res.status(400).json({
@@ -547,10 +549,24 @@ const updateWithdrawalStatus = async (req, res) => {
   });
   try {
 
-    const admins = req.user;
-        if (admins.userType !== 'admin') {
-            return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
-        }
+    const user = req.user.admin_user_id;
+    const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+    if (!adminCheck) {
+      return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to update withdrawal approval.' });
+    }
+
+    if (adminCheck.userType === 'agent') {
+      if (adminCheck.isActive === false) {
+        return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+      }
+      const permission = await Permission.findOne({ admin_user_id: user })
+      if (permission.setWithdrawalApprove === false) {
+        return res.status(403).json({ error: 'Permission denied. You don\'t have the permission to update withdrawal approval.' });
+      }
+    }
+
+
     const { with_referrance } = req.params;
     const { status, processed_by, remarks, conversion_type, transection_hash } = req.body;
 
@@ -567,7 +583,7 @@ const updateWithdrawalStatus = async (req, res) => {
       return res.status(400).json({ error: 'Withdrawal request not found' });
     }
 
-    if(withdrawal.conversion_type !== conversion_type){
+    if (withdrawal.conversion_type !== conversion_type) {
       return res.status(400).json({ error: 'Conversion type does not match' });
     }
     // Check if the withdrawal request has already been processed

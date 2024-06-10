@@ -4,6 +4,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const AdminControl = require('../models/AdminControl.Model');
 const Permission = require('../models/permission.model');
+const Admin = require('../models/AdminModel')
 
 const createBlog = async (req, res) => {
     // Define a schema for request body validation
@@ -20,19 +21,24 @@ const createBlog = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const user = req.user;
+        const user = req.user.admin_user_id;
         const adminCheck = await Admin.findOne({ admin_user_id: user });
+
         if (!adminCheck) {
             return res.status(403).json({ error: 'Permission denied. You are not authorized to create a blog.' });
         }
-        const permission = await Permission.findOne({ admin_user_id: user })
 
-        // if (permission.setCreateBlog ){
+        if (adminCheck.userType === 'agent') {
+            if (adminCheck.isActive === false) {
+                return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+            }
+            const permission = await Permission.findOne({ admin_user_id: user })
+            if (permission.setCreateBlog === false) {
+                return res.status(403).json({ error: 'Permission denied. You are not authorized to create a blog.' });
+            }
+        }
 
-        // }
-
-
-            const { title, content, imageUrls } = value;
+        const { title, content, imageUrls } = value;
 
 
         const newBlog = new Blog({
@@ -53,6 +59,7 @@ const updateBlogById = async (req, res) => {
     const schema = Joi.object({
         title: Joi.string(),
         content: Joi.string(),
+        imageUrls: Joi.array().items(Joi.string()).optional(),
         // Add more fields as needed
     });
     try {
@@ -60,6 +67,23 @@ const updateBlogById = async (req, res) => {
 
         if (error) {
             return res.status(400).json({ error: error.details[0].message });
+        }
+
+        const user = req.user.admin_user_id;
+        const adminCheck = await Admin.findOne({ admin_user_id: user });
+
+        if (!adminCheck) {
+            return res.status(403).json({ error: 'Permission denied. You are not authorized to update a blog.' });
+        }
+
+        if (adminCheck.userType === 'agent') {
+            if (adminCheck.isActive === false) {
+                return res.status(403).json({ error: 'Permission denied. Your account is deactivated.' });
+            }
+            const permission = await Permission.findOne({ admin_user_id: user })
+            if (permission.setCreateBlog === false) {
+                return res.status(403).json({ error: 'Permission denied. You are not authorized to update a blog.' });
+            }
         }
 
         const blogId = req.params.blogId;
