@@ -105,6 +105,7 @@ export const CustomerEditForm = (props) => {
                   formik.touched.investment && formik.errors.investment
                 }
                 label="Investment"
+                type="number"
                 name="investment"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
