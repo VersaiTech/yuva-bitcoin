@@ -9,6 +9,7 @@ import { useAuth } from '../../../hooks/use-auth';
 import { useMounted } from '../../../hooks/use-mounted';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSnackbar } from 'notistack';
+import { LoadingButton } from '@mui/lab';
 
 const initialValues = {
   email: '',
@@ -147,15 +148,16 @@ const Page = () => {
             value={formik.values.password}
           />
         </Stack>
-        <Button
+        <LoadingButton
           fullWidth
           sx={{ mt: 3 }}
           size="large"
           type="submit"
           variant="contained"
+          loading={formik.isSubmitting}
         >
           Continue
-        </Button>
+        </LoadingButton>
         <Box sx={{ mt: 3 }}>
           {/* <Link
             href="#"

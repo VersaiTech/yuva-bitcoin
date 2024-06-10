@@ -118,8 +118,6 @@
 
 // export default Page;
 
-
-
 import NextLink from "next/link";
 import {
   Box,
@@ -142,6 +140,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { Layout as AuthLayout } from "../../../layouts/auth/modern-layout";
 import { paths } from "../../../paths";
+import { LoadingButton } from "@mui/lab";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const initialValues = {
@@ -165,12 +164,15 @@ const Page = () => {
         // Fetch admin email from local storage or any other source
         const email = localStorage.getItem("email");
         // Send OTP verification request to the server
-        const response = await axios.post(`${BASEURL}/api/Auth/verifyOTPAdmin`, {
-          otp: values.code,
-          email: email,
-        });
+        const response = await axios.post(
+          `${BASEURL}/api/Auth/verifyOTPAdmin`,
+          {
+            otp: values.code,
+            email: email,
+          }
+        );
         localStorage.setItem("accessToken", response.data.token);
-        
+
         enqueueSnackbar("OTP verified successfully", { variant: "success" });
         // Redirect admin to the appropriate page after successful verification
         router.push(paths.dashboard.index); // Adjust the path as needed
@@ -202,12 +204,10 @@ const Page = () => {
           <Typography variant="subtitle2">Dashboard</Typography>
         </Link>
       </Box>
-      <Stack sx={{ mb: 4 }}
-spacing={1}>
+      <Stack sx={{ mb: 4 }} spacing={1}>
         <Typography variant="h5">Verify code</Typography>
       </Stack>
-      <form noValidate
-onSubmit={formik.handleSubmit}>
+      <form noValidate onSubmit={formik.handleSubmit}>
         <FormControl error={!!(formik.touched.code && formik.errors.code)}>
           <FormLabel
             sx={{
@@ -225,8 +225,8 @@ onSubmit={formik.handleSubmit}>
             sx={{
               "& .MuiFilledInput-input": {
                 p: {
-                  xs: "7px",  // 5px padding on small screens
-                  sm: "14px"  // 14px padding on larger screens
+                  xs: "7px", // 5px padding on small screens
+                  sm: "14px", // 14px padding on larger screens
                 },
               },
             }}
@@ -239,16 +239,16 @@ onSubmit={formik.handleSubmit}>
         {verificationError && (
           <FormHelperText error>{verificationError}</FormHelperText>
         )}
-        <Button
+        <LoadingButton
           fullWidth
           size="large"
           sx={{ mt: 3 }}
           type="submit"
           variant="contained"
-          disabled={formik.isSubmitting}
+          loading={formik.isSubmitting}
         >
           Verify
-        </Button>
+        </LoadingButton>
       </form>
     </div>
   );
@@ -257,5 +257,3 @@ onSubmit={formik.handleSubmit}>
 Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default Page;
-
-

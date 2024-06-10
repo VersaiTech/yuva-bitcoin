@@ -53,6 +53,7 @@ const Page = () => {
   const isMounted = useMounted();
   const router = useRouter();
   const { issuer, signUp } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formik = useFormik({
     initialValues,
     validationSchema,
