@@ -20,7 +20,7 @@ const createDeposit = async (req, res) => {
       amount: Joi.number().positive().required(),
       transaction_hash: Joi.string().required(),
       wallet_address: Joi.string().required(),
-      deposit_type: Joi.string().valid('usdt', 'bnb', 'matic').required(),
+      deposit_type: Joi.string().valid('usdt', 'bnb', 'matic','yuva').required(),
     });
 
     const { error, value } = schema.validate(req.body);
