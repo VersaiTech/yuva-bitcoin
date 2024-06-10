@@ -168,13 +168,7 @@ export const WorkListTable = (props) => {
             indeterminate={selectedSome}
             onChange={handleToggleAll}
           />
-          <Button
-            color="inherit"
-            size="small"
-            onClick={() => setConfirmDeleteDialogOpen(true)}
-          >
-            Delete
-          </Button>
+          
         </Stack>
       )}
       <Scrollbar>
@@ -226,8 +220,8 @@ export const WorkListTable = (props) => {
                         <Typography color="text.secondary" variant="body2">
                           {"id:" + customer.userId}
                         </Typography>
-                        <Typography color="text.secondary" variant="body2">
-                          {"twitter id :" + customer.twitterId}
+                        <Typography component="a" href={`${customer.twitterId}`} color="text.secondary" variant="body2" target="_blank">
+                          <Typography sx={{ color: 'yellow' }}>{ customer.twitterId}</Typography>
                         </Typography>
                       </div>
                     </Stack>
@@ -293,25 +287,7 @@ export const WorkListTable = (props) => {
         rowsPerPageOptions={[5, 10, 25]}
       />
 
-      <Dialog
-        open={confirmDeleteDialogOpen}
-        onClose={() => setConfirmDeleteDialogOpen(false)}
-      >
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete all selected tasks?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmDeleteDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+     
     </Box>
   );
 };

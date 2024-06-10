@@ -68,7 +68,8 @@ export const OverviewCoinHolders = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link  color="primary" textDecoration="none" size="small" href="/dashboard/coin-holders">
+        {/* <Link  color="primary" textDecoration="none" size="small" href="/dashboard/coin-holders"> */}
+        <Link href="/dashboard/deposit">
         <Button
           color="inherit"
           size="small"

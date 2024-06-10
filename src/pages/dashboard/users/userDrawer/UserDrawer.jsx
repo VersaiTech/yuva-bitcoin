@@ -138,15 +138,15 @@ const UserDrawer = ({ open, onClose, user, onEdit }) => {
                 align={align}
                 disableGutters
                 divider
-                label="Deposited BTC"
-                value={(user.deposit_btc || 0).toFixed(4)}
+                label="Deposited BNB"
+                value={(user.deposit_bnb || 0).toFixed(4)}
               />
               <PropertyListItem
                 align={align}
                 disableGutters
                 divider
-                label="Deposited ETHEREUM"
-                value={(user.deposit_ethereum || 0).toFixed(4)}
+                label="Deposited MATIC"
+                value={(user.deposit_matic || 0).toFixed(4)}
               />
             </PropertyList>
           </Paper>

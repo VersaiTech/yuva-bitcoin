@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import axios from "axios";
 import SetDummyData from './set-dummy-data';
 import Link from "next/link";
+import { paths } from '../../../paths';
 
 
 export const OverviewWithdrawRejectToday = (props) => {
@@ -78,7 +79,9 @@ export const OverviewWithdrawRejectToday = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/dashboard/withdrawal-reject" passHref>
+        {/* <Link href="/dashboard/withdrawal-reject" passHref> */}
+        <Link href={paths.dashboard.withdrawal.pending}>
+
         <Button
           color="inherit"
           endIcon={(
@@ -87,7 +90,7 @@ export const OverviewWithdrawRejectToday = (props) => {
             </SvgIcon>
           )}
           size="small"
-          onClick={handleClick}
+          // onClick={handleClick}
         >
            Withdrawal Reject 
         </Button>

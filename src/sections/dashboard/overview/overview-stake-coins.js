@@ -61,7 +61,8 @@ export const OverviewStakeCoins = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href={paths.dashboard.deposit.index}> {/* Use Next.js Link component */}
+      <Link  href="/dashboard/stake">
+
         <Button
           color="inherit"
           endIcon={(
@@ -70,7 +71,7 @@ export const OverviewStakeCoins = (props) => {
             </SvgIcon>
           )}
           size="small"
-          onClick={handleClick}
+        
         >
           Today Staked 
         </Button>

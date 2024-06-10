@@ -153,13 +153,21 @@ export const CustomerListSearch = (props) => {
   if (option === 'all') {
     // Export all users data
     dataToExport = customers.map((customer) => ({
-      Name: customer.member_user_id,
+      member_user_id: customer.member_user_id,
+      member_name:customer.member_name,
+      registration_date:customer.registration_date,
+      wallet_address:customer.wallet_address,
       TwitterId: customer.twitterId,
       Email: customer.email,
       Coins: customer.coins,
       IsActive: customer.isActive,
       Contact: customer.contactNo,
-      // Add more fields as needed
+      userType: customer.userType,
+      referralCode: customer.referralCode,
+      isReferred: customer.isReferred,
+      deposit_usdt: customer.deposit_usdt,
+      deposit_bnb: customer.deposit_bnb,
+      deposit_matic: customer.deposit_matic,
     }));
   } else {
     // Filter data based on date range
@@ -169,13 +177,21 @@ export const CustomerListSearch = (props) => {
         return customer.createdAt >= formattedStartDate && customer.createdAt <= formattedEndDate;
       })
       .map((customer) => ({
-        Name: customer.member_user_id,
-        TwitterId: customer.twitterId,
-        Email: customer.email,
-        Coins: customer.coins,
-        IsActive: customer.isActive,
-        Contact: customer.contactNo,
-        // Add more fields as needed
+      member_user_id: customer.member_user_id,
+      member_name:customer.member_name,
+      TwitterId: customer.twitterId,
+      Email: customer.email,
+      Coins: customer.coins,
+      IsActive: customer.isActive,
+      Contact: customer.contactNo,
+      registration_date:customer.registration_date,
+      wallet_address:customer.wallet_address,
+      userType: customer.userType,
+      referralCode: customer.referralCode,
+      isReferred: customer.isReferred,
+      deposit_usdt: customer.deposit_usdt,
+      deposit_bnb: customer.deposit_bnb,
+      deposit_matic: customer.deposit_matic,
       }));
   }
 
@@ -192,13 +208,21 @@ const handleExportToExcelDownload = (dataToExport) => {
     // Format customers data into an Excel-compatible format
     console.log(dataToExport);
     const data = dataToExport.map((customer) => ({
-      "Member Id": customer.Name || '', 
-      "Twitter Id": customer.TwitterId || '',
-      Email: customer.Email || '',
-      Coins: customer.Coins || '',
-      "Active Status": customer.IsActive || '',
-      Contact: customer.Contact || '',
-      // Add more fields as needed
+      "NAME": customer.member_name || '', 
+      "MEMBER ID": customer.member_user_id || '', 
+      "TWITTER ID": customer.TwitterId || '',
+      EMAIL: customer.Email || '',
+      COINS: customer.Coins || '',
+      "ACTIVE STATUS": customer.IsActive || '',
+      CONTACT: customer.Contact || '',
+      "DATE": customer.registration_date || '',
+      "WALLET ADDRESS": customer.wallet_address || '',
+      "USER TYPE": customer.userType || '',
+      "Referral Code": customer.referralCode || '',
+      "Is Referred": customer.isReferred || '',
+      USDT: customer.deposit_usdt || '',
+      BNB: customer.deposit_bnb || '',
+      MATIC: customer.deposit_matic || '',
     }));
     console.log("Data now is ",data);
 

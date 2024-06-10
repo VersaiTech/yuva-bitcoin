@@ -67,7 +67,7 @@ export const OverviewWalletUseTask = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link href="/dashboard/overview/task">
+        <Link href={paths.dashboard.taskwork.index}>
         <Button
           color="inherit"
           endIcon={
