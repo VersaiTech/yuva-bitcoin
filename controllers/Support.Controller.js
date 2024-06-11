@@ -314,16 +314,16 @@ const getUserSupport = async (req, res) => {
 const deleteDeposit = async (req, res) => {
     try {
 
-       const admins = req.user;
-       if (admins.userType !== 'admin') {
-           return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
-       }
+        const admins = req.user;
+        if (admins.userType !== 'admin') {
+            return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+        }
         const { supportTicketId } = req.params;
-        const support = await Reply.find({ supportTicketId: supportTicketId });
+        const support = await Support.find({ supportTicketId: supportTicketId });
         if (!support) {
             return res.status(404).json({ status: false, message: 'Support not found' });
         }
-        await Reply.findOneAndDelete({ supportTicketId: supportTicketId });
+        await Support.findOneAndDelete({ supportTicketId: supportTicketId });
         res.status(200).json({ status: true, message: 'Support deleted successfully' });
     } catch (error) {
         console.error('Error deleting support:', error);
@@ -331,6 +331,105 @@ const deleteDeposit = async (req, res) => {
     }
 }
 
+
+const getAllReply = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params);
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const { page_number, count } = value;
+        const pageNumber = page_number || 1;
+        const itemCount = count || 10;
+        const offset = (pageNumber - 1) * itemCount;
+        const totalSupport = await Reply.countDocuments();
+        const support = await Reply.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(itemCount);
+
+        if (!support || support.length === 0) {
+            return res.status(200).json({
+                status: false, message: 'No support found', support: [], totalSupport
+            });
+        }
+        res.status(200).json({ status: true, message: 'Support Reply fetched successfully', support: support, totalSupport: totalSupport });
+    } catch (error) {
+        console.error('Error fetching support:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+const getOneReply = async (req, res) => {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+        userId: Joi.string().required(),
+    });
+    const { error, value } = Schema.validate(req.params);
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const { page_number, count, userId } = value;
+        const pageNumber = page_number || 1;
+        const itemCount = count || 10;
+        const offset = (pageNumber - 1) * itemCount;
+
+        const totalSupport = await Reply.countDocuments({ userId });
+        const support = await Reply.find({ userId })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(itemCount);
+        if (!support || support.length === 0) {
+            return res.status(200).json({
+                status: false, message: 'No support found', totalSupport: totalSupport, support: []
+            });
+        }
+        res.status(200).json({ status: true, message: 'Support Reply fetched successfully', totalSupport: totalSupport, support: support });
+    } catch (error) {
+        console.error('Error fetching support:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+ const getUserReply = async function (req, res) {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    })
+    const { error, value } = Schema.validate(req.params);
+    if (error) {
+        return res.status(400).json({ status: false, error: error.details[0].message });
+    }
+    try {
+        const { page_number, count } = value;
+        const pageNumber = page_number || 1;
+        const itemCount = count || 10;
+        const offset = (pageNumber - 1) * itemCount;
+        const userId = req.user.member_user_id;
+        const totalSupport = await Reply.countDocuments({ userId });
+        const support = await Reply.find({ userId })
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(itemCount);
+        if (!support || support.length === 0) {
+            return res.status(200).json({
+                status: false, message: 'No support found', totalSupport: totalSupport, support: []
+            })
+        }
+        res.status(200).json({ status: true, message: 'Support Reply fetched successfully', totalSupport: totalSupport, support: support });
+    } catch (error) {
+        console.error('Error fetching support:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
 module.exports = {
-    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser, getUserSupport, deleteDeposit
+    createSupport, adminReplyToUser, getAllSupport, getSupportForOneUser, getUserSupport, deleteDeposit, getAllReply, getOneReply, getUserReply
 }
