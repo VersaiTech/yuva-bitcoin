@@ -90,7 +90,8 @@ export const NewTaskForm = (props) => {
         router.push(paths.dashboard.newtask.index);
       } catch (err) {
         console.error(err);
-        toast.error("Something went wrong!");
+        const errorMessage = err.response?.data?.message || err.message;
+        toast.error(errorMessage);
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);

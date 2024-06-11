@@ -113,8 +113,8 @@ export const CustomerListTable = (props) => {
         enqueueSnackbar("Something went wrong", { variant: "error" });
       }
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: "error" });
-      console.log(err);
+      enqueueSnackbar(err.response.data.message, { variant: "error" });
+      console.log(err.message);
     }
   };
 

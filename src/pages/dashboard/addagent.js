@@ -1,7 +1,26 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import axios from "axios";
-import { Box, Button, Card, Container, Stack, SvgIcon, Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel } from "@mui/material";
+import { 
+  Box, 
+  Button, 
+  Card, 
+  Container, 
+  Stack, 
+  SvgIcon, 
+  Switch, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableRow, 
+  Typography, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogTitle, 
+  FormControlLabel 
+} from "@mui/material";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import { useAuth } from "../../hooks/use-auth";
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
@@ -18,14 +37,23 @@ const PermissionsModal = ({ open, onClose, adminUserId }) => {
     setMinimumAmountMarketYUVA: false,
     setMinimumWithdrawal: false,
     setMaximumWithdrawal: false,
+    setMinimumWithdrawalusdt: false,
+    setMaximumWithdrawalusdt: false,
     setRegisterCoinValue: false,
     setReferralCoinValue: false,
+    setMinimumReferralamount: false,
     setStakeMonth1: false,
     setStakeMonth2: false,
     setStakeMonth3: false,
     setStakePercent1: false,
     setStakePercent2: false,
     setStakePercent3: false,
+    setCreateBlog: false,
+    setWithdrawalApprove: false,
+    setTaskApprove: false,
+    setTaskCreate: false,
+    setUserBlock: false,
+    setAllTaskApprove: false,
   });
 
   const { enqueueSnackbar } = useSnackbar();
@@ -40,7 +68,7 @@ const PermissionsModal = ({ open, onClose, adminUserId }) => {
       };
 
       try {
-        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers :headers});
+        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers });
         const permissionsData = response.data.data.find(item => item.admin_user_id === adminUserId);
 
         if (permissionsData) {
@@ -133,7 +161,7 @@ const Page = () => {
     };
 
     try {
-      const response = await axios.get(`${BASEURL}/api/Auth/getAllAgent`, { headers: headers });
+      const response = await axios.get(`${BASEURL}/api/Auth/getAllAgent`, { headers });
       setAgent(response.data.data);
       enqueueSnackbar("Agents fetched successfully", { variant: "success" });
     } catch (error) {
@@ -165,7 +193,7 @@ const Page = () => {
       await axios.post(
         `${BASEURL}/api/Permission/agentHandler/${admin_user_id}`,
         { isActive: !currentStatus }, // Send the toggled status
-        { headers: headers }
+        { headers }
       );
       setAgent((prevAgent) =>
         prevAgent.map((ag) =>
@@ -272,7 +300,6 @@ const Page = () => {
           </Container>
         </Box>
       ) : (
-          
         <Typography variant="h5" align="center" sx={{ marginBottom: 3 }}>
           You are not an admin
         </Typography>

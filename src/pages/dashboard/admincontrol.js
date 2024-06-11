@@ -1,9 +1,8 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
   Card,
-  Divider,
   Grid,
   Typography,
   Switch,
@@ -16,27 +15,57 @@ import { Layout as DashboardLayout } from "../../layouts/dashboard";
 import { useSnackbar } from "notistack";
 import SetCoin from "./setCoin";
 
-
 const permissions = [
-  "USDT Market Value",
+  "setCoinValueMarketUsdt",
   "setMinimumAmountMarketUsdt",
   "setCoinValueMarketYUVA",
   "setMinimumAmountMarketYUVA",
   "setMinimumWithdrawal",
   "setMaximumWithdrawal",
+  "setMinimumWithdrawalusdt",
+  "setMaximumWithdrawalusdt",
   "setRegisterCoinValue",
   "setReferralCoinValue",
+  "setMinimumReferralamount",
   "setStakeMonth1",
   "setStakeMonth2",
   "setStakeMonth3",
   "setStakePercent1",
   "setStakePercent2",
   "setStakePercent3",
+  "setCreateBlog",
+  "setWithdrawalApprove",
+  "setTaskApprove",
+  "setTaskCreate",
+  "setUserBlock",
+  "setAllTaskApprove",
 ];
 
-
-// const { enqueueSnackbar } = useSnackbar();
-
+const permissionNames = {
+  "setCoinValueMarketUsdt": "Set USDT Market Coin Value",
+  "setMinimumAmountMarketUsdt": "Set Minimum Amount for USDT Market",
+  "setCoinValueMarketYUVA": "Set YUVA Market Coin Value",
+  "setMinimumAmountMarketYUVA": "Set Minimum Amount for YUVA Market",
+  "setMinimumWithdrawal": "Set Minimum Withdrawal Amount",
+  "setMaximumWithdrawal": "Set Maximum Withdrawal Amount",
+  "setMinimumWithdrawalusdt": "Set Minimum Withdrawal Amount for USDT",
+  "setMaximumWithdrawalusdt": "Set Maximum Withdrawal Amount for USDT",
+  "setRegisterCoinValue": "Set Coin Value for Registration",
+  "setReferralCoinValue": "Set Coin Value for Referral",
+  "setMinimumReferralamount": "Set Minimum Referral Amount",
+  "setStakeMonth1": "Set Stake for Month 1",
+  "setStakeMonth2": "Set Stake for Month 2",
+  "setStakeMonth3": "Set Stake for Month 3",
+  "setStakePercent1": "Set Stake Percentage for Month 1",
+  "setStakePercent2": "Set Stake Percentage for Month 2",
+  "setStakePercent3": "Set Stake Percentage for Month 3",
+  "setCreateBlog": "Set Create Blog",
+  "setWithdrawalApprove": "Set Withdrawal Approval",
+  "setTaskApprove": "Set Task Approval",
+  "setTaskCreate": "Set Task Creation",
+  "setUserBlock": "Set User Block",
+  "setAllTaskApprove": "Set All Task Approvals",
+};
 
 const PermissionSettingsPage = () => {
   const [state, setState] = useState({});
@@ -52,11 +81,10 @@ const PermissionSettingsPage = () => {
         const adminUserId = localStorage.getItem("admin_user_id");
         const headers = { Authorization: token };
 
-        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers:headers });
+        const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers });
 
         if (response.status === 200) {
           const permissionsData = response.data.data.find(item => item.admin_user_id === adminUserId);
-          console.log("Particular row",permissionsData);
           const initialPermissions = permissions.reduce((acc, permission) => {
             acc[permission] = permissionsData[permission] || false;
             return acc;
@@ -78,8 +106,6 @@ const PermissionSettingsPage = () => {
     fetchPermissions();
   }, [enqueueSnackbar]);
 
-
-
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
     setIsChanged(true);
@@ -94,11 +120,10 @@ const PermissionSettingsPage = () => {
       const response = await axios.post(`${BASEURL}/api/Permission/grantPermission`, state, { headers });
       if (response.status === 201) {
         enqueueSnackbar("Permissions Set Successfully", { variant: "success" });
-        console.log('Permissions updated successfully', response.data);
+        setIsChanged(false);
       } else {
         enqueueSnackbar("Failed to update permissions", { variant: "error" });
       }
-      setIsChanged(false);
     } catch (error) {
       enqueueSnackbar("Failed to update permissions", { variant: "error" });
       console.error("Error updating permissions", error);
@@ -106,36 +131,10 @@ const PermissionSettingsPage = () => {
   };
 
   const half = Math.ceil(permissions.length / 2);
-  const leftPermissions = permissions.slice(0, half);
-  const rightPermissions = permissions.slice(half);
-  // Modify the permission names for better readability
 
-  const permissionNames = {
-    "setCoinValueMarketUsdt": "Set USDT Market Coin Value",
-    "setMinimumAmountMarketUsdt": "Set Minimum Amount for USDT Market",
-    "setCoinValueMarketYUVA": "Set YUVA Market Coin Value",
-    "setMinimumAmountMarketYUVA": "Set Minimum Amount for YUVA Market",
-    "setMinimumWithdrawal": "Set Minimum Withdrawal Amount",
-    "setMaximumWithdrawal": "Set Maximum Withdrawal Amount",
-    "setRegisterCoinValue": "Set Coin Value for Registration",
-    "setReferralCoinValue": "Set Coin Value for Referral",
-    "setStakeMonth1": "Set Stake for Month 1",
-    "setStakeMonth2": "Set Stake for Month 2",
-    "setStakeMonth3": "Set Stake for Month 3",
-    "setStakePercent1": "Set Stake Percentage for Month 1",
-    "setStakePercent2": "Set Stake Percentage for Month 2",
-    "setStakePercent3": "Set Stake Percentage for Month 3",
-    "setMinimumReferralamount": "Set Minimum Referral Amount",
-    "setMinimumWithdrawalusdt": "Set Minimum Withdrawal Amount for USDT",
-    "setMaximumWithdrawalusdt": "Set Maximum Withdrawal Amount for USDT",
-    // Add more permissions as needed
+  const getReadablePermissionName = (permission) => {
+    return permissionNames[permission] || permission;
   };
-  
-
-// Function to get a readable name for a permission
-const getReadablePermissionName = (permission) => {
-  return permissionNames[permission] || permission;
-};
 
   return (
     <Box
@@ -144,7 +143,7 @@ const getReadablePermissionName = (permission) => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        padding: "20px", // Add padding for better spacing
+        padding: "20px",
       }}
     >
       {user?.data?.data?.userType === "admin" ? (
@@ -185,7 +184,7 @@ const getReadablePermissionName = (permission) => {
                     <Paper elevation={3} sx={{ padding: "10px" }}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
                         <Typography variant="body2" sx={{ flex: 1 }}>
-                        {getReadablePermissionName(permission)}
+                          {getReadablePermissionName(permission)}
                         </Typography>
                         <FormControlLabel
                           control={
@@ -203,9 +202,7 @@ const getReadablePermissionName = (permission) => {
                 ))}
               </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <SetCoin />
-            </Grid>
+          
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
             <Button
@@ -222,7 +219,12 @@ const getReadablePermissionName = (permission) => {
             >
               APPLY CHANGES
             </Button>
+
           </Box>
+          <Grid item xs={12}>
+              <SetCoin />
+            </Grid>
+          
         </Card>
       ) : (
         <Typography variant="h5" align="center" sx={{ marginY: 3 }}>
