@@ -25,7 +25,7 @@ const depositSchema = new mongoose.Schema({
     required: true
   },
   deposit_type: {
-    type: String, enum: ['usdt', 'bnb', 'matic'],
+    type: String, enum: ['usdt', 'bnb', 'matic', 'yuva'],
     required: true
   },
   sys_date: { type: Date, default: Date.now },
