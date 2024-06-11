@@ -93,6 +93,9 @@ const createDeposit = async (req, res) => {
         coinAmount = value.amount / coinPrices.price.matic;
         member.coins += coinAmount;
         break;
+      case 'yuva':
+        member.coins += value.amount;
+        break;
       default:
         return res.status(400).json({ error: 'Invalid deposit type' });
     }
