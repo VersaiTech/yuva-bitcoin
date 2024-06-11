@@ -99,7 +99,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Reset Password | Rock34x 
+          Reset Password | Yuva Bitcoin
         </title>
       </Head>
       <div>

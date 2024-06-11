@@ -32,6 +32,7 @@ import { SeverityPill } from "../../../components/severity-pill";
 import Joi from 'joi';
 import { useSnackbar } from 'notistack';
 
+
 const statusMap = {
   complete: "success",
   pending: "info",
@@ -47,6 +48,7 @@ const useSelectionModel = (customers) => {
   }, [customers]);
 
   const [selected, setSelected] = useState([]);
+  
   
 
   useEffect(() => {
@@ -96,6 +98,8 @@ export const WorkListTable = (props) => {
 
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+
+
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -165,8 +169,9 @@ export const WorkListTable = (props) => {
       if (response.status === 200) {
         console.log(response.data);
         enqueueSnackbar(`Tasks ${status} successfully.`, { variant: 'success' });
-        getCustomers();
+        // customers();
         setConfirmDeleteDialogOpen(false);
+        router.push(paths.dashboard.taskwork.index);
       } else {
         console.error("Error confirming/rejecting tasks:", response.data);
         enqueueSnackbar(`Error: ${response.data.message}`, { variant: 'error' });

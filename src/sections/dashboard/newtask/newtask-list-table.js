@@ -176,13 +176,13 @@ export const NewtaskListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              {/* <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell>
+              </TableCell> */}
               <TableCell>Task Name</TableCell>
               <TableCell>Task Id</TableCell>
               <TableCell>Coins</TableCell>
@@ -197,7 +197,7 @@ export const NewtaskListTable = (props) => {
 
               return (
                 <TableRow hover key={customer.taskId + 1} selected={isSelected}>
-                  <TableCell padding="checkbox">
+                  {/* <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
@@ -211,7 +211,7 @@ export const NewtaskListTable = (props) => {
                       }}
                       value={isSelected}
                     />
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
