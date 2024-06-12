@@ -130,7 +130,7 @@ export const NewtaskListSearch = (props) => {
         Authorization: token,
       };
 
-      const response = await axios.post(`${BASEURL}/admin/findMember`, { member_name: query }, { headers });
+      const response = await axios.post(`${BASEURL}/admin/findTasbyNameAdmin`, { taskName: query }, { headers });
 
       if (response.data.status) {
         setSearchResults(response.data.data);
