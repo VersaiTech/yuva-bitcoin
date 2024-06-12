@@ -31,6 +31,7 @@ import axios from "axios";
 import { SeverityPill } from "../../../components/severity-pill";
 import Joi from 'joi';
 import { useSnackbar } from 'notistack';
+import {useRouter} from 'next/router';
 
 const statusMap = {
   complete: "success",
@@ -96,6 +97,7 @@ export const WorkListTable = (props) => {
 
   const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -157,7 +159,7 @@ export const WorkListTable = (props) => {
         enqueueSnackbar(`Validation error: ${error.details[0].message}`, { variant: 'error' });
         return;
       }
-  
+      
       const response = await axios.post(`${BASEURL}/admin/confirmMultipleTaskCompletions`, payload, {
         headers: headers,
       });
@@ -165,15 +167,18 @@ export const WorkListTable = (props) => {
       if (response.status === 200) {
         console.log(response.data);
         enqueueSnackbar(`Tasks ${status} successfully.`, { variant: 'success' });
-        getCustomers();
         setConfirmDeleteDialogOpen(false);
+        // router.push(paths.dashboard.taskwork.index);
+        window.location.reload(); 
       } else {
         console.error("Error confirming/rejecting tasks:", response.data);
-        enqueueSnackbar(`Error: ${response.data.message}`, { variant: 'error' });
+        // enqueueSnackbar(`Error: ${response.data.message}`, { variant: 'error' });
       }
     } catch (err) {
       console.error("Error confirming/rejecting tasks:", err);
-      enqueueSnackbar(`Error: ${err.message}`, { variant: 'error' });
+      const errorMessage = err.response?.data?.message ;
+      console.log(errorMessage);
+      enqueueSnackbar(`Error: ${errorMessage}`, { variant: 'error' });
     }
   };
 

@@ -45,6 +45,7 @@ const Page = () => {
     setStakeMonth1:'',
     setStakeMonth2:'',
     setStakeMonth3:'',
+    setMinimumReferralamount:'',
   });
 
   const [loading, setLoading] = useState(true);
@@ -84,7 +85,8 @@ const Page = () => {
               setStakePercent2: initialValuesFromAPI.setStakePercent2,
               setStakePercent1: initialValuesFromAPI.setStakePercent1,
               setRegisterCoinValue: initialValuesFromAPI.setRegisterCoinValue,
-              setReferralCoinValue: initialValuesFromAPI.setReferralCoinValue
+              setReferralCoinValue: initialValuesFromAPI.setReferralCoinValue,
+              setMinimumReferralamount: initialValuesFromAPI.setMinimumReferralamount
             });
             setLoading(false);
           } else {
@@ -117,6 +119,11 @@ const Page = () => {
           filteredValues = {
             setCoinValueMarketUsdt: values.setCoinValueMarketUsdt,
             setMinimumAmountMarketUsdt: values.setMinimumAmountMarketUsdt
+          };
+          break;
+        case 'minimumReferral':
+          filteredValues = {
+            setMinimumReferralamount: values.setMinimumReferralamount,
           };
           break;
         case 'marketYUVA':
@@ -492,6 +499,35 @@ const Page = () => {
                     fullWidth
                     onClick={() => {
                       setSection('referralCoin');
+                      submitForm();
+                    }}
+                  >
+                    Set Now
+                  </Button>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Box border={1} borderColor="grey.300" borderRadius={2} p={2} sx={{ marginBottom: "30px" }}>
+                  <Typography variant="h6" gutterBottom>
+                    Minimum Referral Amount For Reward
+                  </Typography>
+                  <Field
+                    name="setMinimumReferralamount"
+                    as={TextField}
+                    label="Current"
+                    fullWidth
+                    margin="normal"
+                    value={values.setMinimumReferralamount}
+                    onChange={handleChange}
+                  />
+                  <Button
+                    type="button"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => {
+                      setSection('minimumReferral');
                       submitForm();
                     }}
                   >
