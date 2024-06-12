@@ -59,7 +59,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Forgot Password | Rock34x 
+          Forgot Password | Yuva Bitcoin
         </title>
       </Head>
       <div>

@@ -120,7 +120,7 @@ export const NewTaskForm = (props) => {
                   spacing={3}>
                     {/* Grid for start and end date/time */}
                     <Grid item 
-                    xs={6}>
+                    >
                       {/* Combine startDate and startTime into one field */}
                       <TextField
                         error={

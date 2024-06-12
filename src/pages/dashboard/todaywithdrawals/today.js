@@ -88,7 +88,7 @@ const useCustomers = (search) => {
 const Page = () => {
   const { search, updateSearch } = useSearch();
   const {  customersCount, completed, rejected, pending } = useCustomers(search);
-  const [currentTab, setCurrentTab] = useState("all");
+  const [currentTab, setCurrentTab] = useState("pending");
   // const [search2, setSearch2] = useState("");
   // const [searchedCustomers, setSearchedCustomers] = useState([]);
   // const [searchedCustomersCount, setSearchedCustomersCount] = useState(0);

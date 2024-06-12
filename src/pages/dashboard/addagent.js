@@ -19,9 +19,11 @@ import {
   DialogActions, 
   DialogContent, 
   DialogTitle, 
-  FormControlLabel 
+  FormControlLabel,
+  IconButton,
 } from "@mui/material";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useAuth } from "../../hooks/use-auth";
 import { Layout as DashboardLayout } from "../../layouts/dashboard";
 import OrderForm from "./agent/create";
@@ -146,9 +148,25 @@ const PermissionsModal = ({ open, onClose, adminUserId }) => {
   );
 };
 
+const DeleteConfirmModal = ({ open, onClose, onConfirm }) => {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Confirm Delete</DialogTitle>
+      <DialogContent>
+        <Typography>Are you sure you want to delete this agent?</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onConfirm} color="error">Delete</Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 const Page = () => {
   const [openForm, setOpenForm] = useState(false);
   const [openPermissionsModal, setOpenPermissionsModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [selectedAdminUserId, setSelectedAdminUserId] = useState(null);
   const [agent, setAgent] = useState([]);
   const { user } = useAuth();
@@ -183,6 +201,7 @@ const Page = () => {
   };
 
   const handleStatusChange = async (admin_user_id, currentStatus) => {
+    
     const token = localStorage.getItem("accessToken");
     const headers = {
       Authorization: token,
@@ -214,6 +233,38 @@ const Page = () => {
 
   const handleClosePermissionsModal = () => {
     setOpenPermissionsModal(false);
+    setSelectedAdminUserId(null);
+  };
+
+  const handleDeleteAgent = async () => {
+    const token = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization: token,
+    };
+    try {
+      const response = await axios.delete(
+        `${BASEURL}/api/Auth/deleteAgent`,
+        { headers, data: { admin_user_id: selectedAdminUserId } }
+      );
+      setAgent((prevAgent) =>
+        prevAgent.filter((ag) => ag.admin_user_id !== selectedAdminUserId)
+      );
+      enqueueSnackbar(response.data.message, { variant: "success" });
+      setOpenDeleteModal(false);
+      setSelectedAdminUserId(null);
+    } catch (error) {
+      enqueueSnackbar("Failed to delete agent", { variant: "error" });
+      console.error("Failed to delete agent", error.response?.data || error.message);
+    }
+  };
+
+  const handleOpenDeleteModal = (admin_user_id) => {
+    setSelectedAdminUserId(admin_user_id);
+    setOpenDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
     setSelectedAdminUserId(null);
   };
 
@@ -290,6 +341,12 @@ const Page = () => {
                         <TableCell>{new Date(ag.registration_date).toLocaleDateString()}</TableCell>
                         <TableCell>
                           <Button onClick={() => handleOpenPermissionsModal(ag.admin_user_id)}>Set Permissions</Button>
+                          <IconButton
+                            color="error"
+                            onClick={() => handleOpenDeleteModal(ag.admin_user_id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -308,6 +365,11 @@ const Page = () => {
         open={openPermissionsModal}
         onClose={handleClosePermissionsModal}
         adminUserId={selectedAdminUserId}
+      />
+      <DeleteConfirmModal
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleDeleteAgent}
       />
     </>
   );

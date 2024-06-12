@@ -229,7 +229,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Users List | Rock34x</title>
+        <title>Dashboard: Users List | Yuva Bitcoin</title>
       </Head>
       <Box
         component="main"
