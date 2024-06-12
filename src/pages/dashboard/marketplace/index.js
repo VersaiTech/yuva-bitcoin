@@ -22,6 +22,8 @@ import BuyForm from "./buyform";
 import UpdateForm from "./updateForm";
 import { useSnackbar } from "notistack";
 
+import { useRouter } from 'next/navigation';
+
 const CryptoMarketplacePage = () => {
   const [status, setStatus] = useState("Listed");
   const [listings, setListings] = useState([]);
@@ -30,6 +32,8 @@ const CryptoMarketplacePage = () => {
   const [updateForm, setUpdateForm] = useState(false);
   const [currentdata, setCurrentData] = useState({});
   const { enqueueSnackbar } = useSnackbar();
+
+  const router = useRouter();
 
   useEffect(() => {
     fetchData();
@@ -95,9 +99,11 @@ const CryptoMarketplacePage = () => {
         { headers }
       );
       const responseData = response.data;
-
+      
+      router.push(paths.dashboard.marketplace.index);
       enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseForm();
+      
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         enqueueSnackbar(error.response.data.error, { variant: "error" });

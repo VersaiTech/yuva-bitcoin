@@ -8,15 +8,29 @@ import {
   Typography,
   Button,
   Badge,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Alert ,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+import { color } from "@mui/system";
 
-
-export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonClick,handleDeleteButtonClick,status }) => {
+export const GridList2 = ({
+  projects,
+  handleBuyButtonClick,
+  handleUpdateButtonClick,
+  handleDeleteButtonClick,
+  status,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
   const theme = useTheme();
   console.log(status);
 
@@ -43,8 +57,51 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
     };
   }, [isModalOpen]);
 
+  const handleDeleteClick = (project) => {
+    setSelectedProject(project);
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = (confirmed) => {
+    setOpenDialog(false);
+    if (confirmed && selectedProject) {
+      handleDeleteButtonClick(selectedProject);
+    }
+    setSelectedProject(null);
+  };
+
   return (
     <>
+      <Dialog
+        open={openDialog}
+        onClose={() => handleDialogClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogContent>
+        <Alert severity="warning" sx={{ p: 3 ,  }}>
+          <DialogContentText id="alert-dialog-description" sx={{ color: "text.primary"}}>
+            Are you sure you want to delete this order? Only 3 deletions are
+            allowed per day.
+          </DialogContentText>
+        </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleDialogClose(false)} color="primary" variant="outlined">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDialogClose(true)}
+            color="error"
+            autoFocus
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Box
         sx={{
           backgroundColor: (theme) =>
@@ -57,8 +114,7 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
             const { _id, coin, amount, exchange_currency, total } = project;
 
             return (
-              <Grid key={project.id} item xs={6} sm={6} md={4} 
-              lg={3}>
+              <Grid key={project.id} item xs={6} sm={6} md={4} lg={3}>
                 <Box mt={2} mb={2}>
                   <Card
                     sx={{
@@ -94,11 +150,11 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                             : "0.9rem",
                         }}
                       >
-                      {coin === "yuva" ? "YB" : coin}
+                        {coin === "yuva" ? "YB" : coin}
                       </Typography>
                     </Box>
                     <Badge
-                      badgeContent={status === "Listed" ? "Listed": "Ordered"}
+                      badgeContent={status === "Listed" ? "Listed" : "Ordered"}
                       color="success"
                       sx={{
                         position: "absolute",
@@ -227,25 +283,6 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                           mt: 1,
                         }}
                       >
-                        {/*<Button
-                          variant="contained"
-                          color="primary"
-                          sx={{
-                            ml: 1,
-                            width: isScreenSizeGreaterThanSm ? "80%" : "100%",
-                            height: "36px", // Reduce button height for smaller screens
-                            fontSize: "0.8rem", // Reduce font size for smaller screens
-                            boxShadow:
-                              "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
-                            "&:hover": {
-                              boxShadow:
-                                "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
-                            },
-                          }}
-                          onClick={() => handleBuyButtonClick(project)}
-                        >
-                          Buy
-                        </Button>*/}
                         {status === "Listed" ? (
                           <Button
                             variant="contained"
@@ -268,46 +305,50 @@ export const GridList2 = ({ projects, handleBuyButtonClick,handleUpdateButtonCli
                           </Button>
                         ) : (
                           <>
-                           <Stack
-      direction={isScreenSizeGreaterThanSm ? 'row' : 'column'}
-      spacing={isScreenSizeGreaterThanSm ? 1 : 2}
-      sx={{
-        width: '100%',
-      }}
-    >
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{
-          width: isScreenSizeGreaterThanSm ? 'auto' : '100%',
-          height: '36px',
-          fontSize: '0.8rem',
-          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
-          '&:hover': {
-            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)',
-          },
-        }}
-        onClick={() => handleUpdateButtonClick(project)}
-      >
-        Update
-      </Button>
-      <Button
-        variant="contained"
-        color="error"
-        sx={{
-          width: isScreenSizeGreaterThanSm ? 'auto' : '100%',
-          height: '36px',
-          fontSize: '0.8rem',
-          boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
-          '&:hover': {
-            boxShadow: '0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)',
-          },
-        }}
-        onClick={() => handleDeleteButtonClick(project)}
-      >
-        Delete
-      </Button>
-    </Stack>
+                            <Stack
+                              direction={isScreenSizeGreaterThanSm ? "row" : "column"}
+                              spacing={isScreenSizeGreaterThanSm ? 1 : 2}
+                              sx={{
+                                width: "100%",
+                              }}
+                            >
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                sx={{
+                                  width: isScreenSizeGreaterThanSm ? "auto" : "100%",
+                                  height: "36px",
+                                  fontSize: "0.8rem",
+                                  boxShadow:
+                                    "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
+                                  "&:hover": {
+                                    boxShadow:
+                                      "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
+                                  },
+                                }}
+                                onClick={() => handleUpdateButtonClick(project)}
+                              >
+                                Update
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color="error"
+                                sx={{
+                                  width: isScreenSizeGreaterThanSm ? "auto" : "100%",
+                                  height: "36px",
+                                  fontSize: "0.8rem",
+                                  boxShadow:
+                                    "0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)",
+                                  "&:hover": {
+                                    boxShadow:
+                                      "0px 4px 6px -1px rgba(0,0,0,0.2), 0px 7px 10px 1px rgba(0,0,0,0.14), 0px 2px 20px 2px rgba(0,0,0,0.12)",
+                                  },
+                                }}
+                                onClick={() => handleDeleteClick(project)}
+                              >
+                                Delete
+                              </Button>
+                            </Stack>
                           </>
                         )}
                       </Box>
