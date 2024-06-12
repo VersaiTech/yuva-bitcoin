@@ -9,7 +9,6 @@
 // import axios from "axios";
 // import toast from "react-hot-toast";
 
-
 // const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 // const CreateNewsPage = () => {
@@ -18,7 +17,6 @@
 //     title: '',
 //     content: '',
 //   });
-
 
 //   const handleChange = (event) => {
 //     const { name, value } = event.target;
@@ -32,17 +30,17 @@
 //       const headers = {
 //         'Authorization': token
 //       };
-  
+
 //       // Convert HTML content to plain text
 //       const plainTextContent = formData.content.replace(/<[^>]+>/g, '');
-  
+
 //       const response = await axios.post(`${BASEURL}/api/Blog/createBlog`, { ...formData, content: plainTextContent }, {
 //         headers: headers
 //       });
 //       toast.success("News created");
 
 //       router.push(paths.dashboard.news.list);
-      
+
 //       console.log('News created:', response.data);
 //       // Reset form data after successful submission if needed
 //       setFormData({
@@ -92,17 +90,15 @@
 //   <Button type="submit" variant="contained" color="primary">
 //     Create News
 //   </Button>
-  
-//   <Button 
-//     variant="outlined" 
-//     color="primary" 
-//     sx={{ ml: 2 }} 
-    
 
-    
+//   <Button
+//     variant="outlined"
+//     color="primary"
+//     sx={{ ml: 2 }}
+
 //   >
 //     Cancel
-    
+
 //   </Button>
 // </Box>
 
@@ -115,14 +111,12 @@
 
 // export default CreateNewsPage;
 
-
-
 import { useRouter } from "next/navigation";
 import { paths } from "../../../paths";
-import { useState } from 'react';
-import { Box, Button, TextField, Typography, Input } from '@mui/material';
-import { QuillEditor } from '../../../components/quill-editor';
-import Head from 'next/head';
+import { useState } from "react";
+import { Box, Button, TextField, Typography, Input } from "@mui/material";
+import { QuillEditor } from "../../../components/quill-editor";
+import Head from "next/head";
 import { Layout as DashboardLayout } from "../../../layouts/dashboard";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -132,9 +126,9 @@ const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const CreateNewsPage = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    file: null,
+    title: "",
+    content: "",
+
   });
 
   const handleChange = (event) => {
@@ -149,48 +143,54 @@ const CreateNewsPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = localStorage.getItem("accessToken");
       const headers = {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `${token}`,
       };
 
       // Convert HTML content to plain text
-      const plainTextContent = formData.content.replace(/<[^>]+>/g, '');
+      const plainTextContent = formData.content.replace(/<[^>]+>/g, "");
 
       // Upload image first
-      let imageUrl = '';
+      let imageUrls = [];
       if (formData.file) {
         const formDataFile = new FormData();
-        formDataFile.append('file', formData.file);
+        formDataFile.append("image", formData.file);
 
-        const uploadResponse = await axios.post('https://images.yuvabitcoin.com/upload', formDataFile, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        imageUrl = uploadResponse.data.url; // Adjust based on the actual response
+        const uploadResponse = await axios.post(
+          "https://images.yuvabitcoin.com/upload",
+          formDataFile,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Upload response:", uploadResponse);
+        imageUrls.push(uploadResponse.data.imageUrl);
       }
 
+      const accessToken = localStorage.getItem("accessToken");
+
       // Create news with the uploaded image URL
-      const response = await axios.post(`${BASEURL}/api/Blog/createBlog`, 
-        { ...formData, content: plainTextContent, imageUrl }, 
+      const response = await axios.post(
+        `${BASEURL}/api/Blog/createBlog`,
+        { title: formData.title, content: plainTextContent, imageUrls },
         { headers }
       );
 
       toast.success("News created");
       router.push(paths.dashboard.news.list);
 
-      console.log('News created:', response.data);
+      console.log("News created:", response.data);
       // Reset form data after successful submission if needed
       setFormData({
-        title: '',
-        content: '',
-        file: null,
+        title: "",
+        content: "",
       });
     } catch (error) {
-      console.error('Error creating news:', error);
-      toast.error('Failed to create news');
+      console.error("Error creating news:", error);
+      toast.error("Failed to create news");
     }
   };
 
@@ -223,19 +223,15 @@ const CreateNewsPage = () => {
         <Typography sx={{ mt: 3 }} variant="subtitle2">
           File
         </Typography>
-        <Input
-          type="file"
-          fullWidth
-          onChange={handleFileChange}
-        />
+        <Input type="file" fullWidth onChange={handleFileChange} />
         <Box sx={{ mt: 3 }}>
           <Button type="submit" variant="contained" color="primary">
             Create News
           </Button>
-          <Button 
-            variant="outlined" 
-            color="primary" 
-            sx={{ ml: 2 }} 
+          <Button
+            variant="outlined"
+            color="primary"
+            sx={{ ml: 2 }}
             onClick={() => router.push(paths.dashboard.news.list)}
           >
             Cancel
@@ -249,4 +245,3 @@ const CreateNewsPage = () => {
 CreateNewsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default CreateNewsPage;
-
