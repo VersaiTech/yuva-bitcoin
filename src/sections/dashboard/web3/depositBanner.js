@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Web3 from "web3";
+import { ethers } from "ethers";
 import axios from "axios";
 import PropTypes from "prop-types";
 import SwitchVertical01Icon from "@untitled-ui/icons-react/build/esm/SwitchVertical01";
-import { CONTRACT, USDTABI, USDT_CONTRACT_ADDRESS } from "./wallet";
+import { YUVAABI, USDTABI, USDT_CONTRACT_ADDRESS, YUVA_CONTRACT_ADDRESS } from "./wallet";
 import { useSnackbar } from "notistack";
 // const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -24,19 +25,21 @@ import {
 
 const logoMap = {
   USDT: "/assets/logos/logo-usdt.svg",
-  YuvaBitcoin: "/assets/logos/yuvalogo.png",
+  YUVA: "/assets/logos/yuvalogo2.png",
   BNB: "/assets/logos/logo-bnb.svg",
+  MATIC: "/assets/logos/polygon-matic-logo.svg",
 };
 
 export const DepositOperations = (props) => {
   const [hasProvider, setHasProvider] = useState(null);
   const [coin, setCoin] = useState("USDT");
-  // const [provider, setProvider] = useState(null);
+  const [provider, setProvider] = useState(null);
 
   const [rate, setRate] = useState({
     USDT: 0,
     BNB: 0,
     MATIC: 0,
+    YUVA: 1,
   });
 
   const [wallet, setWallet] = useState([]);
@@ -70,7 +73,8 @@ export const DepositOperations = (props) => {
         return {
           ...prev,
           USDT: response.data[0]?.price?.usdt,
-          BNB: response.data[0]?.price?.ethereum,
+          BNB: response.data[0]?.price?.bnb,
+          MATIC: response.data[0]?.price?.matic,
         };
       });
     } catch (error) {
@@ -185,12 +189,16 @@ export const DepositOperations = (props) => {
   //   }
   // }
 
-  const ADMIN_WALLET_ADDRESS = "0x8Ec246487834f6C4CAAf2fd67cB1731Cc5C9eB57";
+  const ADMIN_WALLET_ADDRESS = "0xA8fbfb208319335913DA9Db7094Eb2cF2B3F9a53";
 
   const buyToken = async () => {
     try {
       if (values.amount <= 0 || !values.amount) {
         enqueueSnackbar("Please Enter Amount", { variant: "error" });
+        return;
+      }
+      if (wallet.accounts[0] === undefined) {  
+        enqueueSnackbar("Please Connect Wallet", { variant: "error" });
         return;
       }
       const provider = await detectEthereumProvider({ silent: true });
@@ -208,14 +216,19 @@ export const DepositOperations = (props) => {
           )
           .send({ from: wallet.accounts[0] });
       } else if (coin === "BNB") {
-        const contract = new web3.eth.Contract(BNBABI, BNB_CONTRACT_ADDRESS);
+        // console.log(provider);
+        // return
 
-        const response = await contract.methods
-          .transfer(
-            ADMIN_WALLET_ADDRESS,
-            web3.utils.toWei(values.amount, "ether")
-          )
-          .send({ from: wallet.accounts[0] });
+        response = await web3.eth.sendTransaction({
+          from: wallet.accounts[0],
+          to: ADMIN_WALLET_ADDRESS,
+          value: web3.utils.toWei(values.amount, "ether"),
+        });
+
+        // response = await signer.sendTransaction({
+        //   to: ADMIN_WALLET_ADDRESS,
+        //   value: web3.utils.toWei(values.amount.toString(), 'ether'),
+        // });
       } else if (coin === "MATIC") {
         const contract = new web3.eth.Contract(
           MATICABI,
@@ -223,6 +236,15 @@ export const DepositOperations = (props) => {
         );
 
         const response = await contract.methods
+          .transfer(
+            ADMIN_WALLET_ADDRESS,
+            web3.utils.toWei(values.amount, "ether")
+          )
+          .send({ from: wallet.accounts[0] });
+      } else if (coin === "YUVA") {
+        const contract = new web3.eth.Contract(YUVAABI, YUVA_CONTRACT_ADDRESS);
+
+        response = await contract.methods
           .transfer(
             ADMIN_WALLET_ADDRESS,
             web3.utils.toWei(values.amount, "ether")
@@ -238,6 +260,7 @@ export const DepositOperations = (props) => {
           deposit_type: coin.toLowerCase(),
           wallet_address: wallet.accounts[0],
           transaction_hash: response.transactionHash,
+          // transaction_hash: "1234123412223334",
           amount: values.amount,
         },
         {
@@ -254,7 +277,7 @@ export const DepositOperations = (props) => {
       // }
 
       enqueueSnackbar("Transaction Success", { variant: "success" });
-      router.push("/dashboard/convert");
+      // router.push("/dashboard/convert");
       // } else {
       //   enqueueSnackbar("Transaction Failed", { variant: "error" });
       // }
@@ -354,6 +377,7 @@ export const DepositOperations = (props) => {
                   Matic
                 </Button>
                 <Button onClick={() => setCoin("USDT")}>USDT</Button>
+                <Button onClick={() => setCoin("YUVA")}>YUVA</Button>
               </ButtonGroup>
             ),
           }}
