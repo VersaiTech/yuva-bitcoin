@@ -10,7 +10,6 @@ import { useSnackbar } from "notistack";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 import detectEthereumProvider from "@metamask/detect-provider";
 import { useRouter } from "next/router";
-
 import {
   Box,
   Button,
@@ -306,6 +305,14 @@ export const DepositOperations = (props) => {
     }
   }, []);
 
+  const handleCoinButtonClick = (selectedCoin) => {
+    if (selectedCoin === "BNB" || selectedCoin === "MATIC") {
+      enqueueSnackbar("Activating soon", { variant: "info" });
+    } else {
+      
+    }
+  };
+
   return (
     <Card
       {...props}
@@ -372,8 +379,8 @@ export const DepositOperations = (props) => {
             ),
             endAdornment: (
               <ButtonGroup variant="text" aria-label="Basic button group">
-                <Button onClick={() => setCoin("BNB")}>BNB</Button>
-                <Button onClick={() => setCoin("MATIC")} value="Matic">
+                <Button onClick={() => handleCoinButtonClick("BNB")} >BNB</Button>
+                <Button onClick={() => handleCoinButtonClick("MATIC")} value="Matic" >
                   Matic
                 </Button>
                 <Button onClick={() => setCoin("USDT")}>USDT</Button>
