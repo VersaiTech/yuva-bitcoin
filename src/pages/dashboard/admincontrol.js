@@ -39,6 +39,7 @@ const permissions = [
   "setTaskCreate",
   "setUserBlock",
   "setAllTaskApprove",
+  "setMinimumReferralamount",
 ];
 
 const permissionNames = {
@@ -65,6 +66,7 @@ const permissionNames = {
   "setTaskCreate": "Set Task Creation",
   "setUserBlock": "Set User Block",
   "setAllTaskApprove": "Set All Task Approvals",
+  "setMinimumReferralamount":"Set Minimum Amount For Referral Reward"
 };
 
 const PermissionSettingsPage = () => {
