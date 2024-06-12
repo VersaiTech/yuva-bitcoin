@@ -75,6 +75,11 @@ app.use('/api/Permission', require('./routes/Permission.route'));
 // app.delete('/delete-tweet/:tweetId', assignedTaskController.deleteTweet);
 
 
+// app.get('/', (req, res) => {
+//   const ipAddress = req.socket.remoteAddress;
+//   res.send(`Your IP address is: ${ipAddress}`);
+// });
+
 
 //Database
 const username = process.env.DB_USERNAME;

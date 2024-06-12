@@ -241,7 +241,7 @@ const confirmTaskCompletion = async (req, res) => {
     } else if (status === 'rejected') {
       completedTask.reason = reason; // Save the reason for rejection
       await completedTask.save();
-      return res.status(400).json({ message: 'Task completion rejected. User not rewarded.' });
+      return res.status(200).json({ message: 'Task completion rejected. User not rewarded.' });
     } else {
       return res.status(400).json({ message: 'Invalid status' });
     }
