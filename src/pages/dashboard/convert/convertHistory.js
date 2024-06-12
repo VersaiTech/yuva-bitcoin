@@ -204,15 +204,6 @@ const Page = () => {
               </Stack>
             </Stack>
             <Card>
-              <ConvertListSearch
-                onFiltersChange={handleFiltersChange}
-                onSortChange={handleSortChange}
-                sortDir={search.sortDir}
-                completed={completed}
-                pending={pending}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-              />
               <ConvertListTable
                 // customers={customers}
                 // customersCount={customersCount}

@@ -20,6 +20,10 @@ import axios from "axios";
 import OrderForm from "./Orderform";
 import BuyForm from "./buyform";
 import UpdateForm from "./updateForm";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useSnackbar } from "notistack";
 
 const CryptoMarketplacePage = () => {
@@ -29,12 +33,42 @@ const CryptoMarketplacePage = () => {
   const [buyForm, setBuyForm] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [currentdata, setCurrentData] = useState({});
+  const [minValues, setMinValues] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+  
+
+  useEffect(() => {
+    const fetchStakingDurations = async () => {
+      try {
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem("accessToken");
+        const headers = {
+          Authorization: token,
+        };
+
+        const response = await axios.get(`${BASEURL}/admin/smallData`, { headers });
+        console.log(response.data.data)
+
+        if (response.status === 200) {
+          setMinValues(response.data.data);
+        } else {
+          enqueueSnackbar("Failed to fetch staking durations", { variant: "error" });
+        }
+      } catch (error) {
+        enqueueSnackbar(error.response?.data?.error || "Failed to fetch minimum values", { variant: "error" });
+      }
+    };
+
+    fetchStakingDurations();
+  }, []);
+
+
 
   const fetchData = async () => {
     try {
@@ -291,10 +325,25 @@ const CryptoMarketplacePage = () => {
               Create Order
             </Button>
           </Box>
-          <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
-            Minimum coin value : <br />
-            Minimum number of coins :
-          </Alert>
+          <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography>Minimum Values</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
+              Minimum coin value USDT: {minValues.setCoinValueMarketUsdt}<br />
+              Minimum number of coins USDT: {minValues.setMinimumAmountMarketUsdt}
+            </Alert>
+            <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
+              Minimum coin value YUVA: {minValues.setCoinValueMarketYuva}<br />
+              Minimum number of coins YUVA: {minValues.setMinimumAmountMarketYuva}
+            </Alert>
+          </AccordionDetails>
+        </Accordion>
           <Divider sx={{ my: 3 }} />
           <GridList2
             projects={listings}
