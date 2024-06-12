@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const { getOverview, getUserOverview } = require('../controllers/Overview.controller');
-const { getuserbalance, getAllStakes, getAllStake, addTask, editTask, getOneTaskforAdminConfirmationTask,confirmMultipleTaskCompletions,getAllTasksforAdminWithoutStatus, updateMemberDetails, getMemberDetails, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser,countMembersWithCoins,countMemberWithStakeCoins,findMember,findMemberInTask ,userRegToday,stakeToday,withdrawSToday,withdrawRToday,withdrawPToday,usdtDepositToday,referralToday,findTaskByName,smallData} = require('../controllers/AdminController');
+const { getuserbalance, getAllStakes, getAllStake, addTask, editTask,findTasbyNameAdmin, getOneTaskforAdminConfirmationTask,confirmMultipleTaskCompletions,getAllTasksforAdminWithoutStatus, updateMemberDetails, getMemberDetails, deleteTask, deleteManyTasks, getOneTask, deleteUser, getRejectedTasks, getAllTasks, completeTask, confirmTaskCompletion, getMemberByUserId, updateMemberStatus, getAllMembers, getActiveMembers, getBlockedMembers, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getRejectedTasksForUser, getAllTasksUser,countMembersWithCoins,countMemberWithStakeCoins,findMember,findMemberInTask ,userRegToday,stakeToday,withdrawSToday,withdrawRToday,withdrawPToday,usdtDepositToday,referralToday,findTaskByName,smallData} = require('../controllers/AdminController');
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 router.route('/addTask').post(isAdmin, upload.array('file', 10), addTask); //
@@ -68,6 +68,7 @@ router.route('/countMemberWithStakeCoins').get(isAdmin, countMemberWithStakeCoin
 router.route('/findMember').post(isAdmin, findMember);
 router.route('/findMemberInTask').post(isAdmin, findMemberInTask);
 router.route('/findTaskByName').post(ValidMember, findTaskByName);
+router.route('/findTasbyNameAdmin').post(isAdmin, findTasbyNameAdmin);
 
 router.route("/registeredToday/:page_number?/:count?").get(isAdmin, userRegToday);
 router.route("/stackedToday/:page_number?/:count?").get(isAdmin, stakeToday);

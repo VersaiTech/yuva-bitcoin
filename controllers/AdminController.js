@@ -1966,6 +1966,30 @@ async function findTaskByName(req, res) {
 }
 
 
+async function findTasbyNameAdmin(req, res) {
+  try {
+    const user = req.user.admin_user_id;
+    if (!user) {
+      return res.status(401).json({ status: false, message: "Unauthorized" });
+    }
+    const { taskName } = req.body;
+    if (taskName.length < 3) {
+      return res.status(400).json({ status: false, message: "Minimum 3 character required" });
+    }
+
+    const task = await Task.find({ taskName: { $regex: taskName, $options: "i" } }).lean();
+    if (task.length == 0) {
+      return res.status(404).json({ status: false, message: "Task not found" });
+    }
+    return res.status(200).json({ status: true, message: "Task found", data: task });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+}
+
+
+
 
 const userRegToday = async (req, res) => {
   const schema = Joi.object({
@@ -2281,4 +2305,4 @@ const smallData = async (req, res) => {
   }
 }
 
-module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, smallData, addTask, getOneTask, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday, findTaskByName, confirmMultipleTaskCompletions }; 
+module.exports = { getuserbalance, getAllStakes, getAllStake, getAllTasks, smallData, addTask, getOneTask, findTasbyNameAdmin, getMemberByUserId, editTask, deleteTask, deleteManyTasks, completeTask, confirmTaskCompletion, getAllMembers, getRejectedTasks, getActiveMembers, getBlockedMembers, updateMemberStatus, deleteUser, getPendingTasks, getCompletedTasks, getConfirmedTasksForUser, getPendingTasksForUser, getOneTaskforAdminConfirmationTask, getRejectedTasksForUser, getAllTasksUser, getMemberDetails, updateMemberDetails, getAllTasksforAdminWithoutStatus, countMembersWithCoins, countMemberWithStakeCoins, findMember, findMemberInTask, userRegToday, stakeToday, withdrawSToday, withdrawRToday, withdrawPToday, usdtDepositToday, referralToday, findTaskByName, confirmMultipleTaskCompletions }; 
