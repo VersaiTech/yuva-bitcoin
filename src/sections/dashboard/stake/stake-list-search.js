@@ -33,19 +33,7 @@ const tabs = [
     label: "Today Staked",
     value: "pending",
   },
-  // {
-  //   label: 'Rejected',
-  //   value: 'hasAcceptedMarketing'
-  // },
-  // {
-  //   label: 'Approved',
-  //   value: 'isProspect'
-  // }
-  // ,
-  // {
-  //   label: 'Returning',
-  //   value: 'isReturning'
-  // }
+  
 ];
 
 const sortOptions = [
