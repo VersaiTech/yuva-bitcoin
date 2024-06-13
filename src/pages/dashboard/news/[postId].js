@@ -222,7 +222,7 @@ const NewsDetailPage = () => {
         headers: headers,
       });
 
-      router.push("/dashboard");
+      router.push("/dashboard/portfolio");
     } catch (error) {
       console.error("Error deleting news article:", error);
     }
