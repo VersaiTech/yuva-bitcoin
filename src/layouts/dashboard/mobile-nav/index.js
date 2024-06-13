@@ -180,14 +180,14 @@ export const MobileNav = (props) => {
               color="neutral.400"
               variant="subtitle1"
             >
-              Need help?
+              Check White Paper
             </Typography>
             <Typography
               color="neutral.400"
               sx={{ mb: 2 }}
               variant="body2"
             >
-              Please check our docs.
+              Please check our whitepaper.
             </Typography>
             <Button
               component={NextLink}
@@ -200,7 +200,7 @@ export const MobileNav = (props) => {
               )}
               variant="contained"
             >
-              Documentation
+              White Paper
             </Button>
           </Box>
         </Stack>

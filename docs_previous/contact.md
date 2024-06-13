@@ -6,7 +6,7 @@ title: Contact
 
 Our support mainly covers pre-sale questions, basic product questions and bug reports through our
 support email:
-[support@YuvaBitcoinio.zendesk.com](mailto:support@YuvaBitcoinio.zendesk.com).
+[support@rock34xio.zendesk.com](mailto:support@rock34xio.zendesk.com).
 
 To be eligible to request the technical support you must have purchased the theme and have at least
 one Standard or Extended license.
