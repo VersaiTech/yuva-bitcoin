@@ -232,7 +232,7 @@ const Page = () => {
                   <Field
                     name="setMinimumAmountMarketUsdt"
                     as={TextField}
-                    label="Minimum Amount"
+                    label="Minimum Coin"
                     fullWidth
                     margin="normal"
                     value={values.setMinimumAmountMarketUsdt}
@@ -270,7 +270,7 @@ const Page = () => {
                   <Field
                     name="setMinimumAmountMarketYUVA"
                     as={TextField}
-                    label="Minimum Amount"
+                    label="Minimum Coin"
                     fullWidth
                     margin="normal"
                     value={values.setMinimumAmountMarketYUVA}
@@ -510,12 +510,12 @@ const Page = () => {
               <Grid item xs={12} sm={6}>
                 <Box border={1} borderColor="grey.300" borderRadius={2} p={2} sx={{ marginBottom: "30px" }}>
                   <Typography variant="h6" gutterBottom>
-                    Minimum Referral Amount For Reward
+                    Minimum Referral Amount Deposit For Reward
                   </Typography>
                   <Field
                     name="setMinimumReferralamount"
                     as={TextField}
-                    label="Yuva Bitcoin"
+                    label="USDT"
                     fullWidth
                     margin="normal"
                     value={values.setMinimumReferralamount}
