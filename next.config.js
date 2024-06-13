@@ -6,6 +6,9 @@ const config = {
     appDir: false,
     esmExternals: false
   },
+  images: {
+    domains: ['images.yuvabitcoin.com']
+  },
   redirects() {
     return [
       {
