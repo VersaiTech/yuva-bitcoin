@@ -5,6 +5,9 @@ const config = {
   experimental: {
     appDir: false
   },
+  images: {
+    domains: ['images.yuvabitcoin.com']
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -34,3 +37,4 @@ const withTM = require('next-transpile-modules')([
 ]);
 
 module.exports = withTM(config);
+
