@@ -223,7 +223,7 @@ const Page = () => {
                   <Field
                     name="setCoinValueMarketUsdt"
                     as={TextField}
-                    label="Current Value"
+                    label="Minimum Exchange Rate (YUVA BITCOIN)"
                     fullWidth
                     margin="normal"
                     value={values.setCoinValueMarketUsdt}
@@ -261,7 +261,7 @@ const Page = () => {
                   <Field
                     name="setCoinValueMarketYUVA"
                     as={TextField}
-                    label="Current Value"
+                    label="Minimum Exchange rate (USDT)"
                     fullWidth
                     margin="normal"
                     value={values.setCoinValueMarketYUVA}
@@ -414,7 +414,7 @@ const Page = () => {
               <Grid item xs={12} sm={6}>
                 <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
                   <Typography variant="h6" gutterBottom>
-                    Withdrawal Value
+                    Withdrawal Value (USDT & YUVA BITCOIN)
                   </Typography>
                   <Field
                     name="setMinimumWithdrawal"
@@ -457,7 +457,7 @@ const Page = () => {
                   <Field
                     name="setRegisterCoinValue"
                     as={TextField}
-                    label="Current"
+                    label="Yuva Bitcoin"
                     fullWidth
                     margin="normal"
                     value={values.setRegisterCoinValue}
@@ -486,7 +486,7 @@ const Page = () => {
                   <Field
                     name="setReferralCoinValue"
                     as={TextField}
-                    label="Current"
+                    label="Yuva Bitcoin"
                     fullWidth
                     margin="normal"
                     value={values.setReferralCoinValue}
@@ -515,7 +515,7 @@ const Page = () => {
                   <Field
                     name="setMinimumReferralamount"
                     as={TextField}
-                    label="Current"
+                    label="Yuva Bitcoin"
                     fullWidth
                     margin="normal"
                     value={values.setMinimumReferralamount}
