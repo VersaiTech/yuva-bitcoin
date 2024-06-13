@@ -1,19 +1,70 @@
 const Deposit = require("../models/deposit");
 const Member = require("../models/memberModel");
 const ReferralHistory = require("../models/referralModel");
+const Joi = require("joi");
 
 
-const getAllReferral = async (req, res) => {
+// const getAllReferral = async (req, res) => {
+//     try {
+//         const adminId = req.user.admin_user_id;
+//         if (!adminId) {
+//             return res.status(401).json({ message: 'Unauthorized' });
+//         }
+
+//         const totalReferral = await ReferralHistory.countDocuments();
+//         const referrals = await ReferralHistory.find();
+//         return res.status(200).json({ referrals, totalReferral });
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message });
+//     }
+// }
+
+async function getAllReferral(req, res) {
+    const Schema = Joi.object({
+        page_number: Joi.number(),
+        count: Joi.number(),
+    });
+    const { error, value } = Schema.validate(req.params);
+
+    if (error) {
+        return res
+            .status(400)
+            .json({ status: false, error: error.details[0].message });
+    }
     try {
+
         const adminId = req.user.admin_user_id;
         if (!adminId) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        const referrals = await ReferralHistory.find();
-        return res.status(200).json({ referrals });
+        const page_number = value.page_number || 1;
+        const count = value.count || 10;
+        const offset = (page_number - 1) * count;
+
+        const totalReferral = await ReferralHistory.countDocuments();
+        const referrals = await ReferralHistory.find()
+            .sort({ createdAt: -1 })
+            .skip(offset)
+            .limit(count);
+
+        if (!referrals || referrals.length === 0) {
+            return res.status(200).json({
+                status: false,
+                message: "No Referral found",
+                externalSwap: [],
+            });
+        }
+
+        return res.status(200).json({
+            status: true,
+            message: "Referral found",
+            referrals: referrals,
+            totalReferral: totalReferral,
+        });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 }
 

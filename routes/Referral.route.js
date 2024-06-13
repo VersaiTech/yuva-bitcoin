@@ -4,7 +4,7 @@ const { getAllReferral ,getUserReferral,getReferralForUser} = require("../contro
 const { ValidMember, isAdmin } = require('../middleware/Auth.middleware');
 
 
-router.route("/getAllReferral").get(isAdmin, getAllReferral);
+router.route("/getAllReferral/:page_number?/:count?").get(isAdmin, getAllReferral);
 router.route("/getUserReferral/:user_id").get(isAdmin, getUserReferral);
 router.route("/getReferralForUser").get(ValidMember, getReferralForUser);
 
