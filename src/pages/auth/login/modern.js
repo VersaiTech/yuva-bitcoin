@@ -159,6 +159,16 @@ const Page = () => {
           Continue
         </LoadingButton>
         <Box sx={{ mt: 3 }}>
+          <Link
+            component={NextLink}
+            href={paths.auth.forgotPassword.modern}
+            underline="hover"
+            variant="subtitle2"
+          >
+            Forgot password?
+          </Link>
+        </Box>
+        {/* <Box sx={{ mt: 3 }}> */}
           {/* <Link
             href="#"
             underline="hover"
@@ -166,7 +176,7 @@ const Page = () => {
           >
             Forgot password?
           </Link> */}
-        </Box>
+        {/* </Box> */}
       </form>
     </div>
   );
