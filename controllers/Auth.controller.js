@@ -362,9 +362,9 @@ async function sendOTPForgotPassword(email, otp, member_name) {
   try {
 
     const imagePath = path.resolve(__dirname, '../public/logo.png')
-    const images = fs.readFileSync(imagePath)
+    // const images = fs.readFileSync(imagePath)
 
-    const base64Image = Buffer.from(images).toString('base64')
+    // const base64Image = Buffer.from(images).toString('base64')
 
     // Path to your HTML file
     const templatePath = path.resolve(__dirname, '../template/emailTemplate/forgotPassword.html');
@@ -1203,9 +1203,9 @@ async function sendLoginOTP(email, otp) {
   try {
 
     const imagePath = path.resolve(__dirname, '../public/logo.jpeg')
-    const images = fs.readFileSync(imagePath)
+    // const images = fs.readFileSync(imagePath)
 
-    const base64Image = Buffer.from(images).toString('base64')
+    // const base64Image = Buffer.from(images).toString('base64')
     // console.log(base64Image);
     // Path to your HTML file
     const templatePath = path.resolve(__dirname, '../template/emailTemplate/login.html');
