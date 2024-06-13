@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -111,7 +112,7 @@ export const WorkTaskSearch = (props) => {
     const query = queryRef.current?.value;
 
     if (query.length < 3) {
-      alert("Minimum 3 characters required");
+      enqueueSnackbar('Please enter at least 3 characters', { variant: 'warning' });
       return;
     }
 
@@ -131,7 +132,7 @@ export const WorkTaskSearch = (props) => {
       }
     } catch (error) {
       console.error(error.response.data.message);
-      alert("An error occurred while searching for members");
+      enqueueSnackbar(error.response.data.message, { variant: 'error' });
     }
   }, [setSearchResults]);
 

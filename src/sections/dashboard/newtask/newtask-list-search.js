@@ -15,8 +15,8 @@ import {
   TextField
 } from '@mui/material';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
-
 import axios from 'axios';
+import { useSnackbar } from 'notistack';
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -62,16 +62,15 @@ const sortOptions = [
 export const NewtaskListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
   const queryRef = useRef(null);
-  // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
-  // const [activeUsers, setActiveUsers] = useState([]);
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
   console.log(sturl);
 
   useEffect(() => {
-    if(sturl){
+    if (sturl) {
       setCurrentTab(sturl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,7 +88,7 @@ export const NewtaskListSearch = (props) => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
 
-  const handleTabsChange = useCallback(async(event, value) => {
+  const handleTabsChange = useCallback((event, value) => {
     setCurrentTab(value);
     setFilters((prevState) => {
       const updatedFilters = {
@@ -107,20 +106,12 @@ export const NewtaskListSearch = (props) => {
     });
   }, [setCurrentTab]);
 
-  // const handleQueryChange = useCallback((event) => {
-  //   event.preventDefault();
-  //   setFilters((prevState) => ({
-  //     ...prevState,
-  //     query: queryRef.current?.value
-  //   }));
-  // }, []);
-
   const handleQueryChange = useCallback(async (event) => {
     event.preventDefault();
     const query = queryRef.current?.value;
 
     if (query.length < 3) {
-      alert("Minimum 3 characters required");
+      enqueueSnackbar("Minimum 3 characters required", { variant: 'warning' });
       return;
     }
 
@@ -135,13 +126,13 @@ export const NewtaskListSearch = (props) => {
       if (response.data.status) {
         setSearchResults(response.data.data);
       } else {
-        alert(response.data.message);
+        enqueueSnackbar(response.data.message, { variant: 'error' });
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred while searching for members");
+      enqueueSnackbar( error.response.data.message, { variant: 'error' });
     }
-  }, [setSearchResults]);
+  }, [setSearchResults, enqueueSnackbar]);
 
   const handleRefresh = useCallback(() => {
     queryRef.current.value = "";

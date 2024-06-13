@@ -23,6 +23,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import * as XLSX from 'xlsx';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
+
 const tabs = [
   {
     label: 'All Users',
@@ -49,6 +50,7 @@ export const CustomerListSearch = (props) => {
   const [filters, setFilters] = useState({});
   // Export Modal Opening 
   const [exportModalOpen, setExportModalOpen] = useState(false);
+  
 
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
@@ -95,7 +97,7 @@ export const CustomerListSearch = (props) => {
     const query = queryRef.current?.value;
 
     if (query.length < 3) {
-      alert("Minimum 3 characters required");
+      enqueueSnackbar('Please enter at least 3 characters', { variant: 'warning' });
       return;
     }
 
@@ -110,11 +112,12 @@ export const CustomerListSearch = (props) => {
       if (response.data.status) {
         setSearchResults(response.data.data);
       } else {
-        alert(response.data.message);
+       enqueueSnackbar(response.data.message, { variant: 'error' });
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred while searching for members");
+      
+      enqueueSnackbar(error.response.data.message, { variant: 'error' });
     }
   }, [setSearchResults]);
 
