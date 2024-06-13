@@ -80,7 +80,7 @@ export const TopNav = (props) => {
                 }
               }}
             >
-              Yuva <span>Bitcoin</span>
+              Yuva <span>Bitcoin WhitePaper </span>
             </Box>
           </Stack>
           <Chip

@@ -142,7 +142,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Admin COntrol | Yuva Bitcoin </title>
+        <title>Dashboard: Admin Control | Yuva Bitcoin </title>
       </Head>
       <Box
         component="main"

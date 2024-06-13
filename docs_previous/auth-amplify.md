@@ -121,7 +121,7 @@ const Page = () => {
   
   const handleLogin = () => {
     // Email/username and password
-    login('demo@YuvaBitcoin.io', 'Password123!');
+    login('demo@Rock34x.io', 'Password123!');
   };
 
   return (

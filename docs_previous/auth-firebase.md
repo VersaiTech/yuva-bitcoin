@@ -1,63 +1,65 @@
 ---
-title: Amplify
+title: Firebase
 ---
 
-# Amplify
+# Firebase
 
-AWS Amplify is a set of services accompanied by various tools and libraries created to help the
-development of apps. Their suite offers among other features, an authentication feature, which can
-be used as a stand-alone authentication system. The project is able to be used with this
-authentication system, as well. Should you want to implement any of the other features Amplify
-offers, you can refer to their [documentation](https://docs.amplify.aws/).
+Firebase is a complete set of solutions, from Analytics to Cloud Functions. In the app at hand, only
+the authentication service is used, although you can decide to use more of their features. Please
+refer to their [documentation](https://firebase.google.com/docs)
+as you deem necessary.
 
-## Set up your Amplify account
+## Set up your Firebase account
 
 The documentation for this, can be found in the official documentation of the service, mentioned
 above.
 
 ## Configuration
 
-In order to configure Amplify client library you have to open (or create) `.env` file in the
-project's root folder and set the following variables as presented in your Amplify account settings:
+To configure Firebase client library you have to open (or create) `.env` file in the project's root
+folder and set the following variables as presented in your Firebase account settings:
 
 ```shell
-NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID=
-NEXT_PUBLIC_AWS_COGNITO_REGION=
-NEXT_PUBLIC_AWS_PROJECT_REGION=
-NEXT_PUBLIC_AWS_USER_POOLS_ID=
-NEXT_PUBLIC_AWS_USER_POOLS_WEB_CLIENT_ID=
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_DATABASE_URL=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 ```
 
 If you do not want to set up environment variables, settings can be applied simply on
-the `amplifyConfig` object found in the `src/config.js` file.
+the `firebaseConfig` object found in the `src/config.js` file.
 
 ```js
-export const amplifyConfig = {
-  aws_project_region: '',
-  aws_cognito_identity_pool_id: '',
-  aws_cognito_region: '',
-  aws_user_pools_id: '',
-  aws_user_pools_web_client_id: ''
+export const firebaseConfig = {
+  apiKey: '',
+  appId: '',
+  authDomain: '',
+  messagingSenderId: '',
+  projectId: '',
+  storageBucket: ''
 };
 ```
 
 ## How it was implemented
 
-As mentioned above, Amplify offers a set of components to help your development process, although
+As mentioned above, Firebase offers a set of components to help your development process, although
 they're not used in the app.
 
-The `Auth` singleton from the library is used to provide the authentication feature to a context (
-which wraps the content of the `App` component).
+The `firebase.auth` factory from the library is used to create and provide the authentication
+feature to a context (which wraps the content of the `App` component).
 
 This aforementioned context is then used in the component tree to access the `Auth` public methods.
 It provides the user authentication status and user profile, if available.
 
-## How to use Amplify Provider
+## How to use Firebase Auth Provider
 
 By default, the project uses a mocked `JWT provider` (as in: it doesn't use an actual JWT based
 authentication server). To make use of Amplify simply follow these steps:
 
-### Step 1. Replace the provider and consumer
+### Step 1. Replace the provider
 
 Open `src/pages/_app.js` file and replace the following line:
 
@@ -68,7 +70,7 @@ import { AuthConsumer, AuthProvider } from '../contexts/auth/jwt-context';
 with
 
 ```js
-import { AuthConsumer, AuthProvider } from '../contexts/auth/amplify-context';
+import { AuthConsumer, AuthProvider } from '../contexts/auth/firebase-context';
 ```
 
 ### Step 2. Replace the hook context
@@ -82,7 +84,7 @@ import { AuthContext } from '../contexts/auth/jwt-context';
 with
 
 ```js
-import { AuthContext } from '../contexts/auth/amplify-context';
+import { AuthContext } from '../contexts/auth/firebase-context';
 ```
 
 ## How to use auth
@@ -117,11 +119,11 @@ const Page = () => {
 import { useAuth } from '../hooks/use-auth';
 
 const Page = () => {
-  const { login } = useAuth();
+  const { signInWithEmailAndPassword } = useAuth();
   
   const handleLogin = () => {
-    // Email/username and password
-    login('demo@YuvaBitcoin.io', 'Password123!');
+    // Email and password
+    signInWithEmailAndPassword('demo@Rock34x.io', 'Password123!');
   };
 
   return (
@@ -138,10 +140,7 @@ const Page = () => {
 
 Currently, the app only covers the main flows:
 
-- Sign in
-- Sign up
-- Confirm sign up
-- Resend sign up
-- Forgot password
-- Forgot password submit
+- Create user with email and password
+- Sign in with email and password
+- Sign in with popup (Google)
 - Logout
