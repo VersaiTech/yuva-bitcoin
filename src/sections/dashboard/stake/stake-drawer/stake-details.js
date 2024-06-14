@@ -64,21 +64,21 @@ export const StakeDetails = (props) => {
         <PropertyList>
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="ID"
             value={order.id}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Number"
             value={order.number}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Customer"
           >
@@ -109,28 +109,28 @@ export const StakeDetails = (props) => {
           </PropertyListItem>
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Date"
             value={createdAt}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Promotion Code"
             value={order.promotionCode}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Total Amount"
             value={totalAmount}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Status"
           >

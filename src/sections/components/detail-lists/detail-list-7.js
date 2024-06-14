@@ -53,7 +53,7 @@ export const DetailList7 = () => {
         <CardContent sx={{ pt: 0 }}>
           <List>
             <ListItem
-              disableGutters
+              disablegutters
               divider
               sx={{
                 justifyContent: 'space-between',
@@ -71,7 +71,7 @@ export const DetailList7 = () => {
               </Typography>
             </ListItem>
             <ListItem
-              disableGutters
+              disablegutters
               divider
               sx={{
                 justifyContent: 'space-between',
@@ -89,7 +89,7 @@ export const DetailList7 = () => {
               </Typography>
             </ListItem>
             <ListItem
-              disableGutters
+              disablegutters
               sx={{
                 justifyContent: 'space-between',
                 padding: 2

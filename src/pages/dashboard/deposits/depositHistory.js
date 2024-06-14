@@ -63,7 +63,7 @@ const useCustomers = (search) => {
         `${BASEURL}/api/Deposit/getDepositsForUser`,
         { headers: headers }
       );
-      console.log(response.data);
+      //console.log(response.data);
 
       if (isMounted()) {
         setState({

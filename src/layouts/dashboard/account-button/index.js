@@ -33,7 +33,7 @@ export const AccountButton = () => {
         headers : headers
       })
 
-      console.log(response.data.data)
+      // console.log(response.data.data)
       setProfile(response.data.data)
 
     }catch(error){

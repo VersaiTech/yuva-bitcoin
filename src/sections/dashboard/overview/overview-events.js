@@ -37,7 +37,7 @@ export const OverviewEvents = (props) => {
 
             return (
               <ListItem
-                disableGutters
+                disablegutters
                 sx={{ py: 1.5 }}
                 key={event.id}
               >

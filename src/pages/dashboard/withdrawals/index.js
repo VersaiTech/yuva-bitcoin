@@ -69,7 +69,7 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(response.data);
+      //console.log(response.data);
 
       if (isMounted()) {
         setState({

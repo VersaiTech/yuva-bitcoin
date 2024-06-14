@@ -124,7 +124,7 @@
 
 //             return (
 //               <ListItem
-//                 disableGutters
+//                 disablegutters
 //                 key={contact.id}
 //               >
 //                 <ListItemAvatar>
@@ -227,7 +227,7 @@ export const Modal4 = ({ isOpen, handleCloseModal, wallets }) => (
         <Box sx={{ mt: 2 }}>
           <List disablePadding>
             {wallets.map((wallet) => (
-              <ListItem disableGutters
+              <ListItem disablegutters
                 key={wallet.id}>
                 <ListItemAvatar>
                   <Avatar src={wallet.logo} />

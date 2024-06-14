@@ -169,7 +169,7 @@ export const StorageStats = () => {
 
             return (
               <ListItem
-                disableGutters
+                disablegutters
                 key={total.extension}
               >
                 <ListItemIcon>

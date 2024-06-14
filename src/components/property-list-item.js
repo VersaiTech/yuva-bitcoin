@@ -2,12 +2,12 @@ import PropTypes from 'prop-types';
 import { Box, ListItem, ListItemText, Typography } from '@mui/material';
 
 export const PropertyListItem = (props) => {
-  const { align, children, disableGutters, value, label, ...other } = props;
+  const { align, children, disablegutters, value, label, ...other } = props;
 
   return (
     <ListItem
       sx={{
-        px: disableGutters ? 0 : 3,
+        px: disablegutters ? 0 : 3,
         py: 1.5
       }}
       {...other}>
@@ -55,7 +55,7 @@ PropertyListItem.defaultProps = {
 PropertyListItem.propTypes = {
   align: PropTypes.oneOf(['horizontal', 'vertical']),
   children: PropTypes.node,
-  disableGutters: PropTypes.bool,
+  disablegutters: PropTypes.bool,
   label: PropTypes.string.isRequired,
   value: PropTypes.string
 };

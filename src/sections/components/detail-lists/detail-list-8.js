@@ -39,7 +39,7 @@ export const DetailList8 = () => (
         </Typography>
         <List>
           <ListItem
-            disableGutters
+            disablegutters
             divider
           >
             <ListItemAvatar>
@@ -81,7 +81,7 @@ export const DetailList8 = () => (
             />
           </ListItem>
           <ListItem
-            disableGutters
+            disablegutters
             divider
           >
             <ListItemAvatar>
@@ -102,7 +102,7 @@ export const DetailList8 = () => (
             />
           </ListItem>
           <ListItem
-            disableGutters
+            disablegutters
             divider
           >
             <ListItemAvatar>
@@ -144,7 +144,7 @@ export const DetailList8 = () => (
             />
           </ListItem>
           <ListItem
-            disableGutters
+            disablegutters
             divider
           >
             <ListItemAvatar>

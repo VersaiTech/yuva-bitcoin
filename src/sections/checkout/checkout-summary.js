@@ -53,7 +53,7 @@ export const CheckoutSummary = (props) => {
 
           return (
             <ListItem
-              disableGutters
+              disablegutters
               key={product.id}
             >
               <ListItemAvatar sx={{ pr: 2 }}>

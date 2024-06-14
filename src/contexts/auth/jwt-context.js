@@ -105,7 +105,7 @@ export const AuthProvider = (props) => {
         });
       }
     } catch (err) {
-      console.error(err.response);
+      // console.error(err.response);
       dispatch({
         type: ActionType.INITIALIZE,
         payload: {
@@ -130,7 +130,7 @@ export const AuthProvider = (props) => {
         email,
         password,
       });
-      console.log(response.data);
+      // console.log(response.data);
       const { token, user } = response.data;
 
       // const { accessToken } = await authApi.signIn({ email, password });
@@ -170,7 +170,7 @@ export const AuthProvider = (props) => {
         referralCode,
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       // const {token,user} = response.data;
 
       // localStorage.setItem(STORAGE_KEY, accessToken);

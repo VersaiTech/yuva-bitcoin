@@ -20,7 +20,7 @@ export const OrderDrawer = (props) => {
   }, []);
 
   let content = null;
-  console.log(order)
+  // console.log(order)
 
   if (order) {
     content = (

@@ -56,7 +56,7 @@ export const GroupedList8 = () => (
           <List disablePadding>
             {members.map((member) => (
               <ListItem
-                disableGutters
+                disablegutters
                 key={member.id}
               >
                 <ListItemAvatar>

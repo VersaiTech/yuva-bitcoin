@@ -67,7 +67,7 @@ export const SocialAbout = (props) => {
           </Typography>
           <List disablePadding>
             <ListItem
-              disableGutters
+              disablegutters
               divider
             >
               <ListItemAvatar>
@@ -113,7 +113,7 @@ export const SocialAbout = (props) => {
               />
             </ListItem>
             <ListItem
-              disableGutters
+              disablegutters
               divider
             >
               <ListItemAvatar>
@@ -134,7 +134,7 @@ export const SocialAbout = (props) => {
               />
             </ListItem>
             <ListItem
-              disableGutters
+              disablegutters
               divider
             >
               <ListItemAvatar>
@@ -175,7 +175,7 @@ export const SocialAbout = (props) => {
                 )}
               />
             </ListItem>
-            <ListItem disableGutters>
+            <ListItem disablegutters>
               <ListItemAvatar>
                 <SvgIcon color="action">
                   <Mail01Icon />

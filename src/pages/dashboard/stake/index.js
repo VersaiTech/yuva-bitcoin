@@ -64,7 +64,7 @@ const useCustomers = (search) => {
       const response = await axios.get(`${BASEURL}/api/Staking/getStaked`, {
         headers: headers,
       });
-      console.log(response.data);
+      //console.log(response.data);
 
       const totalStaked = response.data.total || response.data.staked.length;
 

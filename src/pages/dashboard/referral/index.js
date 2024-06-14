@@ -52,7 +52,7 @@ const useOrders = (search) => {
       }
 
       const response = await axios.get(`${BASEURL}/api/Deposit/getDepositsForUser`, { headers: headers })
-      console.log(response.data)
+      // console.log(response.data)
 
       if (isMounted()) {
         setState({

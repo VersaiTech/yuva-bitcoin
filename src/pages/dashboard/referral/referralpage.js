@@ -163,10 +163,10 @@ export const ReferralPage = () => {
         headers: headers
       })
 
-      console.log(response.data.data)
+      // console.log(response.data.data)
       setInvitationCode(response.data.data.member_user_id)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       return '';
     }
   };
