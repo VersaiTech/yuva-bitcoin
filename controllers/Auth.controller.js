@@ -1090,7 +1090,7 @@ async function adminRegister(req, res) {
     const response = await newAdmin.save();
 
     //if userType is agent then create Permission Data for that agent
-    if (userType === "agent") {
+    if (userType === "agent" || userType === "admin") {
       const permission = new Permission({
         admin_user_id: admin_user_id,
         setCoinValueMarketUsdt: false,
