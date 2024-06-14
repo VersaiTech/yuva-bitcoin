@@ -137,6 +137,7 @@ import Cardd from "../../components/card.jsx"
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const ReferralPage = () => {
+  const [minValues, setMinValues] = useState([]);
   const [invitationCode, setInvitationCode] = useState('');
   const [invitationLink, setInvitationLink] = useState(`https://user.yuvabitcoin.com/auth/register/modern?code=`);
   const [isCopied, setIsCopied] = useState(false);
@@ -170,6 +171,31 @@ export const ReferralPage = () => {
       return '';
     }
   };
+
+  useEffect(() => {
+    const fetchSmallData = async () => {
+      try {
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem("accessToken");
+        const headers = {
+          Authorization: token,
+        };
+  
+        const response = await axios.get(`${BASEURL}/admin/smallData`, { headers });
+        console.log("SMall data is ",response.data.data)
+  
+        if (response.status === 200) {
+          setMinValues(response.data.data);
+        } else {
+          enqueueSnackbar("Failed to fetch Small Data ", { variant: "error" });
+        }
+      } catch (error) {
+        enqueueSnackbar(error.response?.data?.error || "Failed to fetch minimum values", { variant: "error" });
+      }
+    };
+  
+    fetchSmallData();
+  }, []);
 
   return (
     <Box
@@ -229,8 +255,8 @@ export const ReferralPage = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <ReferralIntro/>
-        </Grid>
+  <ReferralIntro minValues={minValues} />
+</Grid>
       </Grid>
     </Box>
   );
