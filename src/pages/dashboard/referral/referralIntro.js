@@ -36,7 +36,7 @@ const ReferralIntro = ({minValues}) => {
           <ListItem>
             <ListItemIcon>
               <CheckCircleIcon color="primary" />
-            </ListItemIcon>
+            </ListItemIcon>a
             <ListItemText primary={`On Successful registration and ${minValues.setMinimumReferralamount} USDT deposition of your friends `} />
           </ListItem>
           <ListItem>
