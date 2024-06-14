@@ -146,6 +146,9 @@ const Page = () => {
   const { orders, ordersCount, pending, completed, rejected } =
     useOrders(search);
   const [currentTab, setCurrentTab] = useState("all");
+
+  const [searchResults, setSearchResults] = useState([]);
+
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined,
@@ -295,11 +298,13 @@ const Page = () => {
               rejected={rejected}
               currentTab={currentTab}
               setCurrentTab={setCurrentTab}
+              setSearchResults={setSearchResults}
             />
             <Divider />
             <TaskListTable
               onOrderSelect={handleOrderOpen}
               orders={
+                searchResults.length > 0 ? searchResults :
                 currentTab === "all"
                   ? orders
                   : currentTab === "pending"
@@ -311,6 +316,7 @@ const Page = () => {
                         : []
               }
               ordersCount={
+                searchResults.length > 0 ? searchResults.length :
                 currentTab === 'all'
                   ? ordersCount
                   : currentTab === 'pending'

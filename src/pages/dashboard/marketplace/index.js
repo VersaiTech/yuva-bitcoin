@@ -341,12 +341,12 @@ const CryptoMarketplacePage = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
-              Minimum coin value USDT: {minValues.setCoinValueMarketUsdt}<br />
+              Minimum convertion USDT: {minValues.setCoinValueMarketYUVA + " Yuva Bitcoin"}<br />
               Minimum number of coins USDT: {minValues.setMinimumAmountMarketUsdt}
             </Alert>
             <Alert severity="info" sx={{ mt: 2, color: "text.primary" }}>
-              Minimum coin value YUVA: {minValues.setCoinValueMarketYuva}<br />
-              Minimum number of coins YUVA: {minValues.setMinimumAmountMarketYuva}
+              Minimum convertion Yuva Bitcoin: {minValues.setCoinValueMarketUsdt + " USDT"}<br />
+              Minimum number of coins YUVA: {minValues.setMinimumAmountMarketYUVA + " Yuva Bitcoin"}
             </Alert>
           </AccordionDetails>
         </Accordion>

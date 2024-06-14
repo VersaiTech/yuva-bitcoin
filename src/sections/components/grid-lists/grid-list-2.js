@@ -114,7 +114,8 @@ export const GridList2 = ({
             const { _id, coin, amount, exchange_currency, total } = project;
 
             return (
-              <Grid key={project.id} item xs={6} sm={6} md={4} lg={3}>
+              <Grid key={project.id} item xs={6} sm={6} md={4}
+              lg={3}>
                 <Box mt={2} mb={2}>
                   <Card
                     sx={{
