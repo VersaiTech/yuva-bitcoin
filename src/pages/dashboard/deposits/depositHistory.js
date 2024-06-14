@@ -162,43 +162,11 @@ const Page = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Deposit History</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
-                  {/* <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Upload01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    size="small"
-                    startIcon={(
-                      <SvgIcon>
-                        <Download01Icon />
-                      </SvgIcon>
-                    )}
-                  >
-                    Export
-                  </Button> */}
+                 
                 </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                {/* <Button
-                  component={NextLink}
-                  startIcon={
-                    <SvgIcon>
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                  href={paths.dashboard.tasks.create}
-                >
-                  Add
-                </Button> */}
+               
               </Stack>
             </Stack>
             <Card>

@@ -71,6 +71,7 @@ export const useTotalInvestment = () => {
 
 const Page = () => {
   const totalInvestment = useTotalInvestment();
+  const [minValues, setMinValues] = useState([]);
   const [overview, setOverview] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0);
@@ -102,6 +103,31 @@ const Page = () => {
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
   };
+
+  useEffect(() => {
+    const fetchSmallData = async () => {
+      try {
+        const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
+        const token = localStorage.getItem("accessToken");
+        const headers = {
+          Authorization: token,
+        };
+  
+        const response = await axios.get(`${BASEURL}/admin/smallData`, { headers });
+        console.log("SMall data is ",response.data.data)
+  
+        if (response.status === 200) {
+          setMinValues(response.data.data);
+        } else {
+          enqueueSnackbar("Failed to fetch Small Data ", { variant: "error" });
+        }
+      } catch (error) {
+        enqueueSnackbar(error.response?.data?.error || "Failed to fetch minimum values", { variant: "error" });
+      }
+    };
+  
+    fetchSmallData();
+  }, []);
 
   return (
     <>
@@ -227,7 +253,7 @@ const Page = () => {
                   md={6}
                   sx={{ paddingRight: 2, paddingLeft: 2 }}
                 >
-                  <InterestCalculator />
+                  <InterestCalculator minValues={minValues}/>
                 </Grid>
               </Grid>
             </Stack>

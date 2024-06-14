@@ -56,6 +56,8 @@ const useSelectionModel = (customers) => {
     setSelected([]);
   }, []);
 
+
+
   return {
     deselectAll,
     deselectOne,
@@ -95,6 +97,27 @@ export const DepositListTable = (props) => {
   const selectedSome =
     selected.length > 0 && selected.length < customers.length;
   const enableBulkActions = selected.length > 0;
+
+  const getAvatarSrc = (depositType) => {
+     let src = '/assets/logos/logo-usdt.svg';
+    switch (depositType) {
+      case 'usdt':
+        src = '/assets/logos/logo-usdt.svg';
+        break;
+      case 'bnb':
+        src = '/assets/logos/bnb-logo.png';
+        break;
+      case 'yuva':
+        src = '/assets/logos/yuvalogo.png';
+        break;
+      case 'matic':
+        src = '/assets/logos/logo-usdt.svg';
+        break;
+      default:
+        return ;
+    }
+    return src;
+  };
 
   return (
     <Box sx={{ position: "relative" }} {...other}>
@@ -161,7 +184,7 @@ export const DepositListTable = (props) => {
                 <TableCell>
                   <Stack alignItems="center" direction="row" spacing={1}>
                     <Avatar
-                      src="/assets/logos/logo-usdt.svg"
+                      src={getAvatarSrc(customer.deposit_type)}
                       sx={{
                         height: 42,
                         width: 42,

@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { Box, Card, CardContent, Typography, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useSnackbar } from "notistack";
 
-const ReferralIntro = () => {
+
+
+
+const ReferralIntro = ({minValues}) => {
+  const { enqueueSnackbar } = useSnackbar();
+  
+  
+  useEffect(() => {
+    if (minValues.length > 0) {
+      console.log("minValues populated:", minValues);
+    }
+  }, [minValues]);
+ 
+
   return (
     <Card sx={{ mt: 3 }}>
       <CardContent>
@@ -17,13 +31,13 @@ const ReferralIntro = () => {
             <ListItemIcon>
               <CheckCircleIcon color="primary" />
             </ListItemIcon>
-            <ListItemText primary="Earn up to 5 Yuva Bitcoins!." />
+            <ListItemText primary={`Earn up to ${minValues.setReferralCoinValue} Yuva Bitcoins!.`} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <CheckCircleIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText primary="On Successful registration and 10 USDT deposition of your friends " />
+            </ListItemIcon>a
+            <ListItemText primary={`On Successful registration and ${minValues.setMinimumReferralamount} USDT deposition of your friends `} />
           </ListItem>
           <ListItem>
             <ListItemIcon>

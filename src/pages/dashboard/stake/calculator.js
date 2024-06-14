@@ -3,27 +3,28 @@
 
 
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Card, CardContent, CardHeader, Divider, Stack, Button, TextField, Typography, Select, MenuItem, FormControl, InputLabel, useMediaQuery } from '@mui/material';
+import { useSnackbar } from 'notistack';
 
-function calculateInterest(amount, months) {
+function calculateInterest(amount, months,minValues) {
   let interestRate;
-  if (months === 3) {
-    interestRate = 0.05; // 5% per annum
-  } else if (months === 6) {
-    interestRate = 0.07; // 7% per annum
-  } else if (months === 12) {
-    interestRate = 0.10; // 10% per annum
+  if (months === minValues.setStakeMonth1) {
+    interestRate = minValues.setStakePercent1 / 100; // Convert percentage to decimal
+  } else if (months === minValues.setStakeMonth2) {
+    interestRate = minValues.setStakePercent2 / 100; // Convert percentage to decimal
+  } else if (months === minValues.setStakeMonth3) {
+    interestRate = minValues.setStakePercent3 / 100; // Convert percentage to decimal
   } else {
     return 'Invalid number of months';
   }
-
   const monthlyInterestRate = interestRate / 12;
   const totalInterest = amount * monthlyInterestRate * months;
   return totalInterest.toFixed(2); // return total interest rounded to 2 decimal places
 }
 
-const InterestCalculator = () => {
+const InterestCalculator = ({minValues}) => {
+  const {enqueueSnackbar} = useSnackbar();
   const [amount, setAmount] = useState('');
   const [months, setMonths] = useState('');
   const [totalAmount, setTotalAmount] = useState('');
@@ -32,12 +33,15 @@ const InterestCalculator = () => {
 
   const handleCalculate = () => {
     const principal = parseFloat(amount);
-    const calculatedInterest = calculateInterest(principal, parseInt(months));
+    const calculatedInterest = calculateInterest(principal, parseInt(months),minValues);
     const total = principal + parseFloat(calculatedInterest);
     
     setInterest(calculatedInterest);
     setTotalAmount(total.toFixed(2));
   };
+
+
+
 
   return (
     <Card>
@@ -58,9 +62,9 @@ const InterestCalculator = () => {
               onChange={(e) => setMonths(e.target.value)}
               fullWidth
             >
-              <MenuItem value={3}>3 Months</MenuItem>
-              <MenuItem value={6}>6 Months</MenuItem>
-              <MenuItem value={12}>12 Months</MenuItem>
+              <MenuItem value={minValues.setStakeMonth1}>{minValues.setStakeMonth1}</MenuItem>
+              <MenuItem value={minValues.setStakeMonth2}>{minValues.setStakeMonth2}</MenuItem>
+              <MenuItem value={minValues.setStakeMonth3}>{minValues.setStakeMonth3}</MenuItem>
             </Select>
           </FormControl>
           <Divider />
