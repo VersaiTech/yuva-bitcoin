@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { Box, Card, CardContent, Typography, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useSnackbar } from "notistack";
+
+
+
 
 const ReferralIntro = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  
+
+ 
+
   return (
     <Card sx={{ mt: 3 }}>
       <CardContent>
