@@ -43,30 +43,30 @@ const permissions = [
 ];
 
 const permissionNames = {
-  "setCoinValueMarketUsdt": "Set USDT Market Coin Value",
-  "setMinimumAmountMarketUsdt": "Set Minimum Amount for USDT Market",
-  "setCoinValueMarketYUVA": "Set YUVA Market Coin Value",
-  "setMinimumAmountMarketYUVA": "Set Minimum Amount for YUVA Market",
-  "setMinimumWithdrawal": "Set Minimum Withdrawal Amount",
-  "setMaximumWithdrawal": "Set Maximum Withdrawal Amount",
-  "setMinimumWithdrawalusdt": "Set Minimum Withdrawal Amount for USDT",
-  "setMaximumWithdrawalusdt": "Set Maximum Withdrawal Amount for USDT",
-  "setRegisterCoinValue": "Set Coin Value for Registration",
-  "setReferralCoinValue": "Set Coin Value for Referral",
-  "setMinimumReferralamount": "Set Minimum Referral Amount",
-  "setStakeMonth1": "Set Stake for Month 1",
-  "setStakeMonth2": "Set Stake for Month 2",
-  "setStakeMonth3": "Set Stake for Month 3",
-  "setStakePercent1": "Set Stake Percentage for Month 1",
-  "setStakePercent2": "Set Stake Percentage for Month 2",
-  "setStakePercent3": "Set Stake Percentage for Month 3",
-  "setCreateBlog": "Set Create Blog",
-  "setWithdrawalApprove": "Set Withdrawal Approval",
-  "setTaskApprove": "Set Task Approval",
-  "setTaskCreate": "Set Task Creation",
-  "setUserBlock": "Set User Block",
-  "setAllTaskApprove": "Set All Task Approvals",
-  "setMinimumReferralamount":"Set Minimum Amount For Referral Reward"
+  setCoinValueMarketUsdt: "Set USDT Market Coin Value",
+  setMinimumAmountMarketUsdt: "Set Minimum Amount for USDT Market",
+  setCoinValueMarketYUVA: "Set YUVA Market Coin Value",
+  setMinimumAmountMarketYUVA: "Set Minimum Amount for YUVA Market",
+  setMinimumWithdrawal: "Set Minimum Withdrawal Amount",
+  setMaximumWithdrawal: "Set Maximum Withdrawal Amount",
+  setMinimumWithdrawalusdt: "Set Minimum Withdrawal Amount for USDT",
+  setMaximumWithdrawalusdt: "Set Maximum Withdrawal Amount for USDT",
+  setRegisterCoinValue: "Set Coin Value for Registration",
+  setReferralCoinValue: "Set Coin Value for Referral",
+  setMinimumReferralamount: "Set Minimum Referral Amount",
+  setStakeMonth1: "Set Stake for Month 1",
+  setStakeMonth2: "Set Stake for Month 2",
+  setStakeMonth3: "Set Stake for Month 3",
+  setStakePercent1: "Set Stake Percentage for Month 1",
+  setStakePercent2: "Set Stake Percentage for Month 2",
+  setStakePercent3: "Set Stake Percentage for Month 3",
+  setCreateBlog: "Set Create Blog",
+  setWithdrawalApprove: "Set Withdrawal Approval",
+  setTaskApprove: "Set Task Approval",
+  setTaskCreate: "Set Task Creation",
+  setUserBlock: "Set User Block",
+  setAllTaskApprove: "Set All Task Approvals",
+  setMinimumReferralamount: "Set Minimum Amount For Referral Reward",
 };
 
 const PermissionSettingsPage = () => {
@@ -209,7 +209,6 @@ const PermissionSettingsPage = () => {
                 ))}
               </Grid>
             </Grid>
-          
           </Grid>
           <Box sx={{ display: "flex", justifyContent: "center", marginTop: 4 }}>
             <Button
@@ -226,12 +225,10 @@ const PermissionSettingsPage = () => {
             >
               APPLY CHANGES
             </Button>
-
           </Box>
           <Grid item xs={12}>
-              <SetCoin />
-            </Grid>
-          
+            <SetCoin />
+          </Grid>
         </Card>
       ) : (
         <Typography variant="h5" align="center" sx={{ marginY: 3 }}>

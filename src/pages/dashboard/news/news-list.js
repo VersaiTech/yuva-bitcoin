@@ -341,7 +341,7 @@ const Page = () => {
                   authorAvatar="/assets/avatars/avatar-alcides-antonio.png"
                   authorName="Yuva Bitcoin"
                   category="Crypto"
-                  cover="/assets/gallery/news.jpg"
+                  cover={newsArticle.imageUrls[0]}
                   publishedAt={newsArticle.createdAt}
                   readTime="5 min"
                   shortDescription={newsArticle.content}

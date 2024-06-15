@@ -238,7 +238,7 @@ export const QueriesListTable = (props) => {
 
   // Selection hooks
   const [selected, setSelected] = useState([]);
-  const isSelected = (queryId) => selected.indexOf(queryId) !== -1;
+  const isSelected = (supportTicketId) => selected.indexOf(supportTicketId) !== -1;
 
   // Function to handle selection
   const handleClick = (event, id) => {
@@ -260,13 +260,20 @@ export const QueriesListTable = (props) => {
 
     setSelected(newSelected);
   };
-
+ 
   // Function to handle delete operation
-  const handleDelete = async (queryId) => {
+  const handleDelete = async (supportTicketId) => {
+    
     try {
-      await axios.post(`${BASEURL}/api/Support/deleteSupport/${queryId}`);
+      const token = localStorage.getItem("accessToken");
+      const headers = {
+        'Authorization': token
+      }
+      await axios.delete(`${BASEURL}/api/Support/deleteSupport/${supportTicketId}` , {
+        headers: headers,
+      });
       enqueueSnackbar('Query deleted successfully', { variant: 'success' });
-      router.reload();
+      router.push(paths.dashboard.support.list);
     } catch (error) {
       enqueueSnackbar('Failed to delete the query', { variant: 'error' });
     }
@@ -276,8 +283,8 @@ export const QueriesListTable = (props) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [deleteQueryId, setDeleteQueryId] = useState(null);
 
-  const handleDeleteDialogOpen = (queryId) => {
-    setDeleteQueryId(queryId);
+  const handleDeleteDialogOpen = (supportTicketId) => {
+    setDeleteQueryId(supportTicketId);
     setOpenDeleteDialog(true);
   };
 
@@ -343,7 +350,7 @@ export const QueriesListTable = (props) => {
                     >
                       <Edit02Icon />
                     </IconButton>
-                    <IconButton onClick={() => handleDeleteDialogOpen(query._id)}>
+                    <IconButton onClick={() => handleDeleteDialogOpen(query.supportTicketId)}>
                       <DeleteIcon />
                     </IconButton>
                   </Stack>
@@ -376,7 +383,7 @@ export const QueriesListTable = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteDialogClose} color="primary">
+          <Button onClick={handleDeleteDialogClose} color="primary"> 
             Cancel
           </Button>
           <Button onClick={handleDeleteConfirmed} color="error" autoFocus>

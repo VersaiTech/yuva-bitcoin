@@ -123,7 +123,7 @@ const Page = () => {
   
   const handleLogin = () => {
     // Email and password
-    signInWithEmailAndPassword('demo@Rock34x.io', 'Password123!');
+    signInWithEmailAndPassword('demo@YuvaBitcoin.io', 'Password123!');
   };
 
   return (

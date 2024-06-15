@@ -49,6 +49,7 @@ const useReferrals = (search) => {
     referralsCount: 0,
   });
 
+  const { page, rowsPerPage } = search;
 
   const fetchReferrals = useCallback(async () => {
     try {
@@ -58,7 +59,7 @@ const useReferrals = (search) => {
       };
 
       const response = await axios.get(
-        `${BASEURL}/api/Referral/getAllReferral`,
+        `${BASEURL}/api/Referral/getAllReferral/${page + 1}/${rowsPerPage}`,
         {
           headers: headers,
         }
@@ -69,7 +70,7 @@ const useReferrals = (search) => {
       if (isMounted()) {
         setReferrals({
           referrals: response.data.referrals || [],
-          referralsCount: response.data.totalExternalSwap,
+          referralsCount: response.data.totalReferral,
           // activeUsers: activeUsersResponse.data.members,
           // blockedUsers: blockedUsersResponse.data.members,
         });
