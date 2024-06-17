@@ -301,7 +301,7 @@ const Page = () => {
                     <Grid item xs={12} sm={4} lg={4}>
                       <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
                         <Typography variant="h6" gutterBottom>
-                          Month 1
+                          Section 1
                         </Typography>
                         <InputLabel>% Value</InputLabel>
                         <TextField
@@ -338,7 +338,7 @@ const Page = () => {
                     <Grid item xs={12} sm={4} lg={4}>
                       <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
                         <Typography variant="h6" gutterBottom>
-                          Month 2
+                          Section 2
                         </Typography>
                         <InputLabel>% Value</InputLabel>
                         <TextField
@@ -375,7 +375,7 @@ const Page = () => {
                     <Grid item xs={12} sm={4} lg={4}>
                       <Box border={1} borderColor="grey.300" borderRadius={2} p={2}>
                         <Typography variant="h6" gutterBottom>
-                          Month 3
+                          Section 3
                         </Typography>
                         <InputLabel>% Value</InputLabel>
                         <TextField
