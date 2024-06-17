@@ -78,10 +78,10 @@ const getAdminDashboardData = async (req, res) => {
   const { admin_user_id } = req.user;
 
   try {
-    const admins = req.user;
-    if (admins.userType !== 'admin') {
-      return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
-    }
+    // const admins = req.user;
+    // if (admins.userType !== 'admin') {
+    //   return res.status(403).json({ message: 'Permission Denied. Only admin can access this route.' });
+    // }
     const admin = await Admin.findOne({ admin_user_id: admin_user_id });
 
     if (!admin) {

@@ -1387,7 +1387,7 @@ async function verifyOTPAdmin(req, res) {
       process.env.JWT_SECRET_KEY,
       { expiresIn: '100d' }
     );
-
+    console.log("Token is :", admin.admin_user_id);
     return res.status(200).send({
       status: true,
       message: "OTP verified successfully",
@@ -1730,7 +1730,7 @@ async function forgotPasswordAdmin(req, res) {
     await temporaryData.save();
 
     // Send OTP to user via email or SMS (not implemented in this example)
-await sendOTPForgotPassword(email, otp);
+    await sendOTPForgotPassword(email, otp);
     return res.status(200).send({
       status: true,
       message: "OTP sent successfully",
