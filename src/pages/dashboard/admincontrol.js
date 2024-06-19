@@ -70,6 +70,11 @@ const permissionNames = {
 };
 
 const PermissionSettingsPage = () => {
+  const initialState = permissions.reduce((acc, permission) => {
+    acc[permission] = false; // Initialize each permission to false or another default value
+    return acc;
+  }, {});
+
   const [state, setState] = useState({});
   const [isChanged, setIsChanged] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -80,7 +85,7 @@ const PermissionSettingsPage = () => {
       try {
         const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
         const token = localStorage.getItem("accessToken");
-        const adminUserId = localStorage.getItem("admin_user_id");
+        const adminUserId = user.data.data.admin_user_id;
         const headers = { Authorization: token };
 
         const response = await axios.get(`${BASEURL}/api/Permission/getPermission`, { headers });

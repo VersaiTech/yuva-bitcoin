@@ -25,6 +25,7 @@ import { customer } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSearch = () => {
+ 
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
@@ -72,7 +73,7 @@ const useCustomers = (search) => {
         headers: headers,
       });
 
-      console.log(response);
+      console.log("The users are ",response);
       let activeUsersResponse = await axios.get(
         `${BASEURL}/admin/getActiveMembers/${page + 1}/${rowsPerPage}`,
         { headers: headers }
@@ -129,6 +130,8 @@ const useCustomers = (search) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
+
+
   useEffect(() => {
     getCustomers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,13 +147,7 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState("all");
   const [drawer, setDrawer] = useState({ isOpen: false, user: null });
   const [searchResults, setSearchResults] = useState([]);
-
-  useEffect(() => {
-    console.log(customers);
-  }, [customers]);
-
-  console.log(currentTab);
-
+  const [allCustomers,setAllCustomers] = useState(null)
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -226,6 +223,30 @@ const Page = () => {
 
   const { data, count } = getCurrentTabData();
 
+  const getAllCustomers = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/admin/getAllMembers/1/10000`, {
+        headers: headers,
+      });
+      console.log("All customers are ",response.data.members)
+
+      setAllCustomers(response.data.members);
+    } catch (err) {
+      console.error("Error fetching all customers: ", err);
+    }
+  };
+
+  useEffect(() => {
+    getAllCustomers();
+  }, []);
+
+
   return (
     <>
       <Head>
@@ -268,6 +289,7 @@ const Page = () => {
                     ? blockedUsers
                     : customers
                 }
+                allCustomers={allCustomers}
               />
               <CustomerListTable
                 customers={

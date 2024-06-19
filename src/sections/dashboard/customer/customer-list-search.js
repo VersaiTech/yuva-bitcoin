@@ -45,7 +45,7 @@ const tabs = [
 
 export const CustomerListSearch = (props) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults, customers } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults, customers,allCustomers } = props;
   const queryRef = useRef(null);
   const [filters, setFilters] = useState({});
   // Export Modal Opening 
@@ -155,7 +155,7 @@ export const CustomerListSearch = (props) => {
 
   if (option === 'all') {
     // Export all users data
-    dataToExport = customers.map((customer) => ({
+    dataToExport = allCustomers.map((customer) => ({
       member_user_id: customer.member_user_id,
       member_name:customer.member_name,
       registration_date:customer.registration_date,
