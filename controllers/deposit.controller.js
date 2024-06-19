@@ -20,7 +20,7 @@ const createDeposit = async (req, res) => {
       amount: Joi.number().positive().required(),
       transaction_hash: Joi.string().required(),
       wallet_address: Joi.string().required(),
-      deposit_type: Joi.string().valid('usdt', 'bnb', 'matic','yuva').required(),
+      deposit_type: Joi.string().valid('usdt', 'bnb', 'matic', 'yuva').required(),
     });
 
     const { error, value } = schema.validate(req.body);
@@ -104,22 +104,25 @@ const createDeposit = async (req, res) => {
     // Ensure deposit_usdt has 4 decimal places
     member.deposit_usdt = Number(member.deposit_usdt.toFixed(4));
 
+
     // Check if member has referred someone and the referral code is valid
-    if (member.deposit_usdt >= acontrol.setMinimumReferralamount && member.referralCode) {
+    if (member.deposit_usdt >= acontrol.setMinimumReferralamount && member.referralCode && member.isReferred != true) {
       // Mark member as referred
+      console.log("member is: ", member);
       member.isReferred = true;
       const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
+      console.log("referralUserId is: ", referralUserId);
       if (referralUserId) {
-        // Find the member who referred this member
-        const referralMember = await ReferralHistory.findOne({ member_user_id: member.referralCode });
+        const referralMember = await Member.findOne({ member_user_id: member.referralCode });
+        console.log("referral member is: ", referralMember);
         if (referralMember) {
           // Ensure referralMember exists
           // Add referral coins to the referring member's coins
           if (typeof acontrol.setReferralCoinValue === 'number' && !isNaN(acontrol.setReferralCoinValue)) {
             referralMember.coins += acontrol.setReferralCoinValue;
-            await referralMember.save();  
+            await referralMember.save();
             // Create a referral history entry
-            if (member.isReferred === true) {
+            if (member.isReferred == true) {
               const referralHistory = new ReferralHistory({
                 user_id: referralMember.member_user_id,
                 user_name: referralMember.member_name,
@@ -127,17 +130,57 @@ const createDeposit = async (req, res) => {
                 referral_code: member.referralCode,
                 referral_user_name: member.member_name,
                 referral_user: member.member_user_id,
-                referral_user_isRefered: true
+
               });
               await referralHistory.save();
-              
-            } else {
-              console.error('Invalid setReferralCoinValue:', acontrol.setReferralCoinValue);
             }
           }
         }
       }
+    } 
+    else {
+      // If member.isReferred is true, do not create referralHistory again
+      console.log("member isReferred is true");
     }
+
+    // ==========================================================================================================================
+    // // Check if member has referred someone and the referral code is valid
+    // if (member.deposit_usdt >= acontrol.setMinimumReferralamount && member.referralCode) {
+    //   // Mark member as referred
+    //   console.log("member is: ", member);
+    //   member.isReferred = true;
+    //   const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
+    //   console.log("referralUserId is: ", referralUserId);
+    //   if (referralUserId) {
+    //     const referralMember = await Member.findOne({ member_user_id: member.referralCode });
+    //     console.log("referral member is: ", referralMember);
+    //     if (referralMember) {
+    //       // Ensure referralMember exists
+    //       // Add referral coins to the referring member's coins
+    //       if (typeof acontrol.setReferralCoinValue === 'number' && !isNaN(acontrol.setReferralCoinValue)) {
+    //         referralMember.coins += acontrol.setReferralCoinValue;
+    //         await referralMember.save();
+    //         // Create a referral history entry
+    //         if (member.isReferred === true) {
+    //           const referralHistory = new ReferralHistory({
+    //             user_id: referralMember.member_user_id,
+    //             user_name: referralMember.member_name,
+    //             user_earned: acontrol.setReferralCoinValue,
+    //             referral_code: member.referralCode,
+    //             referral_user_name: member.member_name,
+    //             referral_user: member.member_user_id,
+    //             referral_user_isRefered: true
+    //           });
+    //           await referralHistory.save();
+
+    //         } else {
+    //           console.error('Invalid setReferralCoinValue:', acontrol.setReferralCoinValue);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // ==========================================================================================================================
 
     // Save the updated member object to the database
     await member.save();
