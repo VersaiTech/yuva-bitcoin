@@ -32,7 +32,7 @@ import axios from "axios";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const useSelectionModel = (customers) => {
-  console.log(customers);
+  // console.log(customers);
   const customerIds = useMemo(() => {
     return customers.map((customer) => customer.taskId);
   }, [customers]);
@@ -119,9 +119,9 @@ export const NewtaskListTable = (props) => {
         );
 
         if (response.status === 200) {
-          console.log(response.data);
+          // console.log(response.data);
         } else {
-          console.error("Error deleting task:", taskId, response.data);
+          // console.error("Error deleting task:", taskId, response.data);
         }
       }
 
@@ -131,7 +131,7 @@ export const NewtaskListTable = (props) => {
       // Close confirmation dialog
       setConfirmDeleteDialogOpen(false);
     } catch (err) {
-      console.error("Error deleting tasks:", err);
+      // console.error("Error deleting tasks:", err);
     }
   };
 

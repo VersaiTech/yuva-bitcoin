@@ -67,7 +67,7 @@ export const NewtaskListSearch = (props) => {
 
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
-  console.log(sturl);
+  // console.log(sturl);
 
   useEffect(() => {
     if (sturl) {
@@ -77,7 +77,7 @@ export const NewtaskListSearch = (props) => {
   }, [sturl]);
 
   useEffect(() => {
-    console.log(currentTab);
+    // console.log(currentTab);
   })
 
   const handleFiltersUpdate = useCallback(() => {
@@ -129,7 +129,7 @@ export const NewtaskListSearch = (props) => {
         enqueueSnackbar(response.data.message, { variant: 'error' });
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       enqueueSnackbar( error.response.data.message, { variant: 'error' });
     }
   }, [setSearchResults, enqueueSnackbar]);

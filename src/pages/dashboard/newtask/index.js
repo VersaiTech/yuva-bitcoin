@@ -55,7 +55,7 @@ const useCustomers = (search) => {
   });
 
   const { page, rowsPerPage } = search;
-  console.log(search);
+  // console.log(search);
 
   const getCustomers = useCallback(async () => {
     try {
@@ -71,7 +71,7 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(response.data);
+      // console.log(response.data);
 
       // console.log(setState(response.data));
 
@@ -81,8 +81,8 @@ const useCustomers = (search) => {
           customersCount: response.data.allTasks,
         });
       }
-      console.log(customers.data.tasks);
-      console.log(customersCount);
+      // console.log(customers.data.tasks);
+      // console.log(customersCount);
     } catch (err) {
       // console.error(err.response.datax);
     }
@@ -142,7 +142,7 @@ const Page = () => {
 
   const handlePageChange = useCallback(
     (event, page) => {
-      console.log(page);
+      // console.log(page);
       updateSearch((prevState) => ({
         ...prevState,
         page,
@@ -153,7 +153,7 @@ const Page = () => {
 
   const handleRowsPerPageChange = useCallback(
     (event) => {
-      console.log(event.target.value);
+      // console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
