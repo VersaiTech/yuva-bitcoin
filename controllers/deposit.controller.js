@@ -111,13 +111,13 @@ const createDeposit = async (req, res) => {
       const referralUserId = await Member.findOne({ referralCode: member.referralCode }, 'member_user_id');
       if (referralUserId) {
         // Find the member who referred this member
-        const referralMember = await Member.findOne({ member_user_id: member.referralCode });
+        const referralMember = await ReferralHistory.findOne({ member_user_id: member.referralCode });
         if (referralMember) {
           // Ensure referralMember exists
           // Add referral coins to the referring member's coins
           if (typeof acontrol.setReferralCoinValue === 'number' && !isNaN(acontrol.setReferralCoinValue)) {
             referralMember.coins += acontrol.setReferralCoinValue;
-            await referralMember.save();
+            await referralMember.save();  
             // Create a referral history entry
             if (member.isReferred === true) {
               const referralHistory = new ReferralHistory({

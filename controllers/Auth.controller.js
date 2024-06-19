@@ -277,7 +277,10 @@ const jwt = require('jsonwebtoken');
 const Joi = require('@hapi/joi');
 const fs = require('fs');
 const path = require('path');
+const ReferralHistory = require('../models/referralModel');
 const AdminControl = require('../models/AdminControl.Model');
+const { log } = require('console');
+const { isNull } = require('util');
 
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
@@ -753,12 +756,25 @@ async function verifyOTP(req, res) {
         referralCode
       });
 
+      const referralCreate = new ReferralHistory({
+        user_id: "null",
+        user_name: "null",
+        user_earned: 0,
+        referral_code: newMember.referralCode,
+        referral_user: newMember.member_user_id,
+        referral_user_name: newMember.member_name,
+        referral_user_isRefered: false
+      });
+
+      await referralCreate.save();
       // Save the member to the database
       await newMember.save();
     }
 
     // Delete temporary registration data
     await temporaryRegistrationFromBody.deleteOne();
+
+
 
     return res.status(200).send({
       status: true,
