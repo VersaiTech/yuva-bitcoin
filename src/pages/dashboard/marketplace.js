@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import NextLink from "next/link";
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
-import { paths } from "../../../paths";
 import {
   Box,
   Button,
@@ -14,18 +12,17 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { customersApi } from "../../../api/customers";
-import { useMounted } from "../../../hooks/use-mounted";
-import { usePageView } from "../../../hooks/use-page-view";
-import { Layout as DashboardLayout } from "../../../layouts/dashboard";
-import { CustomerListSearch } from "../../../sections/dashboard/customer/customer-list-search";
-import { CustomerListTable } from "../../../sections/dashboard/customer/customer-list-table";
-import { WithdrawalListSearch } from "../../../sections/dashboard/withdrawals/withdrawals-list-search";
-import { WithdrawalsListTable } from "../../../sections/dashboard/withdrawals/withdrawals-list-table";
-import { NewtaskListSearch } from "../../../sections/dashboard/newtask/newtask-list-search";
-import { NewtaskListTable } from "../../../sections/dashboard/newtask/newtask-list-table";
+import { customersApi } from "../../api/customers";
+import { useMounted } from "../../hooks/use-mounted";
+import { usePageView } from "../../hooks/use-page-view";
+import { Layout as DashboardLayout } from "../../layouts/dashboard";
+import { CustomerListSearch } from "../../sections/dashboard/customer/customer-list-search";
+import { CustomerListTable } from "../../sections/dashboard/customer/customer-list-table";
+import { WithdrawalListSearch } from "../../sections/dashboard/withdrawals/withdrawals-list-search";
+import { WithdrawalsListTable } from "../../sections/dashboard/withdrawals/withdrawals-list-table";
+import { MarketplaceListSearch } from "../../sections/dashboard/marketplace/marketplace-list-search";
+import { MarketplaceListTable } from "../../sections/dashboard/marketplace/marketplace-list-table";
 import axios from "axios";
-import { customer, customers } from "../../../api/customers/data";
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -55,8 +52,6 @@ const useCustomers = (search) => {
   });
 
   const { page, rowsPerPage } = search;
-  // console.log(search);
-
   const getCustomers = useCallback(async () => {
     try {
       // const response = await customersApi.getCustomers(search);
@@ -66,58 +61,62 @@ const useCustomers = (search) => {
         Authorization: token,
       };
 
-      const response = await axios.get(
-        `${BASEURL}/admin/getAllTasksforAdminWithoutStatus/${page + 1}/${rowsPerPage}`,
+      const response = await axios.get(`${BASEURL}/api/Order/getAllOrder/${page + 1}/${rowsPerPage}`,
+      {headers: headers});
+      console.log(response.data);
+
+      
+      const BuyOrders = await axios.get(
+        `${BASEURL}/api/Order/getAllBuyOrder/${page + 1}/${rowsPerPage}`,
         { headers: headers }
       );
 
-      // console.log(response.data);
+      console.log(BuyOrders.data);
 
-      // console.log(setState(response.data));
+      // const blockedUsersResponse = await axios.get(
+      //   `${BASEURL}/admin/getBlockedMembers`,
+      //   { headers: headers }
+      // );
 
       if (isMounted()) {
         setState({
-          customers: response.data.tasks,
-          customersCount: response.data.allTasks,
+          customers: response.data.order || [],
+          customersCount: response.data.totalOrders,
+          BuyOrders: BuyOrders.data.order || [],
+          totalOrders: BuyOrders.data.totalOrders,
+          // blockedUsers: blockedUsersResponse.data.members,
         });
       }
-      // console.log(customers.data.tasks);
-      // console.log(customersCount);
     } catch (err) {
-      // console.error(err.response.datax);
+      console.error(err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, isMounted]);
 
-  useEffect(() => {
-    getCustomers();
+  useEffect(
+    () => {
+      getCustomers();
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+    [search]
+  );
 
   return state;
 };
 
 const Page = () => {
-  // get url status from query
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get("status");
-
   const { search, updateSearch } = useSearch();
-
-  const { customers, customersCount, completed, rejected, pending } =
+  const { customers, customersCount, BuyOrders, totalOrders } =
     useCustomers(search);
+
+  console.log(customers);
 
   const [currentTab, setCurrentTab] = useState("all");
   const [searchResults, setSearchResults] = useState([]);
 
-  usePageView();
+  console.log(currentTab);
 
-  // const handlePageChange = useCallback(
-  //   (event, pageData) => {
-  //     console.log(pageData);
-  //   },
-  //   [updateSearch]
-  // );
+  usePageView();
 
   const handleFiltersChange = useCallback(
     (filters) => {
@@ -142,7 +141,6 @@ const Page = () => {
 
   const handlePageChange = useCallback(
     (event, page) => {
-      // console.log(page);
       updateSearch((prevState) => ({
         ...prevState,
         page,
@@ -151,9 +149,10 @@ const Page = () => {
     [updateSearch]
   );
 
+  useEffect(() => {}, [currentTab]);
+
   const handleRowsPerPageChange = useCallback(
     (event) => {
-      // console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
@@ -165,7 +164,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Task List | Yuva Bitcoin</title>
+        <title>Dashboard: Deposit List | Yuva Bitcoin</title>
       </Head>
       <Box
         component="main"
@@ -178,57 +177,79 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">All Task</Typography>
-                <Stack alignItems="center" direction="row" spacing={1}></Stack>
+                <Typography variant="h4">All Marketplace</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}>
+                  {/* <Button
+                    color="inherit"
+                    size="small"
+                    startIcon={(
+                      <SvgIcon>
+                        <Upload01Icon />
+                      </SvgIcon>
+                    )}
+                  >
+                    Import
+                  </Button>
+                  <Button
+                    color="inherit"
+                    size="small"
+                    startIcon={(
+                      <SvgIcon>
+                        <Download01Icon />
+                      </SvgIcon>
+                    )}
+                  >
+                    Export
+                  </Button> */}
+                </Stack>
               </Stack>
               <Stack alignItems="center" direction="row" spacing={3}>
-                <Button
-                  component={NextLink}
+                {/* <Button
                   startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
                   }
                   variant="contained"
-                  href={paths.dashboard.newtask.create}
-                  sx={{
-                    position: "relative",
-                    overflow: "hidden",
-                    "&:hover::after": {
-                      content: '""',
-                      position: "absolute",
-                      zIndex: 1,
-                      top: "50%",
-                      left: "50%",
-                      width: "300%",
-                      height: "300%",
-                      background: "rgba(255, 255, 255, 0.3)",
-                      borderRadius: "50%",
-                      transition: "all 0.6s ease",
-                      transform: "translate(-50%, -50%)",
-                    },
-                  }}
                 >
-                  Add Task
-                </Button>
+                  Add
+                </Button> */}
               </Stack>
             </Stack>
             <Card>
-              <NewtaskListSearch
+              <MarketplaceListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
-                // completed={completed}
-                // pending={pending}
+                // activeUsers={activeUsers}
+                todayUsers={BuyOrders}
+                // blockedUsers={blockedUsers}
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
               />
-              <NewtaskListTable
+              <MarketplaceListTable
                 // customers={customers}
-                customersCount={ searchResults.length > 0 ? searchResults.length : customersCount}
-                customers={searchResults.length > 0 ? searchResults : currentTab === "all" ? customers : []}
+                // customersCount={customersCount}
+                customers={
+                  searchResults.length > 0 ? searchResults :
+                  currentTab === "all"
+                    ? customers
+                    : currentTab === "hasAcceptedMarketing"
+                    ? BuyOrders
+                    
+                    : customers
+                }
+                customersCount={
+                  searchResults.length > 0 ? searchResults.length :
+                  currentTab === "all"
+                    ? customersCount
+                    : currentTab === "hasAcceptedMarketing"
+                    ? totalOrders
+                    
+                    : customersCount
+                }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}

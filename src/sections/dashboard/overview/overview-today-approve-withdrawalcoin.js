@@ -58,7 +58,7 @@ export const OverviewWithdrawApproveToday = (props) => {
       >
         <div>
           <img
-            src="/assets/accept.png"
+            src="/assets/iconly/verified-user.png"
             width={48}
           />
         </div>

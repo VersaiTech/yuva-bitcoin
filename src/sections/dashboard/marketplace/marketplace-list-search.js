@@ -22,15 +22,15 @@ const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
   {
-    label: 'All Task',
+    label: 'All',
     value: 'all',
   },
+  {
+    label: 'Buy',
+    value: 'hasAcceptedMarketing'
+  },
   // {
-  //   label: 'Pending Task',
-  //   value: 'hasAcceptedMarketing'
-  // },
-  // {
-  //   label: 'Completed Task',
+  //   label: 'Completed',
   //   value: 'isProspect'
   // }
   // ,
@@ -59,26 +59,31 @@ const sortOptions = [
   // }
 ];
 
-export const NewtaskListSearch = (props) => {
+export const MarketplaceListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
+
   const queryRef = useRef(null);
+  // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
   const { enqueueSnackbar } = useSnackbar();
-
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
-  // console.log(sturl);
+  console.log(sturl);
 
   useEffect(() => {
-    if (sturl) {
+    if(sturl){
       setCurrentTab(sturl);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sturl]);
 
   useEffect(() => {
-    // console.log(currentTab);
+    console.log(currentTab);
   })
+
+
+
+  // const [activeUsers, setActiveUsers] = useState([]);
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -88,7 +93,7 @@ export const NewtaskListSearch = (props) => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
 
-  const handleTabsChange = useCallback((event, value) => {
+  const handleTabsChange = useCallback(async(event, value) => {
     setCurrentTab(value);
     setFilters((prevState) => {
       const updatedFilters = {
@@ -106,12 +111,21 @@ export const NewtaskListSearch = (props) => {
     });
   }, [setCurrentTab]);
 
+  // const handleQueryChange = useCallback((event) => {
+  //   event.preventDefault();
+  //   setFilters((prevState) => ({
+  //     ...prevState,
+  //     query: queryRef.current?.value
+  //   }));
+  // }, []);
+
   const handleQueryChange = useCallback(async (event) => {
     event.preventDefault();
     const query = queryRef.current?.value;
 
     if (query.length < 3) {
-      enqueueSnackbar("Minimum 3 characters required", { variant: 'warning' });
+            enqueueSnackbar('Please enter at least 3 characters', { variant: 'warning' });
+
       return;
     }
 
@@ -121,18 +135,20 @@ export const NewtaskListSearch = (props) => {
         Authorization: token,
       };
 
-      const response = await axios.post(`${BASEURL}/admin/findTasbyNameAdmin`, { taskName: query }, { headers });
+      const response = await axios.post(`${BASEURL}/api/Deposit/findMemberDeposit`, { name: query }, { headers });
 
+      console.log(response);
       if (response.data.status) {
         setSearchResults(response.data.data);
       } else {
-        enqueueSnackbar(response.data.message, { variant: 'error' });
+        enqueueSnackbar(response.data.message, { variant: "error" });
       }
     } catch (error) {
-      // console.error(error);
-      enqueueSnackbar( error.response.data.message, { variant: 'error' });
+      console.error(error.response.data.message);
+
+      enqueueSnackbar(error.response.data.message, { variant: "error" });
     }
-  }, [setSearchResults, enqueueSnackbar]);
+  }, [setSearchResults]);
 
   const handleRefresh = useCallback(() => {
     queryRef.current.value = "";
@@ -186,7 +202,7 @@ export const NewtaskListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search Task"
+            placeholder="Search Deposit"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -203,16 +219,16 @@ export const NewtaskListSearch = (props) => {
             }
           />
         </Box>
-      </Stack>
+        </Stack>
     </>
   );
 };
 
-NewtaskListSearch.propTypes = {
+MarketplaceListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,
   sortDir: PropTypes.oneOf(['asc', 'desc']),
-  pending: PropTypes.array,
-  completed: PropTypes.array,
+  activeUsers: PropTypes.array,
+  blockedUsers: PropTypes.array,
 };

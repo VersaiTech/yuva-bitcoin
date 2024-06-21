@@ -5,6 +5,7 @@ export const en = {
   [tokens.nav.academy]: 'Academy',
   
   [tokens.nav.admincontrol]: 'Admin Control',
+  [tokens.nav.marketplace]: 'Marketplace',
   [tokens.nav.addagent]: 'Add Agent',
   [tokens.nav.account]: 'Account',
   [tokens.nav.support]:'Support',
