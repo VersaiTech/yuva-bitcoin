@@ -40,6 +40,15 @@ export const getSections = (t) => [
         ),
       },
       {
+        title: t(tokens.nav.marketplace),
+        path: paths.dashboard.marketplace,
+        icon: (
+          <SvgIcon fontSize="small">
+            <StakesIcon />
+          </SvgIcon>
+        ),
+      },
+      {
         title: t(tokens.nav.addagent),
         path: paths.dashboard.addagent,
         icon: (

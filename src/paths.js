@@ -60,6 +60,7 @@ export const paths = {
     },
     portfolio: "/dashboard/portfolio",
     admincontrol: "/dashboard/admincontrol",
+    marketplace: "/dashboard/marketplace",
     addagent: "/dashboard/addagent",
     analytics: "/dashboard/analytics",
     demo: "/dashboard/demo",

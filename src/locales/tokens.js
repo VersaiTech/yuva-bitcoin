@@ -6,6 +6,7 @@ export const tokens = {
     academy: 'nav.academy',
     account: 'nav.account',
     admincontrol  : 'nav.admincontrol',
+    marketplace  : 'nav.marketplace',
     addagent: 'nav.addagent',
     portfolio: 'nav.portfolio',
     admincontrol: 'nav.admincontrol',
