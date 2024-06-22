@@ -71,12 +71,12 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getAllTasksBoth/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(response.data);
+      // console.log(response.data);
       tasks.orders = response.data.tasks;
       tasks.ordersCount = response.data.allTasks;
       // tasks.ordersCount = 10; // Assuming 'count' is directly on 'data'
     } catch (err) {
-      console.error("Error fetching all tasks:", err);
+      // console.error("Error fetching all tasks:", err);
     }
 
     try {
@@ -84,11 +84,11 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getConfirmedTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(completedTasks.data);
+      // console.log(completedTasks.data);
       tasks.completed = completedTasks.data.tasks;
       tasks.ordersCount = completedTasks.data.totalCompletedTasks;
     } catch (err) {
-      console.error("Error fetching completed tasks:", err);
+      // console.error("Error fetching completed tasks:", err);
     }
 
     try {
@@ -96,11 +96,11 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getPendingTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(pendingTasks.data);
+      // console.log(pendingTasks.data);
       tasks.pending = pendingTasks.data.tasks;
       tasks.ordersCount = pendingTasks.data.totalPenidngTasks;
     } catch (err) {
-      console.error("Error fetching pending tasks:", err);
+      // console.error("Error fetching pending tasks:", err);
     }
 
     try {
@@ -108,11 +108,11 @@ const useOrders = (search) => {
         `${BASEURL}/admin/getRejectedTasksForUser/${page + 1}/${rowsPerPage}`,
         { headers }
       );
-      console.log(rejectedTasks.data);
+      // console.log(rejectedTasks.data);
       tasks.rejected = rejectedTasks.data.tasks;
       tasks.ordersCount = rejectedTasks.data.totalRejectedTasks;
     } catch (err) {
-      console.error("Error fetching rejected tasks:", err);
+      // console.error("Error fetching rejected tasks:", err);
     }
 
     // Update state if component is still mounted
@@ -154,8 +154,8 @@ const Page = () => {
     data: undefined,
   });
 
-  console.log("Orders Count:", ordersCount);
-  console.log("Orders:", orders);
+  // console.log("Orders Count:", ordersCount);
+  // console.log("Orders:", orders);
 
   const currentOrder = useMemo(() => {
     if (!drawer.data) {
@@ -198,7 +198,7 @@ const Page = () => {
 
   const handleRowsPerPageChange = useCallback(
     (event) => {
-      console.log(event.target.value);
+      // console.log(event.target.value);
       updateSearch((prevState) => ({
         ...prevState,
         rowsPerPage: parseInt(event.target.value, 10),
@@ -210,7 +210,7 @@ const Page = () => {
   const handleOrderOpen = useCallback(
     (orderId) => {
       // Close drawer if is the same order
-      console.log(drawer);
+      // console.log(drawer);/
 
       if (drawer.isOpen && drawer.data === orderId) {
         setDrawer({

@@ -67,7 +67,9 @@ export const SplashScreen = () => (
       <Image src="/assets/logos/yuvalogo.png" 
       alt="Ecommerce" 
       width={100} 
-      height={100} />
+      height={100} 
+      priority
+      />
       {/*<Image src="/assets/images/Furniture Shop/RoundSofa.png" alt="Ecommerce" width={100} height={100} />*/}
     </Box>
 

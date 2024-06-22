@@ -39,7 +39,7 @@ export const Colors2 = () => {
       >
         {colors.map((color) => (
           <ListItem
-            disableGutters
+            disablegutters
             key={color.code}
           >
             <ListItemAvatar>

@@ -91,7 +91,7 @@
 //       };
 
 //       const response = await axios.post(`${BASEURL}/api/Withdraw/verifyOTP`, otpValue, { headers });
-//       console.log(response.data);
+//       //console.log(response.data);
 
 //       if (response.status === 200) {
 //         enqueueSnackbar("Withdraw Successful", { variant: "success" });
@@ -276,7 +276,7 @@ export const WithdrawalsCreateForm = (props) => {
       };
 
       const response = await axios.post(`${BASEURL}/api/Withdraw/verifyOTP`, otpValue, { headers });
-      console.log(response.data);
+      //console.log(response.data);
 
       if (response.status === 200) {
         enqueueSnackbar("Withdraw Successful", { variant: "success" });

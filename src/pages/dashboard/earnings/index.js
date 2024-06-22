@@ -52,7 +52,7 @@ const useOrders = (search) => {
 
       const response = await axios.get(`${BASEURL}/admin/getAllTasksUser/${page + 1}/${rowsPerPage}`, { headers: headers });
 
-      console.log(response.data);
+      //console.log(response.data);
 
       if (isMounted()) {
         setState({

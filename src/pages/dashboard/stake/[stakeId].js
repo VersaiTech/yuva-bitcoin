@@ -53,7 +53,7 @@ export const useTotalInvestment = () => {
           headers: headers,
         }
       );
-      console.log(response.data);
+      //console.log(response.data);
 
       setTotalInvestment(response.data.totalInvestment);
     } catch (err) {

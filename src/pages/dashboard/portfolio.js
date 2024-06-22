@@ -112,7 +112,7 @@ const Page = () => {
         <Container maxWidth={settings.stretch ? false : "xl"}>
           <Grid
             container
-            disableGutters
+            disablegutters
             spacing={{
               xs: 3,
               lg: 4,

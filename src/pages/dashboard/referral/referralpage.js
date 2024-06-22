@@ -164,10 +164,10 @@ export const ReferralPage = () => {
         headers: headers
       })
 
-      console.log(response.data.data)
+      // console.log(response.data.data)
       setInvitationCode(response.data.data.member_user_id)
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       return '';
     }
   };
@@ -217,7 +217,7 @@ export const ReferralPage = () => {
                   Refer friends. Earn Crypto together.
                 </Typography>
                 <Typography variant="subtitle2">
-                  Invite your friends to trade an Bitmax and share up to 30% of trading fee for referral reward
+                  Invite your friends to get referral reward
                 </Typography>
                 
               </Stack>

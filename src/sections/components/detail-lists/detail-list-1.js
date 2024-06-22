@@ -82,7 +82,7 @@ export const DetailList1 = () => {
 
                 return (
                   <ListItem
-                    disableGutters
+                    disablegutters
                     key={currency.name}
                     sx={{
                       pb: 2,

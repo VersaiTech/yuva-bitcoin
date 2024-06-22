@@ -47,7 +47,7 @@ export const ContactsPopover = (props) => {
 
             return (
               <ListItem
-                disableGutters
+                disablegutters
                 key={contact.id}
               >
                 <ListItemAvatar>

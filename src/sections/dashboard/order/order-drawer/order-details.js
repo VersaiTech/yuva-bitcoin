@@ -165,7 +165,7 @@
 //         <PropertyList>
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Task Open Time"
 //             value={
@@ -176,28 +176,28 @@
 //           />
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Task Name"
 //             value={order.taskName}
 //           />
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Task Description "
 //             value={order.description}
 //           />
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Rewards"
 //             value={order.coins + " Coins"}
 //           />
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Task Link"
 //             value={
@@ -213,12 +213,12 @@
 //           />
 //           <PropertyListItem
 //             align={align}
-//             disableGutters
+//             disablegutters
 //             divider
 //             label="Task End Time"
 //             value={countdown}
 //           />
-//           <PropertyListItem align={align} disableGutters divider label="Status">
+//           <PropertyListItem align={align} disablegutters divider label="Status">
 //             <SeverityPill color={statusColor}>
 //               {countdown === "Task Expired" ? "Expired" : order.status}
 //             </SeverityPill>
@@ -443,7 +443,7 @@ export const OrderDetails = (props) => {
         <PropertyList>
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Task Open Time"
             value={
@@ -454,14 +454,14 @@ export const OrderDetails = (props) => {
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Task Name"
             value={order.taskName}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Task Description "
             value={
@@ -472,14 +472,14 @@ export const OrderDetails = (props) => {
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Rewards"
             value={order.coins + " Coins"}
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Task Link"
             value={
@@ -495,12 +495,12 @@ export const OrderDetails = (props) => {
           />
           <PropertyListItem
             align={align}
-            disableGutters
+            disablegutters
             divider
             label="Task End Time"
             value={endCountdown}
           />
-          <PropertyListItem align={align} disableGutters divider label="Status">
+          <PropertyListItem align={align} disablegutters divider label="Status">
             <SeverityPill color={statusColor}>
               {endCountdown === "Task Expired" ? "Expired" : order.status}
             </SeverityPill>

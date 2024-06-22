@@ -57,7 +57,7 @@ const CryptoMarketplacePage = () => {
         };
 
         const response = await axios.get(`${BASEURL}/admin/smallData`, { headers });
-        console.log(response.data.data)
+        // console.log(response.data.data)
 
         if (response.status === 200) {
           setMinValues(response.data.data);
@@ -91,7 +91,7 @@ const CryptoMarketplacePage = () => {
 
       const response = await axios.get(url, { headers });
       const data = response.data;
-      console.log(data);
+      // console.log(data);
       setListings(data.order);
     } catch (error) {
       enqueueSnackbar("Error fetching data", { variant: "error" });
@@ -144,7 +144,7 @@ const CryptoMarketplacePage = () => {
       } else {
         enqueueSnackbar("Error placing order", { variant: "error" });
       }
-      console.error("Error placing order:", error);
+      // console.error("Error placing order:", error);
     }
   };
 
@@ -171,7 +171,7 @@ const CryptoMarketplacePage = () => {
       enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseBuyForm();
     } catch (error) {
-      console.error("Error placing order:", error.response.data);
+      // console.error("Error placing order:", error.response.data);
       enqueueSnackbar(error.response.data.error, {
         variant: "error",
       });
@@ -215,7 +215,7 @@ const CryptoMarketplacePage = () => {
 
       handleCloseUpdateForm();
     } catch (error) {
-      console.error("Error updating order:", error.response?.data);
+      // console.error("Error updating order:", error.response?.data);
     }
   };
 
@@ -233,10 +233,10 @@ const CryptoMarketplacePage = () => {
       });
 
       const responseData = response.data;
-      console.log(
-        `DELETE order with data: ${JSON.stringify({ orderId: _id, userId })}`
-      );
-      console.log(`DELETE order response: ${JSON.stringify(responseData)}`);
+      // console.log(
+      //   `DELETE order with data: ${JSON.stringify({ orderId: _id, userId })}`
+      // );
+      // console.log(`DELETE order response: ${JSON.stringify(responseData)}`);
 
       enqueueSnackbar("Order deleted successfully", { variant: "success" });
 

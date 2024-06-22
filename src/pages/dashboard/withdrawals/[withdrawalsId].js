@@ -224,10 +224,10 @@ const Page = () => {
       const headers = {
         Authorization: token,
       };
-      console.log(
-        `Making API call to ${BASEURL}/admin/getuserbalance with headers`,
-        headers
-      );
+      // console.log(
+      //   `Making API call to ${BASEURL}/admin/getuserbalance with headers`,
+      //   headers
+      // );
       const response = await axios.get(`${BASEURL}/admin/getuserbalance`, {
         headers,
       });

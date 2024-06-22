@@ -104,7 +104,7 @@ export const LogisticsVehiclesOverview = (props) => {
               <List disablePadding>
                 {chartSeries.map((item, index) => (
                   <ListItem
-                    disableGutters
+                    disablegutters
                     key={index}
                     sx={{ display: 'flex' }}
                   >

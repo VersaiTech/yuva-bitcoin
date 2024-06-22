@@ -46,7 +46,7 @@ export const MailLabel = (props) => {
 
   return (
     <ListItem
-      disableGutters
+      disablegutters
       disablePadding
       sx={{
         '& + &': {

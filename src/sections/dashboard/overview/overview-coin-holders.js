@@ -80,6 +80,7 @@ export const OverviewCoinHolders = (props) => {
             src="/assets/logos/yuvalogo.png"
             width={56}
             alt="Yuva Logo"
+            priority
           />
         </div>
         <Box sx={{ flexGrow: 2 }}>

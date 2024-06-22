@@ -32,7 +32,7 @@ export const GridList2 = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const theme = useTheme();
-  console.log(status);
+  // console.log(status);
 
   // Inside your component
   const isScreenSizeGreaterThanSm = useMediaQuery((theme) =>

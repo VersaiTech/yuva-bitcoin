@@ -66,7 +66,7 @@ const useCustomers = (search) => {
       const response = await axios.get(`${BASEURL}/admin/getAllTasks`, {
         headers: headers,
       });
-      console.log(response.data);
+      //console.log(response.data);
 
       const completedTasks = await axios.get(
         `${BASEURL}/admin/getConfirmedTasksForUser`,
