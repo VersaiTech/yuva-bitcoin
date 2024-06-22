@@ -74,8 +74,8 @@ const Page = () => {
         router.push(returnTo || paths.dashboard.index);
 
       } catch (error) {
-        console.error("An error occurred during login:", error);
-        enqueueSnackbar('Invalid email or password.', { variant: 'error' });
+        enqueueSnackbar(error.response.data.message, { variant: 'error' });
+        console.log(error.response.data.message);
         helpers.setSubmitting(false);
       } finally {
         setLoading(false);
