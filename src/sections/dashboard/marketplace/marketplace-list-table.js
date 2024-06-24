@@ -168,7 +168,17 @@ export const MarketplaceListTable = (props) => {
                   key={customer.member_user_id}
                   selected={isSelected}
                 >
-                  <TableCell>
+                <TableCell>
+                    <Stack alignItems="center" direction="row" spacing={1}>
+                      <div>
+                      {customer.member_name}
+                      <Typography color="text.secondary" variant="body2">
+                      {customer.userId}
+                    </Typography>
+                      </div>
+                    </Stack>
+                  </TableCell>
+                  {/*<TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={customer.avatar}
@@ -177,7 +187,6 @@ export const MarketplaceListTable = (props) => {
                           width: 42,
                         }}
                       >
-                        {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
                         <Typography color="text.secondary" variant="body2">
@@ -188,7 +197,7 @@ export const MarketplaceListTable = (props) => {
                         </Typography>
                       </div>
                     </Stack>
-                  </TableCell>
+                  </TableCell>*/}
                   <TableCell align="center">
                     <Typography variant="subtitle2" color={green[500]}>
                       {customer.transactionType === "order_sell"
@@ -198,14 +207,18 @@ export const MarketplaceListTable = (props) => {
                   </TableCell>
 
                   <TableCell>{customer.amount}</TableCell>
-                  <TableCell>{customer.coin}</TableCell>
+                  <TableCell>
+                  {customer.coin.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' : customer.coin.toUpperCase()}
+                </TableCell>
                   <TableCell>{customer.exchange_currency}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
                       {formatDate(customer.createdAt)}
                     </Typography>
                   </TableCell>
-                  <TableCell>{customer.payment_method}</TableCell>
+                  <TableCell>
+                  {customer.payment_method.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' :customer.payment_method.toUpperCase()}
+                  </TableCell>
                   <TableCell>{customer.total}</TableCell>
                   {/* <TableCell align="right">
                     <IconButton

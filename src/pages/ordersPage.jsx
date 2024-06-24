@@ -218,9 +218,15 @@ const OrdersPage = () => {
             ) : (
               orders.map((order) => (
                 <TableRow key={order.id}>
-                  <TableCell align="center">{order.coin.toUpperCase()}</TableCell>
-                  <TableCell align="center">{order.exchange_currency}</TableCell>
-                  <TableCell align="center">{order.payment_method.toUpperCase()}</TableCell>
+                  <TableCell align="center"l>
+                  {order.coin.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' : order.coin.toUpperCase()}
+                </TableCell>
+                  <TableCell align="center">
+                  {order.exchange_currency}
+                  </TableCell>
+                  <TableCell align="center">
+                  {order.payment_method.toUpperCase()=== 'YUVA' ? 'YUVA BITCOIN' :order.payment_method.toUpperCase()}
+                  </TableCell>
                   <TableCell align="center">{getStatusBadge(order.active)}</TableCell>
                   <TableCell align="center">{order.amount}</TableCell>
                   <TableCell align="center">
