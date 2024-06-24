@@ -68,7 +68,15 @@ async function getOverview(req, res) {
 
     const usdtDepositToday = await Deposit.aggregate([
       { $match: { deposit_type: 'usdt', createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
-      { $group: { _id: null, count: { $sum: 1 }, }, },
+      { $group: { _id: null, count: { $sum: "$amount" }, }, },
+      // { $group: { _id: null, count: { $sum: 1 }, }, },
+    ]);
+
+    const yuvaDepositToday = await Deposit.aggregate([
+      { $match: { deposit_type: 'yuva', createdAt: { $gte: new Date(new Date().setHours(0, 0, 0, 0)), $lt: new Date(new Date().setHours(23, 59, 59, 999)), }, }, },
+      { $group: { _id: null, count: { $sum: "$amount" }, }, },
+      // { $project: { _id: 0, totalCoins: 1, }, },
+      // { $group: { _id: null, count: { $sum: 1 }, }, },
     ]);
 
     const referralToday = await ReferralHistory.aggregate([
@@ -99,6 +107,7 @@ async function getOverview(req, res) {
       withdrawRToday: withdrawRToday.length > 0 ? withdrawRToday[0].count : 0,
       withdrawPToday: withdrawPToday.length > 0 ? withdrawPToday[0].count : 0,
       usdtDepositToday: usdtDepositToday.length > 0 ? usdtDepositToday[0].count : 0,
+      yuvaDepositToday: yuvaDepositToday.length > 0 ? yuvaDepositToday[0].count : 0,
       referralToday: referralToday.length > 0 ? referralToday[0].count : 0,
     },
   });
