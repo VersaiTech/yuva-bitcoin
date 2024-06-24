@@ -26,7 +26,6 @@ import { paths } from "../../../paths";
 import { getInitials } from "../../../utils/get-initials";
 import { green } from "@mui/material/colors";
 
-
 const useSelectionModel = (customers) => {
   const customerIds = useMemo(() => {
     return customers?.map((customer) => customer.id);
@@ -97,14 +96,14 @@ export const MarketplaceListTable = (props) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const options = { 
-      day: '2-digit', 
-      month: 'long', 
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
+    const options = {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
     };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
 
   return (
@@ -144,11 +143,10 @@ export const MarketplaceListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-             
               <TableCell>Name</TableCell>
               <TableCell>Transaction Type</TableCell>
               <TableCell>Amount</TableCell>
-              <TableCell>coin</TableCell>
+              <TableCell>coin Type</TableCell>
               <TableCell>Exchange Currency</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Payment Method</TableCell>
@@ -170,7 +168,6 @@ export const MarketplaceListTable = (props) => {
                   key={customer.member_user_id}
                   selected={isSelected}
                 >
-                  
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
@@ -183,7 +180,6 @@ export const MarketplaceListTable = (props) => {
                         {/* {getInitials(customer.member_name)} */}
                       </Avatar>
                       <div>
-                       
                         <Typography color="text.secondary" variant="body2">
                           {customer.member_name}
                         </Typography>
@@ -193,13 +189,14 @@ export const MarketplaceListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell> <Typography variant="subtitle2" color={green[500]}>
-                        { customer.transactionType}
-                      </Typography>
-                      {/* <Typography variant="caption">
-                        {"Hash: " + customer.transaction_hash}
-                      </Typography> */}
-                      </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="subtitle2" color={green[500]}>
+                      {customer.transactionType === "order_sell"
+                        ? "Order Sell"
+                        : "Order Buy"}
+                    </Typography>
+                  </TableCell>
+
                   <TableCell>{customer.amount}</TableCell>
                   <TableCell>{customer.coin}</TableCell>
                   <TableCell>{customer.exchange_currency}</TableCell>

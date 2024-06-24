@@ -22,7 +22,7 @@ const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const tabs = [
   {
-    label: 'All',
+    label: 'Sell',
     value: 'all',
   },
   {
@@ -191,34 +191,8 @@ export const MarketplaceListSearch = (props) => {
         direction="row"
         flexWrap="wrap"
         spacing={3}
-        sx={{ p: 3 }}
+        sx={{ p: 1 }}
       >
-        <Box
-          component="form"
-          onSubmit={handleQueryChange}
-          sx={{ flexGrow: 1 }}
-        >
-          <OutlinedInput
-            defaultValue=""
-            fullWidth
-            inputProps={{ ref: queryRef }}
-            placeholder="Search Deposit"
-            startAdornment={(
-              <InputAdornment position="start">
-                <SvgIcon>
-                  <SearchMdIcon />
-                </SvgIcon>
-              </InputAdornment>
-            )}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton onClick={handleRefresh}>
-                  <RefreshIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </Box>
         </Stack>
     </>
   );

@@ -412,14 +412,14 @@ const UserDrawer = ({ open, onClose, user, onEdit }) => {
           variant="contained"
           onClick={() => handleNavigateToOrders('orders')}
         >
-          Get Orders
+          Sell Orders
         </Button>
         <Button
           fullWidth
           variant="contained"
           onClick={() => handleNavigateToOrders('buy')}
         >
-          Get Buy Orders
+          Buy Orders
         </Button>
       </Box>
     </Drawer>
