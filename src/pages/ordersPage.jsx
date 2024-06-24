@@ -187,6 +187,19 @@ const OrdersPage = () => {
     );
   }
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Button onClick={() => router.back()} variant="contained" sx={{ mb: 3 }}>
@@ -200,12 +213,13 @@ const OrdersPage = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center">Coin Type</TableCell>
-              <TableCell align="center">Exchange Currency</TableCell>
-              <TableCell align="center">Payment</TableCell>
+              <TableCell align="center">Exchange Coin</TableCell>
+              <TableCell align="center">Payment Method</TableCell>
               <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Amount</TableCell>
-              <TableCell align="center">Type</TableCell>
-              <TableCell align="center">Total</TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Exchange Coin</TableCell>
+              <TableCell align="center">Transaction Type</TableCell>
+              <TableCell align="center">Total Amount</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -228,6 +242,11 @@ const OrdersPage = () => {
                   {order.payment_method.toUpperCase()=== 'YUVA' ? 'YUVA BITCOIN' :order.payment_method.toUpperCase()}
                   </TableCell>
                   <TableCell align="center">{getStatusBadge(order.active)}</TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle2">
+                      {formatDate(order.createdAt)}
+                    </Typography>
+                  </TableCell>
                   <TableCell align="center">{order.amount}</TableCell>
                   <TableCell align="center">
                     <Typography variant="subtitle2" color={green[500]}>

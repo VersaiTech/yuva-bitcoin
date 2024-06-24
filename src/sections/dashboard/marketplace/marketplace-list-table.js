@@ -63,6 +63,16 @@ const useSelectionModel = (customers) => {
   };
 };
 
+// Utility function to determine the display text
+const getPaymentOrPurchasedCurrency = (customer) => {
+  if (customer.payment_method) {
+    return customer.payment_method.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' : customer.payment_method.toUpperCase();
+  } else if (customer.purchasedCurrency) {
+    return customer.purchasedCurrency.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' : customer.purchasedCurrency.toUpperCase();
+  }
+  return '';
+};
+
 export const MarketplaceListTable = (props) => {
   const {
     customers,
@@ -98,10 +108,11 @@ export const MarketplaceListTable = (props) => {
     const date = new Date(dateString);
     const options = {
       day: "2-digit",
-      month: "long",
+      month: "short",
       year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     };
     return date.toLocaleDateString("en-US", options);
   };
@@ -145,12 +156,12 @@ export const MarketplaceListTable = (props) => {
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Transaction Type</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>coin Type</TableCell>
-              <TableCell>Exchange Currency</TableCell>
+              <TableCell>Total Coin</TableCell>
+              <TableCell>Coin Type</TableCell>
+              <TableCell>Exchange Coin</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Payment Method</TableCell>
-              <TableCell>Total</TableCell>
+              <TableCell>Total Amount</TableCell>
               {/* <TableCell align="right">Actions</TableCell> */}
             </TableRow>
           </TableHead>
@@ -217,7 +228,7 @@ export const MarketplaceListTable = (props) => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                  {customer.payment_method.toUpperCase() === 'YUVA' ? 'YUVA BITCOIN' :customer.payment_method.toUpperCase()}
+                  {getPaymentOrPurchasedCurrency(customer)}
                   </TableCell>
                   <TableCell>{customer.total}</TableCell>
                   {/* <TableCell align="right">
