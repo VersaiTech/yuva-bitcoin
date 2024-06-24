@@ -26,7 +26,10 @@ async function getOverview(req, res) {
 
     const totalStakesInvestment = allStakes.reduce((total, stake) => total + stake.investment, 0);
     const totalMemberCoins = allCoin.reduce((total, member) => total + member.coins, 0);
-    const totalDepositAmount = allDeposits.reduce((total, deposit) => total + deposit.amount, 0);
+    // const totalDepositAmount = allDeposits.reduce((total, deposit) => total + deposit.amount, 0);
+
+    const totalDepositUsdt = allDeposits.reduce((total, deposit) => (deposit.deposit_type === 'usdt' ? total + deposit.amount : total), 0);
+    const totalDepositYuva = allDeposits.reduce((total, deposit) => (deposit.deposit_type === 'yuva' ? total + deposit.amount : total), 0);
 
     const totalTaskCoins = await CompletedTask.aggregate([
       { $match: { status: 'confirmed' } },
@@ -97,7 +100,9 @@ async function getOverview(req, res) {
       totalTaskCoins: totalTaskCoins.length > 0 ? totalTaskCoins[0].totalCoins : 0,
       totalStakesInvestment,
       totalMemberCoins,
-      totalDepositAmount,
+      // totalDepositAmount,
+      totalDepositUsdt: totalDepositUsdt,
+      totalDepositYuva: totalDepositYuva,
       totalReferralEarned: totalReferralEarned.length > 0 ? totalReferralEarned[0].totalCoins : 0,
       yuva: adminData.yuva,
       usdt: adminData.usdt,
