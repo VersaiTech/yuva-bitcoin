@@ -11,7 +11,7 @@ const stakeSchema = new mongoose.Schema({
   stake_type: { type: String, enum: ['Wallet'], required: true },
   stakingDuration: { type: Number, required: true }, // Add staking duration field
   interestCredited: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 // Create a model from the schema
 const Stake = mongoose.model('Stake', stakeSchema);

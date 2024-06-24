@@ -117,7 +117,7 @@ const stakingSummaryForAdmin = async (req, res) => {
     return res.status(200).send({
       message: "Staking summary",
       data: stakes,
-    });
+    }).sort({ createdAt: -1 });
   } catch (error) {
     console.error("Error retrieving staking summary:", error);
     return res.status(500).send({
