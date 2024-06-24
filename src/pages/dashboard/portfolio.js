@@ -48,6 +48,7 @@ import OverviewWithdrawRejectToday from "../../sections/dashboard/overview/overv
 import OverviewWalletUseTask from "../../sections/dashboard/overview/overview-walletuse-task";
 import OverviewWalletUseRefferal from "../../sections/dashboard/overview/overview-walletuse-refferal";
 import OverviewWalletUseStake from "../../sections/dashboard/overview/overview-walletuse-stake";
+import TotalDeposits from "../../sections/dashboard/crypto/total-deposits";
 
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -183,7 +184,13 @@ const Page = () => {
               <Grid item xs={6} md={4}>
                 <OverviewCoinHolders
                   amount={overview.usdtDepositToday}
-                  // fetchDummyData={fetchDummyData}
+                  coinType="USDT"
+                />
+              </Grid>
+              <Grid item xs={6} md={4}>
+                <OverviewCoinHolders
+                  amount={overview.yuvaDepositToday}
+                  coinType="YUVA"
                 />
               </Grid>
               <Grid item xs={6} md={4}>
@@ -279,6 +286,20 @@ const Page = () => {
             <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
+
+            {/*Total Yuva & USDT deposits*/}
+            <Grid xs={12} md={4}>
+            <Stack>
+              <TotalDeposits amount={overview.usdt} coinType="USDT" />
+            </Stack>
+          </Grid>
+          <Grid xs={12} md={4}>
+              <Stack>
+                <TotalDeposits amount={overview.yuva} coinType="YUVA" />
+              </Stack>
+            </Grid>
+
+            
             <Grid xs={12} md={4}>
               <Stack>
                 <CryptoTransactions amount={overview.totalDepositAmount} />

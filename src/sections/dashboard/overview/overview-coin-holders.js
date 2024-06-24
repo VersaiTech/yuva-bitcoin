@@ -20,7 +20,7 @@ import Link from "next/link";
 
 
 export const OverviewCoinHolders = (props) => {
-  const { amount} = props;
+  const { amount, coinType } = props;
   const { enqueueSnackbar } = useSnackbar();
   const [openDataForm, setOpenDataForm] = useState(false);
 
@@ -32,6 +32,19 @@ export const OverviewCoinHolders = (props) => {
 
 
   const totalCoinHolders = amount ? amount : 0;
+
+  const coinDetails = {
+    USDT: {
+      label: "TODAY USDT DEPOSITS",
+      imageUrl: "/logo-usdt.svg",
+    },
+    YUVA: {
+      label: "TODAY YUVA DEPOSITS",
+      imageUrl: "/yuvalogo2.png", // Replace with the correct path for YUVA logo
+    },
+  };
+
+  const { label, imageUrl } = coinDetails[coinType] || coinDetails.USDT;
 
   return (
     <Card>
@@ -49,8 +62,8 @@ export const OverviewCoinHolders = (props) => {
       >
         <div>
           <Image
-            src="/logo-usdt.svg"
-            alt="Logo USDT"
+          src={imageUrl}
+          alt={`Logo ${coinType}`}
             width={46}
             height={46}
             quality={100}
@@ -59,7 +72,7 @@ export const OverviewCoinHolders = (props) => {
         </div>
         <Box sx={{ flexGrow: 2 }}>
           <Typography color="text.secondary" variant="body2">
-            USDT BUYER
+          {label}
           </Typography>
           <Typography color="text.primary" variant="h4">
             {totalCoinHolders}
@@ -97,7 +110,7 @@ export const OverviewCoinHolders = (props) => {
 
 OverviewCoinHolders.propTypes = {
   amount: PropTypes.number, // Adjust the prop type accordingly
-  // fetchDummyData: PropTypes.func.isRequired,
+  coinType: PropTypes.oneOf(["USDT", "YUVA"]),
 };
 
 export default OverviewCoinHolders;

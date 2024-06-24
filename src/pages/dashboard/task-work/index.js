@@ -257,10 +257,10 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
+                allCustomers={searchResults.length > 0 ? searchResults : currentData ? currentData : []}
               />
               <WorkListTable
                 customersCount={count}
-
                 currentTab={currentTab}
                 customers={searchResults.length > 0 ? searchResults : currentData ? currentData : []}
                 onPageChange={handlePageChange}
