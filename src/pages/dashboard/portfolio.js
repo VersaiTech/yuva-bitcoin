@@ -287,6 +287,15 @@ const Page = () => {
               <OverviewPendingIssues amount={overview.pendingTasks} />
             </Grid>
 
+            {/*Total Member Coin*/}
+            <Grid xs={12} md={4}>
+            <Stack>
+              <TotalDeposits amount={overview.totalMemberCoins} coinType="COINS" />
+            </Stack>
+          </Grid>  
+
+
+
             {/*Total Yuva & USDT deposits*/}
             <Grid xs={12} md={4}>
             <Stack>
@@ -302,7 +311,7 @@ const Page = () => {
             
             <Grid xs={12} md={4}>
               <Stack>
-                <CryptoTransactions amount={overview.totalDepositAmount} />
+                <CryptoTransactions amount={overview.totalDepositUsdt} />
               </Stack>
             </Grid>
             <Grid xs={12} md={4}>

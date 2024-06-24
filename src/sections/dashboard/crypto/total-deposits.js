@@ -24,7 +24,11 @@ export const TotalDeposits = (props) => {
     },
     YUVA: {
       title: "Total Yuva Bitcoin Deposits",
-      imageUrl: "/yuvalogo2.png",
+      imageUrl: "/yuvalogo2.png", // Replace with the correct path for YUVA logo
+    },
+    COINS: {
+      title: "Total Member Wallet Yuva Bitcoin Coins",
+      imageUrl: "/yuvalogo2.png", // Replace with the correct path for YUVA logo
     },
   };
 
