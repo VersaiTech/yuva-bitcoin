@@ -57,7 +57,8 @@ export const paths = {
       courseDetails: '/dashboard/academy/courses/:courseId'
     },
     marketplace:{
-      index: ' /dashboard/marketplace'
+      index: ' /dashboard/marketplace',
+      marketplaceHistory: '/dashboard/marketplaceHistory'
     },
     earnings:{
       index: '/dashboard/earnings',

@@ -26,6 +26,7 @@ export const en = {
   [tokens.nav.crypto]: 'Crypto',
   [tokens.nav.cryptos]: 'Cryptos',
   [tokens.nav.marketplace] : 'Market Place',
+  [tokens.nav.marketplaceHistory] : 'Market Place History',
   [tokens.nav.customers]: 'Customers',
   [tokens.nav.dashboard]: 'Dashboard',
   [tokens.nav.details]: 'Details',

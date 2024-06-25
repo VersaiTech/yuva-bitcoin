@@ -11,6 +11,7 @@ export const tokens = {
     supportCreate:'nav.supportCreate',
     supportList:'nav.supportList',
     marketplace: 'nav.marketplace',
+    marketplaceHistory: 'nav.marketplaceHistory',
     cryptos: 'nav.cryptos',
     account: 'nav.account',
     portfolio: 'nav.portfolio',

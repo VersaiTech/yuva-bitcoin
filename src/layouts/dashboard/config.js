@@ -35,6 +35,16 @@ export const getSections = (t) => [
             <CryptoIcon />
           </SvgIcon>
         ),
+        items: [
+          {
+            title: t(tokens.nav.marketplace),
+            path: paths.dashboard.marketplace.index,
+          },
+          {
+            title: t(tokens.nav.marketplaceHistory),
+            path: paths.dashboard.marketplace.marketplaceHistory,
+          },
+        ],
       },
       {
         title: t(tokens.nav.tasks),
