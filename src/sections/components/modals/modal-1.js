@@ -105,6 +105,10 @@ const ModalContent = ({ handleCloseModal, memberData }) => {
           // Enqueue success notification
           enqueueSnackbar("Updated Successfully", { variant: "success" });
           handleCloseModal(); // Close modal on successful submission
+          if (isMounted) {
+            window.location.reload();
+          }
+
           // if (isMounted) {
           //   window.location.href = "/dashboard/social/profile";
           // }
