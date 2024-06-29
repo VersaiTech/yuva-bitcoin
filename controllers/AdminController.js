@@ -1419,7 +1419,7 @@ const getAllStake = async (req, res) => {
 
 async function updateMemberDetails(req, res) {
   try {
-    const { contactNo, member_name, email, wallet_address } = req.body;
+    const { contactNo, member_name, email, wallet_address, twitterId } = req.body;
     const userId = req.user.member_user_id; // Assuming user id is stored in the request object after authentication
 
     // Check if the user exists
@@ -1439,6 +1439,7 @@ async function updateMemberDetails(req, res) {
     //   existingMember.password = await bcrypt.hash(password, salt);
     // }
     if (email) existingMember.email = email;
+    if (twitterId) existingMember.twitterId = twitterId;
     // if (twitterId) existingMember.twitterId = twitterId;
     if (wallet_address) existingMember.wallet_address = wallet_address;
 
