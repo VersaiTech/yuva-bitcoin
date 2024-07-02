@@ -2,8 +2,13 @@ import { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
 import RefreshIcon from '@mui/icons-material/Refresh';
+
+import { ExportOptionsModal } from "../../../components/ExportOptions";
+import DownloadIcon from "@mui/icons-material/Download";
+import * as XLSX from "xlsx";
 import {
   Box,
+  Button,
   Divider,
   InputAdornment,
   OutlinedInput,
@@ -60,16 +65,17 @@ const sortOptions = [
 ];
 
 export const External_DepositListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults } = props;
+  const { onFiltersChange, onSortChange, sortBy, sortDir, setCurrentTab, currentTab, setSearchResults,allExternalDeposits } = props;
 
   const queryRef = useRef(null);
   // const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({});
+  // Export Modal Opening
+  const [exportModalOpen, setExportModalOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const urlParams = new URLSearchParams(window.location.search);
   const sturl = urlParams.get('status');
-  console.log(sturl);
 
   useEffect(() => {
     if(sturl){
@@ -78,9 +84,7 @@ export const External_DepositListSearch = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sturl]);
 
-  useEffect(() => {
-    console.log(currentTab);
-  })
+
 
 
 
@@ -138,7 +142,6 @@ export const External_DepositListSearch = (props) => {
 
       const response = await axios.post(`${BASEURL}/api/ExternalSwap/findExternalSwap`, { name: query }, { headers });
 
-      console.log(response);
       if (response.data.status) {
         setSearchResults(response.data.data);
       } else {
@@ -165,6 +168,115 @@ export const External_DepositListSearch = (props) => {
       sortDir
     });
   }, [onSortChange]);
+
+    // For opening the modal
+    const handleExportToExcel = () => {
+      // Open the export options modal
+      setExportModalOpen(true);
+    };
+  
+    // For handling the download logic of excel from modal option
+    const handleExportOptionsSubmit = (option, startDate, endDate) => {
+  
+      const formattedStartDate = startDate
+        ? new Date(startDate).toISOString()
+        : null;
+      const formattedEndDate = endDate ? new Date(endDate).toISOString() : null;
+  
+      let dataToExport = [];
+  
+      if (option === "all") {
+        // Export all users data
+        dataToExport = allExternalDeposits.map((deposit) => ({
+          orderId: deposit.orderId,
+          status: deposit.status,
+          amount: deposit.amount,
+          reason: deposit.reason,
+          deposit_type: deposit.deposit_type,
+          transaction_hash: deposit.transaction_hash,
+          wallet_address: deposit.wallet_address,
+
+        }));
+      } else {
+        // Filter data based on date range
+        dataToExport = allExternalDeposits
+          .filter((deposit) => {
+            // Assuming the deposit object has a 'createdAt' field representing the creation date
+            return (
+              deposit.createdAt >= formattedStartDate &&
+              deposit.createdAt <= formattedEndDate
+            );
+          })
+          .map((deposit) => ({
+          orderId: deposit.orderId,
+          status: deposit.status,
+          amount: deposit.amount,
+          reason: deposit.reason,
+          deposit_type: deposit.deposit_type,
+          transaction_hash: deposit.transaction_hash,
+          wallet_address: deposit.wallet_address,
+
+          }));
+      }
+  
+      handleExportToExcelDownload(dataToExport);
+      setExportModalOpen(false);
+    };
+  
+    // For downloading all data directly
+  
+    const handleExportToExcelDownload = (dataToExport) => {
+      try {
+        const data = dataToExport.map((deposit) => ({
+          "ORDER ID": deposit.orderId || "",
+          STATUS: deposit.status || "",
+          AMOUNT: deposit.amount || "",
+          REASON: deposit.reason || "",
+          "DEPOSIT TYPE": deposit.deposit_type || "",
+          "TRANSACTION HASH": deposit.transaction_hash || "",
+          "WALLET ADDRESS": deposit.wallet_address || "",
+
+        }));
+  
+        // Create a new workbook
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.json_to_sheet(data);
+  
+        // Add the worksheet to the workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
+  
+        // Convert the workbook to a binary Excel file
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+  
+        // Create a Blob from the buffer
+        const blob = new Blob([excelBuffer], {
+          type: "application/octet-stream",
+        });
+  
+        // Create a temporary URL for the Blob
+        const url = window.URL.createObjectURL(blob);
+  
+        // Create an anchor element and initiate the download
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "Users.xlsx");
+        document.body.appendChild(link);
+        link.click();
+  
+        // Clean up by revoking the URL
+        window.URL.revokeObjectURL(url);
+  
+        enqueueSnackbar("Excel file downloaded successfully", {
+          variant: "success",
+        });
+      } catch (error) {
+        enqueueSnackbar("Error exporting to Excel", { variant: "error" });
+        console.error("Error exporting to Excel:", error);
+      }
+    };
 
   return (
     <>
@@ -219,6 +331,28 @@ export const External_DepositListSearch = (props) => {
             }
           />
         </Box>
+
+        <Box>
+        <Button
+          color="inherit"
+          endIcon={
+            <SvgIcon>
+              <DownloadIcon />
+            </SvgIcon>
+          }
+          size="small"
+          // onClick={handleExportToExcelDownload}
+          onClick={handleExportToExcel}
+        >
+          Export to Excel
+        </Button>
+        {/* Export options modal */}
+        <ExportOptionsModal
+          open={exportModalOpen}
+          onClose={() => setExportModalOpen(false)}
+          onSubmit={handleExportOptionsSubmit}
+        />
+      </Box>
         </Stack>
     </>
   );

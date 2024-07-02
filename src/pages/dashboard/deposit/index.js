@@ -103,7 +103,7 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
-  const [allDeposits,setAllDeposits] = useState(null)
+  const [allDeposits,setAllDeposits] = useState(null);
   const { customers, customersCount, TodayUsersResponse } =
     useCustomers(search);
 
@@ -167,7 +167,7 @@ const Page = () => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin/1/10000`, {
+      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin/1/100000`, {
         headers: headers,
       });
       console.log("All Deposits are ",response.data.allDeposits)

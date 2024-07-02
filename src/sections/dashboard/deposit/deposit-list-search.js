@@ -155,7 +155,6 @@ export const DepositListSearch = (props) => {
           { headers }
         );
 
-        console.log(response);
         if (response.data.status) {
           setSearchResults(response.data.data);
         } else {
@@ -194,12 +193,10 @@ export const DepositListSearch = (props) => {
   const handleExportToExcel = () => {
     // Open the export options modal
     setExportModalOpen(true);
-    console.log("Data all deposits are ",allDeposits);
   };
 
   // For handling the download logic of excel from modal option
   const handleExportOptionsSubmit = (option, startDate, endDate) => {
-    console.log("Selected export option:", option);
 
     const formattedStartDate = startDate
       ? new Date(startDate).toISOString()
@@ -238,7 +235,6 @@ export const DepositListSearch = (props) => {
         }));
     }
 
-    console.log("Data to be exported is ", dataToExport);
     handleExportToExcelDownload(dataToExport);
     setExportModalOpen(false);
   };
@@ -247,8 +243,6 @@ export const DepositListSearch = (props) => {
 
   const handleExportToExcelDownload = (dataToExport) => {
     try {
-      // Format customers data into an Excel-compatible format
-      console.log(dataToExport);
       const data = dataToExport.map((deposit) => ({
         NAME: deposit.name || "",
         MAMBER: deposit.member || "",

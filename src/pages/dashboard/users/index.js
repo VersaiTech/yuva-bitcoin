@@ -231,7 +231,7 @@ const Page = () => {
         Authorization: token,
       };
 
-      const response = await axios.get(`${BASEURL}/admin/getAllMembers/1/10000`, {
+      const response = await axios.get(`${BASEURL}/admin/getAllMembers/1/100000`, {
         headers: headers,
       });
       console.log("All customers are ",response.data.members)

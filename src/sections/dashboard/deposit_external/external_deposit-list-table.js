@@ -76,7 +76,6 @@ export const External_DepositListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } =
   useSelectionModel(customers);
-  console.log(customersCount);
 
   const handleToggleAll = useCallback(
     (event) => {
