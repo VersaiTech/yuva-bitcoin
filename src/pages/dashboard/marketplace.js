@@ -239,7 +239,7 @@ const Page = () => {
                     : currentTab === "hasAcceptedMarketing"
                     ? BuyOrders
                     
-                    : customers
+                    : []
                 }
                 customersCount={
                   searchResults.length > 0 ? searchResults.length :
@@ -248,7 +248,7 @@ const Page = () => {
                     : currentTab === "hasAcceptedMarketing"
                     ? totalOrders
                     
-                    : customersCount
+                    : []
                 }
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
