@@ -113,7 +113,7 @@ const AdminControl = require("../models/AdminControl.Model");
 
 const stakingSummaryForAdmin = async (req, res) => {
   try {
-    const stakes = await Stake.find().sort({ createdAt: -1 });;
+    const stakes = await Stake.find().sort({ sys_date: -1 });;
     return res.status(200).send({
       message: "Staking summary",
       data: stakes,
