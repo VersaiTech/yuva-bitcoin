@@ -63,7 +63,6 @@ const useCustomers = (search) => {
 
       const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin/${page + 1}/${rowsPerPage}`,
       {headers: headers});
-      console.log(response.data);
 
       
       const TodayUsersResponse = await axios.get(
@@ -71,7 +70,6 @@ const useCustomers = (search) => {
         { headers: headers }
       );
 
-      console.log(TodayUsersResponse);
 
       // const blockedUsersResponse = await axios.get(
       //   `${BASEURL}/admin/getBlockedMembers`,
@@ -105,15 +103,16 @@ const useCustomers = (search) => {
 
 const Page = () => {
   const { search, updateSearch } = useSearch();
+  const [allDeposits,setAllDeposits] = useState(null)
   const { customers, customersCount, TodayUsersResponse } =
     useCustomers(search);
 
-  console.log(customers);
+ 
 
   const [currentTab, setCurrentTab] = useState("all");
   const [searchResults, setSearchResults] = useState([]);
 
-  console.log(currentTab);
+ 
 
   usePageView();
 
@@ -159,6 +158,28 @@ const Page = () => {
     },
     [updateSearch]
   );
+
+  const getAllDeposits = async () => {
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      const headers = {
+        Authorization: token,
+      };
+
+      const response = await axios.get(`${BASEURL}/api/Deposit/getAllDepositsForAdmin/1/10000`, {
+        headers: headers,
+      });
+      console.log("All Deposits are ",response.data.allDeposits)
+
+      setAllDeposits(response.data.allDeposits);
+    } catch (err) {
+      console.error("Error fetching all customers: ", err);
+    }
+  };
+  useEffect(() => {
+    getAllDeposits();
+  }, []);
 
   return (
     <>
@@ -227,6 +248,8 @@ const Page = () => {
                 currentTab={currentTab}
                 setCurrentTab={setCurrentTab}
                 setSearchResults={setSearchResults}
+                allDeposits={allDeposits}
+                
               />
               <DepositListTable
                 // customers={customers}

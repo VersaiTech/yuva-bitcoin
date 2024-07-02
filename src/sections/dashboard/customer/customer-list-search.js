@@ -174,7 +174,7 @@ export const CustomerListSearch = (props) => {
     }));
   } else {
     // Filter data based on date range
-    dataToExport = customers
+    dataToExport = allCustomers
       .filter((customer) => {
         // Assuming the customer object has a 'createdAt' field representing the creation date
         return customer.createdAt >= formattedStartDate && customer.createdAt <= formattedEndDate;
