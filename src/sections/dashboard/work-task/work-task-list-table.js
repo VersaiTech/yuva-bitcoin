@@ -273,8 +273,7 @@ export const WorkListTable = (props) => {
                           {"id:" + customer.userId}
                         </Typography>
                         <Typography component="a" href={`${customer.twitterId}`} color="text.secondary" variant="body2" target="_blank">
-                          <Typography sx={{ color: 'yellow' }}>{ customer.twitterId}</Typography>
-                          {/* <Typography sx={{ color: 'blue' }}>{ customer.twitterId}</Typography> */}
+                          <Typography sx={{ color: 'green' }}>{ customer.twitterId}</Typography>
                         </Typography>
                       </div>
                     </Stack>
