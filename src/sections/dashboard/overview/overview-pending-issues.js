@@ -45,7 +45,7 @@ export const OverviewPendingIssues = (props) => {
       </Stack>
       <Divider />
       <CardActions>
-        <Link component={NextLink} href={paths.dashboard.newtask.index}> {/* Use Next.js Link component */}
+        <Link component={NextLink} href={paths.dashboard.taskwork.index}> {/* Use Next.js Link component */}
         <Button
           color="inherit"
           endIcon={(
