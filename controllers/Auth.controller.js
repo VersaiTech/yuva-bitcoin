@@ -756,17 +756,18 @@ async function verifyOTP(req, res) {
         referralCode
       });
 
-      // const referralCreate = new ReferralHistory({
-      //   user_id: "null",
-      //   user_name: "null",
-      //   user_earned: 0,
-      //   referral_code: newMember.referralCode,
-      //   referral_user: newMember.member_user_id,
-      //   referral_user_name: newMember.member_name,
-      //   referral_user_isRefered: false
-      // });
+     // Save the referral history
+    // const referralCreate = new ReferralHistory({
+    //   user_id: newMember.member_user_id,
+    //   user_name: newMember.member_name,
+    //   user_earned: 0,
+    //   referral_code: newMember.referralCode,
+    //   referral_user: newMember.member_user_id,
+    //   referral_user_name: newMember.member_name,
+    //   referral_user_isRefered: false
+    // });
 
-      // await referralCreate.save();
+    // await referralCreate.save();
 
       
       // Save the member to the database
