@@ -103,9 +103,9 @@ const Page = () => {
   const router = useRouter();
   // const referrals = useReferrals();
 
-  // const handleReferralClick = (userId) => {
-  //   router.push(`/dashboard/referral/${userId}`);
-  // };
+  const handleReferralClick = (userId) => {
+    router.push(`/dashboard/referral/${userId}`);
+  };
 
   const handleFiltersChange = useCallback(
     (filters) => {
