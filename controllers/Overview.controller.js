@@ -31,6 +31,13 @@ async function getOverview(req, res) {
     const totalDepositUsdt = allDeposits.reduce((total, deposit) => (deposit.deposit_type === 'usdt' ? total + deposit.amount : total), 0);
     const totalDepositYuva = allDeposits.reduce((total, deposit) => (deposit.deposit_type === 'yuva' ? total + deposit.amount : total), 0);
 
+    //total yuva is getting wrong datas
+    // const totalDepositUsdt = await Deposit.aggregate([
+    //   { $match: { deposit_type: 'usdt' } },
+    //   { $group: { _id: null, total: { $sum: '$amount' } } },
+    //   { $project: { _id: 0, total: 1 } },
+    // ]);
+
     const totalTaskCoins = await CompletedTask.aggregate([
       { $match: { status: 'confirmed' } },
       { $group: { _id: null, totalCoins: { $sum: "$coins" }, }, },
