@@ -168,6 +168,10 @@ const CryptoMarketplacePage = () => {
       );
       const responseData = response.data;
 
+      //reload location
+
+      router.push(paths.dashboard.index);
+
       enqueueSnackbar("Order placed successfully", { variant: "success" });
       handleCloseBuyForm();
     } catch (error) {
