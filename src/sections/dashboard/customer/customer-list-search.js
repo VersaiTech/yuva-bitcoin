@@ -20,7 +20,7 @@ import {
 import axios from 'axios';
 import { useUpdateEffect } from '../../../hooks/use-update-effect';
 import DownloadIcon from '@mui/icons-material/Download';
-import * as XLSX from 'xlsx';
+// import * as XLSX from 'xlsx';
 const BASEURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 
@@ -198,69 +198,69 @@ export const CustomerListSearch = (props) => {
       }));
   }
 
-  console.log("Data to be exported is ",dataToExport);
-  handleExportToExcelDownload(dataToExport)
+  // console.log("Data to be exported is ",dataToExport);
+  // handleExportToExcelDownload(dataToExport)
   setExportModalOpen(false);
   };
 
 // For downloading all data directly
 
 
-const handleExportToExcelDownload = (dataToExport) => {
-  try {
-    // Format customers data into an Excel-compatible format
-    console.log(dataToExport);
-    const data = dataToExport.map((customer) => ({
-      "NAME": customer.member_name || '', 
-      "MEMBER ID": customer.member_user_id || '', 
-      "TWITTER ID": customer.TwitterId || '',
-      EMAIL: customer.Email || '',
-      COINS: customer.Coins || '',
-      "ACTIVE STATUS": customer.IsActive || '',
-      CONTACT: customer.Contact || '',
-      "DATE": customer.registration_date || '',
-      "WALLET ADDRESS": customer.wallet_address || '',
-      "USER TYPE": customer.userType || '',
-      "Referral Code": customer.referralCode || '',
-      "Is Referred": customer.isReferred || '',
-      USDT: customer.deposit_usdt || '',
-      BNB: customer.deposit_bnb || '',
-      MATIC: customer.deposit_matic || '',
-    }));
-    console.log("Data now is ",data);
+// const handleExportToExcelDownload = (dataToExport) => {
+//   try {
+//     // Format customers data into an Excel-compatible format
+//     console.log(dataToExport);
+//     const data = dataToExport.map((customer) => ({
+//       "NAME": customer.member_name || '', 
+//       "MEMBER ID": customer.member_user_id || '', 
+//       "TWITTER ID": customer.TwitterId || '',
+//       EMAIL: customer.Email || '',
+//       COINS: customer.Coins || '',
+//       "ACTIVE STATUS": customer.IsActive || '',
+//       CONTACT: customer.Contact || '',
+//       "DATE": customer.registration_date || '',
+//       "WALLET ADDRESS": customer.wallet_address || '',
+//       "USER TYPE": customer.userType || '',
+//       "Referral Code": customer.referralCode || '',
+//       "Is Referred": customer.isReferred || '',
+//       USDT: customer.deposit_usdt || '',
+//       BNB: customer.deposit_bnb || '',
+//       MATIC: customer.deposit_matic || '',
+//     }));
+//     console.log("Data now is ",data);
 
-    // Create a new workbook
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.json_to_sheet(data);
+//     // Create a new workbook
+//     // const workbook = XLSX.utils.book_new();
+//     // const worksheet = XLSX.utils.json_to_sheet(data);
 
-    // Add the worksheet to the workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
+//     // Add the worksheet to the workbook
+//     // XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
 
-    // Convert the workbook to a binary Excel file
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+//     // Convert the workbook to a binary Excel file
+//     // const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
-    // Create a Blob from the buffer
-    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+//     // Create a Blob from the buffer
+//     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-    // Create a temporary URL for the Blob
-    const url = window.URL.createObjectURL(blob);
+//     // Create a temporary URL for the Blob
+//     const url = window.URL.createObjectURL(blob);
 
-    // Create an anchor element and initiate the download
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'Users.xlsx');
-    document.body.appendChild(link);
-    link.click();
+//     // Create an anchor element and initiate the download
+//     const link = document.createElement('a');
+//     link.href = url;
+//     link.setAttribute('download', 'Users.xlsx');
+//     document.body.appendChild(link);
+//     link.click();
 
-    // Clean up by revoking the URL
-    window.URL.revokeObjectURL(url);
+//     // Clean up by revoking the URL
+//     window.URL.revokeObjectURL(url);
 
-    enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
-  } catch (error) {
-    enqueueSnackbar("Error exporting to Excel", { variant: "error" });
-    console.error("Error exporting to Excel:", error);
-  }
-};
+//     enqueueSnackbar("Excel file downloaded successfully", { variant: "success" });
+//   } catch (error) {
+//     enqueueSnackbar("Error exporting to Excel", { variant: "error" });
+//     console.error("Error exporting to Excel:", error);
+//   }
+// };
 
   return (
     <>
