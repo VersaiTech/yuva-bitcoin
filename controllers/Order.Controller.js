@@ -1111,6 +1111,7 @@ const createBuyOrder = async (req, res) => {
         const sellerId = req.body.sellerId; // Assuming the seller's ID is provided in the request body
         const buyAmount = req.body.amount; // The amount the buyer wants to buy
 
+
         // Fetch buyer and seller details
         const buyer = await Member.findOne({ member_user_id: buyerId });
         const seller = await Member.findOne({ member_user_id: sellerId });
@@ -1244,11 +1245,12 @@ const createBuyOrder = async (req, res) => {
 
         // Transfer the total amount from buyer to seller
         if (sellOrder.coin === 'yuva') {
-            buyer.coins += buyAmount;
-            seller.deposit_usdt += totalPrice;
+            buyer.coins = parseFloat(buyer.coins) + parseFloat(buyAmount);
+            seller.deposit_usdt = parseFloat(seller.deposit_usdt) + parseFloat(totalPrice);
         } else if (sellOrder.coin === 'usdt') {
-            buyer.deposit_usdt += buyAmount;
-            seller.coins += totalPrice;
+            buyer.deposit_usdt = parseFloat(buyer.deposit_usdt) + parseFloat(buyAmount);
+            // seller.coins += totalPrice;
+            seller.coins = parseFloat(seller.coins) + parseFloat(totalPrice);
         }
 
         // Set the sellOrder as inactive if the buy amount equals the sell amount
