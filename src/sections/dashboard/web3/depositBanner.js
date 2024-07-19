@@ -605,7 +605,7 @@ export const DepositOperations = (props) => {
     }
   };
 
-  const ADMIN_WALLET_ADDRESS = "0xA8fbfb208319335913DA9Db7094Eb2cF2B3F9a53";
+  const ADMIN_WALLET_ADDRESS = "0x31658504f117dFE64C5541Eb69D16c7715c1E9A1";
 
   const buyToken = async () => {
     try {
