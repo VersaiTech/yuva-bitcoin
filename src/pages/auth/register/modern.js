@@ -83,13 +83,13 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       localStorage.setItem("email", values.email);
       try {
-        const fullTwitterId = `https://twitter.com/${values.twitterId}`;
+        // const fullTwitterId = `https://twitter.com/${values.twitterId}`;
         await signUp(
           values.member_name,
           values.email,
           values.password,
           values.contactNo,
-          fullTwitterId,
+          values.twitterId,
           values.wallet_address,
           values.referralCode
         );
@@ -98,7 +98,7 @@ const Page = () => {
       localStorage.setItem("email", values.email);
       localStorage.setItem("member_name", values.member_name);
       localStorage.setItem("contactNo", values.contactNo);
-      localStorage.setItem("twitterId", fullTwitterId);
+      localStorage.setItem("twitterId", values.twitterId);
       localStorage.setItem("wallet_address", values.wallet_address);
       localStorage.setItem("referralCode", values.referralCode);
 
