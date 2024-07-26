@@ -297,14 +297,14 @@ const Page = () => {
 
 
             {/*Total Yuva & USDT deposits*/}
-            <Grid xs={12} md={4}>
+            {/* <Grid xs={12} md={4}>
             <Stack>
               <TotalDeposits amount={overview.usdt} coinType="USDT" />
             </Stack>
-          </Grid>
+          </Grid> */}
           <Grid xs={12} md={4}>
               <Stack>
-                <TotalDeposits amount={overview.yuva} coinType="YUVA" />
+                <TotalDeposits amount={overview.totalDepositYuva} coinType="YUVA" />
               </Stack>
             </Grid>
 

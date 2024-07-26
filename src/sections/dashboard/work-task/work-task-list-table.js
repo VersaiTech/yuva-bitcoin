@@ -227,13 +227,13 @@ export const WorkListTable = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              {/* <TableCell padding="checkbox">
+              <TableCell padding="checkbox">
                 <Checkbox
                   checked={selectedAll}
                   indeterminate={selectedSome}
                   onChange={handleToggleAll}
                 />
-              </TableCell> */}
+              </TableCell>
               <TableCell>User Name</TableCell>
               <TableCell>Task Id</TableCell>
               <TableCell>Description</TableCell>
@@ -250,7 +250,7 @@ export const WorkListTable = (props) => {
 
               return (
                 <TableRow hover key={index} selected={isSelected}>
-                  {/* <TableCell padding="checkbox">
+                  <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
                       onChange={(event) => {
@@ -264,7 +264,7 @@ export const WorkListTable = (props) => {
                       }}
                       value={isSelected}
                     />
-                  </TableCell> */}
+                  </TableCell>
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <div>

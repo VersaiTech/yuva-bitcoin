@@ -29,7 +29,7 @@ export const CryptoTransactions = (props) => {
 
   return (
     <Card>
-      <CardHeader title="Total Users Deposit Usdt " />
+      <CardHeader title="Total Deposit Usdt " />
 
       <Stack
         display={'flex'}
