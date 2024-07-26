@@ -1416,6 +1416,7 @@ const getAllStake = async (req, res) => {
   }
 };
 
+const baseTwitterURL = "https://twitter.com/";
 
 async function updateMemberDetails(req, res) {
   try {
@@ -1439,7 +1440,7 @@ async function updateMemberDetails(req, res) {
     //   existingMember.password = await bcrypt.hash(password, salt);
     // }
     if (email) existingMember.email = email;
-    if (twitterId) existingMember.twitterId = twitterId;
+    if (twitterId) existingMember.twitterId = baseTwitterURL + twitterId;
     // if (twitterId) existingMember.twitterId = twitterId;
     if (wallet_address) existingMember.wallet_address = wallet_address;
 

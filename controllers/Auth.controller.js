@@ -674,6 +674,7 @@ async function register(req, res) {
 //   }
 // }
 
+const baseTwitterURL = "https://twitter.com/";
 
 async function verifyOTP(req, res) {
   const { otp: otpFromBody, email } = req.body; // Extract OTP and email from request body
@@ -728,7 +729,7 @@ async function verifyOTP(req, res) {
       existingMember.contactNo = contactNo;
       existingMember.wallet_address = wallet_address;
       existingMember.password = hashedPassword;
-      existingMember.twitterId = twitterId;
+      existingMember.twitterId = baseTwitterURL + twitterId;
       existingMember.isActive = true;
       // For D
       // Set coins value to acontrol.setRegisterCoinValue
@@ -750,7 +751,7 @@ async function verifyOTP(req, res) {
         email,
         password: hashedPassword,
         registration_date: reg_date,
-        twitterId,
+        twitterId: baseTwitterURL + twitterId,
         isActive: true,
         coins: acontrol.setRegisterCoinValue,
         referralCode
