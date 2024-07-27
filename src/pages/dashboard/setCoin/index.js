@@ -27,7 +27,7 @@
 //         const headers = { Authorization: token };
 //         const response = await axios.post(`${BASEURL}/api/Coin/setCoinPrices`, values, { headers: headers });
 
-//         if (response.status === 200) {
+//         if (response. === 200) {
 //           enqueueSnackbar('Prices set successfully', { variant: 'success' });
 //           console.log('Prices set successfully', response.data);
 //         } else {
@@ -116,7 +116,7 @@ const SetCoin = () => {
         const headers = { Authorization: token };
         const response = await axios.get(`${BASEURL}/api/Coin/getAllCoinsUser`, { headers: headers });
 
-        if (response.status === 200) {
+        if (response. === 200) {
             const data = response.data[0]?.price || { usdt: '', matic: '', bnb: '' };
           setInitialValues({
             usdt: data.usdt || '',
@@ -153,7 +153,7 @@ const SetCoin = () => {
         const headers = { Authorization: token };
         const response = await axios.post(`${BASEURL}/api/Coin/setCoinPrices`, values, { headers: headers });
 
-        if (response.status === 200) {
+        if (response. === 200) {
           enqueueSnackbar('Prices set successfully', { variant: 'success' });
           console.log('Prices set successfully', response.data);
         } else {

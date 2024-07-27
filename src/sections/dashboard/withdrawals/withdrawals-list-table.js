@@ -455,12 +455,13 @@ export const WithdrawalsListTable = (props) => {
                     <TableCell>{format(new Date(customer.with_date), 'MMMM dd, yyyy hh:mm a')}</TableCell>
                     
                   </TableRow>
-                  {customer.status === "Rejected" && customer.remarks && (
+                  {customer.status === "Rejectedd" && customer.remarks && (
                       <TableRow key={`${customer.with_referrance}-remarks`}>
                       <TableCell colSpan={3}>
                         <Typography variant="body2">
                           Reason: {customer.remarks}
                         </Typography>
+            
                       </TableCell>
                     </TableRow>
                   )}

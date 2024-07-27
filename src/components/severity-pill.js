@@ -5,7 +5,7 @@ const SeverityPillRoot = styled('span')(({ theme, ownerState }) => {
   const backgroundColor = theme.palette[ownerState.color].alpha12;
   const color = theme.palette.mode === 'dark'
     ? theme.palette[ownerState.color].main
-    : theme.palette[ownerState.color].dark;
+    : theme.palette[ownerState.color].main;
 
   return {
     alignItems: 'center',
@@ -52,6 +52,7 @@ SeverityPill.propTypes = {
     'error',
     'info',
     'warning',
-    'success'
+    'success',
+    
   ])
 };

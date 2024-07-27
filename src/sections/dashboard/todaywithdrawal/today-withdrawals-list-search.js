@@ -30,7 +30,7 @@ const tabs = [
     label: 'Rejected',
     value: 'hasAcceptedMarketing'
   },
-  {
+ {
     label: 'Approved',
     value: 'isProspect'
   }
