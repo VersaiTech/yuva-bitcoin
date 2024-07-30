@@ -1068,8 +1068,8 @@ const addTask = async (req, res) => {
     description: Joi.string().required(),
     coins: Joi.number().required(),
     link: Joi.string().uri().required(),
-    scheduledTime: Joi.date().iso().required(),
-    completionTime: Joi.date().iso().required(),
+    scheduledTime: Joi.date().required(),
+    completionTime: Joi.date().required(),
   });
   try {
 
