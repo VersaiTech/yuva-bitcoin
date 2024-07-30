@@ -137,7 +137,7 @@ export const NewTaskForm = (props) => {
                         onChange={formik.handleChange}
                         value={formik.values.openDateTime} // Combine startDate and startTime into one value
                         inputProps={{
-                          min: new Date().toISOString().split("T")[0], // Set min value to today
+                          min: new Date(), // Set min value to today
                         }}
                       />
                     </Grid>
@@ -159,7 +159,7 @@ export const NewTaskForm = (props) => {
                         onChange={formik.handleChange}
                         value={formik.values.endDateTime} // Combine endDate and endTime into one value
                         inputProps={{
-                          min: new Date().toISOString().split("T")[0], // Set min value to today
+                          min: new Date(), // Set min value to today
                         }}
                       />
                     </Grid>
