@@ -56,13 +56,21 @@ export const NewTaskForm = (props) => {
         const headers = {
           Authorization: token,
         };
+        // Convert local time to UTC before sending to backend
+        const scheduledTime = new Date(`${values.openDate}T${values.startTime}`);
+        const completionTime = new Date(`${values.endDate}T${values.endTime}`);
+
+        // Convert to UTC
+        scheduledTime.setMinutes(scheduledTime.getMinutes() - scheduledTime.getTimezoneOffset());
+        completionTime.setMinutes(completionTime.getMinutes() - completionTime.getTimezoneOffset());
+
         const data = {
           taskName: values.name,
           description: values.description,
           coins: values.oldPrice,
           link: values.url,
-          scheduledTime: `${values.openDate}T${values.startTime}`, // Combine openDate and startTime
-          completionDateTime: `${values.endDate}T${values.endTime}`, // Combine endDate and endTime
+          scheduledTime: scheduledTime.toISOString(),
+          completionTime: completionTime.toISOString(),
         };
 
         const response = await axios.post(`${BASEURL}/admin/addTask`, data, {
