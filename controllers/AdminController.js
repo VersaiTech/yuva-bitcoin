@@ -1105,35 +1105,17 @@ const addTask = async (req, res) => {
       completionTime,
     } = value;
 
-    const options = { timeZone: 'Asia/Kolkata' }; // 'Asia/Kolkata' is the time zone for Indian Standard Time
-
-    // Convert date strings to Date objects
     const parsedScheduledTime = new Date(scheduledTime);
-    const parsedCompletionDateTime = new Date(completionTime);
+    const parsedCompletionTime = new Date(completionTime);
 
-    // Adjust date objects to the specified time zone
-    parsedScheduledTime.toLocaleString('en-US', options);
-    parsedCompletionDateTime.toLocaleString('en-US', options);
-
-    // Check if completion time is before scheduled time
-    if (parsedCompletionDateTime < parsedScheduledTime) {
-      return res.status(400).json({ error: 'Completion time cannot be before scheduled time.' });
-    }
-
-    // Check if scheduled time is in the past
+    // Ensure dates are in UTC
     if (parsedScheduledTime < new Date()) {
       return res.status(400).json({ error: 'Scheduled time cannot be in the past.' });
     }
 
-    // Check if completion time is in the past
-    if (parsedCompletionDateTime < new Date()) {
-      return res.status(400).json({ error: 'Completion time cannot be in the past.' });
+    if (parsedCompletionTime < parsedScheduledTime) {
+      return res.status(400).json({ error: 'Completion time cannot be before scheduled time.' });
     }
-
-    // Set submissionOpen based on current time compared to scheduledTime and completionDateTime
-    const currentTime = new Date();
-
-    console.log(currentTime, parsedScheduledTime, parsedCompletionDateTime);
 
     // Define newTask here with the correct variables
     const newTask = new Task({
@@ -1144,7 +1126,7 @@ const addTask = async (req, res) => {
       link,
       imageUrls: [],
       scheduledTime: parsedScheduledTime,
-      completionTime: parsedCompletionDateTime,
+      completionTime: parsedCompletionTime,
       // submissionOpen: isSubmissionOpen,
     });
 
